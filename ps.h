@@ -57,7 +57,6 @@ public:
   void endpage();
   void trailer();
   void close();
-  void setDoc(document &docu);
   void setPointlist(pointlist &plist);
   int getPages();
   double xscale(double x);
@@ -74,7 +73,6 @@ public:
   void startline();
   void lineto(xy pnt);
   void endline(bool closed=false);
-  void spline(bezier3d spl,bool fill=false);
   void widen(double factor);
   void write(xy pnt,std::string text);
   void centerWrite(xy pnt,std::string text);

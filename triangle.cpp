@@ -60,10 +60,6 @@ triangle::triangle()
 {
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
-#ifndef FLATTRIANGLE
-  memset(ctrl,0,sizeof(ctrl));
-  nocubedir=INT_MAX;
-#endif
 }
 
 double triangle::area()
@@ -101,13 +97,7 @@ double triangle::elevation(xy pnt)
   p/=totarea;
   q/=totarea;
   r/=totarea;
-#ifdef FLATTRIANGLE
   return q*b->z+p*a->z+r*c->z;
-#else
-  return q*q*q*b->z+3*q*q*r*ctrl[5]+3*p*q*q*ctrl[2]+
-         3*q*r*r*ctrl[6]+6*p*q*r*ctrl[3]+3*p*p*q*ctrl[0]+
-         p*p*p*a->z+3*p*p*r*ctrl[1]+3*p*r*r*ctrl[4]+r*r*r*c->z;
-#endif
 }
 
 xyz triangle::gradient3(xy pnt)
@@ -117,15 +107,9 @@ xyz triangle::gradient3(xy pnt)
   p=area3(pnt,*b,*c)/s;
   q=area3(*a,pnt,*c)/s;
   r=area3(*a,*b,pnt)/s;
-#ifdef FLATTRIANGLE
   gp=a->z;
   gq=b->z;
   gr=c->z;
-#else
-  gp=3*q*q*ctrl[2]+6*q*r*ctrl[3]+6*p*q*ctrl[0]+3*p*p*a->z+6*p*r*ctrl[1]+3*r*r*ctrl[4];
-  gq=3*q*q*b->z+6*q*r*ctrl[5]+6*p*q*ctrl[2]+3*r*r*ctrl[6]+6*p*r*ctrl[3]+3*p*p*ctrl[0];
-  gr=3*q*q*ctrl[5]+6*q*r*ctrl[6]+6*p*q*ctrl[3]+3*p*p*ctrl[1]+6*p*r*ctrl[4]+3*r*r*c->z;
-#endif
   return xyz(gp,gq,gr);
 }
 

@@ -37,8 +37,6 @@ typedef std::map<point*,int> revptlist;
 
 class pointlist
 {
-private:
-  std::vector<segment> break0;
 public:
   ptlist points;
   revptlist revpoints;
@@ -50,20 +48,12 @@ public:
    * when a vector is resized.
    */
   qindex qinx;
-  pointlist();
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
   int size();
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();
-  int1loop toInt1loop(std::vector<point *> ptrLoop);
-  std::vector<point *> fromInt1loop(int1loop intLoop);
-  intloop boundary();
-  int readCriteria(std::string fname,Measure ms);
-  void setgradient(bool flat=false);
-  void findedgecriticalpts();
-  void findcriticalpts();
   void addperimeter();
   void removeperimeter();
   triangle *findt(xy pnt,bool clip=false);
@@ -73,11 +63,8 @@ private:
   void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
-  void splitBreaklines();
-  int checkBreak0(edge &e);
   bool shouldFlip(edge &e);
   bool tryStartPoint(PostScript &ps,xy &startpnt);
-  int1loop convexHull();
   int flipPass(PostScript &ps,bool colorfibaster);
   void maketin(std::string filename="",bool colorfibaster=false);
   void makegrad(double corr);

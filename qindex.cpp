@@ -130,33 +130,6 @@ point *qindex::findp(xy pont,bool clip)
   return ret;
 }
 
-void qindex::insertPoint(point *pont,bool clip)
-/* The qindex must have already been split, with a vector including the xy
- * of this point. If not, there may already be three points in the leaf,
- * in which case it does nothing.
- */
-{
-  int i;
-  xy inpnt=*pont;
-  i=quarter(*pont,clip);
-  if (i<0)
-    ; // point is outside square
-  else if (!sub[3])
-    for (i=0;i<3;i++)
-    {
-      if (!pnt[i] || xy(*pont)==xy(*pnt[i]))
-      {
-	if (pnt[i] && pont->elev()!=pnt[i]->elev())
-	  throw samePoints;
-	else
-	  pnt[i]=pont;
-	break;
-      }
-    }
-  else 
-    sub[i]->insertPoint(pont,clip);
-}
-
 void qindex::sizefit(vector<xy> pnts)
 /* Computes size, x, and y such that size is a power of 2, x and y are multiples
  * of size/16, and all points are in the resulting square.

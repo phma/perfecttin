@@ -79,14 +79,10 @@ public:
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
-  segment getsegment();
   std::array<double,4> ctrlpts();
-  xyz critpoint(int i);
-  void findextrema();
   void clearmarks();
   void mark(int n);
   bool ismarked(int n);
-  void stlSplit(double maxError);
 };
 
 typedef std::pair<double,point*> ipoint;

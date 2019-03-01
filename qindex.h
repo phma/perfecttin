@@ -47,7 +47,6 @@ public:
   };
   triangle *findt(xy pnt,bool clip=false);
   point *findp(xy pont,bool clip=false);
-  void insertPoint(point *pont,bool clip=false);
   int quarter(xy pnt,bool clip=false);
   xy middle();
   void sizefit(std::vector<xy> pnts);

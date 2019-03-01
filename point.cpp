@@ -25,6 +25,7 @@
 #include <cmath>
 #include <cassert>
 #include <cstring>
+#include "tin.h"
 #include "ldecimal.h"
 #include "angle.h"
 using namespace std;

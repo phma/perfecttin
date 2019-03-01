@@ -27,14 +27,8 @@
 
 using namespace std;
 
-pointlist::pointlist()
-{
-  initStlTable();
-}
-
 void pointlist::clear()
 {
-  contours.clear();
   triangles.clear();
   edges.clear();
   points.clear();
@@ -201,114 +195,6 @@ bool pointlist::checkTinConsistency()
   return ret;
 }
 
-int1loop pointlist::toInt1loop(vector<point *> ptrLoop)
-{
-  int i;
-  int1loop ret;
-  for (i=0;i<ptrLoop.size();i++)
-    ret.push_back(revpoints[ptrLoop[i]]);
-  return ret;
-}
-
-vector<point *> pointlist::fromInt1loop(int1loop intLoop)
-{
-  int i;
-  vector<point *> ret;
-  for (i=0;i<intLoop.size();i++)
-    ret.push_back(&points[intLoop[i]]);
-  return ret;
-}
-
-intloop pointlist::boundary()
-/* The boundary is traced *clockwise*, with the triangles on the right,
- * so that, after combining with the convex hull, it will consist of
- * counterclockwise loops, which can then be triangulated.
- */
-{
-  int i;
-  edge *e;
-  intloop ret;
-  int1loop bdy1;
-  for (i=0;i<edges.size();i++)
-  {
-    if (!edges[i].tria)
-      edges[i].reverse();
-    edges[i].contour=0;
-  }
-  for (i=0;i<edges.size();i++)
-    if (!edges[i].contour && !edges[i].trib)
-    {
-      bdy1.clear();
-      e=&edges[i];
-      while (!e->contour)
-      {
-	bdy1.push_back(revpoints[e->a]);
-	e->contour++;
-	e=e->nexta;
-      }
-      bdy1.reverse();
-      ret.push_back(bdy1);
-    }
-  return ret;
-}
-
-int pointlist::readCriteria(string fname,Measure ms)
-{
-  ifstream infile;
-  size_t size=0,pos1,pos2;
-  ssize_t len;
-  int p,ncrit;
-  criterion crit1;
-  vector<string> words;
-  string line,minstr,maxstr,eminstr,emaxstr,d,instr;
-  infile.open(fname);
-  ncrit=-(!infile.is_open());
-  if (infile.is_open())
-  {
-    crit.clear();
-    do
-    {
-      getline(infile,line);
-      while (line.back()=='\n' || line.back()=='\r')
-	line.pop_back();
-      words=parsecsvline(line);
-      if (words.size()==6)
-      {
-	minstr=words[0];
-	maxstr=words[1];
-	eminstr=words[2];
-	emaxstr=words[3];
-	d=words[4];
-	instr=words[5];
-	if (true)
-	{
-	  crit1.lo=stoi(minstr);
-	  crit1.hi=stoi(maxstr);
-          if (eminstr.length())
-            crit1.elo=ms.parseMeasurement(eminstr,LENGTH).magnitude;
-          else
-            crit1.elo=NAN;
-          if (emaxstr.length())
-            crit1.ehi=ms.parseMeasurement(emaxstr,LENGTH).magnitude;
-          else
-            crit1.ehi=NAN;
-          crit1.str=d;
-          crit1.istopo=atoi(instr.c_str())!=0;
-          crit.push_back(crit1);
-	  ncrit++;
-	}
-	//puts(d.c_str());
-      }
-      else if (words.size()==0 || (words.size()==1 && words[0].length() && words[0][0]<32))
-	; // blank line or end-of-file character
-      else
-	cerr<<"Ignored line: "<<line<<endl;
-    } while (infile.good());
-    infile.close();
-  }
-  return ncrit;
-}
-
 void pointlist::addpoint(int numb,point pnt,bool overwrite)
 // If numb<0, it's a point added by bezitopo.
 {int a;
@@ -366,21 +252,6 @@ double pointlist::elevation(xy location)
     return nan("");
 }
 
-void pointlist::setgradient(bool flat)
-{
-  int i;
-  for (i=0;i<triangles.size();i++)
-    if (flat)
-      triangles[i].flatten();
-    else
-    {
-      triangles[i].setgradient(*triangles[i].a,triangles[i].a->gradient);
-      triangles[i].setgradient(*triangles[i].b,triangles[i].b->gradient);
-      triangles[i].setgradient(*triangles[i].c,triangles[i].c->gradient);
-      triangles[i].setcentercp();
-    }
-}
-
 double pointlist::dirbound(int angle)
 /* angle=0x00000000: returns least easting.
  * angle=0x20000000: returns least northing.
@@ -397,24 +268,6 @@ double pointlist::dirbound(int angle)
       bound=turncoord;
   }
   return bound;
-}
-
-void pointlist::findedgecriticalpts()
-{
-  map<int,edge>::iterator e;
-  for (e=edges.begin();e!=edges.end();e++)
-    e->second.findextrema();
-}
-
-void pointlist::findcriticalpts()
-{
-  map<int,triangle>::iterator t;
-  findedgecriticalpts();
-  for (t=triangles.begin();t!=triangles.end();t++)
-  {
-    t->second.findcriticalpts();
-    t->second.subdivide();
-  }
 }
 
 void pointlist::addperimeter()
@@ -437,240 +290,11 @@ triangle *pointlist::findt(xy pnt,bool clip)
   return qinx.findt(pnt,clip);
 }
 
-bool pointlist::join2break0()
-/* Joins two fragments of type-0 breakline and returns true,
- * or returns false if there are none that can be joined.
- */
-{
-  int i,j;
-  int sz=type0Breaklines.size();
-  Breakline0 cat;
-  for (i=0;i<sz;i++)
-    for (j=i+1;j<sz;j++)
-      if (jungible(type0Breaklines[i],type0Breaklines[j]))
-        goto jung;
-  jung:
-  if (i<sz && j<sz)
-  {
-    cat=type0Breaklines[i]+type0Breaklines[j];
-    type0Breaklines[j]=cat;
-    while (j+1<sz && type0Breaklines[j].size()>type0Breaklines[j+1].size())
-    {
-      swap(type0Breaklines[j],type0Breaklines[j+1]);
-      j++;
-    }
-    while (i+1<sz)
-    {
-      swap(type0Breaklines[i],type0Breaklines[i+1]);
-      i++;
-    }
-    type0Breaklines.resize(sz-1);
-    return true;
-  }
-  else
-    return false;
-}
-
-void pointlist::joinBreaklines()
-{
-  while (join2break0());
-}
-
-void pointlist::edgesToBreaklines()
-{
-  int i;
-  type0Breaklines.clear();
-  for (i=0;i<edges.size();i++)
-    if (!edges[i].delaunay() || (edges[i].broken&1))
-      type0Breaklines.push_back(Breakline0(revpoints[edges[i].a],revpoints[edges[i].b]));
-  joinBreaklines();
-  whichBreak0Valid=3;
-}
-
-void pointlist::stringToBreakline(string line)
-/* Insert one line read from a breakline file into the breaklines.
- * Comments begin with '#'. Blank lines are ignored.
- * Type-0 breaklines look like "5-6-7-8-9-5".
- * Type-1 breaklines look like "1,0;-.5,.866;-.5,.866;1,0".
- * Can throw badBreaklineFormat.
- */
-{
-  size_t hashpos=line.find('#');
-  vector<string> lineWords;
-  int i;
-  if (hashpos<line.length())
-    line.erase(hashpos);
-  if (line.length())
-  {
-    if (line.find(',')<line.length())
-      ; // type-1 is not implemented yet
-    else
-      type0Breaklines.push_back(Breakline0(parseBreakline(line,'-')));
-  }
-}
-
-void pointlist::readBreaklines(string filename)
-{
-  fstream file(filename,fstream::in);
-  string line;
-  type0Breaklines.clear();
-  while (!file.eof() && !file.fail())
-  {
-    getline(file,line);
-    stringToBreakline(line);
-  }
-  if (!file.eof())
-    throw fileError;
-}
-
-string pointlist::hitTestString(triangleHit hit)
-{
-  string ret;
-  if (hit.cor)
-    ret=to_string(revpoints[hit.cor])+' '+hit.cor->note;
-  if (hit.edg)
-    ret=to_string(revpoints[hit.edg->a])+'-'+to_string(revpoints[hit.edg->b]);
-  if (hit.tri)
-    ret='('+to_string(revpoints[hit.tri->a])+' '+
-        to_string(revpoints[hit.tri->b])+' '+
-        to_string(revpoints[hit.tri->c])+')';
-  return ret;
-}
-
-string pointlist::hitTestPointString(xy pnt,double radius)
-{
-  ptlist::iterator i;
-  string ret;
-  for (i=points.begin();i!=points.end();++i)
-  {
-    if (dist(i->second,pnt)<radius)
-    {
-      if (ret.length())
-        ret+=' ';
-      ret+=to_string(i->first)+' '+i->second.note;
-    }
-  }
-  return ret;
-}
-
-void pointlist::addIfIn(triangle *t,set<triangle *> &addenda,xy pnt,double radius)
-{
-  if (t && !localTriangles.count(t) && t->inCircle(pnt,radius))
-    addenda.insert(t);
-}
-
-void pointlist::setLocalSets(xy pnt,double radius)
-/* If the sets are set to {nullptr}, this means one of two things:
- * • The area in the window is too large; it would be faster to loop through
- *   all the edges.
- * • There are no triangles. A qindex is an index of triangles.
- * An empty qindex would produce {}, so this condition has to be checked.
- */
-{
-  set<point *>::iterator i;
-  set<edge *>::iterator j;
-  set<triangle *>::iterator k;
-  int n;
-  vector<edge *> pointEdges;
-  set<triangle *> addenda;
-  localTriangles.clear();
-  localEdges.clear();
-  localPoints.clear();
-  if (triangles.size())
-    localTriangles=qinx.localTriangles(pnt,radius,triangles.size()/64+100);
-  else
-    localTriangles.insert(nullptr);
-  if (localTriangles.count(nullptr))
-  {
-    localEdges.insert(nullptr);
-    localPoints.insert(nullptr);
-    //cout<<"No triangles or view is too big\n";
-  }
-  else
-  {
-    do
-    {
-      addenda.clear();
-      for (k=localTriangles.begin();k!=localTriangles.end();++k)
-      {
-	addIfIn((*k)->aneigh,addenda,pnt,radius);
-	addIfIn((*k)->bneigh,addenda,pnt,radius);
-	addIfIn((*k)->cneigh,addenda,pnt,radius);
-      }
-      for (k=addenda.begin();k!=addenda.end();++k)
-	localTriangles.insert(*k);
-    } while (addenda.size());
-    for (k=localTriangles.begin();k!=localTriangles.end();++k)
-    {
-      localPoints.insert((*k)->a);
-      localPoints.insert((*k)->b);
-      localPoints.insert((*k)->c);
-    }
-    for (i=localPoints.begin();i!=localPoints.end();++i)
-    {
-      pointEdges=(*i)->incidentEdges();
-      for (n=0;n<pointEdges.size();n++)
-	localEdges.insert(pointEdges[n]);
-    }
-    for (j=localEdges.begin();j!=localEdges.end();++j)
-    { // localTriangles() usually doesn't find all triangles, and may even miss a point.
-      if ((*j)->tria)
-	localTriangles.insert((*j)->tria);
-      if ((*j)->trib)
-	localTriangles.insert((*j)->trib);
-      localPoints.insert((*j)->a);
-      localPoints.insert((*j)->b);
-    }
-    assert(!localPoints.count(nullptr));
-    assert(!localEdges.count(nullptr));
-    assert(!localTriangles.count(nullptr));
-    //cout<<localPoints.size()<<" points "<<localEdges.size()<<" edges "<<localTriangles.size()<<" triangles\n";
-  }
-}
-
-void pointlist::writeXml(ofstream &ofile)
-{
-  int i;
-  ptlist::iterator p;
-  map<int,triangle>::iterator t;
-  ofile<<"<Pointlist><Criteria>";
-  for (i=0;i<crit.size();i++)
-    crit[i].writeXml(ofile);
-  ofile<<"</Criteria><Points>";
-  for (p=points.begin(),i=0;p!=points.end();p++,i++)
-  {
-    if (i && (i%1)==0)
-      ofile<<endl;
-    p->second.writeXml(ofile,*this);
-  }
-  ofile<<"</Points>"<<endl;
-  ofile<<"<TIN>";
-  for (t=triangles.begin(),i=0;t!=triangles.end();t++,i++)
-  {
-    if (i && (i%1)==0)
-      ofile<<endl;
-    t->second.writeXml(ofile,*this);
-  }
-  ofile<<"</TIN>"<<endl;
-  ofile<<"<Contours>";
-  for (i=0;i<contours.size();i++)
-    contours[i].writeXml(ofile);
-  ofile<<"</Contours>";
-  ofile<<"<Breaklines>";
-  for (i=0;i<type0Breaklines.size();i++)
-    type0Breaklines[i].writeXml(ofile);
-  ofile<<"</Breaklines>";
-  contourInterval.writeXml(ofile);
-  ofile<<"</Pointlist>"<<endl;
-}
-
 void pointlist::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   xy cs=cossin(ro);
   int i;
   ptlist::iterator j;
-  for (i=0;i<contours.size();i++)
-    contours[i]._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
   for (j=points.begin();j!=points.end();j++)
     j->second._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
 }

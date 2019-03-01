@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
+#include "angle.h"
 #include "boundrect.h"
 
 BoundRect::BoundRect()
@@ -66,19 +68,6 @@ void BoundRect::include(xy obj)
   }
 }
 
-void BoundRect::include(drawobj *obj)
-{
-  int i;
-  double newbound;
-  for (i=0;i<4;i++)
-  {
-    newbound=obj->dirbound(i*DEG90-orientation,bounds[i]);
-    if (newbound<bounds[i])
-      bounds[i]=newbound;
-  }
-}
-
-#ifdef POINTLIST
 void BoundRect::include(pointlist *obj)
 {
   int i;
@@ -90,5 +79,4 @@ void BoundRect::include(pointlist *obj)
       bounds[i]=newbound;
   }
 }
-#endif
 

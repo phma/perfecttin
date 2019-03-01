@@ -131,14 +131,9 @@ public:
   bool crosses(int subdir,double elevation);
   bool upleft(int subdir);
   xy contourcept(int subdir,double elevation);
-  segment dirclip(const xy pnt,const int dir);
   edge *checkBentContour();
   virtual void writeXml(std::ofstream &ofile,pointlist &pl);
 private:
-#ifndef FLATTRIANGLE
-  double vtxeloff(double off);
-#endif
-  void setsubslopes(segment &s);
 };
 
 double deriv0(std::vector<double> xsect);

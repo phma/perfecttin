@@ -23,6 +23,7 @@
 #include <map>
 #include <cmath>
 #include <iostream>
+#include <cassert>
 #include "tin.h"
 #include "ps.h"
 #include "point.h"
@@ -30,7 +31,6 @@
 #include "ldecimal.h"
 #include "manysum.h"
 #include "random.h"
-#include "smooth5.h"
 #include "relprime.h"
 
 #define THR 16777216
@@ -319,44 +319,12 @@ void dumphull_ps(PostScript &ps)
   ps.widen(0.2);
 }
 
-void pointlist::splitBreaklines()
-// Split the breaklines, which are lists of points, into individual line segments.
-{
-  int i,j;
-  array<int,2> bl;
-  break0.clear();
-  for (i=0;i<type0Breaklines.size();i++)
-    for (j=0;j<type0Breaklines[i].size();j++)
-    {
-      bl=type0Breaklines[i][j];
-      if (points.count(bl[0])==0 || points.count(bl[1])==0)
-        throw badBreaklineEnd;
-      break0.push_back(segment(points[bl[0]],points[bl[1]]));
-    }
-}
-
 double edge::length()
 {
   xy c,d;
   c=*a;
   d=*b;
   return dist(c,d);
-}
-
-segment edge::getsegment()
-{
-  segment ret(*a,*b);
-  triangle *tri;
-  if (tria)
-    tri=tria;
-  else
-    tri=trib;
-  if (tri)
-  {
-    ret.setctrl(START,tri->ctrlpt(*a,*b));
-    ret.setctrl(END,tri->ctrlpt(*b,*a));
-  }
-  return ret;
 }
 
 array<double,4> edge::ctrlpts()
@@ -379,23 +347,6 @@ array<double,4> edge::ctrlpts()
   return ret;
 }
 
-void edge::findextrema()
-{
-  int i;
-  vector<double> ext;
-  ext=getsegment().vextrema(false);
-  for (i=0;i<2;i++)
-    if (i>=ext.size())
-      extrema[i]=nan("");
-    else
-      extrema[i]=ext[i];
-}
-
-xyz edge::critpoint(int i)
-{
-  return getsegment().station(extrema[i]);
-}
-
 void edge::clearmarks()
 {
   contour=0;
@@ -409,19 +360,6 @@ void edge::mark(int n)
 bool edge::ismarked(int n)
 {
   return (contour>>n)&1;
-}
-
-void edge::stlSplit(double maxError)
-{
-  segment thisSeg=getsegment();
-  double maxAccel,error;
-  maxAccel=thisSeg.accel(0);
-  if (thisSeg.accel(length())>maxAccel)
-    maxAccel=thisSeg.accel(length());
-  error=sqr(length())*maxAccel/4;
-  for (stlmin=0;stlmin<216 && error>maxError*sqr(stltable[stlmin]);stlmin++);
-  if (stlmin==216)
-    stlmin--;
 }
 
 bool goodcenter(xy a,xy b,xy c,xy d)
@@ -462,26 +400,6 @@ bool goodcenter(xy a,xy b,xy c,xy d)
   if (A<perim*perim/THR)
     n=0;
   return n>1;
-}
-
-int pointlist::checkBreak0(edge &e)
-{
-  int i;
-  segment s;
-  if ((e.broken&4)==0)
-  {
-    e.broken&=-4;
-    s=e.getsegment();
-    for (i=0;i<break0.size();i++)
-    {
-      if (intersection_type(s,break0[i])==ACXBD)
-        e.broken|=2;
-      if (sameXyz(s,break0[i]))
-        e.broken|=1;
-    }
-    e.broken|=4;
-  }
-  return e.broken&3;
 }
 
 bool pointlist::shouldFlip(edge &e)
