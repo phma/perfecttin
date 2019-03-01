@@ -24,8 +24,6 @@
 #include <string>
 #include <iostream>
 #include <map>
-#include "bezier3d.h"
-#include "document.h"
 #include "tin.h"
 #include "boundrect.h"
 class pointlist;
