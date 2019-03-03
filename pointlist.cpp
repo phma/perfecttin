@@ -270,21 +270,6 @@ double pointlist::dirbound(int angle)
   return bound;
 }
 
-void pointlist::addperimeter()
-{
-  map<int,triangle>::iterator t;
-  cout<<"Adding perimeter to "<<triangles.size()<<" triangles\n";
-  for (t=triangles.begin();t!=triangles.end();t++)
-    t->second.addperimeter();
-}
-
-void pointlist::removeperimeter()
-{
-  map<int,triangle>::iterator t;
-  for (t=triangles.begin();t!=triangles.end();t++)
-    t->second.removeperimeter();
-}
-
 triangle *pointlist::findt(xy pnt,bool clip)
 {
   return qinx.findt(pnt,clip);

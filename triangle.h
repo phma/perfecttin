@@ -88,8 +88,6 @@ public:
   triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
-  void setgradient(xy pnt,xy grad);
-  double ctrlpt(xy pnt1,xy pnt2);
   void flatten();
   xyz gradient3(xy pnt);
   xy gradient(xy pnt);
@@ -103,36 +101,11 @@ public:
   double perimeter();
   double acicularity();
   xy centroid();
-  void setcentercp();
   void setgradmat();
   std::vector<double> xsect(int angle,double offset);
   double spelevation(int angle,double x,double y);
-#ifndef FLATTRIANGLE
-  int findnocubedir();
-  std::vector<xyz> slices(bool side);
-#endif
-  double flatoffset();
-  //void setctrl(bool flat);
-  xy critical_point(double start,double startz,double end,double endz);
-#ifndef FLATTRIANGLE
-  std::vector<xy> criticalpts_side(bool side);
-  xy spcoord(double x,double y);
-  std::vector<xy> criticalpts_axis();
-#endif
-  void findcriticalpts();
   int pointtype(xy pnt);
-  void subdivide();
-  void addperimeter();
-  void removeperimeter();
-  uintptr_t edgepart(int subdir);
-  std::array<double,4> lohi();
-  int subdir(uintptr_t edgepart);
-  int proceed(int subdir,double elevation);
-  bool crosses(int subdir,double elevation);
-  bool upleft(int subdir);
-  xy contourcept(int subdir,double elevation);
   edge *checkBentContour();
-  virtual void writeXml(std::ofstream &ofile,pointlist &pl);
 private:
 };
 

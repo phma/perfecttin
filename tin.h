@@ -79,7 +79,6 @@ public:
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
-  std::array<double,4> ctrlpts();
   void clearmarks();
   void mark(int n);
   bool ismarked(int n);

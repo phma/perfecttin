@@ -54,8 +54,6 @@ public:
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();
-  void addperimeter();
-  void removeperimeter();
   triangle *findt(xy pnt,bool clip=false);
   // the following methods are in tin.cpp
 private:
@@ -63,22 +61,13 @@ private:
   void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
-  bool shouldFlip(edge &e);
-  bool tryStartPoint(PostScript &ps,xy &startpnt);
-  int flipPass(PostScript &ps,bool colorfibaster);
-  void maketin(std::string filename="",bool colorfibaster=false);
-  void makegrad(double corr);
   void maketriangles();
   void makeqindex();
   void updateqindex();
-  void makeBareTriangles(std::vector<std::array<xyz,3> > bareTriangles);
-  void triangulatePolygon(std::vector<point *> poly);
   void makeEdges();
-  void fillInBareTin();
   double totalEdgeLength();
   double elevation(xy location);
   double dirbound(int angle);
-  std::array<double,2> lohi();
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
 };
 
