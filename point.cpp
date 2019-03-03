@@ -300,11 +300,6 @@ void xyz::roscat(xy tfrom,int ro,double sca,xy tto)
   _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
 }
 
-void xyz::writeXml(ofstream &ofile)
-{
-  ofile<<"<xyz>"<<ldecimal(x)<<' '<<ldecimal(y)<<' '<<ldecimal(z)<<"</xyz>";
-}
-
 bool operator==(const xyz &l,const xyz &r)
 {
   return l.x==r.x && l.y==r.y && l.z==r.z;

@@ -27,7 +27,7 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 add_executable(decisite angle.cpp boundrect.cpp cogo.cpp decisite.cpp
-               ldecimal.cpp point.cpp pointlist.cpp
+               ldecimal.cpp manysum.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp tin.cpp triangle.cpp)
 
 include(CheckIncludeFiles)

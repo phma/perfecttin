@@ -45,7 +45,6 @@ public:
   double dirbound(int angle);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
-  virtual void writeXml(std::ofstream &ofile);
   friend xy operator+(const xy &l,const xy &r);
   friend xy operator+=(xy &l,const xy &r);
   friend xy operator-=(xy &l,const xy &r);
@@ -90,7 +89,6 @@ public:
   double length();
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto);
-  virtual void writeXml(std::ofstream &ofile);
   void setelev(double h)
   {
     z=h;
