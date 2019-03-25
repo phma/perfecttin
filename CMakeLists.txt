@@ -28,8 +28,9 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX REQUIRED)
 add_executable(decisite angle.cpp boundrect.cpp cogo.cpp decisite.cpp
-               ldecimal.cpp manysum.cpp point.cpp pointlist.cpp ps.cpp
+               ldecimal.cpp manysum.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp tin.cpp triangle.cpp)
+target_link_libraries(decisite ${LibPLYXX_LIBRARY})
 
 include(CheckIncludeFiles)
 check_include_files(time.h HAVE_TIME_H)
@@ -50,6 +51,7 @@ set(DECISITE_VERSION ${DECISITE_MAJOR_VERSION}.${DECISITE_MINOR_VERSION}.${DECIS
 set(COPY_YEAR 2019)
 
 include_directories(${PROJECT_BINARY_DIR})
+include_directories(${LibPLYXX_INCLUDE_DIR})
 configure_file (config.h.in config.h)
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${DECISITE_MAJOR_VERSION})
