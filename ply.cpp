@@ -25,3 +25,6 @@
 
 using namespace std;
 using namespace libply;
+
+ElementBuffer buf;
+File plyfile("test.ply");
