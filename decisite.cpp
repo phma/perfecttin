@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "ply.h"
 
 int main(int argc, char *argv[])
 {
+  readPly("pc.ply");
   return 0;
 }
