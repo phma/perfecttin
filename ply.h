@@ -20,5 +20,8 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <string>
+#include <vector>
+#include "point.h"
 
+extern std::vector<xyz> cloud;
 void readPly(std::string fileName);

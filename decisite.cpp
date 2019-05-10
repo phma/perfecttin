@@ -20,9 +20,24 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ply.h"
+#include "ps.h"
 
 int main(int argc, char *argv[])
 {
+  PostScript ps;
+  BoundRect br;
+  int i;
   readPly("pc.ply");
+  ps.open("decisite.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.startpage();
+  for (i=0;i<cloud.size();i++)
+    br.include(cloud[i]);
+  ps.setscale(br);
+  for (i=0;i<cloud.size();i++)
+    ps.dot(cloud[i]);
+  ps.endpage();
+  ps.close();
   return 0;
 }
