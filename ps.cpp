@@ -160,7 +160,9 @@ void PostScript::startpage()
   if (psfile && indocument && !inpage)
   {
     ++pages;
-    *psfile<<"%%Page: "<<pages<<' '<<pages<<"\ngsave mmscale 0.1 setlinewidth\n";
+    *psfile<<"%%Page: "<<pages<<' '<<pages<<"\n<< /PageSize [";
+    *psfile<<paper.getx()*36e1/127<<' '<<paper.gety()*36e1/127<<"] >> setpagedevice\n";
+    *psfile<<"gsave mmscale 0.1 setlinewidth\n";
     *psfile<<paper.getx()/2<<' '<<paper.gety()/2<<' '<<"translate ";
     *psfile<<(pageorientation&3)*90<<" rotate ";
     *psfile<<paper.getx()/-2<<' '<<paper.gety()/-2<<' '<<"translate"<<endl;
