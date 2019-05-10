@@ -27,10 +27,15 @@ using namespace std;
 using namespace libply;
 
 ElementBuffer buf;
+void receivePoint(ElementBuffer &buf)
+{
+}
 
 void readPly(string fileName)
 {
   File plyfile(fileName);
+  ElementReadCallback pointCallback=receivePoint;
+  plyfile.setElementReadCallback("vertex",pointCallback);
   plyfile.read();
 }
 
