@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
   for (i=0;i<cloud.size();i++)
     br.include(cloud[i]);
   ps.setscale(br);
-  for (i=0;i<cloud.size();i++)
+  for (i=0;i<cloud.size();i+=127)
     ps.dot(cloud[i]);
   ps.endpage();
   ps.close();
