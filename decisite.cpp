@@ -21,6 +21,7 @@
  */
 #include "ply.h"
 #include "ps.h"
+#include "octagon.h"
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +29,7 @@ int main(int argc, char *argv[])
   BoundRect br;
   int i;
   readPly("pc.ply");
+  makeOctagon();
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
