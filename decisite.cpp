@@ -34,8 +34,7 @@ int main(int argc, char *argv[])
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   ps.startpage();
-  for (i=0;i<cloud.size();i++)
-    br.include(cloud[i]);
+  br.include(&net);
   ps.setscale(br);
   ps.setcolor(0,0,1);
   ps.startline();
