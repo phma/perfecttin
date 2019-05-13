@@ -37,6 +37,12 @@ int main(int argc, char *argv[])
   for (i=0;i<cloud.size();i++)
     br.include(cloud[i]);
   ps.setscale(br);
+  ps.setcolor(0,0,1);
+  ps.startline();
+  for (i=1;i<=8;i++)
+    ps.lineto(net.points[i]);
+  ps.endline(true);
+  ps.setcolor(0,0,0);
   for (i=0;i<cloud.size();i+=127)
     ps.dot(cloud[i]);
   ps.endpage();

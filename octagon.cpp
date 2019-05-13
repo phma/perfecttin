@@ -40,6 +40,7 @@ void makeOctagon()
 {
   int ori=rng.uirandom();
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
+  double bounds[8],width,margin;
   xy corners[8];
   int i;
   net.clear();
@@ -47,6 +48,26 @@ void makeOctagon()
   {
     orthogonal.include(cloud[i]);
     diagonal.include(cloud[i]);
+  }
+  bounds[0]=orthogonal.left();
+  bounds[1]=diagonal.bottom();
+  bounds[2]=orthogonal.bottom();
+  bounds[3]=-diagonal.right();
+  bounds[4]=-orthogonal.right();
+  bounds[5]=-diagonal.top();
+  bounds[6]=-orthogonal.top();
+  bounds[7]=diagonal.left();
+  for (i=0;i<4;i++)
+  {
+    width=-bounds[i]-bounds[i+4];
+    margin=width/sqrt(cloud.size());
+    bounds[i]-=margin;
+    bounds[i+4]-=margin;
+  }
+  for (i=0;i<8;i++)
+  {
+    corners[i]=intersection(cossin(ori+i*DEG45)*bounds[i],(i+2)*DEG45,cossin(ori+(i+1)*DEG45)*bounds[(i+1)%8],(i+3)*DEG45);
+    net.addpoint(i+1,point(corners[i],0));
   }
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
   cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
