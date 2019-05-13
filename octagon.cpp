@@ -66,7 +66,7 @@ void makeOctagon()
   }
   for (i=0;i<8;i++)
   {
-    corners[i]=intersection(cossin(ori+i*DEG45)*bounds[i],(i+2)*DEG45,cossin(ori+(i+1)*DEG45)*bounds[(i+1)%8],(i+3)*DEG45);
+    corners[i]=intersection(cossin(i*DEG45-ori)*bounds[i],(i+2)*DEG45-ori,cossin((i+1)*DEG45-ori)*bounds[(i+1)%8],(i+3)*DEG45-ori);
     net.addpoint(i+1,point(corners[i],0));
   }
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
