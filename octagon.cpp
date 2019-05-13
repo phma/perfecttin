@@ -90,6 +90,20 @@ void makeOctagon()
   for (i=7;i<12;i++)
     net.edges[i].nextb=&net.edges[i+1];
   net.edges[12].nextb=&net.edges[6];
+  for (i=0;i<6;i++)
+  {
+    net.triangles[i].a=&net.points[1];
+    net.triangles[i].b=&net.points[i+2];
+    net.triangles[i].c=&net.points[i+3];
+    net.edges[i+7].trib=&net.triangles[i];
+    net.edges[i].trib=&net.triangles[i];
+    net.edges[i+1].tria=&net.triangles[i];
+  }
+  for (i=0;i<5;i++)
+  {
+    net.triangles[i].setneighbor(&net.triangles[i+1]);
+    net.triangles[i+1].setneighbor(&net.triangles[i]);
+  }
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
   cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
   cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
