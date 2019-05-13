@@ -315,27 +315,24 @@ void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
   b=*lin.b;
   a=turn(a,orientation);
   b=turn(b,orientation);
-  if (lin.delaunay())
-    if (colorfibaster)
-      switch (fibmod3(abs(pl->revpoints[lin.a]-pl->revpoints[lin.b])))
-      {
-	case -1:
-	  setcolor(0.3,0.3,0.3);
-	  break;
-	case 0:
-	  setcolor(1,0.3,0.3);
-	  break;
-	case 1:
-	  setcolor(0,1,0);
-	  break;
-	case 2:
-	  setcolor(0.3,0.3,1);
-	  break;
-      }
-    else
-      setcolor(0,0,1);
+  if (colorfibaster)
+    switch (fibmod3(abs(pl->revpoints[lin.a]-pl->revpoints[lin.b])))
+    {
+      case -1:
+	setcolor(0.3,0.3,0.3);
+	break;
+      case 0:
+	setcolor(1,0.3,0.3);
+	break;
+      case 1:
+	setcolor(0,1,0);
+	break;
+      case 2:
+	setcolor(0.3,0.3,1);
+	break;
+    }
   else
-    setcolor(0,0,0);
+    setcolor(0,0,1);
   if (directed)
   {
     disp=b-a;
