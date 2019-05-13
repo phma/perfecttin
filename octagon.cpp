@@ -69,6 +69,27 @@ void makeOctagon()
     corners[i]=intersection(cossin(i*DEG45-ori)*bounds[i],(i+2)*DEG45-ori,cossin((i+1)*DEG45-ori)*bounds[(i+1)%8],(i+3)*DEG45-ori);
     net.addpoint(i+1,point(corners[i],0));
   }
+  for (i=0;i<7;i++)
+  {
+    net.edges[i].a=&net.points[1];
+    net.edges[i].b=&net.points[2+i];
+    net.points[1].line=net.points[2+i].line=&net.edges[i];
+  }
+  for (i=0;i<6;i++)
+  {
+    net.edges[7+i].a=&net.points[2+i];
+    net.edges[7+i].b=&net.points[3+i];
+  }
+  for (i=0;i<7;i++)
+    net.edges[i].nexta=&net.edges[(i+1)%7];
+  for (i=1;i<7;i++)
+    net.edges[i].nextb=&net.edges[i+6];
+  net.edges[0].nextb=&net.edges[7];
+  for (i=7;i<13;i++)
+    net.edges[i].nexta=&net.edges[i-7];
+  for (i=7;i<12;i++)
+    net.edges[i].nextb=&net.edges[i+1];
+  net.edges[12].nextb=&net.edges[6];
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
   cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
   cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
