@@ -20,6 +20,7 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include <cassert>
 #include "octagon.h"
 #include "angle.h"
 #include "ply.h"
@@ -104,6 +105,7 @@ void makeOctagon()
     net.triangles[i].setneighbor(&net.triangles[i+1]);
     net.triangles[i+1].setneighbor(&net.triangles[i]);
   }
+  assert(net.checkTinConsistency());
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
   cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
   cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
