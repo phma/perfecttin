@@ -28,7 +28,8 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX REQUIRED)
 add_executable(decisite angle.cpp boundrect.cpp cogo.cpp decisite.cpp
-               ldecimal.cpp manysum.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
+               ldecimal.cpp leastsquares.cpp manysum.cpp matrix.cpp
+               octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp tin.cpp triangle.cpp)
 target_link_libraries(decisite ${LibPLYXX_LIBRARY})
 
