@@ -85,6 +85,7 @@ public:
   double peri,sarea;
   triangle *aneigh,*bneigh,*cneigh;
   double gradmat[2][3]; // to compute gradient from three partial gradients
+  std::vector<xyz> dots;
   triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
