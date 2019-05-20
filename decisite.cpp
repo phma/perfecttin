@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
   PostScript ps;
   BoundRect br;
-  int i;
+  int i,j;
   readPly("pc.ply");
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
@@ -43,8 +43,9 @@ int main(int argc, char *argv[])
   for (i=0;i<net.edges.size();i++)
     ps.line(net.edges[i],i,false,false);
   ps.setcolor(0,0,0);
-  for (i=0;i<cloud.size();i+=127)
-    ps.dot(cloud[i]);
+  for (i=0;i<net.triangles.size();i++)
+    for (j=0;j*j<net.triangles[i].dots.size();j++)
+      ps.dot(net.triangles[i].dots[j*j]);
   ps.endpage();
   ps.close();
   return 0;
