@@ -44,6 +44,7 @@ void makeOctagon()
   double bounds[8],width,margin;
   xy corners[8];
   int i;
+  triangle *tri;
   net.clear();
   for (i=0;i<cloud.size();i++)
   {
@@ -109,5 +110,15 @@ void makeOctagon()
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
   cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
   cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
+  tri=&net.triangles[0];
+  for (i=0;i<cloud.size();i++)
+  {
+    tri=tri->findt(cloud[i]);
+    tri->dots.push_back(cloud[i]);
+  }
+  //cloud.clear();
+  cloud.shrink_to_fit();
+  for (i=0;i<6;i++)
+    cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";
 }
 
