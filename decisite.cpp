@@ -23,12 +23,15 @@
 #include "ps.h"
 #include "octagon.h"
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
   PostScript ps;
   BoundRect br;
   int i;
   readPly("pc.ply");
+  cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
