@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
   ps.setscale(br);
   ps.setcolor(0,0,1);
   for (i=0;i<net.edges.size();i++)
-    ps.line(net.edges[i],i,false,true);
+    ps.line(net.edges[i],i,false,false);
   ps.setcolor(0,0,0);
   for (i=0;i<cloud.size();i+=127)
     ps.dot(cloud[i]);
