@@ -30,6 +30,7 @@
 #include "ldecimal.h"
 #include "boundrect.h"
 #include "cogo.h"
+#include "adjelev.h"
 
 using namespace std;
 
@@ -44,6 +45,8 @@ void makeOctagon()
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
   double bounds[8],width,margin;
   xy corners[8];
+  vector<triangle *> trianglePointers;
+  vector<point *> cornerPointers;
   int i,n,h,sz;
   triangle *tri;
   net.clear();
@@ -122,6 +125,14 @@ void makeOctagon()
   cloud.clear();
   cloud.shrink_to_fit();
   for (i=0;i<6;i++)
+  {
     cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";
+    trianglePointers.push_back(&net.triangles[i]);
+  }
+  for (i=1;i<=8;i++)
+    cornerPointers.push_back(&net.points[i]);
+  adjustElev(trianglePointers,cornerPointers);
+  for (i=1;i<=8;i++)
+    cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
 }
 
