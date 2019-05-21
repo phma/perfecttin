@@ -270,6 +270,10 @@ xyz::xyz()
   x=y=z=0;
 }
 
+void xyz::raise(double height)
+{
+  z+=height;
+}
 void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 {
   double tx,ty;

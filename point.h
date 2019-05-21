@@ -87,6 +87,7 @@ public:
   bool isfinite() const;
   bool isnan() const;
   double length();
+  void raise(double height);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto);
   void setelev(double h)

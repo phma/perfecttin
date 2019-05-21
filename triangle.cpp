@@ -81,11 +81,25 @@ double triangle::acicularity()
   return sqr(peri)/sarea/M_SQRT_432;
 }
 
+double triangle::areaCoord(xy pnt,point *v)
+/* Returns the area coordinate (aka barycentric coordinate) of pnt toward v.
+ * If v is not a corner of the triangle, returns zero.
+ * The coordinate ranges from 0 at the other two corners to 1 at v,
+ * if the point is inside the triangle.
+ */
+{
+  double ret=0;
+  if (v==a)
+    ret=area3(pnt,*b,*c)/sarea;
+  if (v==b)
+    ret=area3(*a,pnt,*c)/sarea;
+  if (v==a)
+    ret=area3(*a,*b,pnt)/sarea;
+  return ret;
+}
+
 double triangle::elevation(xy pnt)
 /* Computes the elevation of triangle tri at the point x,y.
- * This is the oldest function in Decisite, attested in C from 2007-12-13,
- * though since all files in the directory have the same date, I probably
- * wrote it earlier and copied it.
  */
 {
   double p,q,r; // Fraction of distance from a side to opposite corner. p+q+r=1.

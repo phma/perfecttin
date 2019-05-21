@@ -20,4 +20,44 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
+#include <cmath>
+#include <cassert>
+#include "leastsquares.h"
 #include "adjelev.h"
+using namespace std;
+
+void adjustElev(vector<triangle *> tri,vector<point *> pnt)
+/* Adjusts the points by least squares to fit all the dots in the triangles.
+ * The triangles should be all those that have at least one corner in
+ * the list of points. Corners of triangles which are not in pnt will not
+ * be adjusted.
+ */
+{
+  int i,j,k,ndots;
+  matrix a;
+  bool singular=false;
+  vector<double> b,x;
+  for (ndots=i=0;i<tri.size();i++)
+  {
+    ndots+=tri[i]->dots.size();
+    tri[i]->flatten(); // sets sarea, needed for areaCoord
+  }
+  a.resize(ndots,pnt.size());
+  for (ndots=i=0;i<tri.size();i++)
+    for (j=0;j<tri[i]->dots.size();j++,ndots++)
+    {
+      for (k=0;k<pnt.size();k++)
+	a[ndots][k]=tri[i]->areaCoord(tri[i]->dots[j],pnt[k]);
+      b.push_back(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j]));
+    }
+  x=linearLeastSquares(a,b);
+  assert(x.size()==pnt.size());
+  for (k=0;k<pnt.size();k++)
+    if (std::isfinite(x[k]))
+      pnt[k]->raise(x[k]);
+    else
+      singular=true;
+  if (singular)
+    cout<<"Matrix in least squares is singular"<<endl;
+}
