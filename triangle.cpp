@@ -93,7 +93,7 @@ double triangle::areaCoord(xy pnt,point *v)
     ret=area3(pnt,*b,*c)/sarea;
   if (v==b)
     ret=area3(*a,pnt,*c)/sarea;
-  if (v==a)
+  if (v==c)
     ret=area3(*a,*b,pnt)/sarea;
   return ret;
 }
