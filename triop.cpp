@@ -20,14 +20,20 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cassert>
 #include "octagon.h"
 #include "triop.h"
+
+using namespace std;
 
 void split(triangle *tri)
 /* Inserts a new point in the triangle, then moves the dots that are in the
  * two new triangles to them.
  */
 {
+  edge *sidea,*sideb,*sidec;
+  vector<xyz> remainder; // the dots that remain in tri
+  int i;
   // lock
   point newPoint(((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3);
   int newPointNum=net.points.size()+1;
@@ -40,6 +46,29 @@ void split(triangle *tri)
   net.edges[newEdgeNum+1].b=tri->b;
   net.edges[newEdgeNum+2].a=pnt;
   net.edges[newEdgeNum+2].b=tri->c;
-  // ...
+  pnt->line=&net.edges[newEdgeNum];
+  sidea=tri->c->edg(tri);
+  sideb=tri->a->edg(tri);
+  sidec=tri->b->edg(tri);
+  int newTriNum=net.triangles.size();
+  net.triangles[newTriNum].a=tri->a;
+  net.triangles[newTriNum].b=tri->b;
+  net.triangles[newTriNum].c=pnt;
+  net.triangles[newTriNum+1].a=tri->a;
+  net.triangles[newTriNum+1].b=pnt;
+  net.triangles[newTriNum+1].c=tri->c;
+  tri->a=pnt;
+  net.edges[newEdgeNum  ].tria=net.edges[newEdgeNum+2].trib=&net.triangles[newTriNum+1];
+  net.edges[newEdgeNum+1].tria=net.edges[newEdgeNum  ].trib=&net.triangles[newTriNum];
+  net.edges[newEdgeNum+2].tria=net.edges[newEdgeNum+1].trib=tri;
+  if (sideb->tria==tri)
+    sideb->tria=&net.triangles[newTriNum+1];
+  if (sideb->trib==tri)
+    sideb->trib=&net.triangles[newTriNum+1];
+  if (sidec->tria==tri)
+    sidec->tria=&net.triangles[newTriNum];
+  if (sidec->trib==tri)
+    sidec->trib=&net.triangles[newTriNum];
+  assert(net.checkTinConsistency());
   // unlock
 }

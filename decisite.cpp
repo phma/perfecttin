@@ -23,6 +23,7 @@
 #include "ply.h"
 #include "ps.h"
 #include "octagon.h"
+#include "triop.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
   readPly(inputFile);
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
+  split(&net.triangles[0]);
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
