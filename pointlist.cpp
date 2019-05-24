@@ -65,7 +65,7 @@ bool pointlist::checkTinConsistency()
   for (p=points.begin();p!=points.end();p++)
   {
     ed=p->second.line;
-    if (ed->a!=&p->second && ed->b!=&p->second)
+    if (ed==nullptr || (ed->a!=&p->second && ed->b!=&p->second))
     {
       ret=false;
       cerr<<"Point "<<p->first<<" line pointer is wrong.\n";
@@ -73,8 +73,11 @@ bool pointlist::checkTinConsistency()
     edgebearings.clear();
     do
     {
-      ed=ed->next(&p->second);
-      edgebearings.push_back(ed->bearing(&p->second));
+      if (ed)
+      {
+	ed=ed->next(&p->second);
+	edgebearings.push_back(ed->bearing(&p->second));
+      }
     } while (ed!=p->second.line && edgebearings.size()<=edges.size());
     if (edgebearings.size()>=edges.size())
     {
