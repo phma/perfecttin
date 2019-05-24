@@ -95,6 +95,6 @@ void split(triangle *tri)
     swap(tri->dots,remainder);
   tri->dots.shrink_to_fit();
   net.triangles[newTriNum].dots.shrink_to_fit();
-  net.triangles[newTriNum].dots.shrink_to_fit();
+  net.triangles[newTriNum+1].dots.shrink_to_fit();
   // unlock
 }
