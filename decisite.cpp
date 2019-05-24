@@ -61,7 +61,8 @@ int main(int argc, char *argv[])
   readPly(inputFile);
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
-  split(&net.triangles[0]);
+  for (i=0;i<6;i++)
+    split(&net.triangles[i]);
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
