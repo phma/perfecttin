@@ -74,11 +74,10 @@ bool pointlist::checkTinConsistency()
     do
     {
       if (ed)
-      {
 	ed=ed->next(&p->second);
+      if (ed)
 	edgebearings.push_back(ed->bearing(&p->second));
-      }
-    } while (ed!=p->second.line && edgebearings.size()<=edges.size());
+    } while (ed && ed!=p->second.line && edgebearings.size()<=edges.size());
     if (edgebearings.size()>=edges.size())
     {
       ret=false;

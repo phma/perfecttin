@@ -218,6 +218,8 @@ bool edge::isinterior()
 // or if the pointers are messed up.
 {
   point *tempa,*tempb;
+  if (nexta==nullptr || nextb==nullptr)
+    return false;
   tempa=nexta->otherend(a);
   tempb=nextb->otherend(b);
   return nexta->next(tempa)->otherend(tempa)==b &&
