@@ -19,18 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <boost/program_options.hpp>
 #include "ply.h"
 #include "ps.h"
 #include "octagon.h"
 
 using namespace std;
+namespace po=boost::program_options;
 
 int main(int argc, char *argv[])
 {
   PostScript ps;
   BoundRect br;
   int i,j;
-  readPly("pc.ply");
+  double tolerance;
+  string inputFile,outputFile;
+  bool validArgs,validCmd=true;
+  po::options_description generic("Options");
+  po::options_description hidden("Hidden options");
+  po::options_description cmdline_options;
+  po::positional_options_description p;
+  po::variables_map vm;
+  generic.add_options()
+    ("tolerance,t",po::value<double>(&tolerance),"Vertical tolerance")
+    ("output,o",po::value<string>(&outputFile),"Output file");
+  hidden.add_options()
+    ("input",po::value<string>(&inputFile),"Input file");
+  p.add("input",1);
+  cmdline_options.add(generic).add(hidden);
+  try
+  {
+    po::store(po::command_line_parser(argc,argv).options(cmdline_options).positional(p).run(),vm);
+    po::notify(vm);
+  }
+  catch (exception &e)
+  {
+    cerr<<e.what()<<endl;
+    validCmd=false;
+  }
+  readPly(inputFile);
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
   ps.open("decisite.ps");
