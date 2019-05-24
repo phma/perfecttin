@@ -50,6 +50,15 @@ void split(triangle *tri)
   sidea=tri->c->edg(tri);
   sideb=tri->a->edg(tri);
   sidec=tri->b->edg(tri);
+  net.edges[newEdgeNum  ].setnext(pnt,&net.edges[newEdgeNum+1]);
+  net.edges[newEdgeNum+1].setnext(pnt,&net.edges[newEdgeNum+2]);
+  net.edges[newEdgeNum+2].setnext(pnt,&net.edges[newEdgeNum  ]);
+  sidea->setnext(tri->b,&net.edges[newEdgeNum+1]);
+  net.edges[newEdgeNum+1].setnext(tri->b,sidec);
+  sidec->setnext(tri->a,&net.edges[newEdgeNum  ]);
+  net.edges[newEdgeNum  ].setnext(tri->b,sideb);
+  sideb->setnext(tri->c,&net.edges[newEdgeNum+2]);
+  net.edges[newEdgeNum+2].setnext(tri->b,sidea);
   int newTriNum=net.triangles.size();
   net.triangles[newTriNum].a=tri->a;
   net.triangles[newTriNum].b=tri->b;
@@ -69,6 +78,12 @@ void split(triangle *tri)
     sidec->tria=&net.triangles[newTriNum];
   if (sidec->trib==tri)
     sidec->trib=&net.triangles[newTriNum];
+  sidea->setNeighbors();
+  sideb->setNeighbors();
+  sidec->setNeighbors();
+  net.edges[newEdgeNum  ].setNeighbors();
+  net.edges[newEdgeNum+1].setNeighbors();
+  net.edges[newEdgeNum+2].setNeighbors();
   assert(net.checkTinConsistency());
   // unlock
 }
