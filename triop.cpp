@@ -85,5 +85,16 @@ void split(triangle *tri)
   net.edges[newEdgeNum+1].setNeighbors();
   net.edges[newEdgeNum+2].setNeighbors();
   assert(net.checkTinConsistency());
+  for (i=0;i<tri->dots.size();i++)
+    if (net.triangles[newTriNum].in(tri->dots[i]))
+      net.triangles[newTriNum].dots.push_back(tri->dots[i]);
+    else if (net.triangles[newTriNum+1].in(tri->dots[i]))
+      net.triangles[newTriNum+1].dots.push_back(tri->dots[i]);
+    else
+      remainder.push_back(tri->dots[i]);
+    swap(tri->dots,remainder);
+  tri->dots.shrink_to_fit();
+  net.triangles[newTriNum].dots.shrink_to_fit();
+  net.triangles[newTriNum].dots.shrink_to_fit();
   // unlock
 }
