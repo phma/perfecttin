@@ -21,6 +21,7 @@
  */
 
 #include <cstring>
+#include <cassert>
 #include "tin.h"
 #include "edgeop.h"
 #include "octagon.h"
@@ -36,6 +37,7 @@ void flip(edge *e)
   vector<xyz> allDots;
   int i;
   e->flip(&net);
+  assert(net.checkTinConsistency());
   allDots.resize(e->tria->dots.size()+e->trib->dots.size());
   memmove(&allDots[0],&e->tria->dots[0],e->tria->dots.size()*sizeof(xyz));
   memmove(&allDots[e->tria->dots.size()],&e->trib->dots[0],e->trib->dots.size()*sizeof(xyz));

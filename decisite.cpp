@@ -24,6 +24,7 @@
 #include "ps.h"
 #include "octagon.h"
 #include "triop.h"
+#include "edgeop.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -61,7 +62,9 @@ int main(int argc, char *argv[])
   readPly(inputFile);
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
-  for (i=0;i<6;i++)
+  for (i=1;i<6;i+=2)
+    flip(&net.edges[i]);
+  for (i=0;i<0;i++)
     split(&net.triangles[i]);
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
