@@ -20,8 +20,8 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BEZIER_H
-#define BEZIER_H
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 #include <vector>
 #include <array>
 #include "cogo.h"
@@ -56,29 +56,14 @@ struct triangleHit
 };
 
 class triangle
-/* A triangle has three corners and seven other control points, arranged as follows:
-         a
-       0   1
-     2   3   4
-   b   5   6   c
-   The corners are arranged counterclockwise so that the area is always nonnegative
-   (it can be zero in pathological cases such as all the points in a line, but then
-   the elevation and gradient at a point are impossible to compute). It can compute
-   the elevation and gradient at any point, but they are valid only inside the triangle.
-   They are computed outside the triangle for finding the extrema or for extrapolating
-   the surface outside the convex hull.
-   
-   There are two ways of computing the elevation and gradient within a triangle:
-   1. Interpolate cubically using the ten control points.
-   2. Interpolate cubically along a side, and interpolate the sideways slope
-   linearly between the two endpoints. Do this for all three sides, then weight
-   them by the reciprocal of the distance from the three sides.
-   The first method produces slight creases along the sides, The second does not,
-   but it is harder to find the extrema, and evaluating it outside the triangle
-   can yield infinity.
-   
-   Point 3 is not stored, but is computed from the other control points.
-   */
+/* A triangle has three corners, arranged as follows:
+ *   a
+ * b   c
+ * The corners are arranged counterclockwise so that the area is always nonnegative
+ * (it can be zero in pathological cases such as all the points in a line, but then
+ * the elevation and gradient at a point are impossible to compute). It can compute
+ * the elevation and gradient at any point, but they are valid only inside the triangle.
+ */
 {
 public:
   point *a,*b,*c; //corners
