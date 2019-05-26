@@ -91,6 +91,13 @@ void edge::setNeighbors()
     tria->setneighbor(trib);
     trib->setneighbor(tria);
   }
+  else
+  {
+    if (tria)
+      tria->setnoneighbor(this);
+    if (trib)
+      trib->setnoneighbor(this);
+  }
 }
 
 point* edge::otherend(point* end)

@@ -88,6 +88,7 @@ public:
   std::vector<xyz> dots;
   triangle();
   void setneighbor(triangle *neigh);
+  void setnoneighbor(edge *neigh);
   double areaCoord(xy pnt,point *v);
   double elevation(xy pnt);
   void flatten();

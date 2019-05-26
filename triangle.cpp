@@ -262,6 +262,20 @@ void triangle::setneighbor(triangle *neigh)
     bneigh=neigh;
 }
 
+void triangle::setnoneighbor(edge *neigh)
+{
+  bool sha,shb,shc;
+  sha=a==neigh->a || a==neigh->b;
+  shb=b==neigh->a || b==neigh->b;
+  shc=c==neigh->a || c==neigh->b;
+  if (sha&&shb)
+    cneigh=nullptr;
+  if (shb&&shc)
+    aneigh=nullptr;
+  if (shc&&sha)
+    bneigh=nullptr;
+}
+
 triangle *triangle::nexttoward(xy pnt)
 // If the point is in the triangle, return the same triangle.
 // Else return which triangle to look in next.

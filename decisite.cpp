@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
   makeOctagon();
   for (i=1;i<6;i+=2)
     flip(&net.edges[i]);
-  for (i=0;i<0;i++)
+  for (i=0;i<6;i++)
     split(&net.triangles[i]);
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
