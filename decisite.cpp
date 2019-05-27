@@ -62,9 +62,11 @@ int main(int argc, char *argv[])
   readPly(inputFile);
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
-  for (i=1;i<6;i+=2)
+  for (i=0;i<13;i+=(i?1:6)) // edges 1-5 are interior
+    bend(&net.edges[i]);
+  for (i=1;i>6;i+=2)
     flip(&net.edges[i]);
-  for (i=0;i<6;i++)
+  for (i=0;i>6;i++)
     split(&net.triangles[i]);
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);

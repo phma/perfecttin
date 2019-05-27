@@ -21,3 +21,5 @@
  */
 
 void flip(edge *e);
+void bend(edge *e);
+

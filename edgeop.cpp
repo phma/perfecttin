@@ -23,6 +23,7 @@
 #include <cstring>
 #include <cassert>
 #include "tin.h"
+#include "angle.h"
 #include "edgeop.h"
 #include "octagon.h"
 using namespace std;
@@ -36,6 +37,7 @@ void flip(edge *e)
 {
   vector<xyz> allDots;
   int i;
+  // lock
   e->flip(&net);
   assert(net.checkTinConsistency());
   allDots.resize(e->tria->dots.size()+e->trib->dots.size());
@@ -50,4 +52,72 @@ void flip(edge *e)
       e->trib->dots.push_back(allDots[i]);
   e->tria->dots.shrink_to_fit();
   e->trib->dots.shrink_to_fit();
+  // unlock
+}
+
+void bend(edge *e)
+/* Inserts a new point, bending and breaking the edge e of the perimeter,
+ * then flips the edge e.
+ */
+{
+  edge *anext=e,*bnext=e;
+  int abear,ebear,bbear;
+  // lock
+  do
+    anext=anext->next(e->a);
+  while (anext->isinterior());
+  do
+    bnext=bnext->next(e->b);
+  while (bnext->isinterior());
+  abear=anext->bearing(e->a);
+  ebear=e->bearing(e->a);
+  bbear=bnext->bearing(e->b);
+  while (abs(abear-ebear)>DEG90)
+    abear+=DEG180;
+  while (abs(bbear-ebear)>DEG90)
+    bbear+=DEG180;
+  abear=ebear+(abear-ebear)/2;
+  bbear=ebear+(bbear-ebear)/2;
+  point newPoint(intersection(*e->a,abear,*e->b,bbear),0);
+  int newPointNum=net.points.size()+1;
+  net.addpoint(newPointNum,newPoint);
+  point *pnt=&net.points[newPointNum];
+  int newEdgeNum=net.edges.size();
+  net.edges[newEdgeNum  ].a=e->a;
+  net.edges[newEdgeNum  ].b=pnt;
+  net.edges[newEdgeNum+1].a=e->b;
+  net.edges[newEdgeNum+1].b=pnt;
+  pnt->line=&net.edges[newEdgeNum];
+  net.edges[newEdgeNum  ].setnext(pnt,&net.edges[newEdgeNum+1]);
+  net.edges[newEdgeNum+1].setnext(pnt,&net.edges[newEdgeNum  ]);
+  int newTriNum=net.triangles.size();
+  net.triangles[newTriNum].a=pnt;
+  // If abear-bbear<0, then e is counterclockwise around the TIN.
+  if (abear-bbear<0)
+  {
+    net.triangles[newTriNum].b=e->b;
+    net.triangles[newTriNum].c=e->a;
+    anext->setnext(e->a,&net.edges[newEdgeNum]);
+    net.edges[newEdgeNum  ].setnext(e->a,e);
+    e->setnext(e->b,&net.edges[newEdgeNum+1]);
+    net.edges[newEdgeNum+1].setnext(e->b,bnext);
+    e->tria=&net.triangles[newTriNum];
+    net.edges[newEdgeNum  ].trib=&net.triangles[newTriNum];
+    net.edges[newEdgeNum+1].tria=&net.triangles[newTriNum];
+  }
+  else
+  {
+    net.triangles[newTriNum].b=e->a;
+    net.triangles[newTriNum].c=e->b;
+    bnext->setnext(e->b,&net.edges[newEdgeNum+1]);
+    net.edges[newEdgeNum+1].setnext(e->b,e);
+    e->setnext(e->a,&net.edges[newEdgeNum]);
+    net.edges[newEdgeNum  ].setnext(e->a,anext);
+    e->trib=&net.triangles[newTriNum];
+    net.edges[newEdgeNum  ].tria=&net.triangles[newTriNum];
+    net.edges[newEdgeNum+1].trib=&net.triangles[newTriNum];
+  }
+  e->setNeighbors();
+  assert(net.checkTinConsistency());
+  // unlock
 }
