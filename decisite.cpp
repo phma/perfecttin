@@ -29,11 +29,27 @@
 using namespace std;
 namespace po=boost::program_options;
 
+void drawNet(PostScript &ps)
+{
+  BoundRect br;
+  int i,j;
+  ps.startpage();
+  br.include(&net);
+  ps.setscale(br);
+  ps.setcolor(0,0,1);
+  for (i=0;i<net.edges.size();i++)
+    ps.line(net.edges[i],i,false,false);
+  ps.setcolor(0,0,0);
+  for (i=0;i<net.triangles.size();i++)
+    for (j=0;j*j<net.triangles[i].dots.size();j++)
+      ps.dot(net.triangles[i].dots[j*j]);
+  ps.endpage();
+}
+
 int main(int argc, char *argv[])
 {
   PostScript ps;
-  BoundRect br;
-  int i,j;
+  int i;
   double tolerance;
   string inputFile,outputFile;
   bool validArgs,validCmd=true;
@@ -62,26 +78,19 @@ int main(int argc, char *argv[])
   readPly(inputFile);
   cout<<"Read "<<cloud.size()<<" points\n";
   makeOctagon();
-  for (i=1;i<6;i+=2)
-    flip(&net.edges[i]);
-  for (i=0;i<6;i++)
-    split(&net.triangles[i]);
-  for (i=0;i<13;i+=(i?1:6)) // edges 1-5 are interior
-    bend(&net.edges[i]);
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
-  ps.startpage();
-  br.include(&net);
-  ps.setscale(br);
-  ps.setcolor(0,0,1);
-  for (i=0;i<net.edges.size();i++)
-    ps.line(net.edges[i],i,false,false);
-  ps.setcolor(0,0,0);
-  for (i=0;i<net.triangles.size();i++)
-    for (j=0;j*j<net.triangles[i].dots.size();j++)
-      ps.dot(net.triangles[i].dots[j*j]);
-  ps.endpage();
+  drawNet(ps);
+  for (i=1;i<6;i+=2)
+    flip(&net.edges[i]);
+  drawNet(ps);
+  for (i=0;i<6;i++)
+    split(&net.triangles[i]);
+  drawNet(ps);
+  for (i=0;i<13;i+=(i?1:6)) // edges 1-5 are interior
+    bend(&net.edges[i]);
+  drawNet(ps);
   ps.close();
   return 0;
 }
