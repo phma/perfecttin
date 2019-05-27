@@ -120,4 +120,5 @@ void bend(edge *e)
   e->setNeighbors();
   assert(net.checkTinConsistency());
   // unlock
+  flip(e);
 }
