@@ -21,3 +21,4 @@
  */
 
 void split(triangle *tri);
+void triop(triangle *tri,double tolerance);

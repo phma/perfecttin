@@ -21,6 +21,9 @@
  */
 
 #include <cassert>
+#include <cmath>
+#include "neighbor.h"
+#include "adjelev.h"
 #include "octagon.h"
 #include "triop.h"
 
@@ -97,4 +100,24 @@ void split(triangle *tri)
   net.triangles[newTriNum].dots.shrink_to_fit();
   net.triangles[newTriNum+1].dots.shrink_to_fit();
   // unlock
+}
+
+bool shouldSplit(triangle *tri,double tolerance)
+{
+  int i;
+  for (i=0;i<tri->dots.size();i++)
+    if (fabs(tri->dots[i].elev()-tri->elevation(tri->dots[i]))>tolerance)
+      break;
+  return (tri->dots.size()>=9 && i<tri->dots.size());
+}
+
+void triop(triangle *tri,double tolerance)
+{
+  vector<point *> corners;
+  corners.push_back(tri->a);
+  corners.push_back(tri->b);
+  corners.push_back(tri->c);
+  if (shouldSplit(tri,tolerance))
+    split(tri);
+  adjustElev(triangleNeighbors(corners),corners);
 }
