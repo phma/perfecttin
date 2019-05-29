@@ -26,6 +26,10 @@
 #include "angle.h"
 #include "edgeop.h"
 #include "octagon.h"
+#include "triop.h"
+#include "neighbor.h"
+#include "adjelev.h"
+
 using namespace std;
 
 vector<pointlist> tempPointlist;
@@ -155,4 +159,31 @@ bool shouldFlip(edge *e,int thread)
   tempPointlist[thread].maketriangles();
   assert(tempPointlist[thread].checkTinConsistency());
   return false;
+}
+
+bool shouldBend(edge *e,double tolerance)
+{
+  if (e->tria)
+    return shouldSplit(e->tria,tolerance);
+  else
+    return shouldSplit(e->trib,tolerance);
+}
+
+void edgeop(edge *e,double tolerance,int thread)
+{
+  vector<point *> corners;
+  corners.push_back(e->a);
+  corners.push_back(e->b);
+  if (e->tria)
+    corners.push_back(e->nextb->otherend(e->b));
+  if (e->trib)
+    corners.push_back(e->nexta->otherend(e->a));
+  if (e->isinterior())
+    if (e->isFlippable() && shouldFlip(e,thread))
+      flip(e);
+    else;
+  else
+    if (shouldBend(e,tolerance))
+      bend(e);
+  adjustElev(triangleNeighbors(corners),corners);
 }

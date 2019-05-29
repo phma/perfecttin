@@ -21,4 +21,5 @@
  */
 
 void split(triangle *tri);
+bool shouldSplit(triangle *tri,double tolerance); // called from edgeop
 void triop(triangle *tri,double tolerance,int thread);
