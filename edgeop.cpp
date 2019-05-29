@@ -164,6 +164,20 @@ bool shouldFlip(edge *e,int thread)
     tempPointlist[thread].points[i].line=&tempPointlist[thread].edges[(i-1)%4+4];
   tempPointlist[thread].maketriangles();
   assert(tempPointlist[thread].checkTinConsistency());
+  /*
+   *           2
+   *         / | \
+   *       /   |   \
+   *     /  0  |  1  \
+   *   /       |       \
+   * 1---------5---------3
+   *   \       |       /
+   *     \  3  |  2  /
+   *       \   |   /
+   *         \ | /
+   *           4
+   * Line 1-3 is the edge before flipping; line 2-4 is what it would be after.
+   */
   triab[0]=e->tria;
   triab[1]=e->trib;
   tri=&tempPointlist[thread].triangles[0];
