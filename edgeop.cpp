@@ -137,9 +137,9 @@ bool shouldFlip(edge *e,int thread)
   int i;
   tempPointlist[thread].clear();
   tempPointlist[thread].addpoint(1,*e->a);
-  tempPointlist[thread].addpoint(2,*e->nextb->otherend(e->b));
+  tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
   tempPointlist[thread].addpoint(3,*e->b);
-  tempPointlist[thread].addpoint(4,*e->nexta->otherend(e->a));
+  tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
   tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
 			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
   for (i=0;i<4;i++)
@@ -156,6 +156,8 @@ bool shouldFlip(edge *e,int thread)
     tempPointlist[thread].edges[i+4].nexta=&tempPointlist[thread].edges[i];
     tempPointlist[thread].edges[i+4].nextb=&tempPointlist[thread].edges[(i+3)%4+4];
   }
+  for (i=1;i<6;i++)
+    tempPointlist[thread].points[i].line=&tempPointlist[thread].edges[(i-1)%4+4];
   tempPointlist[thread].maketriangles();
   assert(tempPointlist[thread].checkTinConsistency());
   return false;

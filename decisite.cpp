@@ -25,6 +25,7 @@
 #include "octagon.h"
 #include "triop.h"
 #include "edgeop.h"
+#include "relprime.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -49,7 +50,7 @@ void drawNet(PostScript &ps)
 int main(int argc, char *argv[])
 {
   PostScript ps;
-  int i;
+  int i,e,t;
   double tolerance;
   string inputFile,outputFile;
   bool validArgs,validCmd=true;
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
   po::positional_options_description p;
   po::variables_map vm;
   generic.add_options()
-    ("tolerance,t",po::value<double>(&tolerance),"Vertical tolerance")
+    ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
     ("output,o",po::value<string>(&outputFile),"Output file");
   hidden.add_options()
     ("input",po::value<string>(&inputFile),"Input file");
@@ -82,15 +83,23 @@ int main(int argc, char *argv[])
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   drawNet(ps);
-  for (i=1;i<6;i+=2)
+  for (i=1;i>6;i+=2)
     flip(&net.edges[i]);
-  drawNet(ps);
-  for (i=0;i<6;i++)
+  //drawNet(ps);
+  for (i=0;i>6;i++)
     split(&net.triangles[i]);
-  drawNet(ps);
-  for (i=0;i<13;i+=(i?1:6)) // edges 1-5 are interior
+  //drawNet(ps);
+  for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
     bend(&net.edges[i]);
-  drawNet(ps);
+  initTempPointlist(1);
+  for (i=e=t=0;i<100;i++)
+  {
+    edgeop(&net.edges[e],tolerance,0);
+    triop(&net.triangles[t],tolerance,0);
+    drawNet(ps);
+    e=(e+relprime(net.edges.size()))%net.edges.size();
+    t=(t+relprime(net.triangles.size()))%net.triangles.size();
+  }
   ps.close();
   return 0;
 }
