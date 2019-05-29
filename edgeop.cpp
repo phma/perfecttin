@@ -134,7 +134,11 @@ void bend(edge *e)
 
 bool shouldFlip(edge *e,int thread)
 {
-  int i;
+  int i,j;
+  array<triangle *,2> triab;
+  triangle *tri;
+  vector<triangle *> alltris;
+  vector<point *> allpoints;
   tempPointlist[thread].clear();
   tempPointlist[thread].addpoint(1,*e->a);
   tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
@@ -160,6 +164,20 @@ bool shouldFlip(edge *e,int thread)
     tempPointlist[thread].points[i].line=&tempPointlist[thread].edges[(i-1)%4+4];
   tempPointlist[thread].maketriangles();
   assert(tempPointlist[thread].checkTinConsistency());
+  triab[0]=e->tria;
+  triab[1]=e->trib;
+  tri=&tempPointlist[thread].triangles[0];
+  for (i=0;i<2;i++)
+    for (j=0;j<triab[i]->dots.size();j++)
+    {
+      tri=tri->findt(triab[i]->dots[j]);
+      tri->dots.push_back(triab[i]->dots[j]);
+    }
+  for (i=1;i<6;i++)
+    allpoints.push_back(&tempPointlist[thread].points[i]);
+  for (i=0;i<4;i++)
+    alltris.push_back(&tempPointlist[thread].triangles[i]);
+  adjustElev(alltris,allpoints);
   return false;
 }
 
