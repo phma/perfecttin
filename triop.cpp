@@ -111,7 +111,7 @@ bool shouldSplit(triangle *tri,double tolerance)
   return (tri->dots.size()>=9 && i<tri->dots.size());
 }
 
-void triop(triangle *tri,double tolerance)
+void triop(triangle *tri,double tolerance,int thread)
 {
   vector<point *> corners;
   corners.push_back(tri->a);

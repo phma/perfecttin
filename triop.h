@@ -21,4 +21,4 @@
  */
 
 void split(triangle *tri);
-void triop(triangle *tri,double tolerance);
+void triop(triangle *tri,double tolerance,int thread);

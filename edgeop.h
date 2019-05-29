@@ -20,6 +20,7 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+void initTempPointlist(int nthreads);
 void flip(edge *e);
 void bend(edge *e);
 

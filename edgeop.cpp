@@ -33,6 +33,11 @@ vector<pointlist> tempPointlist;
  * flip an edge. One per worker thread.
  */
 
+void initTempPointlist(int nthreads)
+{
+  tempPointlist.resize(nthreads);
+}
+
 void flip(edge *e)
 {
   vector<xyz> allDots;
@@ -121,4 +126,33 @@ void bend(edge *e)
   assert(net.checkTinConsistency());
   // unlock
   flip(e);
+}
+
+bool shouldFlip(edge *e,int thread)
+{
+  int i;
+  tempPointlist[thread].clear();
+  tempPointlist[thread].addpoint(1,*e->a);
+  tempPointlist[thread].addpoint(2,*e->nextb->otherend(e->b));
+  tempPointlist[thread].addpoint(3,*e->b);
+  tempPointlist[thread].addpoint(4,*e->nexta->otherend(e->a));
+  tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
+			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
+  for (i=0;i<4;i++)
+  {
+    tempPointlist[thread].edges[i].a=&tempPointlist[thread].points[i+1];
+    tempPointlist[thread].edges[i].b=&tempPointlist[thread].points[(i+1)%4+1];
+    tempPointlist[thread].edges[i+4].a=&tempPointlist[thread].points[i+1];
+    tempPointlist[thread].edges[i+4].b=&tempPointlist[thread].points[5];
+  }
+  for (i=0;i<4;i++)
+  {
+    tempPointlist[thread].edges[i].nexta=&tempPointlist[thread].edges[(i+3)%4];
+    tempPointlist[thread].edges[i].nextb=&tempPointlist[thread].edges[(i+1)%4+4];
+    tempPointlist[thread].edges[i+4].nexta=&tempPointlist[thread].edges[i];
+    tempPointlist[thread].edges[i+4].nextb=&tempPointlist[thread].edges[(i+3)%4+4];
+  }
+  tempPointlist[thread].maketriangles();
+  assert(tempPointlist[thread].checkTinConsistency());
+  return false;
 }
