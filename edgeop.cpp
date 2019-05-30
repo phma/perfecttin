@@ -137,6 +137,7 @@ bool shouldFlip(edge *e,int thread)
   int i,j;
   array<triangle *,2> triab;
   triangle *tri;
+  bool validTemp;
   vector<triangle *> alltris;
   vector<point *> allpoints;
   tempPointlist[thread].clear();
@@ -163,7 +164,7 @@ bool shouldFlip(edge *e,int thread)
   for (i=1;i<6;i++)
     tempPointlist[thread].points[i].line=&tempPointlist[thread].edges[(i-1)%4+4];
   tempPointlist[thread].maketriangles();
-  assert(tempPointlist[thread].checkTinConsistency());
+  validTemp=tempPointlist[thread].checkTinConsistency();
   /*
    *           2
    *         / | \
@@ -177,6 +178,21 @@ bool shouldFlip(edge *e,int thread)
    *         \ | /
    *           4
    * Line 1-3 is the edge before flipping; line 2-4 is what it would be after.
+   * It is possible for valid splittings to produce an invalid temporary pointlist.
+   * Split △ABC at D, then split △ABD at E. C, D, and E are collinear. Then try
+   * to flip CD. The temporary pointlist looks like this:
+   * 2
+   * | \
+   * |   \
+   * |  1  \
+   * |       \
+   * 1=5-------3
+   * |       /
+   * |  2  /
+   * |   /
+   * | /
+   * 4
+   * Because of roundoff error, it may appear to be flippable, but in fact is not.
    */
   triab[0]=e->tria;
   triab[1]=e->trib;
