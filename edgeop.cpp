@@ -137,7 +137,7 @@ bool shouldFlip(edge *e,int thread)
   int i,j;
   array<triangle *,2> triab;
   triangle *tri;
-  bool validTemp;
+  bool validTemp,ret=false;
   vector<triangle *> alltris;
   vector<point *> allpoints;
   tempPointlist[thread].clear();
@@ -196,19 +196,22 @@ bool shouldFlip(edge *e,int thread)
    */
   triab[0]=e->tria;
   triab[1]=e->trib;
-  tri=&tempPointlist[thread].triangles[0];
-  for (i=0;i<2;i++)
-    for (j=0;j<triab[i]->dots.size();j++)
-    {
-      tri=tri->findt(triab[i]->dots[j]);
-      tri->dots.push_back(triab[i]->dots[j]);
-    }
-  for (i=1;i<6;i++)
-    allpoints.push_back(&tempPointlist[thread].points[i]);
-  for (i=0;i<4;i++)
-    alltris.push_back(&tempPointlist[thread].triangles[i]);
-  adjustElev(alltris,allpoints);
-  return false;
+  if (validTemp)
+  {
+    tri=&tempPointlist[thread].triangles[0];
+    for (i=0;i<2;i++)
+      for (j=0;j<triab[i]->dots.size();j++)
+      {
+	tri=tri->findt(triab[i]->dots[j]);
+	tri->dots.push_back(triab[i]->dots[j]);
+      }
+    for (i=1;i<6;i++)
+      allpoints.push_back(&tempPointlist[thread].points[i]);
+    for (i=0;i<4;i++)
+      alltris.push_back(&tempPointlist[thread].triangles[i]);
+    adjustElev(alltris,allpoints);
+  }
+  return ret;
 }
 
 bool shouldBend(edge *e,double tolerance)
