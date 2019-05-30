@@ -445,6 +445,7 @@ matrix rowvector(const vector<double> v)
 matrix columnvector(const vector<double> v)
 {
   matrix ret(v.size(),1);
-  memcpy(ret[0],&v[0],sizeof(double)*v.size());
+  if (v.size())
+    memcpy(ret[0],&v[0],sizeof(double)*v.size());
   return ret;
 }
