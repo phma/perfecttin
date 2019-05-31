@@ -26,8 +26,9 @@
 struct adjustRecord
 {
   bool validMatrix;
-  double rmsAdjustment;
+  double msAdjustment;
 };
 
 adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
 void logAdjustment(adjustRecord rec);
+double rmsAdjustment();

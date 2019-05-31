@@ -27,6 +27,8 @@
 #include "test.h"
 #include "edgeop.h"
 #include "relprime.h"
+#include "adjelev.h"
+#include "ldecimal.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -52,6 +54,7 @@ int main(int argc, char *argv[])
 {
   PostScript ps;
   int i,e,t;
+  time_t now,then;
   double tolerance;
   string inputFile,outputFile;
   bool validArgs,validCmd=true;
@@ -110,7 +113,15 @@ int main(int argc, char *argv[])
     triop(&net.triangles[t],tolerance,0);
     t=(t+relprime(net.triangles.size()))%net.triangles.size();
     drawNet(ps);
+    now=time(nullptr);
+    if (now!=then)
+    {
+      cout<<i<<"  "<<ldecimal(rmsAdjustment())<<"     \r";
+      cout.flush();
+      then=now;
+    }
   }
+  cout<<'\n';
   ps.close();
   return 0;
 }
