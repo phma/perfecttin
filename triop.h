@@ -20,6 +20,6 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
-void split(triangle *tri);
+point *split(triangle *tri);
 bool shouldSplit(triangle *tri,double tolerance); // called from edgeop
 void triop(triangle *tri,double tolerance,int thread);

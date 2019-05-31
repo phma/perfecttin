@@ -29,7 +29,7 @@
 
 using namespace std;
 
-void split(triangle *tri)
+point *split(triangle *tri)
 /* Inserts a new point in the triangle, then moves the dots that are in the
  * two new triangles to them.
  */
@@ -100,6 +100,7 @@ void split(triangle *tri)
   net.triangles[newTriNum].dots.shrink_to_fit();
   net.triangles[newTriNum+1].dots.shrink_to_fit();
   // unlock
+  return pnt;
 }
 
 bool shouldSplit(triangle *tri,double tolerance)
@@ -118,6 +119,6 @@ void triop(triangle *tri,double tolerance,int thread)
   corners.push_back(tri->b);
   corners.push_back(tri->c);
   if (shouldSplit(tri,tolerance))
-    split(tri);
+    corners.push_back(split(tri));
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
 }

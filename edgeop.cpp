@@ -64,7 +64,7 @@ void flip(edge *e)
   // unlock
 }
 
-void bend(edge *e)
+point *bend(edge *e)
 /* Inserts a new point, bending and breaking the edge e of the perimeter,
  * then flips the edge e.
  */
@@ -130,6 +130,7 @@ void bend(edge *e)
   assert(net.checkTinConsistency());
   // unlock
   flip(e);
+  return pnt;
 }
 
 bool shouldFlip(edge *e,int thread)
@@ -275,6 +276,6 @@ void edgeop(edge *e,double tolerance,int thread)
     else;
   else
     if (shouldBend(e,tolerance))
-      bend(e);
+      corners.push_back(bend(e));
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
 }
