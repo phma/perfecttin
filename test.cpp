@@ -24,6 +24,7 @@
 #include <cmath>
 #include "test.h"
 #include "angle.h"
+#include "ply.h"
 
 using std::map;
 
@@ -33,15 +34,6 @@ void dumppoints()
   printf("dumppoints\n");
   //for (i=pl.points.begin();i!=pl.points.end();i++)
   //    i->second.dump();
-  printf("end dump\n");
-}
-
-void dumppointsvalence(pointlist &pl)
-{
-  map<int,point>::iterator i;
-  printf("dumppoints\n");
-  for (i=pl.points.begin();i!=pl.points.end();i++)
-    printf("%d %d\n",i->first,i->second.valence());
   printf("end dump\n");
 }
 
@@ -141,7 +133,7 @@ void setsurface(int surf)
   }
 }
 
-void aster(pointlist &pl,int n)
+void aster(int n)
 /* Fill points with asteraceous pattern. Pattern invented by H. Vogel in 1979
    and later by me, not knowing of Vogel. */
 {
@@ -151,11 +143,11 @@ void aster(pointlist &pl,int n)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(i+0.5),sin(angle*i)*sqrt(i+0.5));
-    pl.addpoint(i+1,point(pnt,testsurface(pnt)));
+    cloud.push_back(xyz(pnt,testsurface(pnt)));
   }
 }
 
-void _ellipse(pointlist &pl,int n,double skewness)
+void _ellipse(int n,double skewness)
 /* Skewness is not eccentricity. When skewness=0.01, eccentricity=0.14072. */
 {
   int i;
@@ -164,11 +156,11 @@ void _ellipse(pointlist &pl,int n,double skewness)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(n+0.5)*(1-skewness),sin(angle*i)*sqrt(n+0.5)*(1+skewness));
-    pl.addpoint(i+1,point(pnt,testsurface(pnt)));
+    cloud.push_back(xyz(pnt,testsurface(pnt)));
   }
 }
 
-void regpolygon(pointlist &pl,int n)
+void regpolygon(int n)
 {
   int i;
   double angle=2*M_PI/n;
@@ -176,30 +168,30 @@ void regpolygon(pointlist &pl,int n)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(n+0.5),sin(angle*i)*sqrt(n+0.5));
-    pl.addpoint(i+1,point(pnt,testsurface(pnt)));
+    cloud.push_back(xyz(pnt,testsurface(pnt)));
   }
 }
 
-void ring(pointlist &pl,int n)
+void ring(int n)
 /* Points in a circle, for most ambiguous case of the Delaunay algorithm.
  * The number of different ways to make the TIN is a Catalan number.
  */
 {
-  _ellipse(pl,n,0);
+  _ellipse(n,0);
 }
 
-void ellipse(pointlist &pl,int n)
+void ellipse(int n)
 /* Points in an ellipse, for worst case of the Delaunay algorithm. */
 {
-  _ellipse(pl,n,0.01);
+  _ellipse(n,0.01);
 }
 
-void longandthin(pointlist &pl,int n)
+void longandthin(int n)
 {
-  _ellipse(pl,n,0.999);
+  _ellipse(n,0.999);
 }
 
-void straightrow(pointlist &pl,int n)
+void straightrow(int n)
 // Add points in a straight line.
 {
   int i;
@@ -209,38 +201,38 @@ void straightrow(pointlist &pl,int n)
   {
     angle=(2.0*i/(n-1)-1)*M_PI/6;
     pnt=xy(0,sqrt(n)*tan(angle));
-    pl.addpoint(i+1,point(pnt,testsurface(pnt)));
+    cloud.push_back(xyz(pnt,testsurface(pnt)));
   }
 }
 
-void lozenge(pointlist &pl,int n)
+void lozenge(int n)
 // Add points on the short diagonal of a rhombus, then add the two other points.
 {
   xy pnt;
-  straightrow(pl,n);
+  straightrow(n);
   pnt=xy(-sqrt(n),0);
-  pl.addpoint(n+1,point(pnt,testsurface(pnt)));
+  cloud.push_back(xyz(pnt,testsurface(pnt)));
   pnt=xy(sqrt(n),0);
-  pl.addpoint(n+2,point(pnt,testsurface(pnt)));
+  cloud.push_back(xyz(pnt,testsurface(pnt)));
 }
 
-void wheelwindow(pointlist &pl,int n)
+void wheelwindow(int n)
 {
   int i;
   double angle=2*M_PI/n;
   xy pnt;
   pnt=xy(0,0);
-  pl.addpoint(1,point(pnt,testsurface(pnt)));
+  cloud.push_back(xyz(pnt,testsurface(pnt)));
   for (i=0;i<n;i++)
   {
     pnt=cossin(angle*i)*sqrt(n+0.5);
-    pl.addpoint(2*i+1,point(pnt,testsurface(pnt)));
+    cloud.push_back(xyz(pnt,testsurface(pnt)));
     pnt=cossin(angle*(i+0.5))*sqrt(n+6.5);
-    pl.addpoint(2*i+2,point(pnt,testsurface(pnt)));
+    cloud.push_back(xyz(pnt,testsurface(pnt)));
   }
 }
-
-void rotate(pointlist &pl,int n)
+/*
+void rotate(int n)
 {int i;
  double tmpx,tmpy;
  map<int,point>::iterator j;
@@ -253,7 +245,7 @@ void rotate(pointlist &pl,int n)
           }
  }
 
-void movesideways(pointlist &pl,double sw)
+void movesideways(double sw)
 {
   int i;
   double tmpx,tmpy;
@@ -262,7 +254,7 @@ void movesideways(pointlist &pl,double sw)
     j->second.x+=sw;
 }
 
-void moveup(pointlist &pl,double sw)
+void moveup(double sw)
 {
   int i;
   double tmpx,tmpy;
@@ -271,7 +263,7 @@ void moveup(pointlist &pl,double sw)
     j->second.z+=sw;
 }
 
-void enlarge(pointlist &pl,double sc)
+void enlarge(double sc)
 {
   int i;
   double tmpx,tmpy;
@@ -282,3 +274,4 @@ void enlarge(pointlist &pl,double sc)
     j->second.y*=sc;
   }
 }
+*/
