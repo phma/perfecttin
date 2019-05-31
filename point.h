@@ -137,6 +137,10 @@ public:
   //~point();
   const point& operator=(const point &rhs);
   friend class edge;
+  friend void rotate(pointlist &pl,int n);
+  friend void movesideways(pointlist &pl,double sw);
+  friend void moveup(pointlist &pl,double sw);
+  friend void enlarge(pointlist &pl,double sw);
   edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
   edge *edg(triangle *tri);
   // tri.a->edg(tri) is the side opposite tri.b

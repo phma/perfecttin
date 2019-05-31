@@ -31,7 +31,7 @@ find_package(Boost REQUIRED COMPONENTS program_options locale)
 add_executable(decisite adjelev.cpp angle.cpp boundrect.cpp cogo.cpp decisite.cpp
                edgeop.cpp ldecimal.cpp leastsquares.cpp manysum.cpp matrix.cpp
                neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
-               qindex.cpp random.cpp relprime.cpp tin.cpp triangle.cpp triop.cpp)
+               qindex.cpp random.cpp relprime.cpp test.cpp tin.cpp triangle.cpp triop.cpp)
 target_link_libraries(decisite ${LibPLYXX_LIBRARY} ${Boost_LIBRARIES})
 
 include(CheckIncludeFiles)
