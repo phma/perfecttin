@@ -248,7 +248,7 @@ bool shouldFlip(edge *e,int thread)
            tempPointlist[thread].edges[5].length()+
 	   tempPointlist[thread].edges[6].length()+
 	   tempPointlist[thread].edges[7].length());
-    ret=crit1+crit2+crit3>0;
+    ret=crit1+crit2+10*crit3>0;
   }
   return ret;
 }

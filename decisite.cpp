@@ -25,6 +25,7 @@
 #include "octagon.h"
 #include "triop.h"
 #include "test.h"
+#include "angle.h"
 #include "edgeop.h"
 #include "relprime.h"
 #include "adjelev.h"
@@ -112,13 +113,14 @@ int main(int argc, char *argv[])
     e=(e+relprime(net.edges.size()))%net.edges.size();
     triop(&net.triangles[t],tolerance,0);
     t=(t+relprime(net.triangles.size()))%net.triangles.size();
+    if (i==sqr(lrint(sqrt(i))))
+      drawNet(ps);
     now=time(nullptr);
     if (now!=then)
     {
       cout<<i<<"  "<<ldecimal(rmsAdjustment())<<"     \r";
       cout.flush();
       then=now;
-      drawNet(ps);
     }
   }
   drawNet(ps);
