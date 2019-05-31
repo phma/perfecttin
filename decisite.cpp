@@ -24,6 +24,7 @@
 #include "ps.h"
 #include "octagon.h"
 #include "triop.h"
+#include "test.h"
 #include "edgeop.h"
 #include "relprime.h"
 
@@ -76,8 +77,16 @@ int main(int argc, char *argv[])
     cerr<<e.what()<<endl;
     validCmd=false;
   }
-  readPly(inputFile);
-  cout<<"Read "<<cloud.size()<<" points\n";
+  if (inputFile.length())
+  {
+    readPly(inputFile);
+    cout<<"Read "<<cloud.size()<<" points\n";
+  }
+  else
+  {
+    setsurface(CIRPAR);
+    aster(100000);
+  }
   makeOctagon();
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
