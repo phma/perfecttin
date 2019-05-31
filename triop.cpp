@@ -119,5 +119,5 @@ void triop(triangle *tri,double tolerance,int thread)
   corners.push_back(tri->c);
   if (shouldSplit(tri,tolerance))
     split(tri);
-  adjustElev(triangleNeighbors(corners),corners);
+  logAdjustment(adjustElev(triangleNeighbors(corners),corners));
 }

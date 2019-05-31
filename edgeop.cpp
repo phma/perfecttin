@@ -276,5 +276,5 @@ void edgeop(edge *e,double tolerance,int thread)
   else
     if (shouldBend(e,tolerance))
       bend(e);
-  adjustElev(triangleNeighbors(corners),corners);
+  logAdjustment(adjustElev(triangleNeighbors(corners),corners));
 }

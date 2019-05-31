@@ -30,3 +30,4 @@ struct adjustRecord
 };
 
 adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
+void logAdjustment(adjustRecord rec);

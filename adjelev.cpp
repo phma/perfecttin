@@ -29,6 +29,8 @@
 #include "manysum.h"
 using namespace std;
 
+vector<adjustRecord> adjustmentLog;
+
 adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 /* Adjusts the points by least squares to fit all the dots in the triangles.
  * The triangles should be all those that have at least one corner in
@@ -67,4 +69,9 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   //if (singular)
     //cout<<"Matrix in least squares is singular"<<endl;
   return ret;
+}
+
+void logAdjustment(adjustRecord rec)
+{
+  adjustmentLog.push_back(rec);
 }

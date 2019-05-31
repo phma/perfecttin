@@ -131,7 +131,7 @@ void makeOctagon()
   }
   for (i=1;i<=8;i++)
     cornerPointers.push_back(&net.points[i]);
-  adjustElev(trianglePointers,cornerPointers);
+  logAdjustment(adjustElev(trianglePointers,cornerPointers));
   for (i=1;i<=8;i++)
     cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
 }
