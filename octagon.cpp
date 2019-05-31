@@ -122,8 +122,8 @@ void makeOctagon()
     tri=tri->findt(cloud[n]);
     tri->dots.push_back(cloud[n]);
   }
-  cloud.clear();
-  cloud.shrink_to_fit();
+  //cloud.clear();
+  //cloud.shrink_to_fit();
   for (i=0;i<6;i++)
   {
     cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";

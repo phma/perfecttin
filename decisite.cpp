@@ -54,9 +54,10 @@ void drawNet(PostScript &ps)
 int main(int argc, char *argv[])
 {
   PostScript ps;
-  int i,e,t;
+  int i,e,t,d;
   time_t now,then;
   double tolerance;
+  triangle *tri;
   string inputFile,outputFile;
   bool validArgs,validCmd=true;
   po::options_description generic("Options");
@@ -105,14 +106,18 @@ int main(int argc, char *argv[])
   for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
     bend(&net.edges[i]);
   initTempPointlist(1);
-  for (i=e=t=0;i<10000;i++)
+  tri=&net.triangles[0];
+  for (i=e=t=d=0;i<10000;i++)
   {
     edgeop(&net.edges[e],tolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
     edgeop(&net.edges[e],tolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
-    triop(&net.triangles[t],tolerance,0);
-    t=(t+relprime(net.triangles.size()))%net.triangles.size();
+    //triop(&net.triangles[t],tolerance,0);
+    //t=(t+relprime(net.triangles.size()))%net.triangles.size();
+    tri=tri->findt(cloud[d]);
+    triop(tri,tolerance,0);
+    d=(d+relprime(cloud.size()))%cloud.size();
     if (i==sqr(lrint(sqrt(i))))
       drawNet(ps);
     now=time(nullptr);
