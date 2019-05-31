@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
   for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
     bend(&net.edges[i]);
   initTempPointlist(1);
-  for (i=e=t=0;i<100;i++)
+  for (i=e=t=0;i<10000;i++)
   {
     edgeop(&net.edges[e],tolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
@@ -112,15 +112,16 @@ int main(int argc, char *argv[])
     e=(e+relprime(net.edges.size()))%net.edges.size();
     triop(&net.triangles[t],tolerance,0);
     t=(t+relprime(net.triangles.size()))%net.triangles.size();
-    drawNet(ps);
     now=time(nullptr);
     if (now!=then)
     {
       cout<<i<<"  "<<ldecimal(rmsAdjustment())<<"     \r";
       cout.flush();
       then=now;
+      drawNet(ps);
     }
   }
+  drawNet(ps);
   cout<<'\n';
   ps.close();
   return 0;
