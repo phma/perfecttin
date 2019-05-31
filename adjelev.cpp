@@ -25,9 +25,11 @@
 #include <cassert>
 #include "leastsquares.h"
 #include "adjelev.h"
+#include "angle.h"
+#include "manysum.h"
 using namespace std;
 
-bool adjustElev(vector<triangle *> tri,vector<point *> pnt)
+adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 /* Adjusts the points by least squares to fit all the dots in the triangles.
  * The triangles should be all those that have at least one corner in
  * the list of points. Corners of triangles which are not in pnt will not
@@ -36,8 +38,8 @@ bool adjustElev(vector<triangle *> tri,vector<point *> pnt)
 {
   int i,j,k,ndots;
   matrix a;
-  bool singular=false;
-  vector<double> b,x;
+  adjustRecord ret{true,0};
+  vector<double> b,x,xsq;
   for (ndots=i=0;i<tri.size();i++)
   {
     ndots+=tri[i]->dots.size();
@@ -54,11 +56,15 @@ bool adjustElev(vector<triangle *> tri,vector<point *> pnt)
   x=linearLeastSquares(a,b);
   assert(x.size()==pnt.size());
   for (k=0;k<pnt.size();k++)
+  {
     if (std::isfinite(x[k]))
       pnt[k]->raise(x[k]);
     else
-      singular=true;
-  if (singular)
-    cout<<"Matrix in least squares is singular"<<endl;
-  return !singular;
+      ret.validMatrix=false;
+    xsq.push_back(sqr(x[k]));
+  }
+  ret.rmsAdjustment=pairwisesum(xsq)/xsq.size();
+  //if (singular)
+    //cout<<"Matrix in least squares is singular"<<endl;
+  return ret;
 }

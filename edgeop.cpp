@@ -219,7 +219,7 @@ bool shouldFlip(edge *e,int thread)
       allpoints.push_back(&tempPointlist[thread].points[i]);
     for (i=0;i<4;i++)
       alltris.push_back(&tempPointlist[thread].triangles[i]);
-    if (adjustElev(alltris,allpoints))
+    if (adjustElev(alltris,allpoints).validMatrix)
     {
       elev13=(tempPointlist[thread].points[1].elev()*tempPointlist[thread].edges[6].length()+
 	      tempPointlist[thread].points[3].elev()*tempPointlist[thread].edges[4].length())/

@@ -23,4 +23,10 @@
 #include "matrix.h"
 #include "triangle.h"
 
-bool adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
+struct adjustRecord
+{
+  bool validMatrix;
+  double rmsAdjustment;
+};
+
+adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
