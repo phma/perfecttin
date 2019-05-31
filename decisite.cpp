@@ -111,8 +111,6 @@ int main(int argc, char *argv[])
   {
     edgeop(&net.edges[e],tolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
-    edgeop(&net.edges[e],tolerance,0);
-    e=(e+relprime(net.edges.size()))%net.edges.size();
     //triop(&net.triangles[t],tolerance,0);
     //t=(t+relprime(net.triangles.size()))%net.triangles.size();
     tri=tri->findt(cloud[d]);

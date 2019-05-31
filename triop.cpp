@@ -26,6 +26,7 @@
 #include "adjelev.h"
 #include "octagon.h"
 #include "triop.h"
+#include "edgeop.h"
 
 using namespace std;
 
@@ -115,10 +116,21 @@ bool shouldSplit(triangle *tri,double tolerance)
 void triop(triangle *tri,double tolerance,int thread)
 {
   vector<point *> corners;
+  edge *sidea,*sideb,*sidec;
+  bool spl;
   corners.push_back(tri->a);
   corners.push_back(tri->b);
   corners.push_back(tri->c);
-  if (shouldSplit(tri,tolerance))
+  sidea=tri->c->edg(tri);
+  sideb=tri->a->edg(tri);
+  sidec=tri->b->edg(tri);
+  if (spl=shouldSplit(tri,tolerance))
     corners.push_back(split(tri));
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
+  if (spl)
+  {
+    edgeop(sidea,tolerance,thread);
+    edgeop(sideb,tolerance,thread);
+    edgeop(sidec,tolerance,thread);
+  }
 }
