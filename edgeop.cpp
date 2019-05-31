@@ -219,14 +219,18 @@ bool shouldFlip(edge *e,int thread)
       allpoints.push_back(&tempPointlist[thread].points[i]);
     for (i=0;i<4;i++)
       alltris.push_back(&tempPointlist[thread].triangles[i]);
-    adjustElev(alltris,allpoints);
-    elev13=(tempPointlist[thread].points[1].elev()*tempPointlist[thread].edges[6].length()+
-            tempPointlist[thread].points[3].elev()*tempPointlist[thread].edges[4].length())/
-	   (tempPointlist[thread].edges[4].length()+tempPointlist[thread].edges[6].length());
-    elev24=(tempPointlist[thread].points[2].elev()*tempPointlist[thread].edges[7].length()+
-            tempPointlist[thread].points[4].elev()*tempPointlist[thread].edges[5].length())/
-	   (tempPointlist[thread].edges[5].length()+tempPointlist[thread].edges[7].length());
-    elev5=tempPointlist[thread].points[5].elev();
+    if (adjustElev(alltris,allpoints))
+    {
+      elev13=(tempPointlist[thread].points[1].elev()*tempPointlist[thread].edges[6].length()+
+	      tempPointlist[thread].points[3].elev()*tempPointlist[thread].edges[4].length())/
+	     (tempPointlist[thread].edges[4].length()+tempPointlist[thread].edges[6].length());
+      elev24=(tempPointlist[thread].points[2].elev()*tempPointlist[thread].edges[7].length()+
+	      tempPointlist[thread].points[4].elev()*tempPointlist[thread].edges[5].length())/
+	     (tempPointlist[thread].edges[5].length()+tempPointlist[thread].edges[7].length());
+      elev5=tempPointlist[thread].points[5].elev();
+    }
+    else
+      elev13=elev24=elev5=0;
     if (elev13==elev24)
       crit1=0;
     else

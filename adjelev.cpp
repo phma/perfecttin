@@ -27,7 +27,7 @@
 #include "adjelev.h"
 using namespace std;
 
-void adjustElev(vector<triangle *> tri,vector<point *> pnt)
+bool adjustElev(vector<triangle *> tri,vector<point *> pnt)
 /* Adjusts the points by least squares to fit all the dots in the triangles.
  * The triangles should be all those that have at least one corner in
  * the list of points. Corners of triangles which are not in pnt will not
@@ -60,4 +60,5 @@ void adjustElev(vector<triangle *> tri,vector<point *> pnt)
       singular=true;
   if (singular)
     cout<<"Matrix in least squares is singular"<<endl;
+  return !singular;
 }

@@ -23,4 +23,4 @@
 #include "matrix.h"
 #include "triangle.h"
 
-void adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
+bool adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
