@@ -104,10 +104,12 @@ int main(int argc, char *argv[])
   for (i=e=t=0;i<100;i++)
   {
     edgeop(&net.edges[e],tolerance,0);
-    triop(&net.triangles[t],tolerance,0);
-    drawNet(ps);
     e=(e+relprime(net.edges.size()))%net.edges.size();
+    edgeop(&net.edges[e],tolerance,0);
+    e=(e+relprime(net.edges.size()))%net.edges.size();
+    triop(&net.triangles[t],tolerance,0);
     t=(t+relprime(net.triangles.size()))%net.triangles.size();
+    drawNet(ps);
   }
   ps.close();
   return 0;
