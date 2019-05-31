@@ -109,11 +109,13 @@ int main(int argc, char *argv[])
   tri=&net.triangles[0];
   for (i=e=t=d=0;i<10000;i++)
   {
+    if ((i&(i-1))==0)
+      net.makeqindex();
     edgeop(&net.edges[e],tolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
     //triop(&net.triangles[t],tolerance,0);
     //t=(t+relprime(net.triangles.size()))%net.triangles.size();
-    tri=tri->findt(cloud[d]);
+    tri=net.findt(cloud[d]);
     triop(tri,tolerance,0);
     d=(d+relprime(cloud.size()))%cloud.size();
     if (i==sqr(lrint(sqrt(i))))
