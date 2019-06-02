@@ -88,7 +88,7 @@ point *split(triangle *tri)
   net.edges[newEdgeNum  ].setNeighbors();
   net.edges[newEdgeNum+1].setNeighbors();
   net.edges[newEdgeNum+2].setNeighbors();
-  assert(net.checkTinConsistency());
+  //assert(net.checkTinConsistency());
   for (i=0;i<tri->dots.size();i++)
     if (net.triangles[newTriNum].in(tri->dots[i]))
       net.triangles[newTriNum].dots.push_back(tri->dots[i]);
