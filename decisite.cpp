@@ -127,11 +127,11 @@ int main(int argc, char *argv[])
       net.makeqindex();
     edgeop(&net.edges[e],tolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
-    //triop(&net.triangles[t],tolerance,0);
-    //t=(t+relprime(net.triangles.size()))%net.triangles.size();
-    tri=net.findt(cloud[d]);
-    triop(tri,tolerance,0);
-    d=(d+relprime(cloud.size()))%cloud.size();
+    triop(&net.triangles[t],tolerance,0);
+    t=(t+relprime(net.triangles.size()))%net.triangles.size();
+    //tri=net.findt(cloud[d]);
+    //triop(tri,tolerance,0);
+    //d=(d+relprime(cloud.size()))%cloud.size();
     if (i==sqr(lrint(sqrt(i))))
       drawNet(ps);
     now=time(nullptr);
