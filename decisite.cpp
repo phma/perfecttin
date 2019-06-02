@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
   PostScript ps;
   int i,e,t,d;
   time_t now,then;
-  double tolerance;
+  double tolerance,areadone,rmsadj;
+  bool done=false;
   triangle *tri;
   string inputFile,outputFile;
   bool validArgs,validCmd=true;
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
     bend(&net.edges[i]);
   initTempPointlist(1);
   tri=&net.triangles[0];
-  for (i=e=t=d=0;i<10000;i++)
+  for (i=e=t=d=0;!done;i++)
   {
     if ((i&(i-1))==0)
       net.makeqindex();
@@ -137,9 +138,13 @@ int main(int argc, char *argv[])
     now=time(nullptr);
     if (now!=then)
     {
-      cout<<i<<"  "<<ldecimal(areaDone()*100,0.1)<<"%  "<<ldecimal(rmsAdjustment(),tolerance/100)<<"     \r";
+      areadone=areaDone();
+      rmsadj=rmsAdjustment();
+      cout<<i<<"  "<<ldecimal(areadone*100,0.1)<<"%  "<<ldecimal(rmsadj,tolerance/100)<<"     \r";
       cout.flush();
       then=now;
+      if (rmsadj<tolerance && areadone>0.99)
+	done=true;
     }
   }
   drawNet(ps);
