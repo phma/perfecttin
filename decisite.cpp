@@ -140,7 +140,9 @@ int main(int argc, char *argv[])
     {
       areadone=areaDone();
       rmsadj=rmsAdjustment();
-      cout<<i<<"  "<<ldecimal(areadone*100,0.1)<<"%  "<<ldecimal(rmsadj,tolerance/100)<<"     \r";
+      cout<<"Iter "<<i<<"  "<<ldecimal(areadone*100,0.1)<<"% done  ";
+      cout<<net.triangles.size()<<" triangles  adjustment ";
+      cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
       cout.flush();
       then=now;
       if (rmsadj<tolerance && areadone>0.99)
