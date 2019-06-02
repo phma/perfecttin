@@ -27,6 +27,7 @@
 #include "octagon.h"
 #include "triop.h"
 #include "edgeop.h"
+#include "angle.h"
 
 using namespace std;
 
@@ -113,7 +114,7 @@ bool shouldSplit(triangle *tri,double tolerance)
   for (i=0;i<tri->dots.size();i++)
     if (fabs(tri->dots[i].elev()-tri->elevation(tri->dots[i]))>tolerance)
       break;
-  return (tri->dots.size()>=9 && i<tri->dots.size());
+  return (tri->dots.size()>=9 && i<tri->dots.size() && tri->sarea>=sqr(tolerance)*M_SQRT_3/4);
 }
 
 void triop(triangle *tri,double tolerance,int thread)
