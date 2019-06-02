@@ -28,8 +28,8 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options locale)
-add_executable(decisite adjelev.cpp angle.cpp boundrect.cpp cogo.cpp decisite.cpp
-               edgeop.cpp ldecimal.cpp leastsquares.cpp manysum.cpp matrix.cpp
+add_executable(decisite adjelev.cpp angle.cpp binio.cpp boundrect.cpp cogo.cpp decisite.cpp
+               dxf.cpp edgeop.cpp ldecimal.cpp leastsquares.cpp manysum.cpp matrix.cpp
                neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp tin.cpp triangle.cpp triop.cpp)
 target_link_libraries(decisite ${LibPLYXX_LIBRARY} ${Boost_LIBRARIES})
