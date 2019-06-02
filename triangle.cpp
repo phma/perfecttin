@@ -60,6 +60,7 @@ triangle::triangle()
 {
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
+  flags=0;
 }
 
 double triangle::area()

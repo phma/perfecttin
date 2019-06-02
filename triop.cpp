@@ -100,6 +100,9 @@ point *split(triangle *tri)
   tri->dots.shrink_to_fit();
   net.triangles[newTriNum].dots.shrink_to_fit();
   net.triangles[newTriNum+1].dots.shrink_to_fit();
+  tri->flatten();
+  net.triangles[newTriNum].flatten();
+  net.triangles[newTriNum+1].flatten();
   // unlock
   return pnt;
 }
@@ -125,7 +128,12 @@ void triop(triangle *tri,double tolerance,int thread)
   sideb=tri->a->edg(tri);
   sidec=tri->b->edg(tri);
   if (spl=shouldSplit(tri,tolerance))
+  {
     corners.push_back(split(tri));
+    tri->flags&=~1;
+  }
+  else
+    tri->flags|=1;
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
   if (spl)
   {

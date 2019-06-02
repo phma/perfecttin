@@ -71,6 +71,7 @@ public:
   triangle *aneigh,*bneigh,*cneigh;
   double gradmat[2][3]; // to compute gradient from three partial gradients
   std::vector<xyz> dots;
+  int flags;
   triangle();
   void setneighbor(triangle *neigh);
   void setnoneighbor(edge *neigh);

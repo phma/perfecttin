@@ -29,6 +29,7 @@
 #include "edgeop.h"
 #include "relprime.h"
 #include "adjelev.h"
+#include "manysum.h"
 #include "ldecimal.h"
 
 using namespace std;
@@ -49,6 +50,19 @@ void drawNet(PostScript &ps)
     for (j=0;j*j<net.triangles[i].dots.size();j++)
       ps.dot(net.triangles[i].dots[j*j]);
   ps.endpage();
+}
+
+double areaDone()
+{
+  vector<double> allTri,doneTri;
+  int i;
+  for (i=0;i<net.triangles.size();i++)
+  {
+    allTri.push_back(net.triangles[i].sarea);
+    if (net.triangles[i].flags&1)
+      doneTri.push_back(net.triangles[i].sarea);
+  }
+  return pairwisesum(doneTri)/pairwisesum(allTri);
 }
 
 int main(int argc, char *argv[])
@@ -123,7 +137,7 @@ int main(int argc, char *argv[])
     now=time(nullptr);
     if (now!=then)
     {
-      cout<<i<<"  "<<ldecimal(rmsAdjustment())<<"     \r";
+      cout<<i<<"  "<<ldecimal(areaDone()*100,0.1)<<"%  "<<ldecimal(rmsAdjustment(),tolerance/100)<<"     \r";
       cout.flush();
       then=now;
     }

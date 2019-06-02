@@ -61,6 +61,8 @@ void flip(edge *e)
       e->trib->dots.push_back(allDots[i]);
   e->tria->dots.shrink_to_fit();
   e->trib->dots.shrink_to_fit();
+  e->tria->flatten();
+  e->trib->flatten();
   // unlock
 }
 
