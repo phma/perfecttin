@@ -507,3 +507,30 @@ vector<array<xyz,3> > extractTriangles(vector<GroupCode> dxfData)
   }
   return ret;
 }
+
+void insertXyz(vector<GroupCode> &dxfData,int xtag,xyz pnt)
+// xtag is the tag of the x-coordinate
+{
+  GroupCode xCode(xtag),yCode(xtag+10),zCode(xtag+20);
+  xCode.real=pnt.getx();
+  yCode.real=pnt.gety();
+  zCode.real=pnt.getz();
+  dxfData.push_back(xCode);
+  dxfData.push_back(yCode);
+  dxfData.push_back(zCode);
+}
+
+void insertTriangle(vector<GroupCode> &dxfData,triangle &tri)
+{
+  GroupCode entityType(0),layerName(8),colorNumber(62);
+  entityType.str="3DFACE";
+  layerName.str="0";
+  colorNumber.integer=0;
+  dxfData.push_back(entityType);
+  dxfData.push_back(layerName);
+  dxfData.push_back(colorNumber);
+  insertXyz(dxfData,10,*tri.a);
+  insertXyz(dxfData,11,*tri.b);
+  insertXyz(dxfData,12,*tri.c); // A 3DFACE always has four corners. That it's a triangle
+  insertXyz(dxfData,13,*tri.c); // is indicated by repeating a corner.
+}

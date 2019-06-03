@@ -24,6 +24,7 @@
 #include <vector>
 #include <array>
 #include "point.h"
+#include "triangle.h"
 
 struct TagRange
 {
@@ -69,6 +70,8 @@ GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
 void writeDxfText(std::ostream &file,GroupCode code);
 void writeDxfBinary(std::ostream &file,GroupCode code);
-std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode);
+std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode); // true for text
 std::vector<GroupCode> readDxfGroups(std::string filename);
+void writeDxfGroups(std::ostream &file,std::vector<GroupCode> &codes,bool mode);
 std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);
+void insertTriangle(std::vector<GroupCode> &dxfData,triangle &tri);

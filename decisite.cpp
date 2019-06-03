@@ -31,6 +31,7 @@
 #include "adjelev.h"
 #include "manysum.h"
 #include "ldecimal.h"
+#include "dxf.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -63,6 +64,17 @@ double areaDone()
       doneTri.push_back(net.triangles[i].sarea);
   }
   return pairwisesum(doneTri)/pairwisesum(allTri);
+}
+
+void writeDxf(string outputFile)
+{
+  vector<GroupCode> dxfCodes;
+  int i;
+  ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
+  // insert header here
+  for (i=0;i<net.triangles.size();i++)
+    insertTriangle(dxfCodes,net.triangles[i]);
+  writeDxfGroups(dxfFile,dxfCodes,false);
 }
 
 int main(int argc, char *argv[])
@@ -152,5 +164,6 @@ int main(int argc, char *argv[])
   drawNet(ps);
   cout<<'\n';
   ps.close();
+  writeDxf(outputFile);
   return 0;
 }
