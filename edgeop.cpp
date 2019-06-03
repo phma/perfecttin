@@ -150,6 +150,7 @@ bool shouldFlip(edge *e,int thread)
   bool validTemp,ret=false;
   double elev13,elev24,elev5;
   double crit1,crit2,crit3;
+  double areas[4];
   int ndots[4];
   vector<triangle *> alltris;
   vector<point *> allpoints;
@@ -207,6 +208,14 @@ bool shouldFlip(edge *e,int thread)
    * 4
    * Because of roundoff error, it may appear to be flippable, but in fact is not.
    */
+  if (validTemp)
+  {
+    for (i=0;i<4;i++)
+      areas[i]=tempPointlist[thread].triangles[i].area();
+    if (areas[0]+areas[3]>3e8*(areas[1]+areas[2]) ||
+        areas[2]+areas[1]>3e8*(areas[3]+areas[0]))
+      validTemp=false;
+  }
   triab[0]=e->tria;
   triab[1]=e->trib;
   if (validTemp)
@@ -280,4 +289,8 @@ void edgeop(edge *e,double tolerance,int thread)
     if (shouldBend(e,tolerance))
       corners.push_back(bend(e));
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
+  if (e->tria && e->tria->sarea<1e-6)
+    cout<<"tiny triangle a\n";
+  if (e->trib && e->trib->sarea<1e-6)
+    cout<<"tiny triangle b\n";
 }

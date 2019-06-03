@@ -145,8 +145,8 @@ int main(int argc, char *argv[])
     //tri=net.findt(cloud[d]);
     //triop(tri,tolerance,0);
     //d=(d+relprime(cloud.size()))%cloud.size();
-    if (i==sqr(lrint(sqrt(i))))
-      drawNet(ps);
+    //if (i==sqr(lrint(sqrt(i))))
+      //drawNet(ps);
     now=time(nullptr);
     if (now!=then)
     {
