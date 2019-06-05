@@ -191,11 +191,11 @@ bool shouldFlip(edge *e,int thread)
    *           2
    *         / | \
    *      0/   5   \1
-   *     /  0  |  2  \
+   *     /  0  |  1  \
    *   /       |       \
    * 1----4----5----6----3
    *   \       |       /
-   *     \  1  |  3  /
+   *     \  3  |  2  /
    *      3\   7   /2
    *         \ | /
    *           4
@@ -206,11 +206,11 @@ bool shouldFlip(edge *e,int thread)
    * 2
    * | \
    * |   \
-   * |  2  \
+   * |  1  \
    * |       \
    * 1=5-------3
    * |       /
-   * |  3  /
+   * |  2  /
    * |   /
    * | /
    * 4
@@ -252,8 +252,8 @@ bool shouldFlip(edge *e,int thread)
     else
       crit1=(fabs(elev13-elev5)-fabs(elev24-elev5))/(fabs(elev13-elev5)+fabs(elev24-elev5));
     for (i=0;i<4;i++)
-      ndots[i]=tempPointlist[thread].triangles[i].dots.size();
-    crit2=(abs(ndots[0]-ndots[1]+ndots[2]-ndots[3])-abs(ndots[0]+ndots[1]-ndots[2]-ndots[3]))/
+      ndots[i]=tempPointlist[thread].edges[i].tria->dots.size();
+    crit2=(abs(ndots[0]+ndots[1]-ndots[2]-ndots[3])-abs(ndots[0]-ndots[1]-ndots[2]+ndots[3]))/
           (ndots[0]+ndots[1]+ndots[2]+ndots[3]+1.);
     crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
           (areas[0]+areas[1]+areas[2]+areas[3]);
