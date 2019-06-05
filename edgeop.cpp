@@ -36,6 +36,13 @@ vector<pointlist> tempPointlist;
 /* Small pointlists, 5 points and 4 triangles, used for deciding whether to
  * flip an edge. One per worker thread.
  */
+double critLog[16];
+
+void logCrit(double crit)
+{
+  memmove(critLog,critLog+1,15*sizeof(double));
+  critLog[15]=crit;
+}
 
 void initTempPointlist(int nthreads)
 {
@@ -141,7 +148,8 @@ bool shouldFlip(edge *e,int thread)
  * a combination of three criteria:
  * 1. They would fit the dots better after flipping than before.
  * 2. The number of dots on each side would be better balanced after flipping.
- * 3. The edge would be shorter after flipping.
+ * 3. The area on each side would be better balanced after flipping.
+ * 4. The edge would be shorter after flipping.
  */
 {
   int i,j;
@@ -149,7 +157,7 @@ bool shouldFlip(edge *e,int thread)
   triangle *tri;
   bool validTemp,ret=false;
   double elev13,elev24,elev5;
-  double crit1,crit2,crit3;
+  double crit1=-999,crit2,crit3,crit4;
   double areas[4];
   int ndots[4];
   vector<triangle *> alltris;
@@ -183,11 +191,11 @@ bool shouldFlip(edge *e,int thread)
    *           2
    *         / | \
    *      0/   5   \1
-   *     /  0  |  1  \
+   *     /  0  |  2  \
    *   /       |       \
    * 1----4----5----6----3
    *   \       |       /
-   *     \  3  |  2  /
+   *     \  1  |  3  /
    *      3\   7   /2
    *         \ | /
    *           4
@@ -198,24 +206,20 @@ bool shouldFlip(edge *e,int thread)
    * 2
    * | \
    * |   \
-   * |  1  \
+   * |  2  \
    * |       \
    * 1=5-------3
    * |       /
-   * |  2  /
+   * |  3  /
    * |   /
    * | /
    * 4
    * Because of roundoff error, it may appear to be flippable, but in fact is not.
    */
-  if (validTemp)
-  {
-    for (i=0;i<4;i++)
-      areas[i]=tempPointlist[thread].triangles[i].area();
-    if (areas[0]+areas[3]>3e8*(areas[1]+areas[2]) ||
-        areas[2]+areas[1]>3e8*(areas[3]+areas[0]))
-      validTemp=false;
-  }
+  for (i=0;i<4;i++)
+    areas[i]=area3(tempPointlist[thread].points[(i+1)%4+1],
+		   tempPointlist[thread].points[(i)%4+1],
+		   tempPointlist[thread].points[5]);
   triab[0]=e->tria;
   triab[1]=e->trib;
   if (validTemp)
@@ -249,9 +253,11 @@ bool shouldFlip(edge *e,int thread)
       crit1=(fabs(elev13-elev5)-fabs(elev24-elev5))/(fabs(elev13-elev5)+fabs(elev24-elev5));
     for (i=0;i<4;i++)
       ndots[i]=tempPointlist[thread].triangles[i].dots.size();
-    crit2=(abs(ndots[0]+ndots[1]-ndots[2]-ndots[3])-abs(ndots[0]-ndots[1]-ndots[2]+ndots[3]))/
+    crit2=(abs(ndots[0]-ndots[1]+ndots[2]-ndots[3])-abs(ndots[0]+ndots[1]-ndots[2]-ndots[3]))/
           (ndots[0]+ndots[1]+ndots[2]+ndots[3]+1.);
-    crit3=(tempPointlist[thread].edges[4].length()-
+    crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
+          (areas[0]+areas[1]+areas[2]+areas[3]);
+    crit4=(tempPointlist[thread].edges[4].length()-
            tempPointlist[thread].edges[5].length()+
 	   tempPointlist[thread].edges[6].length()-
 	   tempPointlist[thread].edges[7].length())/
@@ -259,8 +265,12 @@ bool shouldFlip(edge *e,int thread)
            tempPointlist[thread].edges[5].length()+
 	   tempPointlist[thread].edges[6].length()+
 	   tempPointlist[thread].edges[7].length());
-    ret=crit1+crit2+crit3>0;
+    ret=crit1+crit2+crit3+crit4>0;
   }
+  logCrit(crit1);
+  logCrit(crit2);
+  logCrit(crit3);
+  logCrit(crit4);
   return ret;
 }
 
@@ -290,7 +300,7 @@ void edgeop(edge *e,double tolerance,int thread)
       corners.push_back(bend(e));
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
   if (e->tria && e->tria->sarea<1e-6)
-    cout<<"tiny triangle a\n";
+    cout<<"tiny triangle e="<<e<<" tria="<<e->tria<<endl;
   if (e->trib && e->trib->sarea<1e-6)
-    cout<<"tiny triangle b\n";
+    cout<<"tiny triangle e="<<e<<" trib="<<e->trib<<endl;
 }
