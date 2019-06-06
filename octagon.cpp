@@ -41,7 +41,7 @@ void makeOctagon()
  * into six triangles.
  */
 {
-  int ori=rng.uirandom();
+  int ori=0;//rng.uirandom();
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
   double bounds[8],width,margin;
   xy corners[8];
