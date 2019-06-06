@@ -36,7 +36,7 @@
 using namespace std;
 namespace po=boost::program_options;
 
-xy magnifyCenter(2301542.929,1432051.010);
+xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
 
 void drawNet(PostScript &ps)
