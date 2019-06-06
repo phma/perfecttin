@@ -20,6 +20,7 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
 #include "leastsquares.h"
 
 using namespace std;
@@ -30,9 +31,13 @@ vector<double> linearLeastSquares(matrix m,vector<double> v)
  */
 {
   matrix mtm,mt,vmat=columnvector(v),mtv;
+  int i;
   mt=m.transpose();
   mtm=mt*m;
   mtv=mt*vmat;
   mtm.gausselim(mtv);
+  for (i=0;i<mtm.getcolumns();i++)
+    if (mtm[i][i]==0)
+      mtv[i][0]=NAN;
   return mtv;
 }
