@@ -169,9 +169,9 @@ int main(int argc, char *argv[])
     //d=(d+relprime(cloud.size()))%cloud.size();
     //if (i==sqr(lrint(sqrt(i))))
       //drawMag(ps);
-    if (i<50)
+    if (i>=1150 && i<=1250)
       drawMag(ps);
-    if (i%500==0)
+    if (i==1202)
     {
       cout<<i<<" net is ";
       if (!net.checkTinConsistency())
