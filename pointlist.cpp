@@ -56,7 +56,7 @@ void pointlist::clearmarks()
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;
-  int i,n,nInteriorEdges=0,nNeighborTriangles=0;
+  int i,n,nInteriorEdges=0,nNeighborTriangles=0,turn1;
   double a;
   long long totturn;
   ptlist::iterator p;
@@ -84,7 +84,15 @@ bool pointlist::checkTinConsistency()
       //cerr<<"Point "<<p->first<<" next pointers do not return to line pointer.\n";
     }
     for (totturn=i=0;i<edgebearings.size();i++)
-      totturn+=(edgebearings[(i+1)%edgebearings.size()]-edgebearings[i])&(DEG360-1);
+    {
+      turn1=(edgebearings[(i+1)%edgebearings.size()]-edgebearings[i])&(DEG360-1);
+      totturn+=turn1;
+      if (turn1==0)
+      {
+	ret=false;
+	//cerr<<"Point "<<p->first<<" has two equal bearings.\n";
+      }
+    }
     if (totturn!=(long long)DEG360) // DEG360 is construed as positive when cast to long long
     {
       ret=false;
