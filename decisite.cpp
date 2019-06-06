@@ -36,6 +36,9 @@
 using namespace std;
 namespace po=boost::program_options;
 
+xy magnifyCenter(2301542.929,1432051.010);
+double magnifySize=5;
+
 void drawNet(PostScript &ps)
 {
   BoundRect br;
@@ -43,6 +46,8 @@ void drawNet(PostScript &ps)
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
+  ps.setcolor(1,0,0);
+  ps.circle(magnifyCenter,magnifySize);
   ps.setcolor(0,0,1);
   for (i=0;i<net.edges.size();i++)
     ps.line(net.edges[i],i,false,false);
@@ -50,6 +55,23 @@ void drawNet(PostScript &ps)
   for (i=0;i<net.triangles.size();i++)
     for (j=0;j*j<net.triangles[i].dots.size();j++)
       ps.dot(net.triangles[i].dots[j*j]);
+  ps.endpage();
+}
+
+void drawMag(PostScript &ps)
+{
+  int i,j;
+  ps.startpage();
+  ps.setscale(magnifyCenter.getx()-magnifySize,magnifyCenter.gety()-magnifySize,
+	      magnifyCenter.getx()+magnifySize,magnifyCenter.gety()+magnifySize);
+  ps.setcolor(0,0,1);
+  for (i=0;i<net.edges.size();i++)
+    if (fabs(pldist(magnifyCenter,*net.edges[i].a,*net.edges[i].b))<2*magnifySize)
+      ps.line(net.edges[i],i,false,false);
+  ps.setcolor(0,0,0);
+  for (i=0;i<cloud.size();i++)
+    if (dist(magnifyCenter,xy(cloud[i]))<2*magnifySize)
+      ps.dot(cloud[i]);
   ps.endpage();
 }
 
@@ -123,7 +145,7 @@ int main(int argc, char *argv[])
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
-  drawNet(ps);
+  drawMag(ps);
   for (i=1;i>6;i+=2)
     flip(&net.edges[i]);
   //drawNet(ps);
@@ -146,7 +168,16 @@ int main(int argc, char *argv[])
     //triop(tri,tolerance,0);
     //d=(d+relprime(cloud.size()))%cloud.size();
     //if (i==sqr(lrint(sqrt(i))))
-      //drawNet(ps);
+      //drawMag(ps);
+    if (i<50)
+      drawMag(ps);
+    if (i%500==0)
+    {
+      cout<<i<<" net is ";
+      if (!net.checkTinConsistency())
+	cout<<"in";
+      cout<<"consistent\n";
+    }
     now=time(nullptr);
     if (now!=then)
     {
@@ -161,6 +192,7 @@ int main(int argc, char *argv[])
 	done=true;
     }
   }
+  drawMag(ps);
   drawNet(ps);
   cout<<'\n';
   ps.close();
