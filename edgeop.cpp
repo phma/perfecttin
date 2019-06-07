@@ -220,6 +220,8 @@ bool shouldFlip(edge *e,int thread)
     areas[i]=area3(tempPointlist[thread].points[(i+1)%4+1],
 		   tempPointlist[thread].points[(i)%4+1],
 		   tempPointlist[thread].points[5]);
+  crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
+	(areas[0]+areas[1]+areas[2]+areas[3]);
   triab[0]=e->tria;
   triab[1]=e->trib;
   if (validTemp)
@@ -255,8 +257,6 @@ bool shouldFlip(edge *e,int thread)
       ndots[i]=tempPointlist[thread].edges[i].tria->dots.size();
     crit2=(abs(ndots[0]+ndots[1]-ndots[2]-ndots[3])-abs(ndots[0]-ndots[1]-ndots[2]+ndots[3]))/
           (ndots[0]+ndots[1]+ndots[2]+ndots[3]+1.);
-    crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
-          (areas[0]+areas[1]+areas[2]+areas[3]);
     crit4=(tempPointlist[thread].edges[4].length()-
            tempPointlist[thread].edges[5].length()+
 	   tempPointlist[thread].edges[6].length()-
