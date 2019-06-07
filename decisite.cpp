@@ -47,7 +47,7 @@ void drawNet(PostScript &ps)
   br.include(&net);
   ps.setscale(br);
   ps.setcolor(1,0,0);
-  ps.circle(magnifyCenter,magnifySize);
+  //ps.circle(magnifyCenter,magnifySize);
   ps.setcolor(0,0,1);
   for (i=0;i<net.edges.size();i++)
     ps.line(net.edges[i],i,false,false);
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
-  drawMag(ps);
+  drawNet(ps);
   for (i=1;i>6;i+=2)
     flip(&net.edges[i]);
   //drawNet(ps);
@@ -169,15 +169,6 @@ int main(int argc, char *argv[])
     //d=(d+relprime(cloud.size()))%cloud.size();
     //if (i==sqr(lrint(sqrt(i))))
       //drawMag(ps);
-    if (i>=1150 && i<=1250)
-      drawMag(ps);
-    if (i==1202)
-    {
-      cout<<i<<" net is ";
-      if (!net.checkTinConsistency())
-	cout<<"in";
-      cout<<"consistent\n";
-    }
     now=time(nullptr);
     if (now!=then)
     {
@@ -192,7 +183,6 @@ int main(int argc, char *argv[])
 	done=true;
     }
   }
-  drawMag(ps);
   drawNet(ps);
   cout<<'\n';
   ps.close();
