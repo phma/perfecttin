@@ -299,8 +299,4 @@ void edgeop(edge *e,double tolerance,int thread)
     if (shouldBend(e,tolerance))
       corners.push_back(bend(e));
   logAdjustment(adjustElev(triangleNeighbors(corners),corners));
-  if (e->tria && e->tria->sarea<1e-6)
-    cout<<"tiny triangle e="<<e<<" tria="<<e->tria<<endl;
-  if (e->trib && e->trib->sarea<1e-6)
-    cout<<"tiny triangle e="<<e<<" trib="<<e->trib<<endl;
 }
