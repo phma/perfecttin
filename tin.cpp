@@ -47,9 +47,6 @@ edge::edge()
   a=b=nullptr;
   nexta=nextb=nullptr;
   tria=trib=nullptr;
-  extrema[0]=extrema[1]=NAN;
-  broken=contour=stlsplit=0;
-  flipcnt=0;
 }
 
 edge* edge::next(point* end)
@@ -205,8 +202,6 @@ void edge::flip(pointlist *topopoints)
     trib->sarea=tria->area();
   }
   setNeighbors();
-  broken&=~4; // checkBreak0 has to recompute bits 0 and 1
-  flipcnt++;
 }
 
 void edge::reverse()
@@ -334,21 +329,6 @@ double edge::length()
   c=*a;
   d=*b;
   return dist(c,d);
-}
-
-void edge::clearmarks()
-{
-  contour=0;
-}
-
-void edge::mark(int n)
-{
-  contour|=(1<<n);
-}
-
-bool edge::ismarked(int n)
-{
-  return (contour>>n)&1;
 }
 
 bool goodcenter(xy a,xy b,xy c,xy d)

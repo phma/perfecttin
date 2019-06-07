@@ -51,7 +51,6 @@ public:
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
   int size();
-  void clearmarks();
   void clearTin();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);

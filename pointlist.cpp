@@ -46,13 +46,6 @@ int pointlist::size()
   return points.size();
 }
 
-void pointlist::clearmarks()
-{
-  map<int,edge>::iterator e;
-  for (e=edges.begin();e!=edges.end();e++)
-    e->second.clearmarks();
-}
-
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;

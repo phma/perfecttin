@@ -41,28 +41,6 @@ public:
   // nexta points to the next edge counterclockwise about a.
   triangle *tria,*trib;
   // When going from a to b, tria is on the right and trib on the left.
-  double extrema[2];
-  char broken;
-  /* Bit 0 is used in viewtin to mean that the edge is in a type-0 breakline.
-   * Bit 0 is used when making the TIN to mean that the edge coincides with a type-0 breakline.
-   * Bit 1 means that the edge crosses a type-0 breakline.
-   * If bits 0 and 1 are both set, two type-0 breaklines cross, which is an error.
-   * Bit 2 means that bits 0 and 1 are up to date.
-   * Bit 3 means that a type-1 breakline crosses the edge.
-   */
-  char contour;
-  /* When drawing a contour, set one of the low 3 bits of edge::contour to true
-   * for each edge that crosses the contour. Keep the flags set when you go to
-   * the next contour of the same elevation. When you go to the next elevation,
-   * clear the flags.
-   */
-  unsigned char stlmin;
-  // Code for the minimum number of pieces this edge must be split into.
-  unsigned char stlsplit;
-  /* Smooth number code of the number of pieces this edge is split into
-   * when writing an STL file.
-   */
-  short flipcnt;
   edge();
   void flip(pointlist *topopoints);
   void reverse();
@@ -79,9 +57,6 @@ public:
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
-  void clearmarks();
-  void mark(int n);
-  bool ismarked(int n);
 };
 
 typedef std::pair<double,point*> ipoint;
