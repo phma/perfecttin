@@ -556,6 +556,29 @@ void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
   dxfData.push_back(sectag);
 }
 
+void openEntitySection(std::vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0),secname(2);
+  sectag.str="SECTION";
+  secname.str="ENTITIES";
+  dxfData.push_back(sectag);
+  dxfData.push_back(secname);
+}
+
+void closeEntitySection(std::vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0);
+  sectag.str="ENDSEC";
+  dxfData.push_back(sectag);
+}
+
+void dxfEnd(std::vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0);
+  sectag.str="EOF";
+  dxfData.push_back(sectag);
+}
+
 void insertTriangle(vector<GroupCode> &dxfData,triangle &tri)
 {
   GroupCode entityType(0),layerName(8),colorNumber(62);

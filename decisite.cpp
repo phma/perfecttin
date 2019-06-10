@@ -96,8 +96,11 @@ void writeDxf(string outputFile)
   br.include(&net);
   ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
   dxfHeader(dxfCodes,br);
+  openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
     insertTriangle(dxfCodes,net.triangles[i]);
+  closeEntitySection(dxfCodes);
+  dxfEnd(dxfCodes);
   writeDxfGroups(dxfFile,dxfCodes,false);
 }
 
