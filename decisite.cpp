@@ -92,8 +92,10 @@ void writeDxf(string outputFile)
 {
   vector<GroupCode> dxfCodes;
   int i;
+  BoundRect br;
+  br.include(&net);
   ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
-  // insert header here
+  dxfHeader(dxfCodes,br);
   for (i=0;i<net.triangles.size();i++)
     insertTriangle(dxfCodes,net.triangles[i]);
   writeDxfGroups(dxfFile,dxfCodes,false);

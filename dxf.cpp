@@ -508,6 +508,16 @@ vector<array<xyz,3> > extractTriangles(vector<GroupCode> dxfData)
   return ret;
 }
 
+void insertXy(vector<GroupCode> &dxfData,int xtag,xy pnt)
+// xtag is the tag of the x-coordinate
+{
+  GroupCode xCode(xtag),yCode(xtag+10);
+  xCode.real=pnt.getx();
+  yCode.real=pnt.gety();
+  dxfData.push_back(xCode);
+  dxfData.push_back(yCode);
+}
+
 void insertXyz(vector<GroupCode> &dxfData,int xtag,xyz pnt)
 // xtag is the tag of the x-coordinate
 {
@@ -518,6 +528,32 @@ void insertXyz(vector<GroupCode> &dxfData,int xtag,xyz pnt)
   dxfData.push_back(xCode);
   dxfData.push_back(yCode);
   dxfData.push_back(zCode);
+}
+
+void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
+{
+  GroupCode comment(999),sectag(0),secname(2),paramtag(9),stringval(1);
+  comment.str="DXF created by DeciSite";
+  dxfData.push_back(comment);
+  sectag.str="SECTION";
+  secname.str="HEADER";
+  dxfData.push_back(sectag);
+  dxfData.push_back(secname);
+  paramtag.str="$ACADVER";
+  stringval.str="AC1006";
+  dxfData.push_back(paramtag);
+  dxfData.push_back(stringval);
+  paramtag.str="$INSBASE";
+  dxfData.push_back(paramtag);
+  insertXyz(dxfData,10,xyz(0,0,0));
+  paramtag.str="$EXTMIN";
+  dxfData.push_back(paramtag);
+  insertXy(dxfData,10,xy(br.left(),br.bottom()));
+  paramtag.str="$EXTMAX";
+  dxfData.push_back(paramtag);
+  insertXy(dxfData,10,xy(br.right(),br.top()));
+  sectag.str="ENDSEC";
+  dxfData.push_back(sectag);
 }
 
 void insertTriangle(vector<GroupCode> &dxfData,triangle &tri)

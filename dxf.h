@@ -23,6 +23,7 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include "boundrect.h"
 #include "point.h"
 #include "triangle.h"
 
@@ -74,4 +75,5 @@ std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode); // true for 
 std::vector<GroupCode> readDxfGroups(std::string filename);
 void writeDxfGroups(std::ostream &file,std::vector<GroupCode> &codes,bool mode);
 std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);
+void dxfHeader(std::vector<GroupCode> &dxfData,BoundRect br);
 void insertTriangle(std::vector<GroupCode> &dxfData,triangle &tri);
