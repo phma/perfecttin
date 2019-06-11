@@ -411,7 +411,7 @@ bool readDxfMagic(istream &file)
 
 void writeDxfMagic(ostream &file)
 {
-  file<<"DXF\r\n\032"<<'\0';
+  file<<"AutoCAD Binary DXF\r\n\032"<<'\0';
 }
 
 vector<GroupCode> readDxfGroups(istream &file,bool mode)
@@ -532,9 +532,7 @@ void insertXyz(vector<GroupCode> &dxfData,int xtag,xyz pnt)
 
 void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
 {
-  GroupCode comment(999),sectag(0),secname(2),paramtag(9),stringval(1);
-  comment.str="DXF created by DeciSite";
-  dxfData.push_back(comment);
+  GroupCode sectag(0),secname(2),paramtag(9),stringval(1);
   sectag.str="SECTION";
   secname.str="HEADER";
   dxfData.push_back(sectag);
