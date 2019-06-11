@@ -61,8 +61,8 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   {
     if (std::isfinite(x[k]))
     {
-      if (fabs(x[k])>2000)
-	cout<<"Big adjustment!\n";
+      //if (fabs(x[k])>2000)
+	//cout<<"Big adjustment!\n";
       pnt[k]->raise(x[k]);
       pnt[k]->avgSquareAdjustment=(15*pnt[k]->avgSquareAdjustment+sqr(x[k]))/16;
     }
