@@ -60,9 +60,15 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   for (k=0;k<pnt.size();k++)
   {
     if (std::isfinite(x[k]))
+    {
       pnt[k]->raise(x[k]);
+      pnt[k]->avgSquareAdjustment=(15*pnt[k]->avgSquareAdjustment+sqr(x[k]))/16;
+    }
     else
+    {
       ret.validMatrix=false;
+      pnt[k]->avgSquareAdjustment/=2;
+    }
     xsq.push_back(sqr(x[k]));
   }
   ret.msAdjustment=pairwisesum(xsq)/xsq.size();

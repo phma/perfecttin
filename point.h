@@ -142,6 +142,7 @@ public:
   friend void moveup(pointlist &pl,double sw);
   friend void enlarge(pointlist &pl,double sw);
   edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
+  double avgSquareAdjustment;
   edge *edg(triangle *tri);
   // tri.a->edg(tri) is the side opposite tri.b
   int valence();

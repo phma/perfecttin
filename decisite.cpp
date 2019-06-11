@@ -43,6 +43,7 @@ void drawNet(PostScript &ps)
 {
   BoundRect br;
   int i,j;
+  double adjRadius;
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
@@ -52,9 +53,16 @@ void drawNet(PostScript &ps)
   for (i=0;i<net.edges.size();i++)
     ps.line(net.edges[i],i,false,false);
   ps.setcolor(0,0,0);
-  for (i=0;i<net.triangles.size();i++)
+  for (i=0;false && i<net.triangles.size();i++)
     for (j=0;j*j<net.triangles[i].dots.size();j++)
       ps.dot(net.triangles[i].dots[j*j]);
+  for (i=1;i<=net.points.size();i++)
+  {
+    adjRadius=sqrt(net.points[i].avgSquareAdjustment);
+    if (adjRadius>2.5/ps.getscale())
+      adjRadius=2.5/ps.getscale();
+    ps.circle(net.points[i],adjRadius);
+  }
   ps.endpage();
 }
 
@@ -173,8 +181,8 @@ int main(int argc, char *argv[])
     //tri=net.findt(cloud[d]);
     //triop(tri,tolerance,0);
     //d=(d+relprime(cloud.size()))%cloud.size();
-    //if (i==sqr(lrint(sqrt(i))))
-      //drawMag(ps);
+    if (i==sqr(lrint(sqrt(i))))
+      drawNet(ps);
     now=time(nullptr);
     if (now!=then)
     {
