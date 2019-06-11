@@ -25,7 +25,12 @@
 
 using namespace std;
 
-map<unsigned,unsigned> relprimes;
+double quadirr[]=
+{
+#include "quadirr.txt"
+};
+
+map<unsigned long,unsigned> relprimes;
 
 unsigned gcd(unsigned a,unsigned b)
 {
@@ -42,20 +47,25 @@ unsigned gcd(unsigned a,unsigned b)
   return a+b;
 }
 
-unsigned relprime(unsigned n)
-// Returns the integer closest to n/φ of those relatively prime to n.
+unsigned relprime(unsigned n,int thread)
+/* Returns an integer relatively prime to n and close to n*q, where
+ * q is the threadth quadratic irrational in the Quadlods order.
+ */
 {
   unsigned ret,twice;
   double phin;
-  ret=relprimes[n];
+  thread%=6542;
+  if (thread<0)
+    thread+=6542;
+  ret=relprimes[((unsigned long)thread<<32)+n];
   if (!ret)
   {
-    phin=n*M_1PHI;
+    phin=n*quadirr[thread];
     ret=rint(phin);
     twice=2*ret-(ret>phin);
-    while (gcd(ret,n)!=1)
+    while (gcd(ret,n)!=1 || ret>n)
       ret=twice-ret+(ret<=phin);
-    relprimes[n]=ret;
+    relprimes[((unsigned long)thread<<32)+n]=ret;
   }
   return ret;
 }

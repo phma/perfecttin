@@ -20,7 +20,5 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define M_1PHI 0.6180339887498948482046
-
 unsigned gcd(unsigned a,unsigned b);
-unsigned relprime(unsigned n);
+unsigned relprime(unsigned n,int thread=0);
