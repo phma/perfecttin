@@ -556,7 +556,54 @@ void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
   dxfData.push_back(sectag);
 }
 
-void openEntitySection(std::vector<GroupCode> &dxfData)
+void insertLinetype(vector<GroupCode> &dxfData,string name,int n1,string desc,int n2,int n3,double penWidth)
+// I have no idea what n1, n2, and n3 mean. I'm just copying code from http://paulbourke.net/dataformats/dxf/min3d.html .
+{
+  GroupCode ltypetag(0),ltypename(2),n1code(70),desccode(3);
+  GroupCode n2code(72),n3code(73),pencode(40);
+  ltypetag.str="LTYPE";
+  dxfData.push_back(ltypetag);
+  ltypename.str=name;
+  dxfData.push_back(ltypename);
+  n1code.integer=n1;
+  dxfData.push_back(n1code);
+  desccode.str=desc;
+  dxfData.push_back(desccode);
+  n2code.integer=n2;
+  dxfData.push_back(n2code);
+  n3code.integer=n3;
+  dxfData.push_back(n3code);
+  pencode.real=penWidth;
+  dxfData.push_back(pencode);
+}
+
+void linetypeTable(vector<GroupCode> &dxfData)
+{
+  GroupCode tabletag(0),tablename(2),nLinetypes(70);
+  tabletag.str="TABLE";
+  tablename.str="LTYPE";
+  dxfData.push_back(tabletag);
+  dxfData.push_back(tablename);
+  nLinetypes.integer=1;
+  dxfData.push_back(nLinetypes);
+  insertLinetype(dxfData,"CONTINUOUS",64,"Solid line",65,0,0);
+  tabletag.str="ENDTAB";
+  dxfData.push_back(tabletag);
+}
+
+void tableSection(vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0),secname(2);
+  sectag.str="SECTION";
+  secname.str="TABLES";
+  dxfData.push_back(sectag);
+  dxfData.push_back(secname);
+  linetypeTable(dxfData);
+  sectag.str="ENDSEC";
+  dxfData.push_back(sectag);
+}
+
+void openEntitySection(vector<GroupCode> &dxfData)
 {
   GroupCode sectag(0),secname(2);
   sectag.str="SECTION";
@@ -565,14 +612,14 @@ void openEntitySection(std::vector<GroupCode> &dxfData)
   dxfData.push_back(secname);
 }
 
-void closeEntitySection(std::vector<GroupCode> &dxfData)
+void closeEntitySection(vector<GroupCode> &dxfData)
 {
   GroupCode sectag(0);
   sectag.str="ENDSEC";
   dxfData.push_back(sectag);
 }
 
-void dxfEnd(std::vector<GroupCode> &dxfData)
+void dxfEnd(vector<GroupCode> &dxfData)
 {
   GroupCode sectag(0);
   sectag.str="EOF";
