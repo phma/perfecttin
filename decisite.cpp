@@ -49,13 +49,6 @@ void drawNet(PostScript &ps)
   ps.setscale(br);
   ps.setcolor(1,0,0);
   //ps.circle(magnifyCenter,magnifySize);
-  ps.setcolor(0,0,1);
-  for (i=0;i<net.edges.size();i++)
-    ps.line(net.edges[i],i,false,false);
-  ps.setcolor(0,0,0);
-  for (i=0;false && i<net.triangles.size();i++)
-    for (j=0;j*j<net.triangles[i].dots.size();j++)
-      ps.dot(net.triangles[i].dots[j*j]);
   for (i=1;i<=net.points.size();i++)
   {
     adjRadius=sqrt(net.points[i].avgSquareAdjustment);
@@ -63,6 +56,13 @@ void drawNet(PostScript &ps)
       adjRadius=2.5/ps.getscale();
     ps.circle(net.points[i],adjRadius);
   }
+  ps.setcolor(0,0,1);
+  for (i=0;i<net.edges.size();i++)
+    ps.line(net.edges[i],i,false,false);
+  ps.setcolor(0,0,0);
+  for (i=0;i<net.triangles.size();i++)
+    for (j=0;j*j<net.triangles[i].dots.size();j++)
+      ps.dot(net.triangles[i].dots[j*j]);
   ps.endpage();
 }
 
