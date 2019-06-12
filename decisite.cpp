@@ -199,6 +199,7 @@ int main(int argc, char *argv[])
       then=now;
       if (rmsadj<stageTolerance && areadone==1)
       {
+	adjustLooseCorners(stageTolerance);
 	stageTolerance/=2;
 	if (stageTolerance<tolerance)
 	  done=true;

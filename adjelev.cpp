@@ -27,6 +27,8 @@
 #include "adjelev.h"
 #include "angle.h"
 #include "manysum.h"
+#include "octagon.h"
+#include "neighbor.h"
 using namespace std;
 
 vector<adjustRecord> adjustmentLog;
@@ -96,4 +98,35 @@ double rmsAdjustment()
   if (std::isnan(sqrt(pairwisesum(xsq)/xsq.size())))
     i++;
   return sqrt(pairwisesum(xsq)/xsq.size());
+}
+
+void adjustLooseCorners(double tolerance)
+/* A loose corner is a point which is not a corner of any triangle with dots in it.
+ * Loose corners are not adjusted by adjustElev; their elevation can be 0
+ * or wild values left over from when they were the far corners of triangles
+ * with only a few dots.
+ */
+{
+  vector<point *> looseCorners,oneCorner;
+  vector<triangle *> nextTriangles;
+  edge *ed;
+  vector<double> nextCornerElev;
+  int i,j,ndots;
+  oneCorner.resize(1);
+  for (i=1;i<=net.points.size();i++)
+  {
+    oneCorner[0]=&net.points[i];
+    nextTriangles=triangleNeighbors(oneCorner);
+    for (ndots=j=0;j<nextTriangles.size();j++)
+      ndots+=nextTriangles[j]->dots.size();
+    if (ndots==0)
+      looseCorners.push_back(oneCorner[0]);
+  }
+  for (i=0;i<looseCorners.size();i++)
+  {
+    nextCornerElev.clear();
+    for (ed=looseCorners[i]->line,j=0;ed!=looseCorners[i]->line || j==0;ed=ed->next(looseCorners[i]),j++)
+      nextCornerElev.push_back(ed->otherend(looseCorners[i])->elev());
+    looseCorners[i]->raise(pairwisesum(nextCornerElev)/nextCornerElev.size()-looseCorners[i]->elev());
+  }
 }
