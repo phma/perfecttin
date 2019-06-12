@@ -36,14 +36,15 @@ using namespace std;
 
 pointlist net;
 
-void makeOctagon()
+double makeOctagon()
 /* Creates an octagon which encloses cloud (defined in ply.cpp) and divides it
- * into six triangles.
+ * into six triangles. Returns the maximum error of any point in the cloud.
  */
 {
   int ori=rng.uirandom();
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
-  double bounds[8],width,margin;
+  double bounds[8],width,margin,err,maxerr=0;
+  xyz dot;
   xy corners[8];
   vector<triangle *> trianglePointers;
   vector<point *> cornerPointers;
@@ -132,7 +133,16 @@ void makeOctagon()
   for (i=1;i<=8;i++)
     cornerPointers.push_back(&net.points[i]);
   logAdjustment(adjustElev(trianglePointers,cornerPointers));
+  for (i=0;i<6;i++)
+    for (n=0;n<net.triangles[i].dots.size();n++)
+    {
+      dot=net.triangles[i].dots[n];
+      err=dot.elev()-net.triangles[i].elevation(dot);
+      if (fabs(err)>maxerr)
+	maxerr=fabs(err);
+    }
   for (i=1;i<=8;i++)
     cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
+  return maxerr;
 }
 

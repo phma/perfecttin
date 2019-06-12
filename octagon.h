@@ -22,4 +22,4 @@
 #include "pointlist.h"
 
 extern pointlist net;
-void makeOctagon();
+double makeOctagon();

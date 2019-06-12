@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
   PostScript ps;
   int i,e,t,d;
   time_t now,then;
-  double tolerance,areadone,rmsadj;
+  double tolerance,stageTolerance,areadone,rmsadj;
   bool done=false;
   triangle *tri;
   string inputFile,outputFile;
@@ -155,7 +155,10 @@ int main(int argc, char *argv[])
     setsurface(CIRPAR);
     aster(100000);
   }
-  makeOctagon();
+  areadone=makeOctagon();
+  stageTolerance=tolerance;
+  while (stageTolerance<areadone)
+    stageTolerance*=2;
   ps.open("decisite.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
@@ -174,27 +177,37 @@ int main(int argc, char *argv[])
   {
     if ((i&(i-1))==0)
       net.makeqindex();
-    edgeop(&net.edges[e],tolerance,0);
+    edgeop(&net.edges[e],stageTolerance,0);
     e=(e+relprime(net.edges.size()))%net.edges.size();
-    triop(&net.triangles[t],tolerance,0);
+    triop(&net.triangles[t],stageTolerance,0);
     t=(t+relprime(net.triangles.size()))%net.triangles.size();
     //tri=net.findt(cloud[d]);
     //triop(tri,tolerance,0);
     //d=(d+relprime(cloud.size()))%cloud.size();
-    if (i==sqr(lrint(sqrt(i))))
-      drawNet(ps);
+    //if (i==sqr(lrint(sqrt(i))))
+      //drawNet(ps);
     now=time(nullptr);
     if (now!=then)
     {
       areadone=areaDone();
       rmsadj=rmsAdjustment();
-      cout<<"Iter "<<i<<"  "<<ldecimal(areadone*100,0.1)<<"% done  ";
+      cout<<"Toler "<<stageTolerance;
+      cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone))<<"% done  ";
       cout<<net.triangles.size()<<" triangles  adjustment ";
       cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
       cout.flush();
       then=now;
-      if (rmsadj<tolerance && areadone>0.99)
-	done=true;
+      if (rmsadj<stageTolerance && areadone==1)
+      {
+	stageTolerance/=2;
+	if (stageTolerance<tolerance)
+	  done=true;
+	else
+	{
+	  drawNet(ps);
+	  writeDxf(outputFile);
+	}
+      }
     }
   }
   drawNet(ps);
