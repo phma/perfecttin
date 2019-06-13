@@ -83,14 +83,14 @@ void drawMag(PostScript &ps)
   ps.endpage();
 }
 
-double areaDone()
+double areaDone(double tolerance)
 {
   vector<double> allTri,doneTri;
   int i;
   for (i=0;i<net.triangles.size();i++)
   {
     allTri.push_back(net.triangles[i].sarea);
-    if (net.triangles[i].flags&1)
+    if (net.triangles[i].inTolerance(tolerance))
       doneTri.push_back(net.triangles[i].sarea);
   }
   return pairwisesum(doneTri)/pairwisesum(allTri);
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
     now=time(nullptr);
     if (now!=then)
     {
-      areadone=areaDone();
+      areadone=areaDone(stageTolerance);
       rmsadj=rmsAdjustment();
       cout<<"Toler "<<stageTolerance;
       cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone))<<"% done  ";

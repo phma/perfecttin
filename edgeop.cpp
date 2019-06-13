@@ -70,6 +70,8 @@ void flip(edge *e)
   e->trib->dots.shrink_to_fit();
   e->tria->flatten();
   e->trib->flatten();
+  e->tria->unsetError();
+  e->trib->unsetError();
   // unlock
 }
 
@@ -142,10 +144,10 @@ point *bend(edge *e)
   return pnt;
 }
 
-bool shouldFlip(edge *e,int thread)
+bool shouldFlip(edge *e,double tolerance,int thread)
 /* Decides whether to flip an interior edge. If it is flippable (that is,
  * the two triangles form a convex quadrilateral), it decides based on
- * a combination of three criteria:
+ * a combination of four criteria:
  * 1. They would fit the dots better after flipping than before.
  * 2. The number of dots on each side would be better balanced after flipping.
  * 3. The area on each side would be better balanced after flipping.
@@ -155,122 +157,126 @@ bool shouldFlip(edge *e,int thread)
   int i,j;
   array<triangle *,2> triab;
   triangle *tri;
-  bool validTemp,ret=false;
+  bool validTemp,ret=false,inTol;
   double elev13,elev24,elev5;
   double crit1=-999,crit2,crit3,crit4;
   double areas[4];
   int ndots[4];
   vector<triangle *> alltris;
   vector<point *> allpoints;
-  tempPointlist[thread].clear();
-  tempPointlist[thread].addpoint(1,*e->a);
-  tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
-  tempPointlist[thread].addpoint(3,*e->b);
-  tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
-  tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
-			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
-  for (i=0;i<4;i++)
+  inTol=e->tria->inTolerance(tolerance)&&e->trib->inTolerance(tolerance);
+  if (!inTol)
   {
-    tempPointlist[thread].edges[i].a=&tempPointlist[thread].points[i+1];
-    tempPointlist[thread].edges[i].b=&tempPointlist[thread].points[(i+1)%4+1];
-    tempPointlist[thread].edges[i+4].a=&tempPointlist[thread].points[i+1];
-    tempPointlist[thread].edges[i+4].b=&tempPointlist[thread].points[5];
-  }
-  for (i=0;i<4;i++)
-  {
-    tempPointlist[thread].edges[i].nexta=&tempPointlist[thread].edges[(i+3)%4];
-    tempPointlist[thread].edges[i].nextb=&tempPointlist[thread].edges[(i+1)%4+4];
-    tempPointlist[thread].edges[i+4].nexta=&tempPointlist[thread].edges[i];
-    tempPointlist[thread].edges[i+4].nextb=&tempPointlist[thread].edges[(i+3)%4+4];
-  }
-  for (i=1;i<6;i++)
-    tempPointlist[thread].points[i].line=&tempPointlist[thread].edges[(i-1)%4+4];
-  tempPointlist[thread].maketriangles();
-  validTemp=tempPointlist[thread].checkTinConsistency();
-  /*
-   *           2
-   *         / | \
-   *      0/   5   \1
-   *     /  0  |  1  \
-   *   /       |       \
-   * 1----4----5----6----3
-   *   \       |       /
-   *     \  3  |  2  /
-   *      3\   7   /2
-   *         \ | /
-   *           4
-   * Line 1-3 is the edge before flipping; line 2-4 is what it would be after.
-   * It is possible for valid splittings to produce an invalid temporary pointlist.
-   * Split △ABC at D, then split △ABD at E. C, D, and E are collinear. Then try
-   * to flip BD. The temporary pointlist looks like this:
-   * 2
-   * | \
-   * |   \
-   * |  1  \
-   * |       \
-   * 1=5-------3
-   * |       /
-   * |  2  /
-   * |   /
-   * | /
-   * 4
-   * Because of roundoff error, it may appear to be flippable, but in fact is not.
-   */
-  for (i=0;i<4;i++)
-    areas[i]=area3(tempPointlist[thread].points[(i+1)%4+1],
-		   tempPointlist[thread].points[(i)%4+1],
-		   tempPointlist[thread].points[5]);
-  crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
-	(areas[0]+areas[1]+areas[2]+areas[3]);
-  triab[0]=e->tria;
-  triab[1]=e->trib;
-  if (validTemp)
-  {
-    tri=&tempPointlist[thread].triangles[0];
-    for (i=0;i<2;i++)
-      for (j=0;j<triab[i]->dots.size();j++)
-      {
-	tri=tri->findt(triab[i]->dots[j]);
-	tri->dots.push_back(triab[i]->dots[j]);
-      }
-    for (i=1;i<6;i++)
-      allpoints.push_back(&tempPointlist[thread].points[i]);
+    tempPointlist[thread].clear();
+    tempPointlist[thread].addpoint(1,*e->a);
+    tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
+    tempPointlist[thread].addpoint(3,*e->b);
+    tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
+    tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
+			    *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
     for (i=0;i<4;i++)
-      alltris.push_back(&tempPointlist[thread].triangles[i]);
-    if (adjustElev(alltris,allpoints).validMatrix)
     {
-      elev13=(tempPointlist[thread].points[1].elev()*tempPointlist[thread].edges[6].length()+
-	      tempPointlist[thread].points[3].elev()*tempPointlist[thread].edges[4].length())/
-	     (tempPointlist[thread].edges[4].length()+tempPointlist[thread].edges[6].length());
-      elev24=(tempPointlist[thread].points[2].elev()*tempPointlist[thread].edges[7].length()+
-	      tempPointlist[thread].points[4].elev()*tempPointlist[thread].edges[5].length())/
-	     (tempPointlist[thread].edges[5].length()+tempPointlist[thread].edges[7].length());
-      elev5=tempPointlist[thread].points[5].elev();
+      tempPointlist[thread].edges[i].a=&tempPointlist[thread].points[i+1];
+      tempPointlist[thread].edges[i].b=&tempPointlist[thread].points[(i+1)%4+1];
+      tempPointlist[thread].edges[i+4].a=&tempPointlist[thread].points[i+1];
+      tempPointlist[thread].edges[i+4].b=&tempPointlist[thread].points[5];
     }
-    else
-      elev13=elev24=elev5=0;
-    if (elev13==elev24)
-      crit1=0;
-    else
-      crit1=(fabs(elev13-elev5)-fabs(elev24-elev5))/(fabs(elev13-elev5)+fabs(elev24-elev5));
     for (i=0;i<4;i++)
-      ndots[i]=tempPointlist[thread].edges[i].tria->dots.size();
-    crit2=(abs(ndots[0]+ndots[1]-ndots[2]-ndots[3])-abs(ndots[0]-ndots[1]-ndots[2]+ndots[3]))/
-          (ndots[0]+ndots[1]+ndots[2]+ndots[3]+1.);
-    crit4=(tempPointlist[thread].edges[4].length()-
-           tempPointlist[thread].edges[5].length()+
-	   tempPointlist[thread].edges[6].length()-
-	   tempPointlist[thread].edges[7].length())/
-	  (tempPointlist[thread].edges[4].length()+
-           tempPointlist[thread].edges[5].length()+
-	   tempPointlist[thread].edges[6].length()+
-	   tempPointlist[thread].edges[7].length());
-    ret=crit1+crit2+crit3+crit4>0;
+    {
+      tempPointlist[thread].edges[i].nexta=&tempPointlist[thread].edges[(i+3)%4];
+      tempPointlist[thread].edges[i].nextb=&tempPointlist[thread].edges[(i+1)%4+4];
+      tempPointlist[thread].edges[i+4].nexta=&tempPointlist[thread].edges[i];
+      tempPointlist[thread].edges[i+4].nextb=&tempPointlist[thread].edges[(i+3)%4+4];
+    }
+    for (i=1;i<6;i++)
+      tempPointlist[thread].points[i].line=&tempPointlist[thread].edges[(i-1)%4+4];
+    tempPointlist[thread].maketriangles();
+    validTemp=tempPointlist[thread].checkTinConsistency();
+    /*
+    *           2
+    *         / | \
+    *      0/   5   \1
+    *     /  0  |  1  \
+    *   /       |       \
+    * 1----4----5----6----3
+    *   \       |       /
+    *     \  3  |  2  /
+    *      3\   7   /2
+    *         \ | /
+    *           4
+    * Line 1-3 is the edge before flipping; line 2-4 is what it would be after.
+    * It is possible for valid splittings to produce an invalid temporary pointlist.
+    * Split △ABC at D, then split △ABD at E. C, D, and E are collinear. Then try
+    * to flip BD. The temporary pointlist looks like this:
+    * 2
+    * | \
+    * |   \
+    * |  1  \
+    * |       \
+    * 1=5-------3
+    * |       /
+    * |  2  /
+    * |   /
+    * | /
+    * 4
+    * Because of roundoff error, it may appear to be flippable, but in fact is not.
+    */
+    for (i=0;i<4;i++)
+      areas[i]=area3(tempPointlist[thread].points[(i+1)%4+1],
+		    tempPointlist[thread].points[(i)%4+1],
+		    tempPointlist[thread].points[5]);
+    crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
+	  (areas[0]+areas[1]+areas[2]+areas[3]);
+    triab[0]=e->tria;
+    triab[1]=e->trib;
+    if (validTemp)
+    {
+      tri=&tempPointlist[thread].triangles[0];
+      for (i=0;i<2;i++)
+	for (j=0;j<triab[i]->dots.size();j++)
+	{
+	  tri=tri->findt(triab[i]->dots[j]);
+	  tri->dots.push_back(triab[i]->dots[j]);
+	}
+      for (i=1;i<6;i++)
+	allpoints.push_back(&tempPointlist[thread].points[i]);
+      for (i=0;i<4;i++)
+	alltris.push_back(&tempPointlist[thread].triangles[i]);
+      if (adjustElev(alltris,allpoints).validMatrix)
+      {
+	elev13=(tempPointlist[thread].points[1].elev()*tempPointlist[thread].edges[6].length()+
+		tempPointlist[thread].points[3].elev()*tempPointlist[thread].edges[4].length())/
+	      (tempPointlist[thread].edges[4].length()+tempPointlist[thread].edges[6].length());
+	elev24=(tempPointlist[thread].points[2].elev()*tempPointlist[thread].edges[7].length()+
+		tempPointlist[thread].points[4].elev()*tempPointlist[thread].edges[5].length())/
+	      (tempPointlist[thread].edges[5].length()+tempPointlist[thread].edges[7].length());
+	elev5=tempPointlist[thread].points[5].elev();
+      }
+      else
+	elev13=elev24=elev5=0;
+      if (elev13==elev24)
+	crit1=0;
+      else
+	crit1=(fabs(elev13-elev5)-fabs(elev24-elev5))/(fabs(elev13-elev5)+fabs(elev24-elev5));
+      for (i=0;i<4;i++)
+	ndots[i]=tempPointlist[thread].edges[i].tria->dots.size();
+      crit2=(abs(ndots[0]+ndots[1]-ndots[2]-ndots[3])-abs(ndots[0]-ndots[1]-ndots[2]+ndots[3]))/
+	    (ndots[0]+ndots[1]+ndots[2]+ndots[3]+1.);
+      crit4=(tempPointlist[thread].edges[4].length()-
+	    tempPointlist[thread].edges[5].length()+
+	    tempPointlist[thread].edges[6].length()-
+	    tempPointlist[thread].edges[7].length())/
+	    (tempPointlist[thread].edges[4].length()+
+	    tempPointlist[thread].edges[5].length()+
+	    tempPointlist[thread].edges[6].length()+
+	    tempPointlist[thread].edges[7].length());
+      ret=crit1+crit2+crit3+crit4>0;
+    }
+    logCrit(crit1);
+    logCrit(crit2);
+    logCrit(crit3);
+    logCrit(crit4);
   }
-  logCrit(crit1);
-  logCrit(crit2);
-  logCrit(crit3);
-  logCrit(crit4);
   return ret;
 }
 
@@ -284,6 +290,7 @@ bool shouldBend(edge *e,double tolerance)
 
 void edgeop(edge *e,double tolerance,int thread)
 {
+  bool did=false;
   vector<point *> corners;
   corners.push_back(e->a);
   corners.push_back(e->b);
@@ -292,11 +299,18 @@ void edgeop(edge *e,double tolerance,int thread)
   if (e->trib)
     corners.push_back(e->nexta->otherend(e->a));
   if (e->isinterior())
-    if (e->isFlippable() && shouldFlip(e,thread))
+    if (e->isFlippable() && shouldFlip(e,tolerance,thread))
+    {
       flip(e);
+      did=true;
+    }
     else;
   else
     if (shouldBend(e,tolerance))
+    {
       corners.push_back(bend(e));
-  logAdjustment(adjustElev(triangleNeighbors(corners),corners));
+      did=true;
+    }
+  if (did)
+    logAdjustment(adjustElev(triangleNeighbors(corners),corners));
 }

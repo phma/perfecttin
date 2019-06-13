@@ -129,13 +129,8 @@ void triop(triangle *tri,double tolerance,int thread)
   if (spl=shouldSplit(tri,tolerance))
   {
     corners.push_back(split(tri));
-    tri->flags&=~1;
-  }
-  else
-    tri->flags|=1;
-  logAdjustment(adjustElev(triangleNeighbors(corners),corners));
-  if (spl)
-  {
+    tri->unsetError();
+    logAdjustment(adjustElev(triangleNeighbors(corners),corners));
     edgeop(sidea,tolerance,thread);
     edgeop(sideb,tolerance,thread);
     edgeop(sidec,tolerance,thread);
