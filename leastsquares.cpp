@@ -33,7 +33,7 @@ vector<double> linearLeastSquares(matrix m,vector<double> v)
   matrix mtm,mt,vmat=columnvector(v),mtv;
   int i;
   mt=m.transpose();
-  mtm=mt*m;
+  mtm=mt.transmult();
   mtv=mt*vmat;
   mtm.gausselim(mtv);
   for (i=0;i<mtm.getcolumns();i++)

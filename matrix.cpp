@@ -166,6 +166,23 @@ matrix matrix::operator*(matrix &b)
   return ret;
 }
 
+matrix matrix::transmult()
+{
+  matrix ret(rows,rows);
+  int i,j,k;
+  double *sum;
+  sum=new double[columns];
+  for (i=0;i<rows;i++)
+    for (j=0;j<=i;j++)
+    {
+      for (k=0;k<columns;k++)
+	sum[k]=(*this)[i][k]*(*this)[j][k];
+      ret[i][j]=ret[j][i]=pairwisesum(sum,columns);
+    }
+  delete[] sum;
+  return ret;
+}
+
 double matrix::trace()
 {
   if (columns!=rows)
