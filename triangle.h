@@ -72,12 +72,16 @@ public:
   double gradmat[2][3]; // to compute gradient from three partial gradients
   std::vector<xyz> dots;
   int flags;
+  double aElev,bElev,cElev,vError;
   triangle();
   void setneighbor(triangle *neigh);
   void setnoneighbor(edge *neigh);
   double areaCoord(xy pnt,point *v);
   double elevation(xy pnt);
   void flatten();
+  bool inTolerance(double tolerance);
+  void setError(double tolerance);
+  void unsetError();
   xyz gradient3(xy pnt);
   xy gradient(xy pnt);
   triangleHit hitTest(xy pnt);

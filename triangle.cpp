@@ -115,6 +115,40 @@ double triangle::elevation(xy pnt)
   return q*b->z+p*a->z+r*c->z;
 }
 
+bool triangle::inTolerance(double tolerance)
+/* Returns true if the triangle
+ * •is smaller than an equilateral triangle whose side is tolerance,
+ * •has too few dots to be split, or
+ * •has all dots within tolerance (without actually checking them all).
+ */
+{
+  return dots.size()<9 ||
+         sarea<sqr(tolerance)*M_SQRT_3/4 ||
+         ((fabs(aElev-a->elev())+fabs(bElev-b->elev()))+
+	  (fabs(cElev-c->elev())+vError))<tolerance;
+}
+
+void triangle::setError(double tolerance)
+{
+  double tempVError=0,err1;
+  int i;
+  for (i=0;i<dots.size() && tempVError<tolerance;i++)
+  {
+    err1=fabs(dots[i].elev()-elevation(dots[i]));
+    if (err1>tempVError)
+      tempVError=err1;
+  }
+  vError=tempVError;
+  aElev=a->elev();
+  bElev=b->elev();
+  cElev=c->elev();
+}
+
+void triangle::unsetError()
+{
+  vError=INFINITY;
+}
+
 xyz triangle::gradient3(xy pnt)
 {
   double p,q,r,s,gp,gq,gr;
