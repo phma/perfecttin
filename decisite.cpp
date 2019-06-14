@@ -89,20 +89,39 @@ void drawMag(PostScript &ps)
 double areaDone(double tolerance)
 {
   vector<double> allTri,doneTri;
+  static vector<double> allBuckets,doneBuckets;
+  static int overtimeCount=0,bucket=0;
   int i;
   double ret;
   cr::nanoseconds elapsed;
   cr::time_point<cr::steady_clock> timeStart=clk.now();
-  for (i=0;i<net.triangles.size();i++)
+  if (allBuckets.size()==0)
+  {
+    allBuckets.push_back(0);
+    doneBuckets.push_back(0);
+  }
+  if (overtimeCount==8)
+  {
+    allBuckets.resize(allBuckets.size()*2);
+    doneBuckets.resize(doneBuckets.size()*2);
+    overtimeCount=0;
+    //cout<<allBuckets.size()<<" buckets \n";
+  }
+  for (i=bucket;i<net.triangles.size();i+=allBuckets.size())
   {
     allTri.push_back(net.triangles[i].sarea);
     if (net.triangles[i].inTolerance(tolerance))
       doneTri.push_back(net.triangles[i].sarea);
   }
-  ret=pairwisesum(doneTri)/pairwisesum(allTri);
+  allBuckets[bucket]=pairwisesum(allTri);
+  doneBuckets[bucket]=pairwisesum(doneTri);
+  ret=pairwisesum(doneBuckets)/pairwisesum(allBuckets);
   elapsed=clk.now()-timeStart;
   if (elapsed>cr::milliseconds(20))
-    cout<<"too much time\n";
+    overtimeCount++;
+  else
+    overtimeCount=0;
+  bucket=(bucket+1)%allBuckets.size();
   return ret;
 }
 
