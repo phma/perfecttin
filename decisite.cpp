@@ -20,6 +20,7 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <boost/program_options.hpp>
+#include <boost/chrono.hpp>
 #include "ply.h"
 #include "ps.h"
 #include "octagon.h"
@@ -35,9 +36,11 @@
 
 using namespace std;
 namespace po=boost::program_options;
+namespace cr=boost::chrono;
 
 xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
+cr::steady_clock clk;
 
 void drawNet(PostScript &ps)
 {
@@ -87,13 +90,20 @@ double areaDone(double tolerance)
 {
   vector<double> allTri,doneTri;
   int i;
+  double ret;
+  cr::nanoseconds elapsed;
+  cr::time_point<cr::steady_clock> timeStart=clk.now();
   for (i=0;i<net.triangles.size();i++)
   {
     allTri.push_back(net.triangles[i].sarea);
     if (net.triangles[i].inTolerance(tolerance))
       doneTri.push_back(net.triangles[i].sarea);
   }
-  return pairwisesum(doneTri)/pairwisesum(allTri);
+  ret=pairwisesum(doneTri)/pairwisesum(allTri);
+  elapsed=clk.now()-timeStart;
+  if (elapsed>cr::milliseconds(20))
+    cout<<"too much time\n";
+  return ret;
 }
 
 void writeDxf(string outputFile)
