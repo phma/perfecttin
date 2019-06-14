@@ -311,6 +311,6 @@ void edgeop(edge *e,double tolerance,int thread)
       corners.push_back(bend(e));
       did=true;
     }
-  if (did)
+  if (did || rmsAdjustment()>tolerance)
     logAdjustment(adjustElev(triangleNeighbors(corners),corners));
 }
