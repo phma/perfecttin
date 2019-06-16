@@ -72,7 +72,7 @@ public:
   void line2p(xy pnt1,xy pnt2);
   void startline();
   void lineto(xy pnt);
-  void endline(bool closed=false);
+  void endline(bool closed=false,bool fill=false);
   void widen(double factor);
   void write(xy pnt,std::string text);
   void centerWrite(xy pnt,std::string text);

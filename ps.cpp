@@ -371,12 +371,12 @@ void PostScript::lineto(xy pnt)
   inlin=true;
 }
 
-void PostScript::endline(bool closed)
+void PostScript::endline(bool closed,bool fill)
 {
   assert(psfile);
   if (closed)
     *psfile<<"closepath ";
-  *psfile<<"s"<<endl;
+  *psfile<<(fill?"fill":"s")<<endl;
   inlin=false;
 }
 
