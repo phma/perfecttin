@@ -22,4 +22,5 @@
 #include "pointlist.h"
 
 extern pointlist net;
+extern double clipLow,clipHigh;
 double makeOctagon();

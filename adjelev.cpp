@@ -66,6 +66,10 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
       //if (fabs(x[k])>2000)
 	//cout<<"Big adjustment!\n";
       pnt[k]->raise(x[k]);
+      if (pnt[k]->elev()>clipHigh)
+	pnt[k]->raise(clipHigh-pnt[k]->elev());
+      if (pnt[k]->elev()<clipLow)
+	pnt[k]->raise(clipLow-pnt[k]->elev());
       pnt[k]->avgSquareAdjustment=(15*pnt[k]->avgSquareAdjustment+sqr(x[k]))/16;
     }
     else

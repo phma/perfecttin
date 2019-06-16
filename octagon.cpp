@@ -35,6 +35,7 @@
 using namespace std;
 
 pointlist net;
+double clipLow,clipHigh;
 
 double makeOctagon()
 /* Creates an octagon which encloses cloud (defined in ply.cpp) and divides it
@@ -43,7 +44,7 @@ double makeOctagon()
 {
   int ori=rng.uirandom();
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
-  double bounds[8],width,margin,err,maxerr=0;
+  double bounds[8],width,margin,err,maxerr=0,high=-INFINITY,low=INFINITY;
   xyz dot;
   xy corners[8];
   vector<triangle *> trianglePointers;
@@ -55,6 +56,10 @@ double makeOctagon()
   {
     orthogonal.include(cloud[i]);
     diagonal.include(cloud[i]);
+    if (cloud[i].elev()>high)
+      high=cloud[i].elev();
+    if (cloud[i].elev()<low)
+      low=cloud[i].elev();
   }
   bounds[0]=orthogonal.left();
   bounds[1]=diagonal.bottom();
@@ -64,6 +69,8 @@ double makeOctagon()
   bounds[5]=-diagonal.top();
   bounds[6]=-orthogonal.top();
   bounds[7]=diagonal.left();
+  clipHigh=2*high-low;
+  clipLow=2*low-high;
   for (i=0;i<4;i++)
   {
     width=-bounds[i]-bounds[i+4];
