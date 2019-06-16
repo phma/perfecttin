@@ -44,6 +44,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   matrix a;
   adjustRecord ret{true,0};
   vector<double> b,x,xsq;
+  double oldelev;
   for (ndots=i=0;i<tri.size();i++)
   {
     ndots+=tri[i]->dots.size();
@@ -65,6 +66,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     {
       //if (fabs(x[k])>2000)
 	//cout<<"Big adjustment!\n";
+      oldelev=pnt[k]->elev();
       pnt[k]->raise(x[k]);
       if (pnt[k]->elev()>clipHigh)
 	pnt[k]->raise(clipHigh-pnt[k]->elev());
@@ -75,7 +77,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     {
       ret.validMatrix=false;
     }
-    xsq.push_back(sqr(x[k]));
+    xsq.push_back(sqr(pnt[k]->elev()-oldelev));
   }
   ret.msAdjustment=pairwisesum(xsq)/xsq.size();
   //if (singular)
