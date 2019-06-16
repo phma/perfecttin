@@ -299,6 +299,10 @@ bool shouldFlip(edge *e,double tolerance,int thread)
     logCrit(crit3);
     logCrit(crit4);
   }
+  if (isSpiky && !wouldbeSpiky)
+    ret=true;
+  if (wouldbeSpiky && !isSpiky)
+    ret=false;
   return ret;
 }
 
