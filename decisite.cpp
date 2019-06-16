@@ -41,12 +41,15 @@ namespace cr=boost::chrono;
 xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
 cr::steady_clock clk;
+const bool drawDots=false;
+const bool colorGradient=true;
 
 void drawNet(PostScript &ps)
 {
   BoundRect br;
   int i,j;
-  double adjRadius;
+  double slope;
+  xy gradient;
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
@@ -57,8 +60,22 @@ void drawNet(PostScript &ps)
     ps.line(net.edges[i],i,false,false);
   ps.setcolor(0,0,0);
   for (i=0;i<net.triangles.size();i++)
-    for (j=0;j*j<net.triangles[i].dots.size();j++)
-      ps.dot(net.triangles[i].dots[j*j]);
+  {
+    if (drawDots)
+      for (j=0;j*j<net.triangles[i].dots.size();j++)
+	ps.dot(net.triangles[i].dots[j*j]);
+    if (colorGradient)
+    {
+      gradient=net.triangles[i].gradient(net.triangles[i].centroid());
+      slope=gradient.length();
+      ps.setcolor((slope>1)?0:1-slope,(slope>1)?0:1-slope,1);
+      ps.startline();
+      ps.lineto(*net.triangles[i].a);
+      ps.lineto(*net.triangles[i].b);
+      ps.lineto(*net.triangles[i].c);
+      ps.endline(true,true);
+    }
+  }
   ps.endpage();
 }
 
