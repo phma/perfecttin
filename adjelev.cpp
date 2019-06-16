@@ -70,12 +70,10 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 	pnt[k]->raise(clipHigh-pnt[k]->elev());
       if (pnt[k]->elev()<clipLow)
 	pnt[k]->raise(clipLow-pnt[k]->elev());
-      pnt[k]->avgSquareAdjustment=(15*pnt[k]->avgSquareAdjustment+sqr(x[k]))/16;
     }
     else
     {
       ret.validMatrix=false;
-      pnt[k]->avgSquareAdjustment/=2;
     }
     xsq.push_back(sqr(x[k]));
   }

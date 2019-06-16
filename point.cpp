@@ -391,7 +391,6 @@ const xyz nanxyz(NAN,NAN,NAN);
 point::point()
 {
   x=y=z=0;
-  avgSquareAdjustment=0;
   line=NULL;
 }
 
@@ -400,7 +399,6 @@ point::point(double e,double n,double h)
   x=e;
   y=n;
   z=h;
-  avgSquareAdjustment=0;
   line=0;
 }
 
@@ -409,7 +407,6 @@ point::point(xy pnt,double h)
   x=pnt.x;
   y=pnt.y;
   z=h;
-  avgSquareAdjustment=0;
   line=0;
 }
 
@@ -418,7 +415,6 @@ point::point(xyz pnt)
   x=pnt.x;
   y=pnt.y;
   z=pnt.z;
-  avgSquareAdjustment=0;
   line=0;
 }
 
@@ -427,7 +423,6 @@ point::point(const point &rhs)
   x=rhs.x;
   y=rhs.y;
   z=rhs.z;
-  avgSquareAdjustment=rhs.avgSquareAdjustment;
   line=rhs.line;
 }
 
@@ -438,7 +433,6 @@ const point& point::operator=(const point &rhs)
     x=rhs.x;
     y=rhs.y;
     z=rhs.z;
-    avgSquareAdjustment=rhs.avgSquareAdjustment;
     line=rhs.line;
   }
 }

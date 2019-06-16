@@ -50,15 +50,8 @@ void drawNet(PostScript &ps)
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
-  ps.setcolor(1,0,0);
+  //ps.setcolor(1,0,0);
   //ps.circle(magnifyCenter,magnifySize);
-  for (i=1;i<=net.points.size();i++)
-  {
-    adjRadius=sqrt(net.points[i].avgSquareAdjustment);
-    if (adjRadius>2.5/ps.getscale())
-      adjRadius=2.5/ps.getscale();
-    ps.circle(net.points[i],adjRadius);
-  }
   ps.setcolor(0,0,1);
   for (i=0;i<net.edges.size();i++)
     ps.line(net.edges[i],i,false,false);
