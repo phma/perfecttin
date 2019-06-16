@@ -165,7 +165,7 @@ bool shouldFlip(edge *e,double tolerance,int thread)
   int i,j;
   array<triangle *,2> triab;
   triangle *tri;
-  bool validTemp,ret=false,inTol;
+  bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
   double elev13,elev24,elev5;
   double crit1=-999,crit2,crit3,crit4;
   double areas[4];
@@ -179,18 +179,19 @@ bool shouldFlip(edge *e,double tolerance,int thread)
   tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
   tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
 			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
-  if (spikyTriangle(tempPointlist[thread].points[1],
-		    tempPointlist[thread].points[2],
-		    tempPointlist[thread].points[3]) ||
-      spikyTriangle(tempPointlist[thread].points[4],
-		    tempPointlist[thread].points[1],
-		    tempPointlist[thread].points[2]) ||
-      spikyTriangle(tempPointlist[thread].points[3],
-		    tempPointlist[thread].points[4],
-		    tempPointlist[thread].points[1]) ||
-      spikyTriangle(tempPointlist[thread].points[2],
-		    tempPointlist[thread].points[3],
-		    tempPointlist[thread].points[4]))
+  isSpiky=spikyTriangle(tempPointlist[thread].points[1],
+			tempPointlist[thread].points[2],
+			tempPointlist[thread].points[3]) ||
+	  spikyTriangle(tempPointlist[thread].points[3],
+			tempPointlist[thread].points[4],
+			tempPointlist[thread].points[1]);
+  wouldbeSpiky=spikyTriangle(tempPointlist[thread].points[4],
+			     tempPointlist[thread].points[1],
+			     tempPointlist[thread].points[2]) ||
+	       spikyTriangle(tempPointlist[thread].points[2],
+			     tempPointlist[thread].points[3],
+			     tempPointlist[thread].points[4]);
+  if (isSpiky && wouldbeSpiky)
     cout<<"spiky triangle\n";
   inTol=e->tria->inTolerance(tolerance)&&e->trib->inTolerance(tolerance);
   if (!inTol)
