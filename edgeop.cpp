@@ -144,6 +144,14 @@ point *bend(edge *e)
   return pnt;
 }
 
+bool spikyTriangle(xy a,xy b,xy c)
+/* Returns true if the altitude of b is such that the angle A or C must be
+ * less than a second of arc. Such a triangle should never appear in the TIN.
+ */
+{
+  return dist(a,c)>412529.6*fabs(pldist(b,c,a));
+}
+
 bool shouldFlip(edge *e,double tolerance,int thread)
 /* Decides whether to flip an interior edge. If it is flippable (that is,
  * the two triangles form a convex quadrilateral), it decides based on
@@ -164,16 +172,29 @@ bool shouldFlip(edge *e,double tolerance,int thread)
   int ndots[4];
   vector<triangle *> alltris;
   vector<point *> allpoints;
+  tempPointlist[thread].clear();
+  tempPointlist[thread].addpoint(1,*e->a);
+  tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
+  tempPointlist[thread].addpoint(3,*e->b);
+  tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
+  tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
+			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
+  if (spikyTriangle(tempPointlist[thread].points[1],
+		    tempPointlist[thread].points[2],
+		    tempPointlist[thread].points[3]) ||
+      spikyTriangle(tempPointlist[thread].points[4],
+		    tempPointlist[thread].points[1],
+		    tempPointlist[thread].points[2]) ||
+      spikyTriangle(tempPointlist[thread].points[3],
+		    tempPointlist[thread].points[4],
+		    tempPointlist[thread].points[1]) ||
+      spikyTriangle(tempPointlist[thread].points[2],
+		    tempPointlist[thread].points[3],
+		    tempPointlist[thread].points[4]))
+    cout<<"spiky triangle\n";
   inTol=e->tria->inTolerance(tolerance)&&e->trib->inTolerance(tolerance);
   if (!inTol)
   {
-    tempPointlist[thread].clear();
-    tempPointlist[thread].addpoint(1,*e->a);
-    tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
-    tempPointlist[thread].addpoint(3,*e->b);
-    tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
-    tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
-			    *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
     for (i=0;i<4;i++)
     {
       tempPointlist[thread].edges[i].a=&tempPointlist[thread].points[i+1];
