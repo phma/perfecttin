@@ -21,6 +21,7 @@
  */
 
 #include <string>
+#include <iostream>
 #include "point.h"
 
 struct LasPoint
@@ -40,8 +41,10 @@ struct LasPoint
   float waveformTime,xDir,yDir,zDir;
 };
 
-struct LasHeader
+class LasHeader
 {
+private:
+  std::ifstream *lasfile;
   unsigned short sourceId,globalEncoding;
   unsigned int guid1;
   unsigned short guid2,guid3;
@@ -57,4 +60,11 @@ struct LasHeader
   size_t startWaveform,startExtendedVariableLength;
   unsigned int nExtendedVariableLength;
   size_t nPoints[16]; // [0] is total; [1]..[15] are each return
+public:
+  LasHeader();
+  void open(std::string fileName);
+  bool isValid();
+  void close();
+  size_t numberPoints(int r=0);
+  LasPoint readPoint(size_t num);
 };
