@@ -24,6 +24,7 @@
 #include "las.h"
 #include "binio.h"
 #include "octagon.h"
+#include "ply.h"
 
 using namespace std;
 
@@ -118,12 +119,25 @@ size_t LasHeader::numberPoints(int r)
 LasPoint LasHeader::readPoint(size_t num)
 {
   LasPoint ret;
+  int xInt,yInt,zInt;
+  lasfile->seekg(num*pointLength+pointOffset,ios_base::beg);
+  xInt=readleint(*lasfile);
+  yInt=readleint(*lasfile);
+  zInt=readleint(*lasfile);
+  ret.location=xyz(xOffset+xScale*xInt,yOffset+yScale*yInt,zOffset+zScale*zInt);
   return ret;
 }
 
 void readLas(string fileName)
 {
+  size_t i;
   LasHeader header;
+  LasPoint pnt;
   header.open(fileName);
   cout<<"File contains "<<header.numberPoints()<<" dots\n";
+  for (i=0;i<header.numberPoints();i++)
+  {
+    pnt=header.readPoint(i);
+    cloud.push_back(pnt.location);
+  }
 }
