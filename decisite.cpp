@@ -189,12 +189,17 @@ int main(int argc, char *argv[])
   {
     //readPly(inputFile);
     readLas(inputFile);
-    cout<<"Read "<<cloud.size()<<" points\n";
+    cout<<"Read "<<cloud.size()<<" dots\n";
   }
   else
   {
     setsurface(CIRPAR);
     aster(100000);
+  }
+  if (cloud.size()==0)
+  {
+    cout<<"No dots, nothing to do.\n";
+    done=true;
   }
   areadone=makeOctagon();
   stageTolerance=tolerance;

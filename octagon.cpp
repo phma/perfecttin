@@ -118,17 +118,20 @@ double makeOctagon()
     net.triangles[i].setneighbor(&net.triangles[i+1]);
     net.triangles[i+1].setneighbor(&net.triangles[i]);
   }
-  assert(net.checkTinConsistency());
+  //assert(net.checkTinConsistency());
   cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
   cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
   cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
   tri=&net.triangles[0];
   sz=cloud.size();
-  h=relprime(sz);
-  for (i=n=0;i<sz;i++,n=(n+h)%sz)
+  if (sz)
   {
-    tri=tri->findt(cloud[n]);
-    tri->dots.push_back(cloud[n]);
+    h=relprime(sz);
+    for (i=n=0;i<sz;i++,n=(n+h)%sz)
+    {
+      tri=tri->findt(cloud[n]);
+      tri->dots.push_back(cloud[n]);
+    }
   }
   cloud.clear();
   cloud.shrink_to_fit();
