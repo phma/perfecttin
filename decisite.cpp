@@ -22,6 +22,7 @@
 #include <boost/program_options.hpp>
 #include <boost/chrono.hpp>
 #include "ply.h"
+#include "las.h"
 #include "ps.h"
 #include "octagon.h"
 #include "triop.h"
@@ -186,7 +187,8 @@ int main(int argc, char *argv[])
   }
   if (inputFile.length())
   {
-    readPly(inputFile);
+    //readPly(inputFile);
+    readLas(inputFile);
     cout<<"Read "<<cloud.size()<<" points\n";
   }
   else

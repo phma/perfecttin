@@ -23,6 +23,7 @@
 #include <cstring>
 #include "las.h"
 #include "binio.h"
+#include "octagon.h"
 
 using namespace std;
 
@@ -38,6 +39,11 @@ LasHeader::LasHeader()
 {
   lasfile=nullptr;
   versionMajor=versionMinor=0;
+}
+
+LasHeader::~LasHeader()
+{
+  close();
 }
 
 void LasHeader::open(std::string fileName)
@@ -115,3 +121,9 @@ LasPoint LasHeader::readPoint(size_t num)
   return ret;
 }
 
+void readLas(string fileName)
+{
+  LasHeader header;
+  header.open(fileName);
+  cout<<"File contains "<<header.numberPoints()<<" dots\n";
+}

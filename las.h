@@ -62,9 +62,12 @@ private:
   size_t nPoints[16]; // [0] is total; [1]..[15] are each return
 public:
   LasHeader();
+  ~LasHeader();
   void open(std::string fileName);
   bool isValid();
   void close();
   size_t numberPoints(int r=0);
   LasPoint readPoint(size_t num);
 };
+
+void readLas(std::string fileName);
