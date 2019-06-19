@@ -21,6 +21,24 @@
  */
 
 #include <string>
+#include "point.h"
+
+struct LasPoint
+{
+  xyz location;
+  unsigned short intensity;
+  unsigned short returnNum,nReturns;
+  bool scanDirection,edgeLine;
+  unsigned short classification,classificationFlags;
+  unsigned short scannerChannel;
+  unsigned short userData;
+  short scanAngle;
+  unsigned short waveIndex;
+  double gpsTime;
+  unsigned short nir,red,green,blue;
+  size_t waveformOffset;
+  float waveformTime,xDir,yDir,zDir;
+};
 
 struct LasHeader
 {
