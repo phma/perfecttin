@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* ply.h - polygon files                              */
+/* cloud.h - point cloud                              */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019 Pierre Abbat.
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <string>
 
-void readPly(std::string fileName);
+#include <vector>
+#include "point.h"
+
+extern std::vector<xyz> cloud;

@@ -22,12 +22,11 @@
 
 #include <libplyxx.h>
 #include "ply.h"
-#include "point.h"
+#include "cloud.h"
 
 using namespace std;
 using namespace libply;
 
-vector<xyz> cloud;
 void receivePoint(ElementBuffer &buf)
 {
   xyz pnt(buf[0],buf[1],buf[2]);

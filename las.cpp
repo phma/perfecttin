@@ -25,7 +25,7 @@
 #include "binio.h"
 #include "octagon.h"
 #include "angle.h"
-#include "ply.h"
+#include "cloud.h"
 
 using namespace std;
 

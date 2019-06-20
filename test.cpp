@@ -24,7 +24,7 @@
 #include <cmath>
 #include "test.h"
 #include "angle.h"
-#include "ply.h"
+#include "cloud.h"
 
 using std::map;
 

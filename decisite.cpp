@@ -23,6 +23,7 @@
 #include <boost/chrono.hpp>
 #include "ply.h"
 #include "las.h"
+#include "cloud.h"
 #include "ps.h"
 #include "octagon.h"
 #include "triop.h"
