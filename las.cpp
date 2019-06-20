@@ -24,6 +24,7 @@
 #include "las.h"
 #include "binio.h"
 #include "octagon.h"
+#include "angle.h"
 #include "ply.h"
 
 using namespace std;
@@ -120,10 +121,42 @@ LasPoint LasHeader::readPoint(size_t num)
 {
   LasPoint ret;
   int xInt,yInt,zInt;
+  int temp;
   lasfile->seekg(num*pointLength+pointOffset,ios_base::beg);
   xInt=readleint(*lasfile);
   yInt=readleint(*lasfile);
   zInt=readleint(*lasfile);
+  ret.intensity=readleshort(*lasfile);
+  if (pointFormat<6)
+  {
+    temp=lasfile->get();
+    ret.returnNum=temp&7;
+    ret.nReturns=(temp>>3)&7;
+    ret.scanDirection=(temp>>6)&1;
+    ret.edgeLine=(temp>>7)&1;
+    ret.classification=(unsigned char)lasfile->get();
+    ret.scanAngle=degtobin((signed char)lasfile->get());
+    ret.userData=(unsigned char)lasfile->get();
+    ret.pointSource=readleshort(*lasfile);
+    // switch(pointFormat)...
+  }
+  else
+  {
+    temp=lasfile->get();
+    ret.returnNum=temp&15;
+    ret.nReturns=(temp>>4)&15;
+    temp=lasfile->get();
+    ret.classificationFlags=temp&15;
+    ret.scannerChannel=(temp>>4)&3;
+    ret.scanDirection=(temp>>6)&1;
+    ret.edgeLine=(temp>>7)&1;
+    ret.classification=(unsigned char)lasfile->get();
+    ret.userData=(unsigned char)lasfile->get();
+    ret.scanAngle=degtobin(readleshort(*lasfile)*0.006);
+    ret.pointSource=readleshort(*lasfile);
+    ret.gpsTime=readledouble(*lasfile);
+    // switch(pointFormat)...
+  }
   ret.location=xyz(xOffset+xScale*xInt,yOffset+yScale*yInt,zOffset+zScale*zInt);
   return ret;
 }
@@ -138,6 +171,8 @@ void readLas(string fileName)
   for (i=0;i<header.numberPoints();i++)
   {
     pnt=header.readPoint(i);
+    //if (i%1000000==0)
+      //cout<<"return "<<pnt.returnNum<<" of "<<pnt.nReturns<<endl;
     cloud.push_back(pnt.location);
   }
 }

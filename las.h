@@ -33,8 +33,9 @@ struct LasPoint
   unsigned short classification,classificationFlags;
   unsigned short scannerChannel;
   unsigned short userData;
-  short scanAngle;
   unsigned short waveIndex;
+  unsigned short pointSource;
+  int scanAngle;
   double gpsTime;
   unsigned short nir,red,green,blue;
   size_t waveformOffset;
