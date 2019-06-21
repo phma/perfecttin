@@ -118,10 +118,9 @@ double makeOctagon()
     net.triangles[i].setneighbor(&net.triangles[i+1]);
     net.triangles[i+1].setneighbor(&net.triangles[i]);
   }
-  //assert(net.checkTinConsistency());
-  cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
-  cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
-  cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
+  //cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
+  //cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
+  //cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
   tri=&net.triangles[0];
   sz=cloud.size();
   if (sz)
@@ -137,7 +136,7 @@ double makeOctagon()
   cloud.shrink_to_fit();
   for (i=0;i<6;i++)
   {
-    cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";
+    //cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";
     trianglePointers.push_back(&net.triangles[i]);
   }
   for (i=1;i<=8;i++)
@@ -151,8 +150,8 @@ double makeOctagon()
       if (fabs(err)>maxerr)
 	maxerr=fabs(err);
     }
-  for (i=1;i<=8;i++)
-    cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
+  //for (i=1;i<=8;i++)
+    //cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
   return maxerr;
 }
 
