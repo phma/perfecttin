@@ -45,12 +45,13 @@ double magnifySize=5;
 cr::steady_clock clk;
 const bool drawDots=false;
 const bool colorGradient=true;
+const bool colorAbsGradient=false;
 
 void drawNet(PostScript &ps)
 {
   BoundRect br;
   int i,j;
-  double slope;
+  double slope,r,g,b;
   xy gradient;
   ps.startpage();
   br.include(&net);
@@ -70,7 +71,27 @@ void drawNet(PostScript &ps)
     {
       gradient=net.triangles[i].gradient(net.triangles[i].centroid());
       slope=gradient.length();
-      ps.setcolor((slope>1)?0:1-slope,(slope>1)?0:1-slope,1);
+      if (colorAbsGradient)
+	ps.setcolor((slope>1)?0:1-slope,(slope>1)?0:1-slope,1);
+      else
+      {
+	r=0.5+gradient.north()*0.3   -gradient.east()*0.4;
+	g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
+	b=0.5+gradient.north()*0.4   -gradient.east()*0.3;
+	if (r>1)
+	  r=1;
+	if (r<0)
+	  r=0;
+	if (g>1)
+	  g=1;
+	if (g<0)
+	  g=0;
+	if (b>1)
+	  b=1;
+	if (b<0)
+	  b=0;
+	ps.setcolor(r,g,b);
+      }
       ps.startline();
       ps.lineto(*net.triangles[i].a);
       ps.lineto(*net.triangles[i].b);
