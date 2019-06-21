@@ -167,7 +167,7 @@ void readLas(string fileName)
   LasHeader header;
   LasPoint pnt;
   header.open(fileName);
-  cout<<"File contains "<<header.numberPoints()<<" dots\n";
+  //cout<<"File contains "<<header.numberPoints()<<" dots\n";
   for (i=0;i<header.numberPoints();i++)
   {
     pnt=header.readPoint(i);
