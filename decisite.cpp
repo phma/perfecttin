@@ -188,8 +188,9 @@ int main(int argc, char *argv[])
   }
   if (inputFile.length())
   {
-    //readPly(inputFile);
-    readLas(inputFile);
+    readPly(inputFile);
+    if (cloud.size()==0)
+      readLas(inputFile);
     cout<<"Read "<<cloud.size()<<" dots\n";
   }
   else
