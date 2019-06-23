@@ -224,88 +224,97 @@ int main(int argc, char *argv[])
     cerr<<e.what()<<endl;
     validCmd=false;
   }
-  if (inputFile.length())
+  if (!outputFile.length())
+    outputFile=baseName(inputFile)+".dxf";
+  if (!outputFile.length())
   {
-    readPly(inputFile);
-    if (cloud.size()==0)
-      readLas(inputFile);
-    cout<<"Read "<<cloud.size()<<" dots\n";
+    cerr<<"Please specify output file with -o\n";
+    validCmd=false;
   }
-  else
+  if (outputFile==inputFile && validCmd)
   {
-    setsurface(CIRPAR);
-    aster(100000);
+    cerr<<"Not overwriting input file\n";
+    validCmd=false;
   }
-  if (cloud.size()==0)
+  if (validCmd)
   {
-    cout<<"No dots, nothing to do.\n";
-    done=true;
-  }
-  areadone=makeOctagon();
-  stageTolerance=tolerance;
-  while (stageTolerance<areadone)
-    stageTolerance*=2;
-  ps.open("decisite.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
-  ps.prolog();
-  drawNet(ps);
-  for (i=1;i>6;i+=2)
-    flip(&net.edges[i]);
-  //drawNet(ps);
-  for (i=0;i>6;i++)
-    split(&net.triangles[i]);
-  //drawNet(ps);
-  for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
-    bend(&net.edges[i]);
-  initTempPointlist(1);
-  tri=&net.triangles[0];
-  for (i=e=t=d=0;!done;i++)
-  {
-    if ((i&(i-1))==0)
-      net.makeqindex();
-    edgeop(&net.edges[e],stageTolerance,0);
-    e=(e+relprime(net.edges.size()))%net.edges.size();
-    triop(&net.triangles[t],stageTolerance,0);
-    t=(t+relprime(net.triangles.size()))%net.triangles.size();
-    //tri=net.findt(cloud[d]);
-    //triop(tri,tolerance,0);
-    //d=(d+relprime(cloud.size()))%cloud.size();
-    //if (i==sqr(lrint(sqrt(i))))
-      //drawNet(ps);
-    now=time(nullptr);
-    if (now!=then)
+    if (inputFile.length())
     {
-      areadone=areaDone(stageTolerance);
-      rmsadj=rmsAdjustment();
-      cout<<"Toler "<<stageTolerance;
-      cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone))<<"% done  ";
-      cout<<net.triangles.size()<<" triangles  adjustment ";
-      cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
-      cout.flush();
-      then=now;
-      if (rmsadj<stageTolerance && areadone==1)
+      readPly(inputFile);
+      if (cloud.size()==0)
+	readLas(inputFile);
+      cout<<"Read "<<cloud.size()<<" dots\n";
+    }
+    else
+    {
+      setsurface(CIRPAR);
+      aster(100000);
+    }
+    if (cloud.size()==0)
+    {
+      cout<<"No dots, nothing to do.\n";
+      done=true;
+    }
+    areadone=makeOctagon();
+    stageTolerance=tolerance;
+    while (stageTolerance<areadone)
+      stageTolerance*=2;
+    ps.open("decisite.ps");
+    ps.setpaper(papersizes["A4 portrait"],0);
+    ps.prolog();
+    drawNet(ps);
+    for (i=1;i>6;i+=2)
+      flip(&net.edges[i]);
+    //drawNet(ps);
+    for (i=0;i>6;i++)
+      split(&net.triangles[i]);
+    //drawNet(ps);
+    for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
+      bend(&net.edges[i]);
+    initTempPointlist(1);
+    tri=&net.triangles[0];
+    for (i=e=t=d=0;!done;i++)
+    {
+      if ((i&(i-1))==0)
+	net.makeqindex();
+      edgeop(&net.edges[e],stageTolerance,0);
+      e=(e+relprime(net.edges.size()))%net.edges.size();
+      triop(&net.triangles[t],stageTolerance,0);
+      t=(t+relprime(net.triangles.size()))%net.triangles.size();
+      //tri=net.findt(cloud[d]);
+      //triop(tri,tolerance,0);
+      //d=(d+relprime(cloud.size()))%cloud.size();
+      //if (i==sqr(lrint(sqrt(i))))
+	//drawNet(ps);
+      now=time(nullptr);
+      if (now!=then)
       {
-	adjustLooseCorners(stageTolerance);
-	stageTolerance/=2;
-	if (stageTolerance<tolerance)
-	  done=true;
-	else
+	areadone=areaDone(stageTolerance);
+	rmsadj=rmsAdjustment();
+	cout<<"Toler "<<stageTolerance;
+	cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone))<<"% done  ";
+	cout<<net.triangles.size()<<" triangles  adjustment ";
+	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
+	cout.flush();
+	then=now;
+	if (rmsadj<stageTolerance && areadone==1)
 	{
-	  drawNet(ps);
-	  writeDxf(outputFile);
+	  adjustLooseCorners(stageTolerance);
+	  stageTolerance/=2;
+	  if (stageTolerance<tolerance)
+	    done=true;
+	  else
+	  {
+	    drawNet(ps);
+	    writeDxf(outputFile);
+	  }
 	}
       }
     }
+    drawNet(ps);
+    cout<<'\n';
+    ps.close();
+    writeDxf(outputFile);
   }
-  drawNet(ps);
-  cout<<'\n';
-  ps.close();
-  writeDxf(outputFile);
-  cout<<baseName("el.las")<<endl;
-  cout<<baseName("/el.las")<<endl;
-  cout<<baseName("/.las")<<endl;
-  cout<<baseName("el.")<<endl;
-  cout<<baseName("/el.las/los")<<endl;
-  cout<<baseName("/..")<<endl;
   return 0;
 }
