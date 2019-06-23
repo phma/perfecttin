@@ -119,6 +119,23 @@ void drawMag(PostScript &ps)
   ps.endpage();
 }
 
+string baseName(string fileName)
+{
+  long long slashPos,dotPos; // npos turns into -1, which is convenient
+  string between;
+  slashPos=fileName.rfind('/');
+  dotPos=fileName.rfind('.');
+  if (dotPos>slashPos)
+  {
+    between=fileName.substr(slashPos+1,dotPos-slashPos-1);
+    if (between.find_first_not_of('.')>between.length())
+      dotPos=-1;
+  }
+  if (dotPos>slashPos)
+    fileName.erase(dotPos);
+  return fileName;
+}
+
 double areaDone(double tolerance)
 {
   vector<double> allTri,doneTri;
@@ -284,5 +301,11 @@ int main(int argc, char *argv[])
   cout<<'\n';
   ps.close();
   writeDxf(outputFile);
+  cout<<baseName("el.las")<<endl;
+  cout<<baseName("/el.las")<<endl;
+  cout<<baseName("/.las")<<endl;
+  cout<<baseName("el.")<<endl;
+  cout<<baseName("/el.las/los")<<endl;
+  cout<<baseName("/..")<<endl;
   return 0;
 }
