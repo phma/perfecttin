@@ -1,0 +1,17 @@
+Decisite reads a point cloud in LAS or PLY format and outputs a TIN in DXF format which approximates the point cloud to within a vertical tolerance.
+
+Before compiling Decisite, if you want it to read PLY files, clone the libplyxx repo from github.com/phma and compile and install it. This is Simon Rajotte's code; I just made it installable.
+
+To compile, if you're not developing the program:
+1. Create a subdirectory build/ inside the directory where you untarred the source code.
+2. cd build
+3. cmake ..
+4. make
+
+If you are developing the program:
+1. Create a directory build/decisite outside the directory where you cloned the source code.
+2. cd build/decisite
+3. cmake <directory where the source code is>
+4. make
+
+PLY and DXF files have no units in them. LAS files do, but I haven't yet figured out whether they're always in meters or the unit is indicated in the variable-length record. The DXF file output is in the same unit as the input.
