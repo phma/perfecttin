@@ -26,7 +26,7 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-find_package(LibPLYXX REQUIRED)
+find_package(LibPLYXX)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono)
 add_executable(decisite adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp decisite.cpp
