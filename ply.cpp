@@ -20,11 +20,14 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef LibPLYXX_FOUND
 #include <libplyxx.h>
+#endif
 #include "ply.h"
 #include "cloud.h"
 
 using namespace std;
+#ifdef LibPLYXX_FOUND
 using namespace libply;
 
 void receivePoint(ElementBuffer &buf)
@@ -46,4 +49,8 @@ void readPly(string fileName)
   {
   }
 }
-
+#else
+void readPly(string fileName)
+{
+}
+#endif

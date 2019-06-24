@@ -34,7 +34,10 @@ add_executable(decisite adjelev.cpp angle.cpp binio.cpp
                leastsquares.cpp manysum.cpp matrix.cpp
                neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp tin.cpp triangle.cpp triop.cpp)
-target_link_libraries(decisite ${LibPLYXX_LIBRARY} ${Boost_LIBRARIES})
+target_link_libraries(decisite ${Boost_LIBRARIES})
+if (${LibPLYXX_FOUND})
+target_link_libraries(decisite ${LibPLYXX_LIBRARY})
+endif (${LibPLYXX_FOUND})
 
 include(CheckIncludeFiles)
 check_include_files(time.h HAVE_TIME_H)
@@ -54,8 +57,10 @@ set(DECISITE_PATCH_VERSION 0)
 set(DECISITE_VERSION ${DECISITE_MAJOR_VERSION}.${DECISITE_MINOR_VERSION}.${DECISITE_PATCH_VERSION})
 set(COPY_YEAR 2019)
 
-include_directories(${PROJECT_BINARY_DIR})
+include_directories(${PROJECT_BINARY_DIR} ${Boost_INCLUDE_DIR})
+if (${LibPLYXX_FOUND})
 include_directories(${LibPLYXX_INCLUDE_DIR})
+endif (${LibPLYXX_FOUND})
 configure_file (config.h.in config.h)
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${DECISITE_MAJOR_VERSION})
