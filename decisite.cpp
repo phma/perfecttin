@@ -46,6 +46,7 @@ cr::steady_clock clk;
 const bool drawDots=false;
 const bool colorGradient=true;
 const bool colorAbsGradient=false;
+const bool doTestPattern=false;
 
 void drawNet(PostScript &ps)
 {
@@ -245,7 +246,7 @@ int main(int argc, char *argv[])
 	readLas(inputFile);
       cout<<"Read "<<cloud.size()<<" dots\n";
     }
-    else
+    else if (doTestPattern)
     {
       setsurface(CIRPAR);
       aster(100000);
