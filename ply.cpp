@@ -20,6 +20,7 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #ifdef LibPLYXX_FOUND
 #include <libplyxx.h>
 #endif
