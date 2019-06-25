@@ -236,6 +236,11 @@ int main(int argc, char *argv[])
   {
     if (inputFile.length())
       cerr<<"Please specify output file with -o\n";
+    else
+    {
+      cout<<"Usage: decisite [options] input-file\n";
+      cout<<generic;
+    }
     validCmd=false;
   }
   if (outputFile==inputFile && validCmd)
