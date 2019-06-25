@@ -22,6 +22,7 @@
 #include <boost/program_options.hpp>
 #include <boost/chrono.hpp>
 #include "ply.h"
+#include "config.h"
 #include "las.h"
 #include "cloud.h"
 #include "ps.h"
@@ -215,6 +216,10 @@ int main(int argc, char *argv[])
     ("input",po::value<string>(&inputFile),"Input file");
   p.add("input",1);
   cmdline_options.add(generic).add(hidden);
+  cout<<"DeciSite version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat, GPLv3+\n";
+#ifdef LibPLYXX_FOUND
+  cout<<"PLY file code © Simon Rajotte, MIT license\n";
+#endif
   try
   {
     po::store(po::command_line_parser(argc,argv).options(cmdline_options).positional(p).run(),vm);
@@ -229,7 +234,8 @@ int main(int argc, char *argv[])
     outputFile=baseName(inputFile)+".dxf";
   if (!outputFile.length())
   {
-    cerr<<"Please specify output file with -o\n";
+    if (inputFile.length())
+      cerr<<"Please specify output file with -o\n";
     validCmd=false;
   }
   if (outputFile==inputFile && validCmd)
