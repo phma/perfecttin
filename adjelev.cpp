@@ -29,6 +29,7 @@
 #include "manysum.h"
 #include "octagon.h"
 #include "neighbor.h"
+#include "threads.h"
 using namespace std;
 
 vector<adjustRecord> adjustmentLog;
@@ -49,6 +50,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   {
     ndots+=tri[i]->dots.size();
     tri[i]->flatten(); // sets sarea, needed for areaCoord
+    markBucketDirty(net.revtriangles[tri[i]]);
   }
   a.resize(ndots,pnt.size());
   for (ndots=i=0;i<tri.size();i++)
@@ -80,6 +82,8 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     xsq.push_back(sqr(pnt[k]->elev()-oldelev));
   }
   ret.msAdjustment=pairwisesum(xsq)/xsq.size();
+  for (i=0;i<tri.size();i++)
+    markBucketDirty(net.revtriangles[tri[i]]);
   //if (singular)
     //cout<<"Matrix in least squares is singular"<<endl;
   return ret;

@@ -36,6 +36,7 @@
 #include "manysum.h"
 #include "ldecimal.h"
 #include "dxf.h"
+#include "threads.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -151,14 +152,17 @@ double areaDone(double tolerance)
   {
     allBuckets.push_back(0);
     doneBuckets.push_back(0);
+    resizeBuckets(1);
   }
   if (overtimeCount==8)
   {
+    resizeBuckets(allBuckets.size()*2);
     allBuckets.resize(allBuckets.size()*2);
     doneBuckets.resize(doneBuckets.size()*2);
     overtimeCount=0;
     //cout<<allBuckets.size()<<" buckets \n";
   }
+  markBucketClean(bucket);
   for (i=bucket;i<net.triangles.size();i+=allBuckets.size())
   {
     allTri.push_back(net.triangles[i].sarea);
@@ -168,6 +172,7 @@ double areaDone(double tolerance)
   allBuckets[bucket]=pairwisesum(allTri);
   doneBuckets[bucket]=pairwisesum(doneTri);
   ret=pairwisesum(doneBuckets)/pairwisesum(allBuckets);
+  markBucketClean(bucket);
   elapsed=clk.now()-timeStart;
   if (elapsed>cr::milliseconds(20))
     overtimeCount++;
@@ -309,7 +314,7 @@ int main(int argc, char *argv[])
 	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
 	cout.flush();
 	then=now;
-	if (rmsadj<stageTolerance && areadone==1)
+	if (rmsadj<stageTolerance && areadone==1 && allBucketsClean())
 	{
 	  adjustLooseCorners(stageTolerance);
 	  stageTolerance/=2;

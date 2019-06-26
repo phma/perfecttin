@@ -30,6 +30,7 @@
 #include "ldecimal.h"
 #include "boundrect.h"
 #include "cogo.h"
+#include "threads.h"
 #include "adjelev.h"
 
 using namespace std;
@@ -52,6 +53,7 @@ double makeOctagon()
   int i,n,h,sz;
   triangle *tri;
   net.clear();
+  resizeBuckets(1);
   for (i=0;i<cloud.size();i++)
   {
     orthogonal.include(cloud[i]);
