@@ -33,7 +33,8 @@ add_executable(decisite adjelev.cpp angle.cpp binio.cpp
                dxf.cpp edgeop.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp
                neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
-               qindex.cpp random.cpp relprime.cpp test.cpp tin.cpp triangle.cpp triop.cpp)
+               qindex.cpp random.cpp relprime.cpp test.cpp
+               threads.cpp tin.cpp triangle.cpp triop.cpp)
 target_link_libraries(decisite ${Boost_LIBRARIES})
 if (${LibPLYXX_FOUND})
 target_link_libraries(decisite ${LibPLYXX_LIBRARY})
