@@ -64,7 +64,7 @@ point *split(triangle *tri)
   net.edges[newEdgeNum  ].setnext(tri->b,sideb);
   sideb->setnext(tri->c,&net.edges[newEdgeNum+2]);
   net.edges[newEdgeNum+2].setnext(tri->b,sidea);
-  int newTriNum=net.triangles.size();
+  int newTriNum=net.addtriangle(2);
   net.triangles[newTriNum].a=tri->a;
   net.triangles[newTriNum].b=tri->b;
   net.triangles[newTriNum].c=pnt;

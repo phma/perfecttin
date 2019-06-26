@@ -199,7 +199,6 @@ bool pointlist::checkTinConsistency()
 }
 
 void pointlist::addpoint(int numb,point pnt,bool overwrite)
-// If numb<0, it's a point added by bezitopo.
 {int a;
  if (points.count(numb))
     if (overwrite)
@@ -221,6 +220,18 @@ void pointlist::addpoint(int numb,point pnt,bool overwrite)
     points[a=numb]=pnt;
  revpoints[&(points[a])]=a;
  }
+
+int pointlist::addtriangle(int n)
+{
+  int i;
+  int newTriNum=triangles.size();
+  for (i=0;i<n;i++)
+  {
+    triangles[newTriNum+i].sarea=0;
+    revtriangles[&triangles[newTriNum+i]]=newTriNum+i;
+  }
+  return newTriNum;
+}
 
 void pointlist::makeqindex()
 {

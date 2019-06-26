@@ -138,6 +138,7 @@ double makeOctagon()
   {
     //cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";
     trianglePointers.push_back(&net.triangles[i]);
+    net.revtriangles[&net.triangles[i]]=i;
   }
   for (i=1;i<=8;i++)
     cornerPointers.push_back(&net.points[i]);

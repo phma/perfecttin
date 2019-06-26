@@ -42,6 +42,7 @@ public:
   revptlist revpoints;
   std::map<int,edge> edges;
   std::map<int,triangle> triangles;
+  std::map<triangle*,int> revtriangles;
   /* edges and triangles are logically arrays from 0 to size()-1, but are
    * implemented as maps, because they have pointers to each other, and points
    * point to edges, and the pointers would be messed up by moving memory
@@ -49,6 +50,7 @@ public:
    */
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
+  int addtriangle(int n=1);
   void clear();
   int size();
   void clearTin();
