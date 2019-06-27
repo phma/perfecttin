@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
   PostScript ps;
   int i,e,t,d;
   time_t now,then;
-  double tolerance,stageTolerance,areadone,rmsadj;
+  double tolerance,stageTolerance,areadone=0,rmsadj;
   bool done=false;
   triangle *tri;
   string inputFile,outputFile;
@@ -260,7 +260,8 @@ int main(int argc, char *argv[])
       readPly(inputFile);
       if (cloud.size()==0)
 	readLas(inputFile);
-      cout<<"Read "<<cloud.size()<<" dots\n";
+      if (cloud.size())
+	cout<<"Read "<<cloud.size()<<" dots\n";
     }
     else if (doTestPattern)
     {
@@ -269,17 +270,21 @@ int main(int argc, char *argv[])
     }
     if (cloud.size()==0)
     {
-      cout<<"No dots, nothing to do.\n";
+      if (inputFile.length())
+	cerr<<"No point cloud found in "<<inputFile<<endl;
       done=true;
     }
     areadone=makeOctagon();
     stageTolerance=tolerance;
     while (stageTolerance<areadone)
       stageTolerance*=2;
-    ps.open("decisite.ps");
-    ps.setpaper(papersizes["A4 portrait"],0);
-    ps.prolog();
-    drawNet(ps);
+    if (!done)
+    {
+      ps.open("decisite.ps");
+      ps.setpaper(papersizes["A4 portrait"],0);
+      ps.prolog();
+      drawNet(ps);
+    }
     for (i=1;i>6;i+=2)
       flip(&net.edges[i]);
     //drawNet(ps);
@@ -328,10 +333,14 @@ int main(int argc, char *argv[])
 	}
       }
     }
-    drawNet(ps);
-    cout<<'\n';
-    ps.close();
-    writeDxf(outputFile);
+    if (ps.isOpen())
+    {
+      drawNet(ps);
+      cout<<'\n';
+      ps.close();
+    }
+    if (outputFile.length() && areadone==1)
+      writeDxf(outputFile);
   }
   return 0;
 }
