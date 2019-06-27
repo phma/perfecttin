@@ -45,7 +45,7 @@ double makeOctagon()
 {
   int ori=rng.uirandom();
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
-  double bounds[8],width,margin,err,maxerr=0,high=-INFINITY,low=INFINITY;
+  double bounds[8],width,margin=0,err,maxerr=0,high=-INFINITY,low=INFINITY;
   xyz dot;
   bool valid=true;
   xy corners[8];
@@ -77,7 +77,11 @@ double makeOctagon()
   for (i=0;i<4;i++)
   {
     width=-bounds[i]-bounds[i+4];
-    margin=width/sqrt(cloud.size());
+    margin+=width;
+  }
+  margin/=4*sqrt(cloud.size());
+  for (i=0;i<4;i++)
+  {
     bounds[i]-=margin;
     bounds[i+4]-=margin;
   }
