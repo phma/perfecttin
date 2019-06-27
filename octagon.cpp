@@ -79,6 +79,8 @@ double makeOctagon()
     width=-bounds[i]-bounds[i+4];
     margin+=width;
   }
+  if (margin==0) // Width is 0 in all directions;
+    valid=false; // only one point or all points coincide.
   margin/=4*sqrt(cloud.size());
   for (i=0;i<4;i++)
   {

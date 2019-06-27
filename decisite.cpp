@@ -275,6 +275,11 @@ int main(int argc, char *argv[])
       done=true;
     }
     areadone=makeOctagon();
+    if (!std::isfinite(areadone))
+    {
+      cerr<<"Point cloud covers no area or has infinite or NaN points\n";
+      done=true;
+    }
     stageTolerance=tolerance;
     while (stageTolerance<areadone)
       stageTolerance*=2;
