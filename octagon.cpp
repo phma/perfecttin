@@ -47,6 +47,7 @@ double makeOctagon()
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
   double bounds[8],width,margin,err,maxerr=0,high=-INFINITY,low=INFINITY;
   xyz dot;
+  bool valid=true;
   xy corners[8];
   vector<triangle *> trianglePointers;
   vector<point *> cornerPointers;
@@ -131,6 +132,11 @@ double makeOctagon()
     for (i=n=0;i<sz;i++,n=(n+h)%sz)
     {
       tri=tri->findt(cloud[n]);
+      if (!tri)
+      {
+	valid=false;
+	break;
+      }
       tri->dots.push_back(cloud[n]);
     }
   }
@@ -155,6 +161,8 @@ double makeOctagon()
     }
   //for (i=1;i<=8;i++)
     //cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
+  if (!valid)
+    maxerr=NAN;
   return maxerr;
 }
 
