@@ -319,8 +319,8 @@ int main(int argc, char *argv[])
 	areadone=areaDone(stageTolerance);
 	rmsadj=rmsAdjustment();
 	cout<<"Toler "<<stageTolerance;
-	cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone))<<"% done  ";
-	cout<<net.triangles.size()<<" triangles  adjustment ";
+	cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone)*10)<<"% done  ";
+	cout<<net.triangles.size()<<" tri  adj ";
 	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
 	cout.flush();
 	then=now;
