@@ -167,6 +167,7 @@ GroupCode& GroupCode::operator=(const GroupCode &b)
       str=b.str;
       break;
   }
+  return *this;
 }
 
 GroupCode::~GroupCode()

@@ -435,6 +435,7 @@ const point& point::operator=(const point &rhs)
     z=rhs.z;
     line=rhs.line;
   }
+  return *this;
 }
 
 int point::valence()
