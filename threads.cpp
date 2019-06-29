@@ -20,8 +20,12 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/thread.hpp>
 #include "threads.h"
 using namespace std;
+
+boost::mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
+boost::mutex triMutex; // Lock this while locking or unlocking triangles.
 
 vector<int> cleanBuckets;
 /* Indicates whether the buckets used by areaDone are clean or dirty.

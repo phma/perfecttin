@@ -27,7 +27,7 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
-find_package(Boost REQUIRED COMPONENTS program_options locale chrono)
+find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
 add_executable(decisite adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp decisite.cpp
                dxf.cpp edgeop.cpp las.cpp ldecimal.cpp
@@ -54,7 +54,7 @@ check_type_size("int *" INT_POINTER)
 
 set(DECISITE_MAJOR_VERSION 0)
 set(DECISITE_MINOR_VERSION 1)
-set(DECISITE_PATCH_VERSION 0)
+set(DECISITE_PATCH_VERSION 1)
 set(DECISITE_VERSION ${DECISITE_MAJOR_VERSION}.${DECISITE_MINOR_VERSION}.${DECISITE_PATCH_VERSION})
 set(COPY_YEAR 2019)
 
