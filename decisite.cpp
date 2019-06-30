@@ -298,34 +298,27 @@ int main(int argc, char *argv[])
     //drawNet(ps);
     for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
       bend(&net.edges[i]);
+    net.makeqindex();
     startThreads(1);
     tri=&net.triangles[0];
     for (i=e=t=d=0;!done;i++)
     {
-      if ((i&(i-1))==0)
-	net.makeqindex();
-      edgeop(&net.edges[e],stageTolerance,0);
-      e=(e+relprime(net.edges.size()))%net.edges.size();
-      triop(&net.triangles[t],stageTolerance,0);
-      t=(t+relprime(net.triangles.size()))%net.triangles.size();
-      //tri=net.findt(cloud[d]);
-      //triop(tri,tolerance,0);
-      //d=(d+relprime(cloud.size()))%cloud.size();
-      //if (i==sqr(lrint(sqrt(i))))
-	//drawNet(ps);
+      boost::this_thread::sleep_for(boost::chrono::milliseconds(1));
       now=time(nullptr);
       if (now!=then)
       {
 	areadone=areaDone(stageTolerance);
 	rmsadj=rmsAdjustment();
 	cout<<"Toler "<<stageTolerance;
-	cout<<"  Iter "<<i<<"  "<<ldecimal(areadone*100,areadone*(1-areadone)*10)<<"% done  ";
+	cout<<"  "<<ldecimal(areadone*100,areadone*(1-areadone)*10)<<"% done  ";
 	cout<<net.triangles.size()<<" tri  adj ";
 	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
 	cout.flush();
 	then=now;
 	if (rmsadj<stageTolerance && areadone==1 && allBucketsClean())
 	{
+	  waitForThreads(TH_PAUSE);
+	  net.makeqindex();
 	  adjustLooseCorners(stageTolerance);
 	  stageTolerance/=2;
 	  if (stageTolerance<tolerance)
@@ -334,10 +327,12 @@ int main(int argc, char *argv[])
 	  {
 	    drawNet(ps);
 	    writeDxf(outputFile);
+	    waitForThreads(TH_RUN);
 	  }
 	}
       }
     }
+    waitForThreads(TH_STOP);
     if (ps.isOpen())
     {
       drawNet(ps);
@@ -346,6 +341,7 @@ int main(int argc, char *argv[])
     }
     if (outputFile.length() && areadone==1)
       writeDxf(outputFile);
+    joinThreads();
   }
   return 0;
 }

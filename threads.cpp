@@ -31,6 +31,7 @@ using namespace boost;
 mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 mutex triMutex; // Lock this while locking or unlocking triangles.
 int threadCommand;
+vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<int> sleepTime;
 vector<int> triangleHolders; // one per triangle
@@ -74,11 +75,21 @@ void resizeBuckets(int n)
 
 void startThreads(int n)
 {
+  int i;
   threadCommand=TH_RUN;
   threadStatus.resize(n);
   heldTriangles.resize(n);
   sleepTime.resize(n);
   initTempPointlist(n);
+  for (i=0;i<n;i++)
+    threads.push_back(thread(TinThread(),i));
+}
+
+void joinThreads()
+{
+  int i;
+  for (i=0;i<threads.size();i++)
+    threads[i].join();
 }
 
 void sleep(int thread)
@@ -129,10 +140,11 @@ void unlockTriangles(int thread)
   triMutex.unlock();
 }
 
-void waitForThreads()
+void waitForThreads(int newStatus)
 // Waits until all threads are in the commanded status.
 {
   int i,n;
+  threadCommand=newStatus;
   do
   {
     for (i=n=0;i<threadStatus.size();i++)
