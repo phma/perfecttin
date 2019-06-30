@@ -30,6 +30,7 @@ using namespace boost;
 
 mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 mutex triMutex; // Lock this while locking or unlocking triangles.
+mutex adjLog;
 int threadCommand;
 vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.

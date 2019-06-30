@@ -91,7 +91,9 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 
 void logAdjustment(adjustRecord rec)
 {
+  adjLog.lock();
   adjustmentLog.push_back(rec);
+  adjLog.unlock();
 }
 
 double rmsAdjustment()
@@ -100,11 +102,13 @@ double rmsAdjustment()
   int nRecent=lrint(sqrt(adjustmentLog.size()));
   vector<double> xsq;
   int i;
+  adjLog.lock();
   for (i=adjustmentLog.size()-1;i>=0 && xsq.size()<nRecent;i--)
     if (std::isfinite(adjustmentLog[i].msAdjustment))
       xsq.push_back(adjustmentLog[i].msAdjustment);
   if (std::isnan(sqrt(pairwisesum(xsq)/xsq.size())))
     i++;
+  adjLog.unlock();
   return sqrt(pairwisesum(xsq)/xsq.size());
 }
 

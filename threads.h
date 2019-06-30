@@ -29,6 +29,7 @@
 #define TH_STOP 3
 
 extern boost::mutex wingEdge;
+extern boost::mutex adjLog;
 extern double stageTolerance;
 
 void markBucketClean(int bucket);
