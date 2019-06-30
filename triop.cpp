@@ -40,7 +40,7 @@ point *split(triangle *tri)
   edge *sidea,*sideb,*sidec;
   vector<xyz> remainder; // the dots that remain in tri
   int i;
-  // lock
+  wingEdge.lock();
   point newPoint(((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3);
   int newPointNum=net.points.size()+1;
   net.addpoint(newPointNum,newPoint);
@@ -105,7 +105,7 @@ point *split(triangle *tri)
   tri->flatten();
   net.triangles[newTriNum].flatten();
   net.triangles[newTriNum+1].flatten();
-  // unlock
+  wingEdge.unlock();
   return pnt;
 }
 

@@ -20,14 +20,13 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/thread.hpp>
 #include "threads.h"
 #include "edgeop.h"
 using namespace std;
 using namespace boost;
 
-boost::mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
-boost::mutex triMutex; // Lock this while locking or unlocking triangles.
+mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
+mutex triMutex; // Lock this while locking or unlocking triangles.
 int threadCommand;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<int> sleepTime;

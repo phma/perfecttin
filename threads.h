@@ -20,12 +20,15 @@
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <boost/thread.hpp>
 #include <vector>
 
 // These are used as both commands to the threads and status from the threads.
 #define TH_RUN 1
 #define TH_PAUSE 2
 #define TH_STOP 3
+
+extern boost::mutex wingEdge;
 
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);

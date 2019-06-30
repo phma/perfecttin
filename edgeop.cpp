@@ -54,7 +54,7 @@ void flip(edge *e)
 {
   vector<xyz> allDots;
   int i;
-  // lock
+  wingEdge.lock();
   e->flip(&net);
   //assert(net.checkTinConsistency());
   allDots.resize(e->tria->dots.size()+e->trib->dots.size());
@@ -73,7 +73,7 @@ void flip(edge *e)
   e->trib->flatten();
   e->tria->unsetError();
   e->trib->unsetError();
-  // unlock
+  wingEdge.unlock();
 }
 
 point *bend(edge *e)
@@ -83,7 +83,7 @@ point *bend(edge *e)
 {
   edge *anext=e,*bnext=e;
   int abear,ebear,bbear;
-  // lock
+  wingEdge.lock();
   do
     anext=anext->next(e->a);
   while (anext->isinterior());
@@ -140,7 +140,7 @@ point *bend(edge *e)
   }
   e->setNeighbors();
   //assert(net.checkTinConsistency());
-  // unlock
+  wingEdge.unlock();
   flip(e);
   return pnt;
 }
