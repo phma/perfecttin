@@ -28,6 +28,8 @@ boost::mutex wingEdge; // Lock this while changing pointers in the winged edge s
 boost::mutex triMutex; // Lock this while locking or unlocking triangles.
 int threadCommand;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
+vector<int> triangleHolders; // one per triangle
+vector<vector<int> > heldTriangles; // one list of triangles per thread
 
 vector<int> cleanBuckets;
 /* Indicates whether the buckets used by areaDone are clean or dirty.
@@ -64,3 +66,41 @@ void resizeBuckets(int n)
   cleanBuckets.resize(n);
 }
 
+void startThreads(int n)
+{
+  threadCommand=TH_RUN;
+  threadStatus.resize(n);
+  heldTriangles.resize(n);
+}
+
+bool lockTriangles(int thread,vector<int> triangles)
+/* Either it locks all the triangles, and returns true,
+ * or it locks nothing, and returns false.
+ */
+{
+  bool ret=true;
+  int i;
+  triMutex.lock();
+  for (i=0;i<triangles.size();i++)
+  {
+    while (triangles[i]>=triangleHolders.size())
+      triangleHolders.push_back(-1);
+    heldTriangles[thread].push_back(triangles[i]);
+    if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
+      ret=false;
+  }
+  for (i=0;i<triangles.size();i++)
+    triangleHolders[triangles[i]]=thread;
+  triMutex.unlock();
+  return ret;
+}
+
+void unlockTriangles(int thread)
+{
+  int i;
+  triMutex.lock();
+  for (i=0;i<heldTriangles[thread].size();i++)
+    if (triangleHolders[heldTriangles[thread][i]]==thread)
+      triangleHolders[heldTriangles[thread][i]]=-1;
+  triMutex.unlock();
+}

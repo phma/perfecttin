@@ -28,6 +28,7 @@
 #include "triop.h"
 #include "edgeop.h"
 #include "angle.h"
+#include "threads.h"
 
 using namespace std;
 
@@ -106,6 +107,15 @@ point *split(triangle *tri)
   net.triangles[newTriNum+1].flatten();
   // unlock
   return pnt;
+}
+
+bool lockTriangles(int thread,vector<triangle *> triPtr)
+{
+  vector<int> triangles;
+  int i;
+  for (i=0;i<triPtr.size();i++)
+    triangles.push_back(net.revtriangles[triPtr[i]]);
+  return lockTriangles(thread,triangles);
 }
 
 bool shouldSplit(triangle *tri,double tolerance)

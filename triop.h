@@ -19,7 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Decisite. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <vector>
 
 point *split(triangle *tri);
+bool lockTriangles(int thread,std::vector<triangle *> triPtr);
 bool shouldSplit(triangle *tri,double tolerance); // called from edgeop
 void triop(triangle *tri,double tolerance,int thread);
