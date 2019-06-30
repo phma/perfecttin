@@ -129,6 +129,19 @@ void unlockTriangles(int thread)
   triMutex.unlock();
 }
 
+void waitForThreads()
+// Waits until all threads are in the commanded status.
+{
+  int i,n;
+  do
+  {
+    for (i=n=0;i<threadStatus.size();i++)
+      if ((threadStatus[i]&255)!=threadCommand)
+	n++;
+    this_thread::sleep_for(chrono::milliseconds(n));
+  } while (n);
+}
+
 void TinThread::operator()(int thread)
 {
   int i,e=0,t=0,d=0;
