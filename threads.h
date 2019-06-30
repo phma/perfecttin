@@ -22,6 +22,11 @@
 
 #include <vector>
 
+// These are used as both commands to the threads and status from the threads.
+#define TH_RUN 1
+#define TH_PAUSE 2
+#define TH_STOP 3
+
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
 bool allBucketsClean();
