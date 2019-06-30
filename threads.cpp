@@ -162,12 +162,12 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
-      if (edgeop(&net.edges[e],stageTolerance,0))
+      if (edgeop(&net.edges[e],stageTolerance,thread))
 	unsleep(thread);
       else
 	sleep(thread);
       e=(e+relprime(net.edges.size(),thread))%net.edges.size();
-      if (triop(&net.triangles[t],stageTolerance,0))
+      if (triop(&net.triangles[t],stageTolerance,thread))
 	unsleep(thread);
       else
 	sleep(thread);
