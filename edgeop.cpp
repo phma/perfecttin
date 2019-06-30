@@ -28,6 +28,7 @@
 #include "octagon.h"
 #include "triop.h"
 #include "neighbor.h"
+#include "threads.h"
 #include "adjelev.h"
 
 using namespace std;
@@ -317,26 +318,52 @@ bool shouldBend(edge *e,double tolerance)
 void edgeop(edge *e,double tolerance,int thread)
 {
   bool did=false;
+  bool gotLock1,gotLock2=true;
   vector<point *> corners;
+  vector<triangle *> triNeigh,triAdj;
   corners.push_back(e->a);
   corners.push_back(e->b);
   if (e->tria)
+  {
+    triAdj.push_back(e->tria);
     corners.push_back(e->nextb->otherend(e->b));
+  }
   if (e->trib)
+  {
+    triAdj.push_back(e->trib);
     corners.push_back(e->nexta->otherend(e->a));
-  if (e->isinterior())
+  }
+  gotLock1=lockTriangles(thread,triAdj);
+  if (gotLock1 && e->isinterior())
     if (e->isFlippable() && shouldFlip(e,tolerance,thread))
     {
-      flip(e);
-      did=true;
+      triNeigh=triangleNeighbors(corners);
+      gotLock2=lockTriangles(thread,triNeigh);
+      if (gotLock2)
+      {
+	flip(e);
+	did=true;
+      }
     }
     else;
   else
-    if (shouldBend(e,tolerance))
+    if (gotLock1 && shouldBend(e,tolerance))
     {
-      corners.push_back(bend(e));
-      did=true;
+      triNeigh=triangleNeighbors(corners);
+      gotLock2=lockTriangles(thread,triNeigh);
+      if (gotLock2)
+      {
+	corners.push_back(bend(e));
+	triNeigh=triangleNeighbors(corners);
+	did=true;
+      }
     }
-  if (did || rmsAdjustment()>tolerance || std::isnan(rmsAdjustment()))
-    logAdjustment(adjustElev(triangleNeighbors(corners),corners));
+  if (triNeigh.size()==0)
+  {
+    triNeigh=triangleNeighbors(corners);
+    gotLock2=lockTriangles(thread,triNeigh);
+  }
+  if (gotLock2 && (did || rmsAdjustment()>tolerance || std::isnan(rmsAdjustment())))
+    logAdjustment(adjustElev(triNeigh,corners));
+  unlockTriangles(thread);
 }

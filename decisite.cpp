@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
     //drawNet(ps);
     for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
       bend(&net.edges[i]);
-    initTempPointlist(1);
+    startThreads(1);
     tri=&net.triangles[0];
     for (i=e=t=d=0;!done;i++)
     {

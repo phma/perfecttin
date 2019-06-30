@@ -22,6 +22,7 @@
 
 #include <boost/thread.hpp>
 #include "threads.h"
+#include "edgeop.h"
 using namespace std;
 
 boost::mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
@@ -71,6 +72,7 @@ void startThreads(int n)
   threadCommand=TH_RUN;
   threadStatus.resize(n);
   heldTriangles.resize(n);
+  initTempPointlist(n);
 }
 
 bool lockTriangles(int thread,vector<int> triangles)
@@ -89,7 +91,7 @@ bool lockTriangles(int thread,vector<int> triangles)
     if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
       ret=false;
   }
-  for (i=0;i<triangles.size();i++)
+  for (i=0;ret && i<triangles.size();i++)
     triangleHolders[triangles[i]]=thread;
   triMutex.unlock();
   return ret;
@@ -102,5 +104,6 @@ void unlockTriangles(int thread)
   for (i=0;i<heldTriangles[thread].size();i++)
     if (triangleHolders[heldTriangles[thread][i]]==thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
+  heldTriangles[thread].clear();
   triMutex.unlock();
 }

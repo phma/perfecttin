@@ -130,19 +130,30 @@ void triop(triangle *tri,double tolerance,int thread)
   vector<point *> corners;
   edge *sidea,*sideb,*sidec;
   bool spl;
+  bool gotLock1,gotLock2=true;
+  vector<triangle *> triNeigh;
+  triNeigh.push_back(tri);
+  gotLock1=lockTriangles(thread,triNeigh);
   corners.push_back(tri->a);
   corners.push_back(tri->b);
   corners.push_back(tri->c);
   sidea=tri->c->edg(tri);
   sideb=tri->a->edg(tri);
   sidec=tri->b->edg(tri);
-  if (spl=shouldSplit(tri,tolerance))
+  if (gotLock1 && (spl=shouldSplit(tri,tolerance)))
   {
-    corners.push_back(split(tri));
-    tri->unsetError();
-    logAdjustment(adjustElev(triangleNeighbors(corners),corners));
-    edgeop(sidea,tolerance,thread);
-    edgeop(sideb,tolerance,thread);
-    edgeop(sidec,tolerance,thread);
+    triNeigh=triangleNeighbors(corners);
+    gotLock2=lockTriangles(thread,triNeigh);
+    if (gotLock2)
+    {
+      corners.push_back(split(tri));
+      triNeigh=triangleNeighbors(corners);
+      tri->unsetError();
+      logAdjustment(adjustElev(triNeigh,corners));
+      edgeop(sidea,tolerance,thread);
+      edgeop(sideb,tolerance,thread);
+      edgeop(sidec,tolerance,thread);
+    }
   }
+  unlockTriangles(thread);
 }
