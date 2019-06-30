@@ -23,6 +23,7 @@
 #include <set>
 #include "neighbor.h"
 #include "tin.h"
+#include "threads.h"
 
 using namespace std;
 
@@ -33,11 +34,13 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
   edge *ed;
   int i,j;
   set<triangle *>::iterator k;
+  wingEdge.lock();
   for (i=0;i<corners.size();i++)
     for (ed=corners[i]->line,j=0;ed!=corners[i]->line || j==0;ed=ed->next(corners[i]),j++)
       tmpRet.insert(ed->tri(corners[i]));
   for (k=tmpRet.begin();k!=tmpRet.end();k++)
     if (*k!=nullptr)
       ret.push_back(*k);
+  wingEdge.unlock();
   return ret;
 }
