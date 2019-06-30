@@ -24,11 +24,13 @@
 #include "threads.h"
 #include "edgeop.h"
 using namespace std;
+using namespace boost;
 
 boost::mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 boost::mutex triMutex; // Lock this while locking or unlocking triangles.
 int threadCommand;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
+vector<int> sleepTime;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 
@@ -72,7 +74,23 @@ void startThreads(int n)
   threadCommand=TH_RUN;
   threadStatus.resize(n);
   heldTriangles.resize(n);
+  sleepTime.resize(n);
   initTempPointlist(n);
+}
+
+void sleep(int thread)
+{
+  sleepTime[thread]++;
+  if (sleepTime[thread]>1000)
+    sleepTime[thread]=1000;
+  threadStatus[thread]|=256;
+  this_thread::sleep_for(chrono::milliseconds(sleepTime[thread]));
+  threadStatus[thread]&=255;
+}
+
+void unsleep(int thread)
+{
+  sleepTime[thread]=0;
 }
 
 bool lockTriangles(int thread,vector<int> triangles)

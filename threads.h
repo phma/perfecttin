@@ -32,5 +32,7 @@ void markBucketDirty(int bucket);
 bool allBucketsClean();
 void resizeBuckets(int n);
 void startThreads(int n);
+void sleep(int thread);
+void unsleep(int thread);
 bool lockTriangles(int thread,std::vector<int> triangles);
 void unlockTriangles(int thread);
