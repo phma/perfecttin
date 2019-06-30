@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
   PostScript ps;
   int i,e,t,d;
   time_t now,then;
-  double tolerance,stageTolerance,areadone=0,rmsadj;
+  double tolerance,areadone=0,rmsadj;
   bool done=false;
   triangle *tri;
   string inputFile,outputFile;

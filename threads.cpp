@@ -22,6 +22,9 @@
 
 #include "threads.h"
 #include "edgeop.h"
+#include "triop.h"
+#include "octagon.h"
+#include "relprime.h"
 using namespace std;
 using namespace boost;
 
@@ -32,6 +35,7 @@ vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<int> sleepTime;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
+double stageTolerance;
 
 vector<int> cleanBuckets;
 /* Indicates whether the buckets used by areaDone are clean or dirty.
@@ -123,4 +127,32 @@ void unlockTriangles(int thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
   heldTriangles[thread].clear();
   triMutex.unlock();
+}
+
+void TinThread::operator()(int thread)
+{
+  int i,e=0,t=0,d=0;
+  while (threadCommand!=TH_STOP)
+  {
+    if (threadCommand==TH_RUN)
+    {
+      threadStatus[thread]=TH_RUN;
+      if (edgeop(&net.edges[e],stageTolerance,0))
+	unsleep(thread);
+      else
+	sleep(thread);
+      e=(e+relprime(net.edges.size(),thread))%net.edges.size();
+      if (triop(&net.triangles[t],stageTolerance,0))
+	unsleep(thread);
+      else
+	sleep(thread);
+      t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
+    }
+    if (threadCommand==TH_PAUSE)
+    {
+      threadStatus[thread]=TH_PAUSE;
+      sleep(thread);
+    }
+  }
+  threadStatus[thread]=TH_STOP;
 }

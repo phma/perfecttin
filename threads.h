@@ -29,6 +29,7 @@
 #define TH_STOP 3
 
 extern boost::mutex wingEdge;
+extern double stageTolerance;
 
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
@@ -39,3 +40,8 @@ void sleep(int thread);
 void unsleep(int thread);
 bool lockTriangles(int thread,std::vector<int> triangles);
 void unlockTriangles(int thread);
+
+class TinThread
+{
+  void operator()(int thread);
+};
