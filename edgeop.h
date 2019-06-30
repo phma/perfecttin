@@ -24,4 +24,4 @@
 void initTempPointlist(int nthreads);
 void flip(edge *e);
 point *bend(edge *e);
-void edgeop(edge *e,double tolerance,int thread);
+bool edgeop(edge *e,double tolerance,int thread);

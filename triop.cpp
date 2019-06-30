@@ -125,7 +125,10 @@ bool shouldSplit(triangle *tri,double tolerance)
   return !tri->inTolerance(tolerance);
 }
 
-void triop(triangle *tri,double tolerance,int thread)
+bool triop(triangle *tri,double tolerance,int thread)
+/* Returns true if it got a lock. If all three edgeop calls didn't get a lock,
+ * it still returns true.
+ */
 {
   vector<point *> corners;
   edge *sidea,*sideb,*sidec;
@@ -156,4 +159,5 @@ void triop(triangle *tri,double tolerance,int thread)
     }
   }
   unlockTriangles(thread);
+  return gotLock1 && gotLock2;
 }

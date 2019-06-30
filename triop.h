@@ -24,4 +24,4 @@
 point *split(triangle *tri);
 bool lockTriangles(int thread,std::vector<triangle *> triPtr);
 bool shouldSplit(triangle *tri,double tolerance); // called from edgeop
-void triop(triangle *tri,double tolerance,int thread);
+bool triop(triangle *tri,double tolerance,int thread);

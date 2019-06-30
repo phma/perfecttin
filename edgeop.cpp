@@ -315,7 +315,7 @@ bool shouldBend(edge *e,double tolerance)
     return shouldSplit(e->trib,tolerance);
 }
 
-void edgeop(edge *e,double tolerance,int thread)
+bool edgeop(edge *e,double tolerance,int thread)
 {
   bool did=false;
   bool gotLock1,gotLock2=true;
@@ -366,4 +366,5 @@ void edgeop(edge *e,double tolerance,int thread)
   if (gotLock2 && (did || rmsAdjustment()>tolerance || std::isnan(rmsAdjustment())))
     logAdjustment(adjustElev(triNeigh,corners));
   unlockTriangles(thread);
+  return gotLock1 && gotLock2;
 }
