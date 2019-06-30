@@ -105,7 +105,8 @@ void sleep(int thread)
 
 void unsleep(int thread)
 {
-  sleepTime[thread]=0;
+  if (sleepTime[thread])
+  sleepTime[thread]--;
 }
 
 bool lockTriangles(int thread,vector<int> triangles)
@@ -158,21 +159,20 @@ void waitForThreads(int newStatus)
 void TinThread::operator()(int thread)
 {
   int i,e=0,t=0,d=0;
+  int triResult,edgeResult;
   while (threadCommand!=TH_STOP)
   {
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
-      if (edgeop(&net.edges[e],stageTolerance,thread))
-	unsleep(thread);
-      else
-	sleep(thread);
+      edgeResult=edgeop(&net.edges[e],stageTolerance,thread);
       e=(e+relprime(net.edges.size(),thread))%net.edges.size();
-      if (triop(&net.triangles[t],stageTolerance,thread))
+      triResult=triop(&net.triangles[t],stageTolerance,thread);
+      t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
+      if (triResult==3 && edgeResult==3)
 	unsleep(thread);
       else
 	sleep(thread);
-      t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
     }
     if (threadCommand==TH_PAUSE)
     {

@@ -125,7 +125,7 @@ bool shouldSplit(triangle *tri,double tolerance)
   return !tri->inTolerance(tolerance);
 }
 
-bool triop(triangle *tri,double tolerance,int thread)
+int triop(triangle *tri,double tolerance,int thread)
 /* Returns true if it got a lock. If all three edgeop calls didn't get a lock,
  * it still returns true.
  */
@@ -159,5 +159,5 @@ bool triop(triangle *tri,double tolerance,int thread)
     }
   }
   unlockTriangles(thread);
-  return gotLock1 && gotLock2;
+  return gotLock1*2+gotLock2; // 2 means deadlock
 }
