@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
 	cout.flush();
 	then=now;
-	if (rmsadj<stageTolerance && areadone==1 && allBucketsClean())
+	if (areadone==1 && allBucketsClean())
 	{
 	  waitForThreads(TH_PAUSE);
 	  net.makeqindex();
