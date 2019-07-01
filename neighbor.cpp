@@ -32,15 +32,15 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
 {
   vector<triangle *> ret;
   set<triangle *> tmpRet;
-  edge *ed;
+  edge *ed,*ed0;
   int i,j;
   set<triangle *>::iterator k;
   wingEdge.lock();
   for (i=0;i<corners.size();i++)
   {
-    for (ed=corners[i]->line,j=0;j<net.edges.size() && (ed!=corners[i]->line || j==0);ed=ed->next(corners[i]),j++)
+    for (ed=ed0=corners[i]->line,j=0;j<net.edges.size() && (ed!=ed0 || j==0);ed=ed->next(corners[i]),j++)
       tmpRet.insert(ed->tri(corners[i]));
-    if (ed!=corners[i]->line)
+    if (ed!=ed0)
       cerr<<"Winged edge corruption\n";
   }
   for (k=tmpRet.begin();k!=tmpRet.end();k++)
