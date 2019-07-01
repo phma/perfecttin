@@ -24,6 +24,7 @@
 #include "neighbor.h"
 #include "tin.h"
 #include "threads.h"
+#include "octagon.h"
 
 using namespace std;
 
@@ -36,8 +37,12 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
   set<triangle *>::iterator k;
   wingEdge.lock();
   for (i=0;i<corners.size();i++)
-    for (ed=corners[i]->line,j=0;ed!=corners[i]->line || j==0;ed=ed->next(corners[i]),j++)
+  {
+    for (ed=corners[i]->line,j=0;j<net.edges.size() && (ed!=corners[i]->line || j==0);ed=ed->next(corners[i]),j++)
       tmpRet.insert(ed->tri(corners[i]));
+    if (ed!=corners[i]->line)
+      cerr<<"Winged edge corruption\n";
+  }
   for (k=tmpRet.begin();k!=tmpRet.end();k++)
     if (*k!=nullptr)
       ret.push_back(*k);
