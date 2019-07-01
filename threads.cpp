@@ -34,7 +34,7 @@ mutex adjLog;
 int threadCommand;
 vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
-vector<int> sleepTime;
+vector<double> sleepTime;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
@@ -95,18 +95,28 @@ void joinThreads()
 
 void sleep(int thread)
 {
-  sleepTime[thread]++;
+  sleepTime[thread]+=1;
   if (sleepTime[thread]>1000)
     sleepTime[thread]=1000;
   threadStatus[thread]|=256;
-  this_thread::sleep_for(chrono::milliseconds(sleepTime[thread]));
+  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
+  threadStatus[thread]&=255;
+}
+
+void sleepDead(int thread)
+// Sleep to try to get out of deadlock.
+{
+  sleepTime[thread]=sleepTime[thread]*1.1+0.1;
+  threadStatus[thread]|=256;
+  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
 }
 
 void unsleep(int thread)
 {
-  if (sleepTime[thread])
-  sleepTime[thread]--;
+  sleepTime[thread]-=1;
+  if (sleepTime[thread]<0 || std::isnan(sleepTime[thread]))
+    sleepTime[thread]=0;
 }
 
 bool lockTriangles(int thread,vector<int> triangles)
@@ -169,10 +179,12 @@ void TinThread::operator()(int thread)
       e=(e+relprime(net.edges.size(),thread))%net.edges.size();
       triResult=triop(&net.triangles[t],stageTolerance,thread);
       t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
-      if (triResult==3 && edgeResult==3)
-	unsleep(thread);
-      else
+      if (triResult==2 || edgeResult==2) // deadlock
+	sleepDead(thread);
+      else if (triResult==1 || edgeResult==1)
 	sleep(thread);
+      else
+	unsleep(thread);
     }
     if (threadCommand==TH_PAUSE)
     {

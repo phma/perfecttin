@@ -39,6 +39,7 @@ void resizeBuckets(int n);
 void startThreads(int n);
 void joinThreads();
 void sleep(int thread);
+void sleepDead(int thread);
 void unsleep(int thread);
 bool lockTriangles(int thread,std::vector<int> triangles);
 void unlockTriangles(int thread);
