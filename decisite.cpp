@@ -203,6 +203,7 @@ int main(int argc, char *argv[])
 {
   PostScript ps;
   int i,e,t,d;
+  int nthreads=boost::thread::hardware_concurrency();
   time_t now,then;
   double tolerance,areadone=0,rmsadj;
   bool done=false;
@@ -214,8 +215,11 @@ int main(int argc, char *argv[])
   po::options_description cmdline_options;
   po::positional_options_description p;
   po::variables_map vm;
+  if (nthreads<2)
+    nthreads=2;
   generic.add_options()
     ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
+    ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
     ("output,o",po::value<string>(&outputFile),"Output file");
   hidden.add_options()
     ("input",po::value<string>(&inputFile),"Input file");
@@ -299,7 +303,9 @@ int main(int argc, char *argv[])
     for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
       bend(&net.edges[i]);
     net.makeqindex();
-    startThreads(8);
+    if (nthreads<1)
+      nthreads=1;
+    startThreads(nthreads);
     tri=&net.triangles[0];
     for (i=e=t=d=0;!done;i++)
     {
