@@ -106,7 +106,7 @@ void sleep(int thread)
 void sleepDead(int thread)
 // Sleep to try to get out of deadlock.
 {
-  sleepTime[thread]=sleepTime[thread]*1.1+0.1;
+  sleepTime[thread]=sleepTime[thread]*(1+1./net.triangles.size())+0.1;
   threadStatus[thread]|=256;
   this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
