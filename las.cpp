@@ -53,7 +53,9 @@ void LasHeader::open(std::string fileName)
   int magicBytes;
   int headerSize;
   int i;
+  size_t total;
   unsigned int legacyNPoints[6];
+  int whichNPoints=3;
   if (lasfile)
     close();
   lasfile=new ifstream(fileName);
@@ -91,11 +93,42 @@ void LasHeader::open(std::string fileName)
     minY=readledouble(*lasfile);
     maxZ=readledouble(*lasfile);
     minZ=readledouble(*lasfile);
-    startWaveform=readlelong(*lasfile);
-    startExtendedVariableLength=readlelong(*lasfile);
-    nExtendedVariableLength=readleint(*lasfile);
-    for (i=0;i<16;i++)
-      nPoints[i]=readlelong(*lasfile);
+    // Here ends the LAS 1.2 header (length 0xe3). The LAS 1.4 header (length 0x177) continues.
+    if (headerSize>0xe3)
+    {
+      startWaveform=readlelong(*lasfile);
+      startExtendedVariableLength=readlelong(*lasfile);
+      nExtendedVariableLength=readleint(*lasfile);
+      for (i=0;i<16;i++)
+	nPoints[i]=readlelong(*lasfile);
+    }
+    else
+    {
+      startWaveform=startExtendedVariableLength=nExtendedVariableLength=0;
+      for (i=0;i<16;i++)
+	nPoints[i]=0;
+    }
+    for (i=1,total=0;i<6;i++)
+      total+=legacyNPoints[i];
+    if (total!=legacyNPoints[0])
+      whichNPoints&=~1;
+    for (i=1,total=0;i<16;i++)
+      total+=nPoints[i];
+    if (total!=nPoints[0])
+      whichNPoints&=~2;
+    for (i=0;i<6;i++)
+    {
+      if (legacyNPoints[i]!=nPoints[i] && legacyNPoints[i]!=0)
+	whichNPoints&=~2;
+      if (nPoints[i]!=legacyNPoints[i] && nPoints[i]!=0)
+	whichNPoints&=~1;
+    }
+    if (whichNPoints==1)
+      for (i=0;i<6;i++)
+	nPoints[i]=legacyNPoints[i];
+    if (whichNPoints==0)
+      for (i=0;i<6;i++)
+	nPoints[i]=0;
   }
   else // file does not begin with "LASF"
     versionMajor=versionMinor=nPoints[0]=0;
