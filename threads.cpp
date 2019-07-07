@@ -24,6 +24,7 @@
 #include "edgeop.h"
 #include "triop.h"
 #include "octagon.h"
+#include "random.h"
 #include "relprime.h"
 using namespace std;
 using namespace boost;
@@ -117,6 +118,13 @@ void unsleep(int thread)
   sleepTime[thread]-=1;
   if (sleepTime[thread]<0 || std::isnan(sleepTime[thread]))
     sleepTime[thread]=0;
+}
+
+void randomizeSleep()
+{
+  int i;
+  for (i=0;i<sleepTime.size();i++)
+    sleepTime[i]=rng.usrandom()/32.768;
 }
 
 bool lockTriangles(int thread,vector<int> triangles)
