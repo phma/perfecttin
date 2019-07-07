@@ -199,6 +199,19 @@ void writeDxf(string outputFile,bool asc)
   writeDxfGroups(dxfFile,dxfCodes,asc);
 }
 
+bool livelock(double areadone,double rmsadj)
+{
+  static double lastAreaDone,lastRmsAdj;
+  static int unchangedCount;
+  if (lastAreaDone==areadone && lastRmsAdj==rmsadj && maxSleepTime==0 && allBucketsClean())
+    unchangedCount++;
+  else
+    unchangedCount=0;
+  lastAreaDone=areadone;
+  lastRmsAdj=rmsadj;
+  return unchangedCount>=5;
+}
+
 int main(int argc, char *argv[])
 {
   PostScript ps;
@@ -323,6 +336,11 @@ int main(int argc, char *argv[])
 	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
 	cout.flush();
 	then=now;
+	if (livelock(areadone,rmsadj))
+	{
+	  cerr<<"Livelock detected\n";
+	  randomizeSleep();
+	}
 	if (areadone==1 && allBucketsClean())
 	{
 	  waitForThreads(TH_PAUSE);

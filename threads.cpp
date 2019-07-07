@@ -120,6 +120,16 @@ void unsleep(int thread)
     sleepTime[thread]=0;
 }
 
+double maxSleepTime()
+{
+  int i;
+  double max=0;
+  for (i=0;i<sleepTime.size();i++)
+    if (sleepTime[i]>max)
+      max=sleepTime[i];
+  return max;
+}
+
 void randomizeSleep()
 {
   int i;

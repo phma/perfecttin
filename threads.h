@@ -41,6 +41,7 @@ void joinThreads();
 void sleep(int thread);
 void sleepDead(int thread);
 void unsleep(int thread);
+double maxSleepTime();
 void randomizeSleep();
 bool lockTriangles(int thread,std::vector<int> triangles);
 void unlockTriangles(int thread);
