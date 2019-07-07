@@ -182,7 +182,7 @@ double areaDone(double tolerance)
   return ret;
 }
 
-void writeDxf(string outputFile)
+void writeDxf(string outputFile,bool asc)
 {
   vector<GroupCode> dxfCodes;
   int i;
@@ -196,7 +196,7 @@ void writeDxf(string outputFile)
     insertTriangle(dxfCodes,net.triangles[i]);
   closeEntitySection(dxfCodes);
   dxfEnd(dxfCodes);
-  writeDxfGroups(dxfFile,dxfCodes,false);
+  writeDxfGroups(dxfFile,dxfCodes,asc);
 }
 
 int main(int argc, char *argv[])
@@ -207,6 +207,7 @@ int main(int argc, char *argv[])
   time_t now,then;
   double tolerance,areadone=0,rmsadj;
   bool done=false;
+  bool asciiFormat=false;
   triangle *tri;
   string inputFile,outputFile;
   bool validArgs,validCmd=true;
@@ -220,6 +221,7 @@ int main(int argc, char *argv[])
   generic.add_options()
     ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
     ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
+    ("ascii,a",po::bool_switch(&asciiFormat),"Output DXF in ASCII")
     ("output,o",po::value<string>(&outputFile),"Output file");
   hidden.add_options()
     ("input",po::value<string>(&inputFile),"Input file");
@@ -332,7 +334,7 @@ int main(int argc, char *argv[])
 	  else
 	  {
 	    drawNet(ps);
-	    writeDxf(outputFile);
+	    writeDxf(outputFile,asciiFormat);
 	    waitForThreads(TH_RUN);
 	  }
 	}
@@ -346,7 +348,7 @@ int main(int argc, char *argv[])
       ps.close();
     }
     if (outputFile.length() && areadone==1)
-      writeDxf(outputFile);
+      writeDxf(outputFile,asciiFormat);
     joinThreads();
   }
   return 0;
