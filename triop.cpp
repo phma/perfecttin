@@ -137,12 +137,15 @@ int triop(triangle *tri,double tolerance,int thread)
   vector<triangle *> triNeigh;
   triNeigh.push_back(tri);
   gotLock1=lockTriangles(thread,triNeigh);
-  corners.push_back(tri->a);
-  corners.push_back(tri->b);
-  corners.push_back(tri->c);
-  sidea=tri->c->edg(tri);
-  sideb=tri->a->edg(tri);
-  sidec=tri->b->edg(tri);
+  if (gotLock1)
+  {
+    corners.push_back(tri->a);
+    corners.push_back(tri->b);
+    corners.push_back(tri->c);
+    sidea=tri->c->edg(tri);
+    sideb=tri->a->edg(tri);
+    sidec=tri->b->edg(tri);
+  }
   if (gotLock1 && (spl=shouldSplit(tri,tolerance)))
   {
     triNeigh=triangleNeighbors(corners);

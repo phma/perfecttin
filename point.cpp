@@ -530,7 +530,7 @@ edge *point::edg(triangle *tri)
 {
   int i;
   edge *oldline,*ret;
-  for (i=0,oldline=line,ret=NULL;!ret && (!i || oldline!=line);i++)
+  for (i=0,oldline=line,ret=NULL;!ret && line && (!i || oldline!=line);i++)
   {
     if (line->tri(this)==tri)
       ret=line;
