@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* decisite.cpp - main program                        */
+/* perfecttin.cpp - main program                      */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019 Pierre Abbat.
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
     ("input",po::value<string>(&inputFile),"Input file");
   p.add("input",1);
   cmdline_options.add(generic).add(hidden);
-  cout<<"DeciSite version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat, GPLv3+\n";
+  cout<<"PerfectTIN version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat, GPLv3+\n";
 #ifdef LibPLYXX_FOUND
   cout<<"PLY file code © Simon Rajotte, MIT license\n";
 #endif
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
       cerr<<"Please specify output file with -o\n";
     else
     {
-      cout<<"Usage: decisite [options] input-file\n";
+      cout<<"Usage: perfecttin [options] input-file\n";
       cout<<generic;
     }
     validCmd=false;

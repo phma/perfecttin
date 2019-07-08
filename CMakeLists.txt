@@ -28,10 +28,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
 add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp cloud.cpp cogo.cpp perfecttin.cpp
+	       boundrect.cpp cloud.cpp cogo.cpp
                dxf.cpp edgeop.cpp las.cpp ldecimal.cpp
-               leastsquares.cpp manysum.cpp matrix.cpp
-               neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
+               leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
+               perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp triangle.cpp triop.cpp)
 target_link_libraries(perfecttin ${Boost_LIBRARIES})
