@@ -1,20 +1,20 @@
-project(bezitopo)
+project(perfecttin)
 cmake_minimum_required(VERSION 3.1.0)
 # Copyright 2019 Pierre Abbat.
-# This file is part of Decisite.
+# This file is part of PerfectTIN.
 # 
-# Decisite is free software: you can redistribute it and/or modify
+# PerfectTIN is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Decisite is distributed in the hope that it will be useful,
+# PerfectTIN is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Decisite. If not, see <http://www.gnu.org/licenses/>.
+# along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
 
 include(TestBigEndian)
 include(CheckTypeSize)
@@ -23,21 +23,20 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
-set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
-add_executable(decisite adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp cloud.cpp cogo.cpp decisite.cpp
+add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
+	       boundrect.cpp cloud.cpp cogo.cpp perfecttin.cpp
                dxf.cpp edgeop.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp
                neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp triangle.cpp triop.cpp)
-target_link_libraries(decisite ${Boost_LIBRARIES})
+target_link_libraries(perfecttin ${Boost_LIBRARIES})
 if (${LibPLYXX_FOUND})
-target_link_libraries(decisite ${LibPLYXX_LIBRARY})
+target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})
 endif (${LibPLYXX_FOUND})
 
 include(CheckIncludeFiles)
@@ -46,7 +45,7 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
-install(TARGETS decisite DESTINATION bin)
+install(TARGETS perfecttin DESTINATION bin)
 
 test_big_endian(BIGENDIAN)
 check_type_size("int" INT)
