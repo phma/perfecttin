@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
 	then=now;
 	if (livelock(areadone,rmsadj))
 	{
-	  cerr<<"Livelock detected\n";
+	  //cerr<<"Livelock detected\n";
 	  randomizeSleep();
 	}
 	if (areadone==1 && allBucketsClean())
