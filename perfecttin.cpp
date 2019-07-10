@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
     validCmd=false;
   }
   if (!outputFile.length() && baseName(inputFile).length())
-    outputFile=baseName(inputFile)+".dxf";
+    outputFile=baseName(inputFile);
   if (!outputFile.length())
   {
     if (inputFile.length())
@@ -265,11 +265,6 @@ int main(int argc, char *argv[])
       cout<<"Usage: perfecttin [options] input-file\n";
       cout<<generic;
     }
-    validCmd=false;
-  }
-  if (outputFile==inputFile && validCmd)
-  {
-    cerr<<"Not overwriting input file\n";
     validCmd=false;
   }
   if (validCmd)
@@ -352,7 +347,7 @@ int main(int argc, char *argv[])
 	  else
 	  {
 	    drawNet(ps);
-	    writeDxf(outputFile,asciiFormat);
+	    writeDxf(outputFile+".dxf",asciiFormat);
 	    waitForThreads(TH_RUN);
 	  }
 	}
@@ -366,7 +361,7 @@ int main(int argc, char *argv[])
       ps.close();
     }
     if (outputFile.length() && areadone==1)
-      writeDxf(outputFile,asciiFormat);
+      writeDxf(outputFile+".dxf",asciiFormat);
     joinThreads();
   }
   return 0;
