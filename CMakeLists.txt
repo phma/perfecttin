@@ -33,7 +33,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
-               threads.cpp tin.cpp triangle.cpp triop.cpp)
+               threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 target_link_libraries(perfecttin ${Boost_LIBRARIES})
 if (${LibPLYXX_FOUND})
 target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})

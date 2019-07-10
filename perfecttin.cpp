@@ -37,6 +37,7 @@
 #include "ldecimal.h"
 #include "dxf.h"
 #include "threads.h"
+#include "tintext.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -348,6 +349,7 @@ int main(int argc, char *argv[])
 	  {
 	    drawNet(ps);
 	    writeDxf(outputFile+".dxf",asciiFormat);
+	    writeTinText(outputFile+".tin");
 	    waitForThreads(TH_RUN);
 	  }
 	}
@@ -361,7 +363,10 @@ int main(int argc, char *argv[])
       ps.close();
     }
     if (outputFile.length() && areadone==1)
+    {
       writeDxf(outputFile+".dxf",asciiFormat);
+      writeTinText(outputFile+".tin");
+    }
     joinThreads();
   }
   return 0;
