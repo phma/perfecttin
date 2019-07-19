@@ -45,6 +45,7 @@ namespace cr=boost::chrono;
 
 xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
+double inUnit=1,outUnit=1;
 cr::steady_clock clk;
 const bool drawDots=false;
 const bool colorGradient=true;
@@ -121,6 +122,35 @@ void drawMag(PostScript &ps)
     if (dist(magnifyCenter,xy(cloud[i]))<2*magnifySize)
       ps.dot(cloud[i]);
   ps.endpage();
+}
+
+double parseUnit(string unit)
+{
+  if (unit=="m")
+    return 1;
+  if (unit=="ft")
+    return 0.3048;
+  if (unit=="usft")
+    return 12e2/3937;
+  if (unit=="inft")
+    return 0.3047996;
+  return 0;
+}
+
+void parseUnits(string units)
+{
+  string inUnitStr,outUnitStr;
+  size_t commapos;
+  commapos=units.find(',');
+  if (commapos<units.length())
+  {
+    inUnitStr=units.substr(0,commapos);
+    outUnitStr=units.substr(commapos+1);
+  }
+  else
+    inUnitStr=outUnitStr=units;
+  inUnit=parseUnit(inUnitStr);
+  outUnit=parseUnit(outUnitStr);
 }
 
 string baseName(string fileName)
@@ -224,6 +254,7 @@ int main(int argc, char *argv[])
   bool asciiFormat=false;
   triangle *tri;
   string inputFile,outputFile;
+  string unitStr;
   bool validArgs,validCmd=true;
   po::options_description generic("Options");
   po::options_description hidden("Hidden options");
@@ -233,6 +264,7 @@ int main(int argc, char *argv[])
   if (nthreads<2)
     nthreads=2;
   generic.add_options()
+    ("units,u",po::value<string>(&unitStr)->default_value("m"),"Units")
     ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
     ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
     ("ascii,a",po::bool_switch(&asciiFormat),"Output DXF in ASCII")
@@ -266,6 +298,13 @@ int main(int argc, char *argv[])
       cout<<"Usage: perfecttin [options] input-file\n";
       cout<<generic;
     }
+    validCmd=false;
+  }
+  parseUnits(unitStr);
+  if (inUnit==0 || outUnit==0)
+  {
+    cerr<<"Units are m (meter), ft (international foot),\nusft (US survey foot) or inft (Indian survey foot).\n";
+    cerr<<"Specify input and output units with a comma, e.g. ft,inft .\n";
     validCmd=false;
   }
   if (validCmd)
