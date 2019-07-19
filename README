@@ -1,6 +1,6 @@
-Decisite reads a point cloud in LAS or PLY format and outputs a TIN in DXF format which approximates the point cloud to within a vertical tolerance.
+PerfectTIN reads a point cloud in LAS or PLY format and outputs a TIN in DXF format and text TIN format which approximates the point cloud to within a vertical tolerance.
 
-Before compiling Decisite, if you want it to read PLY files, clone the libplyxx repo from github.com/phma and compile and install it. This is Simon Rajotte's code; I just made it installable.
+Before compiling PerfectTIN, if you want it to read PLY files, clone the libplyxx repo from github.com/phma and compile and install it. This is Simon Rajotte's code; I just made it installable.
 
 To compile, if you're not developing the program:
 1. Create a subdirectory build/ inside the directory where you untarred the source code.
@@ -14,4 +14,4 @@ If you are developing the program:
 3. cmake <directory where the source code is>
 4. make
 
-PLY and DXF files have no units in them. LAS files do, but I haven't yet figured out whether they're always in meters or the unit is indicated in the variable-length record. The DXF file output is in the same unit as the input.
+PLY and DXF files have no units in them. LAS files may have the unit indicated in the variable-length record, but PerfectTIN ignores it. You can specify the units on the command line with the -u option.
