@@ -26,16 +26,16 @@
 #include "ldecimal.h"
 using namespace std;
 
-void writeTinText(string outputFile)
+void writeTinText(string outputFile,double outUnit)
 {
   int i;
   ofstream tinFile(outputFile,ofstream::trunc);
   tinFile<<"TIN\nBEGT\nVERT "<<net.points.size()<<endl;
   for (i=1;i<=net.points.size();i++)
   {
-    tinFile<<ldecimal(net.points[i].getx())<<' ';
-    tinFile<<ldecimal(net.points[i].gety())<<' ';
-    tinFile<<ldecimal(net.points[i].getz())<<" 0\n"; // The last number is the lock flag, whatever that means.
+    tinFile<<ldecimal(net.points[i].getx()/outUnit)<<' ';
+    tinFile<<ldecimal(net.points[i].gety()/outUnit)<<' ';
+    tinFile<<ldecimal(net.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
   }
   tinFile<<"TRI "<<net.triangles.size()<<endl;
   for (i=0;i<net.triangles.size();i++)

@@ -625,7 +625,7 @@ void dxfEnd(vector<GroupCode> &dxfData)
   dxfData.push_back(sectag);
 }
 
-void insertTriangle(vector<GroupCode> &dxfData,triangle &tri)
+void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
 {
   GroupCode entityType(0),layerName(8),colorNumber(62);
   entityType.str="3DFACE";
@@ -634,8 +634,8 @@ void insertTriangle(vector<GroupCode> &dxfData,triangle &tri)
   dxfData.push_back(entityType);
   dxfData.push_back(layerName);
   dxfData.push_back(colorNumber);
-  insertXyz(dxfData,10,*tri.a);
-  insertXyz(dxfData,11,*tri.b);
-  insertXyz(dxfData,12,*tri.c); // A 3DFACE always has four corners. That it's a triangle
-  insertXyz(dxfData,13,*tri.c); // is indicated by repeating a corner.
+  insertXyz(dxfData,10,*tri.a/outUnit);
+  insertXyz(dxfData,11,*tri.b/outUnit);
+  insertXyz(dxfData,12,*tri.c/outUnit); // A 3DFACE always has four corners. That it's a
+  insertXyz(dxfData,13,*tri.c/outUnit); // triangle is indicated by repeating a corner.
 }

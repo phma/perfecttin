@@ -213,7 +213,7 @@ double areaDone(double tolerance)
   return ret;
 }
 
-void writeDxf(string outputFile,bool asc)
+void writeDxf(string outputFile,bool asc,double outUnit)
 {
   vector<GroupCode> dxfCodes;
   int i;
@@ -224,7 +224,7 @@ void writeDxf(string outputFile,bool asc)
   tableSection(dxfCodes);
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
-    insertTriangle(dxfCodes,net.triangles[i]);
+    insertTriangle(dxfCodes,net.triangles[i],outUnit);
   closeEntitySection(dxfCodes);
   dxfEnd(dxfCodes);
   writeDxfGroups(dxfFile,dxfCodes,asc);
@@ -328,6 +328,8 @@ int main(int argc, char *argv[])
 	cerr<<"No point cloud found in "<<inputFile<<endl;
       done=true;
     }
+    for (i=0;i<cloud.size();i++)
+      cloud[i]*=inUnit;
     areadone=makeOctagon();
     if (!std::isfinite(areadone))
     {
@@ -387,8 +389,8 @@ int main(int argc, char *argv[])
 	  else
 	  {
 	    drawNet(ps);
-	    writeDxf(outputFile+".dxf",asciiFormat);
-	    writeTinText(outputFile+".tin");
+	    writeDxf(outputFile+".dxf",asciiFormat,outUnit);
+	    writeTinText(outputFile+".tin",outUnit);
 	    waitForThreads(TH_RUN);
 	  }
 	}
@@ -403,8 +405,8 @@ int main(int argc, char *argv[])
     }
     if (outputFile.length() && areadone==1)
     {
-      writeDxf(outputFile+".dxf",asciiFormat);
-      writeTinText(outputFile+".tin");
+      writeDxf(outputFile+".dxf",asciiFormat,outUnit);
+      writeTinText(outputFile+".tin",outUnit);
     }
     joinThreads();
   }

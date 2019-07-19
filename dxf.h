@@ -80,4 +80,4 @@ void tableSection(std::vector<GroupCode> &dxfData);
 void openEntitySection(std::vector<GroupCode> &dxfData);
 void closeEntitySection(std::vector<GroupCode> &dxfData);
 void dxfEnd(std::vector<GroupCode> &dxfData);
-void insertTriangle(std::vector<GroupCode> &dxfData,triangle &tri);
+void insertTriangle(std::vector<GroupCode> &dxfData,triangle &tri,double outUnit);
