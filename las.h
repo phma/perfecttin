@@ -39,6 +39,7 @@ struct LasPoint
   double gpsTime;
   unsigned short nir,red,green,blue;
   size_t waveformOffset;
+  unsigned int waveformSize;
   float waveformTime,xDir,yDir,zDir;
 };
 

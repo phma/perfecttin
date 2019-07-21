@@ -195,7 +195,24 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.scanAngle=degtobin((signed char)lasfile->get());
     ret.userData=(unsigned char)lasfile->get();
     ret.pointSource=readleshort(*lasfile);
-    // switch(pointFormat)...
+    if ((1<<pointFormat)&0x3a) // 5, 4, 3, or 1
+      ret.gpsTime=readledouble(*lasfile);
+    if ((1<<pointFormat)&0x2c) // 5, 3, or 2
+    {
+      ret.red=readleshort(*lasfile);
+      ret.green=readleshort(*lasfile);
+      ret.blue=readleshort(*lasfile);
+    }
+    if (pointFormat>=4) // 5 or 4
+    {
+      ret.waveIndex=(unsigned char)lasfile->get();
+      ret.waveformOffset=readlelong(*lasfile);
+      ret.waveformSize=readleint(*lasfile);
+      ret.waveformTime=readlefloat(*lasfile);
+      ret.xDir=readlefloat(*lasfile);
+      ret.yDir=readlefloat(*lasfile);
+      ret.zDir=readlefloat(*lasfile);
+    }
   }
   else
   {
