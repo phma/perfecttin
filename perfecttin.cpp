@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
       stageTolerance*=2;
     if (!done)
     {
-      ps.open("decisite.ps");
+      ps.open("perfecttin.ps");
       ps.setpaper(papersizes["A4 portrait"],0);
       ps.prolog();
       drawNet(ps);
