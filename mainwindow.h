@@ -31,4 +31,13 @@ class MainWindow: public QMainWindow
 public:
   MainWindow(QWidget *parent=0);
   ~MainWindow();
+  void makeActions();
+  void makeStatusBar();
+public slots:
+  void tick();
+private:
+  int tickCount;
+  QTimer *timer;
+  QMenu *fileMenu,*settingsMenu,*helpMenu;
+  QLabel *fileMsg,*progressMsg,*triangleMsg;
 };

@@ -25,9 +25,39 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
   resize(707,500);
   setWindowTitle(QApplication::translate("main", "ViewTIN"));
+  fileMsg=new QLabel(this);
+  progressMsg=new QLabel(this);
+  triangleMsg=new QLabel(this);
+  makeActions();
+  makeStatusBar();
+  tickCount=0;
   show();
+  timer=new QTimer(this);
+  connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
+  timer->start(50);
+  fileMsg->setText(QString("File loaded"));
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::tick()
+{
+  triangleMsg->setNum(++tickCount);
+}
+
+void MainWindow::makeActions()
+{
+  fileMenu=menuBar()->addMenu(tr("&File"));
+  settingsMenu=menuBar()->addMenu(tr("&Settings"));
+  helpMenu=menuBar()->addMenu(tr("&Help"));
+}
+
+void MainWindow::makeStatusBar()
+{
+  statusBar()->addWidget(fileMsg);
+  statusBar()->addWidget(progressMsg);
+  statusBar()->addWidget(triangleMsg);
+  statusBar()->show();
 }
