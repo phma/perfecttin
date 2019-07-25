@@ -20,12 +20,15 @@ include(TestBigEndian)
 include(CheckTypeSize)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
+set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/perfecttin)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
+find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
 add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp
@@ -34,7 +37,9 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+add_executable(perfecttin-gui gui.cpp mainwindow.cpp)
 target_link_libraries(perfecttin ${Boost_LIBRARIES})
+target_link_libraries(perfecttin-gui ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
 if (${LibPLYXX_FOUND})
 target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})
 endif (${LibPLYXX_FOUND})
