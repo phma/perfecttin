@@ -78,7 +78,7 @@ void resizeBuckets(int n)
 void startThreads(int n)
 {
   int i;
-  threadCommand=TH_RUN;
+  threadCommand=TH_WAIT;
   threadStatus.resize(n);
   heldTriangles.resize(n);
   sleepTime.resize(n);
@@ -205,8 +205,13 @@ void TinThread::operator()(int thread)
 	unsleep(thread);
     }
     if (threadCommand==TH_PAUSE)
-    {
+    { // The job is ongoing, but has to pause to write out the files.
       threadStatus[thread]=TH_PAUSE;
+      sleep(thread);
+    }
+    if (threadCommand==TH_WAIT)
+    { // There is no job. The threads are waiting for a job.
+      threadStatus[thread]=TH_WAIT;
       sleep(thread);
     }
   }

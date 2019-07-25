@@ -358,6 +358,7 @@ int main(int argc, char *argv[])
     if (nthreads<1)
       nthreads=1;
     startThreads(nthreads);
+    waitForThreads(TH_RUN);
     tri=&net.triangles[0];
     for (i=e=t=d=0;!done;i++)
     {

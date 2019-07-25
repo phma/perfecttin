@@ -24,13 +24,16 @@
 #include <QTranslator>
 #include "config.h"
 #include "mainwindow.h"
+#include "threads.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+  int exitStatus;
   QApplication app(argc, argv);
   QTranslator translator,qtTranslator;
+  int nthreads=boost::thread::hardware_concurrency();
   if (qtTranslator.load(QLocale(),QLatin1String("qt"),QLatin1String("_"),
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
     app.installTranslator(&qtTranslator);
@@ -47,6 +50,10 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
   }
   MainWindow window;
+  startThreads(nthreads);
   window.show();
-  return app.exec();
+  exitStatus=app.exec();
+  waitForThreads(TH_STOP);
+  joinThreads();
+  return exitStatus;
 }
