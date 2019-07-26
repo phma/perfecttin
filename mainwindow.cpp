@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   fileMsg=new QLabel(this);
   progressMsg=new QLabel(this);
   triangleMsg=new QLabel(this);
+  configDialog=new ConfigurationDialog(this);
   makeActions();
   makeStatusBar();
   tickCount=0;
@@ -47,6 +48,11 @@ void MainWindow::tick()
   triangleMsg->setNum(++tickCount);
 }
 
+void MainWindow::configure()
+{
+  configDialog->exec();
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
   writeSettings();
@@ -58,6 +64,12 @@ void MainWindow::makeActions()
   fileMenu=menuBar()->addMenu(tr("&File"));
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
+  // Settings menu
+  configureAction=new QAction(this);
+  configureAction->setIcon(QIcon::fromTheme("configure"));
+  configureAction->setText(tr("Configure"));
+  settingsMenu->addAction(configureAction);
+  connect(configureAction,SIGNAL(triggered(bool)),this,SLOT(configure()));
 }
 
 void MainWindow::makeStatusBar()

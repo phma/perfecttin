@@ -38,7 +38,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp cloud.cpp cogo.cpp
+	       boundrect.cpp cloud.cpp cogo.cpp configdialog.cpp
                dxf.cpp edgeop.cpp gui.cpp las.cpp ldecimal.cpp
                leastsquares.cpp mainwindow.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp

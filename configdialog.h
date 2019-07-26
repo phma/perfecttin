@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* mainwindow.h - main window                         */
+/* configdialog.h - configuration dialog              */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019 Pierre Abbat.
@@ -19,39 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <QMainWindow>
-#include <QTimer>
-#include <QtWidgets>
-#include <QPixmap>
-#include <array>
-#include "configdialog.h"
 
-class MainWindow: public QMainWindow
+#ifndef CONFIGDIALOG_H
+#define CONFIGDIALOG_H
+#include <vector>
+#include <QDialog>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
+#include <QGridLayout>
+
+class ConfigurationDialog: public QDialog
 {
   Q_OBJECT
 public:
-  MainWindow(QWidget *parent=0);
-  ~MainWindow();
-  void makeActions();
-  void makeStatusBar();
-  void readSettings();
-  void writeSettings();
-  int getNumberThreads()
-  {
-    return numberThreads;
-  }
+  ConfigurationDialog(QWidget *parent=0);
+signals:
 public slots:
-  void tick();
-  void configure();
-protected:
-  void closeEvent(QCloseEvent *event) override;
+  virtual void accept();
 private:
-  int tickCount;
-  int numberThreads;
-  double tolerance,inUnit,outUnit;
-  QTimer *timer;
-  ConfigurationDialog *configDialog;
-  QMenu *fileMenu,*settingsMenu,*helpMenu;
-  QLabel *fileMsg,*progressMsg,*triangleMsg;
-  QAction *configureAction;
+  QComboBox *inUnitBox,*outUnitBox,*toleranceBox;
+  QPushButton *okButton,*cancelButton;
+  QGridLayout *gridLayout;
+  QLineEdit *threadInput;
 };
+#endif
+
