@@ -23,7 +23,6 @@
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
-  resize(707,500);
   setWindowTitle(QApplication::translate("main", "ViewTIN"));
   fileMsg=new QLabel(this);
   progressMsg=new QLabel(this);
@@ -31,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   makeActions();
   makeStatusBar();
   tickCount=0;
+  readSettings();
   show();
   timer=new QTimer(this);
   connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
@@ -47,6 +47,12 @@ void MainWindow::tick()
   triangleMsg->setNum(++tickCount);
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+  writeSettings();
+  event->accept();
+}
+
 void MainWindow::makeActions()
 {
   fileMenu=menuBar()->addMenu(tr("&File"));
@@ -60,4 +66,26 @@ void MainWindow::makeStatusBar()
   statusBar()->addWidget(progressMsg);
   statusBar()->addWidget(triangleMsg);
   statusBar()->show();
+}
+
+void MainWindow::readSettings()
+{
+  QSettings settings("Bezitopo","PerfectTIN");
+  resize(settings.value("size",QSize(707,500)).toSize());
+  move(settings.value("pos",QPoint(0,0)).toPoint());
+  numberThreads=settings.value("threads",0).toInt();
+  tolerance=settings.value("tolerance",0.1).toDouble();
+  inUnit=settings.value("inUnit",1).toDouble();
+  outUnit=settings.value("outUnit",1).toDouble();
+}
+
+void MainWindow::writeSettings()
+{
+  QSettings settings("Bezitopo","PerfectTIN");
+  settings.setValue("size",size());
+  settings.setValue("pos",pos());
+  settings.setValue("threads",numberThreads);
+  settings.setValue("tolerance",tolerance);
+  settings.setValue("inUnit",inUnit);
+  settings.setValue("outUnit",outUnit);
 }

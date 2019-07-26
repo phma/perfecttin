@@ -33,10 +33,20 @@ public:
   ~MainWindow();
   void makeActions();
   void makeStatusBar();
+  void readSettings();
+  void writeSettings();
+  int getNumberThreads()
+  {
+    return numberThreads;
+  }
 public slots:
   void tick();
+protected:
+  void closeEvent(QCloseEvent *event) override;
 private:
   int tickCount;
+  int numberThreads;
+  double tolerance,inUnit,outUnit;
   QTimer *timer;
   QMenu *fileMenu,*settingsMenu,*helpMenu;
   QLabel *fileMsg,*progressMsg,*triangleMsg;
