@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
+#include <QLineEdit>
 #include <QGridLayout>
 
 class ConfigurationDialog: public QDialog

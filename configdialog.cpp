@@ -37,13 +37,15 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   toleranceBox=new QComboBox(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
+  threadInput=new QLineEdit(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(inUnitBox,1,0);
   gridLayout->addWidget(outUnitBox,1,2);
   gridLayout->addWidget(toleranceBox,2,1);
-  gridLayout->addWidget(okButton,3,0);
-  gridLayout->addWidget(cancelButton,3,2);
+  gridLayout->addWidget(threadInput,3,1);
+  gridLayout->addWidget(okButton,4,0);
+  gridLayout->addWidget(cancelButton,4,2);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
@@ -71,6 +73,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
   for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
     if (tolerance==tolerances[i])
       toleranceBox->setCurrentIndex(i);
+  threadInput->setText(QString::number(threads));
 }
 
 void ConfigurationDialog::accept()
