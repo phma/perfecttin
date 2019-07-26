@@ -50,7 +50,8 @@ void MainWindow::tick()
 
 void MainWindow::configure()
 {
-  configDialog->exec();
+  configDialog->set(inUnit,outUnit,tolerance,numberThreads);
+  configDialog->open();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

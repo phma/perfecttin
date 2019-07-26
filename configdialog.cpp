@@ -48,6 +48,31 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
 
+void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int threads)
+{
+  int i;
+  inUnitBox->clear();
+  outUnitBox->clear();
+  toleranceBox->clear();
+  for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
+  {
+    inUnitBox->addItem(tr(unitNames[i]));
+    outUnitBox->addItem(tr(unitNames[i]));
+  }
+  for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
+  {
+    if (inUnit==conversionFactors[i])
+      inUnitBox->setCurrentIndex(i);
+    if (outUnit==conversionFactors[i])
+      outUnitBox->setCurrentIndex(i);
+  }
+  for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
+    toleranceBox->addItem(tr(toleranceStr[i]));
+  for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
+    if (tolerance==tolerances[i])
+      toleranceBox->setCurrentIndex(i);
+}
+
 void ConfigurationDialog::accept()
 {
   QDialog::accept();

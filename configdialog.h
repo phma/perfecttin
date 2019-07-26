@@ -36,6 +36,7 @@ public:
   ConfigurationDialog(QWidget *parent=0);
 signals:
 public slots:
+  void set(double inUnit,double outUnit,double tolerance,int threads);
   virtual void accept();
 private:
   QComboBox *inUnitBox,*outUnitBox,*toleranceBox;
