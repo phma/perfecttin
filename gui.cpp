@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
   int exitStatus;
   QApplication app(argc, argv);
   QTranslator translator,qtTranslator;
-  int nthreads=boost::thread::hardware_concurrency();
+  int nthreads;
   if (qtTranslator.load(QLocale(),QLatin1String("qt"),QLatin1String("_"),
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
     app.installTranslator(&qtTranslator);
@@ -50,6 +50,11 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
   }
   MainWindow window;
+  nthreads=window.getNumberThreads();
+  if (nthreads<1)
+    nthreads=boost::thread::hardware_concurrency();
+  if (nthreads<1)
+    nthreads=2;
   startThreads(nthreads);
   window.show();
   exitStatus=app.exec();
