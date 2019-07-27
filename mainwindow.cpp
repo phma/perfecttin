@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   progressMsg=new QLabel(this);
   triangleMsg=new QLabel(this);
   configDialog=new ConfigurationDialog(this);
+  connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
+	  this,SLOT(setSettings(double,double,double,int)));
   makeActions();
   makeStatusBar();
   tickCount=0;
@@ -102,3 +104,13 @@ void MainWindow::writeSettings()
   settings.setValue("inUnit",inUnit);
   settings.setValue("outUnit",outUnit);
 }
+
+void MainWindow::setSettings(double iu,double ou,double tol,int thr)
+{
+  inUnit=iu;
+  outUnit=ou;
+  tolerance=tol;
+  numberThreads=thr;
+  writeSettings();
+}
+

@@ -42,6 +42,7 @@ public:
   }
 public slots:
   void tick();
+  void setSettings(double iu,double ou,double tol,int thr);
   void configure();
 protected:
   void closeEvent(QCloseEvent *event) override;

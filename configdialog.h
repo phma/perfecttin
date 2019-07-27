@@ -36,6 +36,7 @@ class ConfigurationDialog: public QDialog
 public:
   ConfigurationDialog(QWidget *parent=0);
 signals:
+  void settingsChanged(double iu,double ou,double tol,int thr);
 public slots:
   void set(double inUnit,double outUnit,double tolerance,int threads);
   virtual void accept();

@@ -78,5 +78,9 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
 
 void ConfigurationDialog::accept()
 {
+  settingsChanged(conversionFactors[inUnitBox->currentIndex()],
+		  conversionFactors[outUnitBox->currentIndex()],
+		  tolerances[toleranceBox->currentIndex()],
+		  threadInput->text().toInt());
   QDialog::accept();
 }
