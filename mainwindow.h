@@ -25,6 +25,7 @@
 #include <QPixmap>
 #include <array>
 #include "configdialog.h"
+#include "lissajous.h"
 
 class MainWindow: public QMainWindow
 {
@@ -50,6 +51,7 @@ private:
   int tickCount;
   int numberThreads;
   double tolerance,inUnit,outUnit;
+  Lissajous lis;
   QTimer *timer;
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu;

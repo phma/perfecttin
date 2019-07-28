@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   configDialog=new ConfigurationDialog(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
 	  this,SLOT(setSettings(double,double,double,int)));
+  lis.test();
   makeActions();
   makeStatusBar();
   tickCount=0;

@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* relprime.h - relatively prime numbers              */
+/* lissajous.cpp - Lissajous curves                   */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019 Pierre Abbat.
@@ -19,7 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
+#include "lissajous.h"
+#include "relprime.h"
+using namespace std;
 
-extern const double quadirr[];
-unsigned gcd(unsigned a,unsigned b);
-unsigned relprime(unsigned n,int thread=0);
+// num[i]/denom[i] is a rational approximation to quadirr[i].
+int Lissajous::num[]=
+{
+  987,2131,1393,1519,1189,1801,1027,
+  2111,135,379,1693,1249,357,365,
+  1871,2069,659,1905,1171,1287,3431
+};
+
+int Lissajous::denom[]=
+{
+  1597,2911,3363,2705,3927,2789,1897,
+  3009,701,1197,2193,3083,2549,1017,
+  2351,2873,3037,3629,2759,1579,6043
+};
+
+void Lissajous::test()
+{
+  int i;
+  for (i=0;i<21;i++)
+    cout<<i<<' '<<num[i]<<'/'<<denom[i]<<' '<<quadirr[i]<<' '<<(double)num[i]/denom[i]-quadirr[i]<<endl;
+}

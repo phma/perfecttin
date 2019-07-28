@@ -25,7 +25,7 @@
 
 using namespace std;
 
-double quadirr[]=
+const double quadirr[]=
 {
 #include "quadirr.txt"
 };

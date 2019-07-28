@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* relprime.h - relatively prime numbers              */
+/* lissajous.h - Lissajous curves                     */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019 Pierre Abbat.
@@ -20,6 +20,14 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 
-extern const double quadirr[];
-unsigned gcd(unsigned a,unsigned b);
-unsigned relprime(unsigned n,int thread=0);
+class Lissajous
+/* Generates a Lissajous curve which is used to move a ball at a maximum speed
+ * which is approximately independent of the window size, with a slope close
+ * to 1.
+ */
+{
+public:
+  void test();
+private:
+  static int num[],denom[];
+};
