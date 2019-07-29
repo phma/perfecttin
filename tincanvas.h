@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* mainwindow.h - main window                         */
+/* tincanvas.h - canvas for drawing TIN               */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019 Pierre Abbat.
@@ -19,44 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <QMainWindow>
-#include <QTimer>
-#include <QtWidgets>
-#include <QPixmap>
-#include <array>
-#include "configdialog.h"
-#include "lissajous.h"
-#include "tincanvas.h"
+#ifndef TINCANVAS_H
+#define TINCANVAS_H
+#include <QWidget>
+#include "point.h"
 
-class MainWindow: public QMainWindow
+class TinCanvas: public QWidget
 {
   Q_OBJECT
 public:
-  MainWindow(QWidget *parent=0);
-  ~MainWindow();
-  void makeActions();
-  void makeStatusBar();
-  void readSettings();
-  void writeSettings();
-  int getNumberThreads()
-  {
-    return numberThreads;
-  }
+  TinCanvas(QWidget *parent=0);
+  void setBrush(const QBrush &qbrush);
+  QPointF worldToWindow(xy pnt);
+  xy windowToWorld(QPointF pnt);
+signals:
 public slots:
-  void tick();
-  void setSettings(double iu,double ou,double tol,int thr);
-  void configure();
+  void sizeToFit();
+  //void tick();
 protected:
-  void closeEvent(QCloseEvent *event) override;
+  void setSize();
+  //void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+  //void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
-  int tickCount;
-  int numberThreads;
-  double tolerance,inUnit,outUnit;
-  Lissajous lis;
-  QTimer *timer;
-  ConfigurationDialog *configDialog;
-  QMenu *fileMenu,*settingsMenu,*helpMenu;
-  QLabel *fileMsg,*progressMsg,*triangleMsg;
-  QAction *configureAction;
-  TinCanvas *canvas;
+  QBrush brush;
+  xy windowCenter,worldCenter;
+  double scale;
 };
+#endif

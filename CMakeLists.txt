@@ -44,7 +44,7 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
-               threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+               threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp)
 target_link_libraries(perfecttin ${Boost_LIBRARIES})
 target_link_libraries(perfecttin-gui ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
 if (${LibPLYXX_FOUND})
