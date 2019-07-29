@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   configDialog=new ConfigurationDialog(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
 	  this,SLOT(setSettings(double,double,double,int)));
-  lis.test();
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
@@ -41,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   show();
   timer=new QTimer(this);
   connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
+  connect(timer,SIGNAL(timeout()),canvas,SLOT(tick()));
   timer->start(50);
   fileMsg->setText(QString("File loaded"));
 }

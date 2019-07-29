@@ -73,3 +73,7 @@ void TinCanvas::sizeToFit()
       scale=yscale;
   }
 }
+
+void TinCanvas::tick()
+{
+}

@@ -22,6 +22,7 @@
 #ifndef TINCANVAS_H
 #define TINCANVAS_H
 #include <QWidget>
+#include "lissajous.h"
 #include "point.h"
 
 class TinCanvas: public QWidget
@@ -35,13 +36,14 @@ public:
 signals:
 public slots:
   void sizeToFit();
-  //void tick();
+  void tick();
 protected:
   void setSize();
   //void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   //void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
   QBrush brush;
+  Lissajous lis;
   xy windowCenter,worldCenter;
   double scale;
 };
