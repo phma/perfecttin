@@ -40,7 +40,7 @@ public slots:
 protected:
   void setSize();
   //void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-  //void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+  void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
   QBrush brush;
   Lissajous lis;

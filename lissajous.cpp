@@ -23,6 +23,7 @@
 #include <cmath>
 #include "lissajous.h"
 #include "relprime.h"
+#define SPEED 5
 using namespace std;
 
 // num[i]/denom[i] is a rational approximation to quadirr[i].
@@ -55,6 +56,50 @@ void Lissajous::test()
   int i;
   for (i=0;i<21;i++)
     cout<<i<<' '<<num[i]<<'/'<<denom[i]<<' '<<quadirr[i]<<' '<<(double)num[i]/denom[i]-quadirr[i]<<endl;
+}
+
+void Lissajous::resize(int w,int h)
+{
+  int i,newi,newxperiod,newyperiod;
+  double ratio,r1r,bestr1r=INFINITY;
+  if (w>0 && h>0)
+  {
+    if (w>h)
+      ratio=(double)h/w;
+    else
+      ratio=(double)w/h;
+    for (i=0;i<21;i++)
+    {
+      r1r=ratio/quadirr[i]+quadirr[i]/ratio;
+      if (r1r<bestr1r)
+      {
+	bestr1r=r1r;
+	newi=i;
+      }
+    }
+    newxperiod=num[newi]*2;
+    newyperiod=denom[newi]*2;
+    if (w>h)
+      swap(newxperiod,newyperiod);
+    xphase=lrint(xphase*(double)newxperiod/xperiod);
+    yphase=lrint(yphase*(double)newyperiod/yperiod);
+    xperiod=newxperiod;
+    yperiod=newyperiod;
+    bestr1r=INFINITY;
+    for (i=1;i<=3*SPEED*(double)(xperiod+yperiod)/(w+h);i+=2)
+      if (gcd(i,xperiod)==1 && gcd(i,xperiod)==1)
+      {
+	r1r=i/(SPEED*(double)(xperiod+yperiod)/(w+h))+(SPEED*(double)(xperiod+yperiod)/(w+h))/i;
+	if (r1r<bestr1r)
+	{
+	  bestr1r=r1r;
+	  step=i;
+	}
+      }
+    width=w;
+    height=h;
+    cout<<w<<"×"<<h<<' '<<xperiod<<"×"<<yperiod<<" step "<<step<<endl;
+  }
 }
 
 xy Lissajous::move()

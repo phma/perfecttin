@@ -80,3 +80,15 @@ void TinCanvas::tick()
   ballPos=lis.move();
   cout<<ldecimal(ballPos.getx(),0.1)<<','<<ldecimal(ballPos.gety(),0.1)<<endl;
 }
+
+void TinCanvas::setSize()
+{
+  windowCenter=xy(width(),height())/2.;
+  lis.resize(width()-10,height()-10);
+}
+
+void TinCanvas::resizeEvent(QResizeEvent *event)
+{
+  setSize();
+  QWidget::resizeEvent(event);
+}

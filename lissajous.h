@@ -30,6 +30,7 @@ class Lissajous
 public:
   Lissajous();
   void test();
+  void resize(int w,int h);
   xy move();
 private:
   static int num[],denom[];
