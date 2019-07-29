@@ -22,6 +22,7 @@
 #include "tincanvas.h"
 #include "boundrect.h"
 #include "octagon.h"
+#include "ldecimal.h"
 
 using namespace std;
 
@@ -76,4 +77,6 @@ void TinCanvas::sizeToFit()
 
 void TinCanvas::tick()
 {
+  ballPos=lis.move();
+  cout<<ldecimal(ballPos.getx(),0.1)<<','<<ldecimal(ballPos.gety(),0.1)<<endl;
 }

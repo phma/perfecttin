@@ -20,6 +20,7 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include <cmath>
 #include "lissajous.h"
 #include "relprime.h"
 using namespace std;
@@ -39,9 +40,26 @@ int Lissajous::denom[]=
   2351,2873,3037,3629,2759,1579,6043
 };
 
+Lissajous::Lissajous()
+{
+  width=610;
+  height=377;
+  xperiod=3194;
+  yperiod=1974;
+  xphase=yphase=0;
+  step=5;
+}
+
 void Lissajous::test()
 {
   int i;
   for (i=0;i<21;i++)
     cout<<i<<' '<<num[i]<<'/'<<denom[i]<<' '<<quadirr[i]<<' '<<(double)num[i]/denom[i]-quadirr[i]<<endl;
+}
+
+xy Lissajous::move()
+{
+  xphase=(xphase+step)%xperiod;
+  yphase=(yphase+step)%yperiod;
+  return xy((cos(2*M_PI*xphase/xperiod)+1)/2*width,(cos(2*M_PI*yphase/yperiod)+1)/2*height);
 }

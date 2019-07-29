@@ -46,5 +46,6 @@ private:
   Lissajous lis;
   xy windowCenter,worldCenter;
   double scale;
+  xy ballPos;
 };
 #endif

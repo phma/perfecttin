@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "point.h"
 
 class Lissajous
 /* Generates a Lissajous curve which is used to move a ball at a maximum speed
@@ -27,7 +28,10 @@ class Lissajous
  */
 {
 public:
+  Lissajous();
   void test();
+  xy move();
 private:
   static int num[],denom[];
+  int width,height,xphase,yphase,xperiod,yperiod,step;
 };
