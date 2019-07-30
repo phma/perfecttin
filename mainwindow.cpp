@@ -23,7 +23,7 @@
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
-  setWindowTitle(QApplication::translate("main", "ViewTIN"));
+  setWindowTitle(QApplication::translate("main", "PerfectTIN"));
   fileMsg=new QLabel(this);
   progressMsg=new QLabel(this);
   triangleMsg=new QLabel(this);
