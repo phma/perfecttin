@@ -98,7 +98,7 @@ void Lissajous::resize(int w,int h)
       }
     width=w;
     height=h;
-    cout<<w<<"×"<<h<<' '<<xperiod<<"×"<<yperiod<<" step "<<step<<endl;
+    //cout<<w<<"×"<<h<<' '<<xperiod<<"×"<<yperiod<<" step "<<step<<endl;
   }
 }
 
