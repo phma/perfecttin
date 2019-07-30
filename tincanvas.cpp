@@ -34,6 +34,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setBackgroundRole(QPalette::Base);
   setBrush(Qt::red);
   setPen(Qt::NoPen);
+  setMinimumSize(40,30);
 }
 
 void TinCanvas::setPen(const QPen &qpen)
