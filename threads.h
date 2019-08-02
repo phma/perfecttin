@@ -29,6 +29,20 @@
 #define TH_WAIT 3
 #define TH_STOP 4
 
+// These are used to tell thread 0 to do things while threads are in pause or wait state.
+#define ACT_LOAD 1
+#define ACT_OCTAGON 2
+#define ACT_WRITE_DXF 3
+#define ACT_WRITE_TIN 4
+
+struct ThreadAction
+{
+  int opcode;
+  int param0;
+  double param1;
+  std::string filename;
+};
+
 extern boost::mutex wingEdge;
 extern boost::mutex adjLog;
 extern double stageTolerance;
@@ -39,6 +53,7 @@ bool allBucketsClean();
 void resizeBuckets(int n);
 void startThreads(int n);
 void joinThreads();
+void enqueueAction(ThreadAction a);
 void sleep(int thread);
 void sleepDead(int thread);
 void unsleep(int thread);

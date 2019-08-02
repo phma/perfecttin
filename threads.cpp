@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include <queue>
 #include "threads.h"
 #include "edgeop.h"
 #include "triop.h"
@@ -32,6 +32,8 @@ using namespace boost;
 mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 mutex triMutex; // Lock this while locking or unlocking triangles.
 mutex adjLog;
+mutex actMutex;
+
 int threadCommand;
 vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
@@ -39,6 +41,7 @@ vector<double> sleepTime;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
+queue<ThreadAction> actQueue;
 
 vector<int> cleanBuckets;
 /* Indicates whether the buckets used by areaDone are clean or dirty.
@@ -92,6 +95,27 @@ void joinThreads()
   int i;
   for (i=0;i<threads.size();i++)
     threads[i].join();
+}
+
+ThreadAction dequeueAction()
+{
+  ThreadAction ret;
+  ret.opcode=0;
+  actMutex.lock();
+  if (actQueue.size())
+  {
+    ret=actQueue.front();
+    actQueue.pop();
+  }
+  actMutex.unlock();
+  return ret;
+}
+
+void enqueueAction(ThreadAction a)
+{
+  actMutex.lock();
+  actQueue.push(a);
+  actMutex.unlock();
 }
 
 void sleep(int thread)
@@ -188,6 +212,7 @@ void TinThread::operator()(int thread)
 {
   int i,e=0,t=0,d=0;
   int triResult,edgeResult;
+  ThreadAction act;
   while (threadCommand!=TH_STOP)
   {
     if (threadCommand==TH_RUN)
@@ -207,12 +232,65 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_PAUSE)
     { // The job is ongoing, but has to pause to write out the files.
       threadStatus[thread]=TH_PAUSE;
-      sleep(thread);
+      if (thread)
+	act.opcode=0;
+      else
+	act=dequeueAction();
+      switch (act.opcode)
+      {
+	case ACT_LOAD:
+	  cerr<<"Can't load a file in pause state\n";
+	  unsleep(thread);
+	  break;
+	case ACT_OCTAGON:
+	  cerr<<"Can't make octagon in pause state\n";
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_DXF:
+	  //writeDxf(filename,param0,param1);
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_TIN:
+	  //writeTinText(filename,param1);
+	  unsleep(thread);
+	  break;
+	default:
+	  sleep(thread);
+      }
     }
     if (threadCommand==TH_WAIT)
     { // There is no job. The threads are waiting for a job.
       threadStatus[thread]=TH_WAIT;
-      sleep(thread);
+      if (thread)
+	act.opcode=0;
+      else
+	act=dequeueAction();
+      switch (act.opcode)
+      {
+	case ACT_LOAD:
+	  //readLas(act.filename);
+	  unsleep(thread);
+	  break;
+	case ACT_OCTAGON:
+	  //areadone=makeOctagon();
+	  //if (!std::isfinite(areadone))
+	  //{
+	    //cerr<<"Point cloud covers no area or has infinite or NaN points\n";
+	    //done=true;
+	  //}
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_DXF:
+	  cerr<<"Can't write DXF in wait state\n";
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_TIN:
+	  cerr<<"Can't write TIN in wait state\n";
+	  unsleep(thread);
+	  break;
+	default:
+	  sleep(thread);
+      }
     }
   }
   threadStatus[thread]=TH_STOP;
