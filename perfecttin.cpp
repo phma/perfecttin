@@ -38,6 +38,7 @@
 #include "dxf.h"
 #include "threads.h"
 #include "tintext.h"
+#include "fileio.h"
 
 using namespace std;
 namespace po=boost::program_options;
@@ -153,23 +154,6 @@ void parseUnits(string units)
   outUnit=parseUnit(outUnitStr);
 }
 
-string baseName(string fileName)
-{
-  long long slashPos,dotPos; // npos turns into -1, which is convenient
-  string between;
-  slashPos=fileName.rfind('/');
-  dotPos=fileName.rfind('.');
-  if (dotPos>slashPos)
-  {
-    between=fileName.substr(slashPos+1,dotPos-slashPos-1);
-    if (between.find_first_not_of('.')>between.length())
-      dotPos=-1;
-  }
-  if (dotPos>slashPos)
-    fileName.erase(dotPos);
-  return fileName;
-}
-
 double areaDone(double tolerance)
 {
   vector<double> allTri,doneTri;
@@ -211,23 +195,6 @@ double areaDone(double tolerance)
     overtimeCount=0;
   bucket=(bucket+1)%allBuckets.size();
   return ret;
-}
-
-void writeDxf(string outputFile,bool asc,double outUnit)
-{
-  vector<GroupCode> dxfCodes;
-  int i;
-  BoundRect br;
-  br.include(&net);
-  ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
-  dxfHeader(dxfCodes,br);
-  tableSection(dxfCodes);
-  openEntitySection(dxfCodes);
-  for (i=0;i<net.triangles.size();i++)
-    insertTriangle(dxfCodes,net.triangles[i],outUnit);
-  closeEntitySection(dxfCodes);
-  dxfEnd(dxfCodes);
-  writeDxfGroups(dxfFile,dxfCodes,asc);
 }
 
 bool livelock(double areadone,double rmsadj)
@@ -310,13 +277,7 @@ int main(int argc, char *argv[])
   if (validCmd)
   {
     if (inputFile.length())
-    {
-      readPly(inputFile);
-      if (cloud.size()==0)
-	readLas(inputFile);
-      if (cloud.size())
-	cout<<"Read "<<cloud.size()<<" dots\n";
-    }
+      readCloud(inputFile);
     else if (doTestPattern)
     {
       setsurface(CIRPAR);
