@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
   int i,e,t,d;
   int nthreads=boost::thread::hardware_concurrency();
   time_t now,then;
-  double tolerance,areadone=0,rmsadj;
+  double tolerance,rmsadj;
   bool done=false;
   bool asciiFormat=false;
   triangle *tri;

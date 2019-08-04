@@ -37,6 +37,7 @@ using namespace std;
 
 pointlist net;
 double clipLow,clipHigh;
+double areadone=0;
 
 double makeOctagon()
 /* Creates an octagon which encloses cloud (defined in ply.cpp) and divides it
