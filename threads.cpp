@@ -25,6 +25,9 @@
 #include "triop.h"
 #include "octagon.h"
 #include "random.h"
+#include "fileio.h"
+#include "tintext.h"
+#include "las.h"
 #include "relprime.h"
 using namespace std;
 using namespace boost;
@@ -247,11 +250,11 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
-	  //writeDxf(filename,param0,param1);
+	  writeDxf(act.filename,act.param0,act.param1);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_TIN:
-	  //writeTinText(filename,param1);
+	  writeTinText(act.filename,act.param1);
 	  unsleep(thread);
 	  break;
 	default:
@@ -268,16 +271,16 @@ void TinThread::operator()(int thread)
       switch (act.opcode)
       {
 	case ACT_LOAD:
-	  //readLas(act.filename);
+	  readLas(act.filename);
 	  unsleep(thread);
 	  break;
 	case ACT_OCTAGON:
-	  //areadone=makeOctagon();
-	  //if (!std::isfinite(areadone))
-	  //{
-	    //cerr<<"Point cloud covers no area or has infinite or NaN points\n";
+	  areadone=makeOctagon();
+	  if (!std::isfinite(areadone))
+	  {
+	    cerr<<"Point cloud covers no area or has infinite or NaN points\n";
 	    //done=true;
-	  //}
+	  }
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
