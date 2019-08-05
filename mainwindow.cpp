@@ -71,6 +71,22 @@ void MainWindow::makeActions()
   fileMenu=menuBar()->addMenu(tr("&File"));
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
+  // File menu
+  loadAction=new QAction(this);
+  loadAction->setIcon(QIcon::fromTheme("document-open"));
+  loadAction->setText(tr("Load"));
+  fileMenu->addAction(loadAction);
+  //connect(loadAction,SIGNAL(triggered(bool)),this,SLOT(loadFile()));
+  convertAction=new QAction(this);
+  convertAction->setIcon(QIcon::fromTheme("document-save-as"));
+  convertAction->setText(tr("Convert"));
+  fileMenu->addAction(convertAction);
+  //connect(convertAction,SIGNAL(triggered(bool)),this,SLOT(startConversion()));
+  clearAction=new QAction(this);
+  clearAction->setIcon(QIcon::fromTheme("edit-clear"));
+  clearAction->setText(tr("Clear"));
+  fileMenu->addAction(clearAction);
+  //connect(clearAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
