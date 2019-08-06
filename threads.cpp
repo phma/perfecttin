@@ -284,8 +284,8 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_OCTAGON:
-	  areadone=makeOctagon();
-	  if (!std::isfinite(areadone))
+	  stageTolerance=-makeOctagon();
+	  if (!std::isfinite(stageTolerance))
 	  {
 	    cerr<<"Point cloud covers no area or has infinite or NaN points\n";
 	    //done=true;
