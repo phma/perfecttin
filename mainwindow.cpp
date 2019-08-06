@@ -100,6 +100,12 @@ void MainWindow::loadFile()
   }
 }
 
+void MainWindow::clearCloud()
+{
+  cloud.clear();
+  fileNames="";
+  fileMsg->setText("");
+}
 
 void MainWindow::configure()
 {
@@ -133,7 +139,7 @@ void MainWindow::makeActions()
   clearAction->setIcon(QIcon::fromTheme("edit-clear"));
   clearAction->setText(tr("Clear"));
   fileMenu->addAction(clearAction);
-  //connect(clearAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
+  connect(clearAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
