@@ -91,7 +91,7 @@ void MainWindow::loadFile()
 #ifdef LibPLYXX_FOUND
   fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
 #else
-  fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
+  fileDialog->setNameFilter(tr("(*.las);;(*)"));
 #endif
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -105,6 +105,28 @@ void MainWindow::loadFile()
     if (fileNames.length())
       fileNames+=';';
     fileNames+=fileName;
+    fileMsg->setText(QString::fromStdString(fileNames));
+  }
+}
+
+void MainWindow::startConversion()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Convert to TIN"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->setNameFilter(tr("*"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    saveFileName=files[0].toStdString();
+    ta.opcode=ACT_OCTAGON;
+    enqueueAction(ta);
+    fileNames=saveFileName+".[dxf|tin]";
     fileMsg->setText(QString::fromStdString(fileNames));
   }
 }
@@ -143,7 +165,7 @@ void MainWindow::makeActions()
   convertAction->setIcon(QIcon::fromTheme("document-save-as"));
   convertAction->setText(tr("Convert"));
   fileMenu->addAction(convertAction);
-  //connect(convertAction,SIGNAL(triggered(bool)),this,SLOT(startConversion()));
+  connect(convertAction,SIGNAL(triggered(bool)),this,SLOT(startConversion()));
   clearAction=new QAction(this);
   clearAction->setIcon(QIcon::fromTheme("edit-clear"));
   clearAction->setText(tr("Clear"));

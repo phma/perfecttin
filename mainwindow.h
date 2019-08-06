@@ -46,6 +46,7 @@ public slots:
   void tick();
   void setSettings(double iu,double ou,double tol,int thr);
   void loadFile();
+  void startConversion();
   void clearCloud();
   void configure();
 protected:
@@ -55,7 +56,7 @@ private:
   double lastTolerance,lastStageTolerance;
   int numberThreads;
   double tolerance,inUnit,outUnit;
-  std::string fileNames;
+  std::string fileNames,saveFileName;
   QTimer *timer;
   QFileDialog *fileDialog;
   ConfigurationDialog *configDialog;
