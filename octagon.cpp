@@ -55,6 +55,7 @@ double makeOctagon()
   int i,n,h,sz;
   triangle *tri;
   net.clear();
+  net.triangles[0]; // Create a dummy triangle so that the GUI says "Making octagon"
   resizeBuckets(1);
   for (i=0;i<cloud.size();i++)
   {
