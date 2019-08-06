@@ -22,6 +22,7 @@
 #include "config.h"
 #include "mainwindow.h"
 #include "threads.h"
+#include "ldecimal.h"
 #include "cloud.h"
 #include "octagon.h"
 using namespace std;
@@ -55,6 +56,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::tick()
 {
+  double toleranceRatio;
   int numDots=cloud.size();
   int numTriangles=net.triangles.size();
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
@@ -67,6 +69,13 @@ void MainWindow::tick()
       dotTriangleMsg->setText(tr("%n triangles","",numTriangles));
     else
       dotTriangleMsg->setText(tr("%n dots","",numDots));
+  }
+  if (tolerance!=lastTolerance || stageTolerance!=lastStageTolerance)
+  {
+    lastTolerance=tolerance;
+    lastStageTolerance=stageTolerance;
+    toleranceRatio=stageTolerance/tolerance;
+    toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
   }
 }
 
