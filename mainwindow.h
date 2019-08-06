@@ -49,14 +49,14 @@ public slots:
 protected:
   void closeEvent(QCloseEvent *event) override;
 private:
-  int tickCount;
+  int lastNumDots,lastNumTriangles;
   int numberThreads;
   double tolerance,inUnit,outUnit;
   QTimer *timer;
   QFileDialog *fileDialog;
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu;
-  QLabel *fileMsg,*progressMsg,*triangleMsg;
+  QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
   QAction *loadAction,*convertAction,*clearAction;
   QAction *configureAction;
   TinCanvas *canvas;

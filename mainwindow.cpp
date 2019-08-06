@@ -23,14 +23,16 @@
 #include "config.h"
 #include "mainwindow.h"
 #include "threads.h"
+#include "cloud.h"
+#include "octagon.h"
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
   setWindowTitle(QApplication::translate("main", "PerfectTIN"));
   fileMsg=new QLabel(this);
-  progressMsg=new QLabel(this);
-  triangleMsg=new QLabel(this);
+  dotTriangleMsg=new QLabel(this);
+  toleranceMsg=new QLabel(this);
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
   fileDialog=new QFileDialog(this);
@@ -39,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
-  tickCount=0;
   readSettings();
   canvas->show();
   show();
@@ -56,7 +57,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::tick()
 {
-  triangleMsg->setNum(++tickCount);
+  int numDots=cloud.size();
+  int numTriangles=net.triangles.size();
+  if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
+  {
+    lastNumDots=numDots;
+    lastNumTriangles=numTriangles;
+    if (numDots && numTriangles)
+      dotTriangleMsg->setText(tr("Making octagon"));
+    else if (numTriangles)
+      dotTriangleMsg->setText(tr("%n triangles","",numTriangles));
+    else
+      dotTriangleMsg->setText(tr("%n dots","",numDots));
+  }
 }
 
 void MainWindow::loadFile()
@@ -130,8 +143,8 @@ void MainWindow::makeActions()
 void MainWindow::makeStatusBar()
 {
   statusBar()->addWidget(fileMsg);
-  statusBar()->addWidget(progressMsg);
-  statusBar()->addWidget(triangleMsg);
+  statusBar()->addWidget(dotTriangleMsg);
+  statusBar()->addWidget(toleranceMsg);
   statusBar()->show();
 }
 
