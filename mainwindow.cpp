@@ -98,6 +98,9 @@ void MainWindow::loadFile()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
+    net.clear();
+    if (cloud.size()==0)
+      fileNames="";
     ta.opcode=ACT_LOAD;
     ta.filename=fileName;
     ta.param1=inUnit;
