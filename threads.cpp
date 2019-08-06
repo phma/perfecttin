@@ -36,6 +36,7 @@ mutex wingEdge; // Lock this while changing pointers in the winged edge structur
 mutex triMutex; // Lock this while locking or unlocking triangles.
 mutex adjLog;
 mutex actMutex;
+mutex bucketMutex;
 
 int threadCommand;
 vector<thread> threads;
@@ -55,30 +56,38 @@ vector<int> cleanBuckets;
 
 void markBucketClean(int bucket)
 {
+  bucketMutex.lock();
   bucket&=(cleanBuckets.size()-1); // size is always a power of 2
   if (cleanBuckets[bucket]<2)
     cleanBuckets[bucket]++;
+  bucketMutex.unlock();
 }
 
 void markBucketDirty(int bucket)
 {
+  bucketMutex.lock();
   bucket&=(cleanBuckets.size()-1); // size is always a power of 2
   cleanBuckets[bucket]=0;
+  bucketMutex.unlock();
 }
 
 bool allBucketsClean()
 {
   int i;
   bool ret=true;
+  bucketMutex.lock();
   for (i=0;ret && i<cleanBuckets.size();i++)
     if (cleanBuckets[i]<2)
       ret=false;
+  bucketMutex.unlock();
   return ret;
 }
 
 void resizeBuckets(int n)
 {
+  bucketMutex.lock();
   cleanBuckets.resize(n);
+  bucketMutex.unlock();
 }
 
 void startThreads(int n)
