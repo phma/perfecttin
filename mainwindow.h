@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <QtWidgets>
 #include <QPixmap>
+#include <string>
 #include <array>
 #include "configdialog.h"
 #include "tincanvas.h"
@@ -52,6 +53,7 @@ private:
   int lastNumDots,lastNumTriangles;
   int numberThreads;
   double tolerance,inUnit,outUnit;
+  std::string fileNames;
   QTimer *timer;
   QFileDialog *fileDialog;
   ConfigurationDialog *configDialog;

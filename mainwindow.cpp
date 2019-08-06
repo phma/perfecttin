@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <string>
 #include "config.h"
 #include "mainwindow.h"
 #include "threads.h"
@@ -48,7 +47,6 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
   connect(timer,SIGNAL(timeout()),canvas,SLOT(tick()));
   timer->start(50);
-  fileMsg->setText(QString("File loaded"));
 }
 
 MainWindow::~MainWindow()
@@ -95,6 +93,10 @@ void MainWindow::loadFile()
     ta.filename=fileName;
     ta.param1=inUnit;
     enqueueAction(ta);
+    if (fileNames.length())
+      fileNames+=';';
+    fileNames+=fileName;
+    fileMsg->setText(QString::fromStdString(fileNames));
   }
 }
 
