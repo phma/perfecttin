@@ -44,6 +44,7 @@ public:
 public slots:
   void tick();
   void setSettings(double iu,double ou,double tol,int thr);
+  void loadFile();
   void configure();
 protected:
   void closeEvent(QCloseEvent *event) override;
@@ -52,6 +53,7 @@ private:
   int numberThreads;
   double tolerance,inUnit,outUnit;
   QTimer *timer;
+  QFileDialog *fileDialog;
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu;
   QLabel *fileMsg,*progressMsg,*triangleMsg;

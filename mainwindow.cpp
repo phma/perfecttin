@@ -19,7 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <string>
+#include "config.h"
 #include "mainwindow.h"
+#include "threads.h"
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
@@ -29,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   triangleMsg=new QLabel(this);
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
+  fileDialog=new QFileDialog(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
 	  this,SLOT(setSettings(double,double,double,int)));
   makeActions();
@@ -54,6 +59,33 @@ void MainWindow::tick()
   triangleMsg->setNum(++tickCount);
 }
 
+void MainWindow::loadFile()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Load Point Cloud File"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+#ifdef LibPLYXX_FOUND
+  fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
+#else
+  fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
+#endif
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.opcode=ACT_LOAD;
+    ta.filename=fileName;
+    ta.param1=inUnit;
+    enqueueAction(ta);
+  }
+}
+
+
 void MainWindow::configure()
 {
   configDialog->set(inUnit,outUnit,tolerance,numberThreads);
@@ -76,7 +108,7 @@ void MainWindow::makeActions()
   loadAction->setIcon(QIcon::fromTheme("document-open"));
   loadAction->setText(tr("Load"));
   fileMenu->addAction(loadAction);
-  //connect(loadAction,SIGNAL(triggered(bool)),this,SLOT(loadFile()));
+  connect(loadAction,SIGNAL(triggered(bool)),this,SLOT(loadFile()));
   convertAction=new QAction(this);
   convertAction->setIcon(QIcon::fromTheme("document-save-as"));
   convertAction->setText(tr("Convert"));
