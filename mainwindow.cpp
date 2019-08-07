@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   fileDialog=new QFileDialog(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
 	  this,SLOT(setSettings(double,double,double,int)));
+  connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
@@ -61,6 +62,8 @@ void MainWindow::tick()
   int numTriangles=net.triangles.size();
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
   {
+    if (lastNumTriangles<4 && numTriangles>4)
+      octagonReady();
     lastNumDots=numDots;
     lastNumTriangles=numTriangles;
     if (numDots && numTriangles)

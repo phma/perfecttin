@@ -42,6 +42,8 @@ public:
   {
     return numberThreads;
   }
+signals:
+  void octagonReady();
 public slots:
   void tick();
   void setSettings(double iu,double ou,double tol,int thr);
