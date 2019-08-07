@@ -99,6 +99,7 @@ void TinCanvas::setSize()
 {
   windowCenter=xy(width(),height())/2.;
   lis.resize(width()-20,height()-20);
+  frameBuffer=QPixmap(width(),height());
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
@@ -106,6 +107,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   QPainter painter(this);
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
+  painter.drawPixmap(this->rect(),frameBuffer,this->rect());
   painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
 }
 

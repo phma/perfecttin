@@ -45,6 +45,7 @@ protected:
 private:
   QPen pen;
   QBrush brush;
+  QPixmap frameBuffer;
   Lissajous lis;
   xy windowCenter,worldCenter;
   double scale;
