@@ -206,6 +206,27 @@ void unlockTriangles(int thread)
   triMutex.unlock();
 }
 
+void setThreadCommand(int newStatus)
+{
+  threadCommand=newStatus;
+}
+
+int getThreadStatus()
+/* If all threads are in the same status, including all asleep or all awake,
+ * returns the status, with the high 16 bits clear. If they are in different
+ * statuses, some of the high 16 bits are set.
+ */
+{
+  int i,oneStatus,minStatus=-1,maxStatus=0;
+  for (i=0;i<threadStatus.size();i++)
+  {
+    oneStatus=threadStatus[i];
+    maxStatus|=oneStatus;
+    minStatus&=oneStatus;
+  }
+  return ((minStatus^maxStatus)<<16)|(minStatus&0xffff);
+}
+
 void waitForThreads(int newStatus)
 // Waits until all threads are in the commanded status.
 {
