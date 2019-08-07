@@ -99,6 +99,7 @@ void TinCanvas::setSize()
 {
   windowCenter=xy(width(),height())/2.;
   lis.resize(width()-20,height()-20);
+  sizeToFit();
   frameBuffer=QPixmap(width(),height());
 }
 
