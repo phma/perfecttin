@@ -35,6 +35,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setBrush(Qt::red);
   setPen(Qt::NoPen);
   setMinimumSize(40,30);
+  triangleNum=0;
 }
 
 void TinCanvas::setPen(const QPen &qpen)
@@ -87,12 +88,51 @@ void TinCanvas::sizeToFit()
 
 void TinCanvas::tick()
 {
+  int i;
+  double r,g,b;
+  xy gradient,A,B,C;
+  QPolygonF polygon;
+  QPainter painter(&frameBuffer);
+  QBrush brush;
+  painter.setRenderHint(QPainter::Antialiasing,true);
+  painter.setPen(Qt::NoPen);
+  brush.setStyle(Qt::SolidPattern);
   QRectF before(ballPos.getx()-10.5,ballPos.gety()-10.5,21,21);
   ballPos=lis.move()+xy(10,10);
   QRectF after(ballPos.getx()-10.5,ballPos.gety()-10.5,21,21);
   update(before.toAlignedRect());
   update(after.toAlignedRect());
-  //cout<<ldecimal(ballPos.getx(),0.1)<<','<<ldecimal(ballPos.gety(),0.1)<<endl;
+  for (i=0;i<1;i++)
+  {
+    if (++triangleNum>=net.triangles.size())
+      triangleNum=0;
+    if (triangleNum<net.triangles.size() && net.triangles[triangleNum].a)
+    {
+      gradient=net.triangles[triangleNum].gradient(net.triangles[triangleNum].centroid());
+      A=*net.triangles[triangleNum].a;
+      B=*net.triangles[triangleNum].b;
+      C=*net.triangles[triangleNum].c;
+      r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
+      g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
+      b=0.5-gradient.north()*0.483 -gradient.east()*0.1294;
+      if (r>1)
+	r=1;
+      if (r<0)
+	r=0;
+      if (g>1)
+	g=1;
+      if (g<0)
+	g=0;
+      if (b>1)
+	b=1;
+      if (b<0)
+	b=0;
+      brush.setColor(QColor::fromRgbF(r,g,b));
+      painter.setBrush(brush);
+      polygon<<worldToWindow(A)<<worldToWindow(B)<<worldToWindow(C);
+      painter.drawConvexPolygon(polygon);
+    }
+  }
 }
 
 void TinCanvas::setSize()

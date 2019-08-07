@@ -50,5 +50,6 @@ private:
   xy windowCenter,worldCenter;
   double scale;
   xy ballPos;
+  int triangleNum;
 };
 #endif
