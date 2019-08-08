@@ -212,9 +212,12 @@ void setThreadCommand(int newStatus)
 }
 
 int getThreadStatus()
-/* If all threads are in the same status, including all asleep or all awake,
- * returns the status, with the high 16 bits clear. If they are in different
- * statuses, some of the high 16 bits are set.
+/* Returns aaaaaaaaaabbbbbbbbbbcccccccccc where
+ * aaaaaaaaaa is the status all threads should be in,
+ * bbbbbbbbbb is 0 if all threads are in the same state, and
+ * cccccccccc is the state the threads are in.
+ * If all threads are in the commanded state, but some may be asleep and others awake,
+ * getThreadStatus()&0x3ffbfeff is a multiple of 1048577.
  */
 {
   int i,oneStatus,minStatus=-1,maxStatus=0;
@@ -224,7 +227,7 @@ int getThreadStatus()
     maxStatus|=oneStatus;
     minStatus&=oneStatus;
   }
-  return ((minStatus^maxStatus)<<16)|(minStatus&0xffff);
+  return (threadCommand<<20)|((minStatus^maxStatus)<<10)|(minStatus&0x3ff);
 }
 
 void waitForThreads(int newStatus)
