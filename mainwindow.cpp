@@ -112,7 +112,7 @@ void MainWindow::loadFile()
     enqueueAction(ta);
     if (fileNames.length())
       fileNames+=';';
-    fileNames+=fileName;
+    fileNames+=baseName(fileName);
     lastFileName=fileName;
     fileMsg->setText(QString::fromStdString(fileNames));
   }
@@ -136,7 +136,7 @@ void MainWindow::startConversion()
     saveFileName=files[0].toStdString();
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
-    fileNames=saveFileName+".[dxf|tin]";
+    fileNames=baseName(saveFileName)+".[dxf|tin]";
     fileMsg->setText(QString::fromStdString(fileNames));
   }
 }
