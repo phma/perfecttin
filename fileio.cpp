@@ -51,6 +51,13 @@ string noExt(string fileName)
   return fileName;
 }
 
+string baseName(string fileName)
+{
+  long long slashPos;
+  slashPos=fileName.rfind('/');
+  return fileName.substr(slashPos+1);
+}
+
 void writeDxf(string outputFile,bool asc,double outUnit)
 {
   vector<GroupCode> dxfCodes;
