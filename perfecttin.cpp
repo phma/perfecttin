@@ -254,8 +254,8 @@ int main(int argc, char *argv[])
     cerr<<e.what()<<endl;
     validCmd=false;
   }
-  if (!outputFile.length() && baseName(inputFile).length())
-    outputFile=baseName(inputFile);
+  if (!outputFile.length() && noExt(inputFile).length())
+    outputFile=noExt(inputFile);
   if (!outputFile.length())
   {
     if (inputFile.length())

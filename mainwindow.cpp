@@ -127,7 +127,7 @@ void MainWindow::startConversion()
   fileDialog->setWindowTitle(tr("Convert to TIN"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-  fileDialog->selectFile(QString::fromStdString(baseName(lastFileName)));
+  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
   fileDialog->setNameFilter(tr("*"));
   dialogResult=fileDialog->exec();
   if (dialogResult)

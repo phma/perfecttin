@@ -21,6 +21,6 @@
  */
 #include <string>
 
-std::string baseName(std::string fileName);
+std::string noExt(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit);
 void readCloud(std::string inputFile);

@@ -34,7 +34,7 @@ using namespace std;
  * that multiple formats of the same TIN may be output by different threads
  * at once), while the program is not working on the TIN.
  */
-string baseName(string fileName)
+string noExt(string fileName)
 {
   long long slashPos,dotPos; // npos turns into -1, which is convenient
   string between;
