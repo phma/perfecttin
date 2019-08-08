@@ -58,7 +58,7 @@ private:
   double lastTolerance,lastStageTolerance;
   int numberThreads;
   double tolerance,inUnit,outUnit;
-  std::string fileNames,saveFileName;
+  std::string fileNames,saveFileName,lastFileName;
   QTimer *timer;
   QFileDialog *fileDialog;
   ConfigurationDialog *configDialog;

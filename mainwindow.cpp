@@ -24,6 +24,7 @@
 #include "threads.h"
 #include "ldecimal.h"
 #include "cloud.h"
+#include "fileio.h"
 #include "octagon.h"
 using namespace std;
 
@@ -91,6 +92,7 @@ void MainWindow::loadFile()
   fileDialog->setWindowTitle(tr("Load Point Cloud File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+  fileDialog->selectFile("");
 #ifdef LibPLYXX_FOUND
   fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
 #else
@@ -111,6 +113,7 @@ void MainWindow::loadFile()
     if (fileNames.length())
       fileNames+=';';
     fileNames+=fileName;
+    lastFileName=fileName;
     fileMsg->setText(QString::fromStdString(fileNames));
   }
 }
@@ -124,6 +127,7 @@ void MainWindow::startConversion()
   fileDialog->setWindowTitle(tr("Convert to TIN"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(baseName(lastFileName)));
   fileDialog->setNameFilter(tr("*"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -140,7 +144,7 @@ void MainWindow::startConversion()
 void MainWindow::clearCloud()
 {
   cloud.clear();
-  fileNames="";
+  fileNames=lastFileName="";
   fileMsg->setText("");
 }
 
