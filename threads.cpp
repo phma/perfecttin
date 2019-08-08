@@ -130,6 +130,11 @@ void enqueueAction(ThreadAction a)
   actMutex.unlock();
 }
 
+bool actionQueueEmpty()
+{
+  return actQueue.size()==0;
+}
+
 void sleep(int thread)
 {
   sleepTime[thread]+=1;

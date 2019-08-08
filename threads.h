@@ -28,6 +28,7 @@
 #define TH_PAUSE 2
 #define TH_WAIT 3
 #define TH_STOP 4
+#define TH_ASLEEP 256
 
 // These are used to tell thread 0 to do things while threads are in pause or wait state.
 #define ACT_LOAD 1
@@ -54,6 +55,7 @@ void resizeBuckets(int n);
 void startThreads(int n);
 void joinThreads();
 void enqueueAction(ThreadAction a);
+bool actionQueueEmpty();
 void sleep(int thread);
 void sleepDead(int thread);
 void unsleep(int thread);

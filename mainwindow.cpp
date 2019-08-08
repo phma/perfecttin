@@ -60,6 +60,7 @@ void MainWindow::tick()
 {
   double toleranceRatio;
   int numDots=cloud.size();
+  int tstatus=getThreadStatus();
   int numTriangles=net.triangles.size();
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
   {
@@ -74,12 +75,30 @@ void MainWindow::tick()
     else
       dotTriangleMsg->setText(tr("%n dots","",numDots));
   }
+  toleranceRatio=stageTolerance/tolerance;
   if (tolerance!=lastTolerance || stageTolerance!=lastStageTolerance)
   {
     lastTolerance=tolerance;
     lastStageTolerance=stageTolerance;
-    toleranceRatio=stageTolerance/tolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
+  }
+  if (tstatus==1048577*TH_WAIT+TH_ASLEEP && actionQueueEmpty() &&
+      !(toleranceRatio>0) && net.triangles.size()==6)
+  { // It's finished making the octagon, and all threads are waiting and asleep.
+    if (!std::isfinite(stageTolerance)) // only one point in cloud, or points are NaN
+    {
+      clearCloud();
+      net.clear();
+      // send a signal to pop up an error
+    }
+    else
+    {
+      toleranceRatio=-toleranceRatio;
+      stageTolerance=tolerance;
+      while (stageTolerance<tolerance*toleranceRatio)
+	stageTolerance*=2;
+      setThreadCommand(TH_RUN);
+    }
   }
 }
 
