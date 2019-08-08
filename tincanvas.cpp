@@ -20,12 +20,18 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QPainter>
+#include <cmath>
 #include "tincanvas.h"
 #include "boundrect.h"
 #include "octagon.h"
 #include "ldecimal.h"
 
 using namespace std;
+
+QPoint qptrnd(xy pnt)
+{
+  return QPoint(lrint(pnt.getx()),lrint(pnt.gety()));
+}
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
@@ -92,16 +98,38 @@ void TinCanvas::tick()
   double r,g,b;
   xy gradient,A,B,C;
   QPolygonF polygon;
+  QPolygon swath;
+  xy oldBallPos=ballPos;
   QPainter painter(&frameBuffer);
   QBrush brush;
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.setPen(Qt::NoPen);
   brush.setStyle(Qt::SolidPattern);
-  QRectF before(ballPos.getx()-10.5,ballPos.gety()-10.5,21,21);
   ballPos=lis.move()+xy(10,10);
-  QRectF after(ballPos.getx()-10.5,ballPos.gety()-10.5,21,21);
-  update(before.toAlignedRect());
-  update(after.toAlignedRect());
+  switch ((ballPos.gety()>oldBallPos.gety())*2+(ballPos.getx()>oldBallPos.getx()))
+  {
+    case 0: // Ball is moving up and left
+      swath<<qptrnd(ballPos+xy(-10.5,-10.5))<<qptrnd(ballPos+xy(-10.5,10.5));
+      swath<<qptrnd(oldBallPos+xy(-10.5,10.5))<<qptrnd(oldBallPos+xy(10.5,10.5));
+      swath<<qptrnd(oldBallPos+xy(10.5,-10.5))<<qptrnd(ballPos+xy(10.5,-10.5));
+      break;
+    case 1: // Ball is moving up and right
+      swath<<qptrnd(oldBallPos+xy(-10.5,-10.5))<<qptrnd(oldBallPos+xy(-10.5,10.5));
+      swath<<qptrnd(oldBallPos+xy(10.5,10.5))<<qptrnd(ballPos+xy(10.5,10.5));
+      swath<<qptrnd(ballPos+xy(10.5,-10.5))<<qptrnd(ballPos+xy(-10.5,-10.5));
+      break;
+    case 2: // Ball is moving down and left
+      swath<<qptrnd(oldBallPos+xy(10.5,10.5))<<qptrnd(oldBallPos+xy(10.5,-10.5));
+      swath<<qptrnd(oldBallPos+xy(-10.5,-10.5))<<qptrnd(ballPos+xy(-10.5,-10.5));
+      swath<<qptrnd(ballPos+xy(-10.5,10.5))<<qptrnd(ballPos+xy(10.5,10.5));
+      break;
+    case 3: // Ball is moving down and right
+      swath<<qptrnd(ballPos+xy(10.5,10.5))<<qptrnd(ballPos+xy(10.5,-10.5));
+      swath<<qptrnd(oldBallPos+xy(10.5,-10.5))<<qptrnd(oldBallPos+xy(-10.5,-10.5));
+      swath<<qptrnd(oldBallPos+xy(-10.5,10.5))<<qptrnd(ballPos+xy(-10.5,10.5));
+      break;
+  }
+  update(QRegion(swath));
   for (i=0;i<1;i++)
   {
     if (++triangleNum>=net.triangles.size())
