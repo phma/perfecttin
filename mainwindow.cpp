@@ -95,7 +95,7 @@ void MainWindow::tick()
     {
       toleranceRatio=-toleranceRatio;
       stageTolerance=tolerance;
-      while (stageTolerance<tolerance*toleranceRatio)
+      while (stageTolerance*2<tolerance*toleranceRatio)
 	stageTolerance*=2;
       setThreadCommand(TH_RUN);
     }
