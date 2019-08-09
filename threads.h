@@ -53,6 +53,8 @@ void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
 bool allBucketsClean();
 void resizeBuckets(int n);
+double areaDone(double tolerance);
+bool livelock(double areadone,double rmsadj);
 void startThreads(int n);
 void joinThreads();
 void enqueueAction(ThreadAction a);

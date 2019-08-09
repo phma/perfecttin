@@ -47,7 +47,6 @@ namespace cr=boost::chrono;
 xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
 double inUnit=1,outUnit=1;
-cr::steady_clock clk;
 const bool drawDots=false;
 const bool colorGradient=true;
 const bool colorAbsGradient=false;
@@ -152,62 +151,6 @@ void parseUnits(string units)
     inUnitStr=outUnitStr=units;
   inUnit=parseUnit(inUnitStr);
   outUnit=parseUnit(outUnitStr);
-}
-
-double areaDone(double tolerance)
-{
-  vector<double> allTri,doneTri;
-  static vector<double> allBuckets,doneBuckets;
-  static int overtimeCount=0,bucket=0;
-  int i;
-  double ret;
-  cr::nanoseconds elapsed;
-  cr::time_point<cr::steady_clock> timeStart=clk.now();
-  if (allBuckets.size()==0)
-  {
-    allBuckets.push_back(0);
-    doneBuckets.push_back(0);
-    resizeBuckets(1);
-  }
-  if (overtimeCount==8)
-  {
-    resizeBuckets(allBuckets.size()*2);
-    allBuckets.resize(allBuckets.size()*2);
-    doneBuckets.resize(doneBuckets.size()*2);
-    overtimeCount=0;
-    //cout<<allBuckets.size()<<" buckets \n";
-  }
-  markBucketClean(bucket);
-  for (i=bucket;i<net.triangles.size();i+=allBuckets.size())
-  {
-    allTri.push_back(net.triangles[i].sarea);
-    if (net.triangles[i].inTolerance(tolerance))
-      doneTri.push_back(net.triangles[i].sarea);
-  }
-  allBuckets[bucket]=pairwisesum(allTri);
-  doneBuckets[bucket]=pairwisesum(doneTri);
-  ret=pairwisesum(doneBuckets)/pairwisesum(allBuckets);
-  markBucketClean(bucket);
-  elapsed=clk.now()-timeStart;
-  if (elapsed>cr::milliseconds(20))
-    overtimeCount++;
-  else
-    overtimeCount=0;
-  bucket=(bucket+1)%allBuckets.size();
-  return ret;
-}
-
-bool livelock(double areadone,double rmsadj)
-{
-  static double lastAreaDone,lastRmsAdj;
-  static int unchangedCount;
-  if (lastAreaDone==areadone && lastRmsAdj==rmsadj && maxSleepTime()<100 && allBucketsClean())
-    unchangedCount++;
-  else
-    unchangedCount=0;
-  lastAreaDone=areadone;
-  lastRmsAdj=rmsadj;
-  return unchangedCount>=5;
 }
 
 int main(int argc, char *argv[])
