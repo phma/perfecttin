@@ -53,6 +53,7 @@ public:
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1);
   void insertHullPoint(point *newpnt,point *prec);
+  int closestHullPoint(xy pnt);
   void clear();
   int size();
   void clearTin();

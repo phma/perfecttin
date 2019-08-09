@@ -97,10 +97,11 @@ void TinCanvas::sizeToFit()
 
 void TinCanvas::tick()
 {
-  int i;
+  int i,sz;
   int thisOpcount=opcount;
   double r,g,b;
   xy gradient,A,B,C;
+  xy dartCorners[4];
   QPolygonF polygon;
   QPolygon swath;
   cr::nanoseconds elapsed;
@@ -111,6 +112,7 @@ void TinCanvas::tick()
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.setPen(Qt::NoPen);
   brush.setStyle(Qt::SolidPattern);
+  // Compute the new position of the ball, and update a swath containing the ball's motion.
   ballAngle+=lrint(8388608*sqrt((unsigned)(thisOpcount-lastOpcount)));
   lastOpcount=thisOpcount;
   ballPos=lis.move()+xy(10,10);
@@ -138,6 +140,27 @@ void TinCanvas::tick()
       break;
   }
   update(QRegion(swath));
+  // Paint a dart (concave quadrilateral) outside the TIN white.
+  dartAngle+=PHITURN;
+  dartCorners[0]=hypot(width(),height())*0.51/scale*cossin(dartAngle)+worldCenter;
+  if (sz=net.convexHull.size())
+  {
+    i=net.closestHullPoint(dartCorners[0]);
+    dartCorners[1]=*net.convexHull[(i+sz-1)%sz];
+    dartCorners[2]=*net.convexHull[i];
+    dartCorners[3]=*net.convexHull[(i+1)%sz];
+  }
+  else
+  {
+    dartCorners[1]=hypot(width(),height())*0.1/scale*cossin(dartAngle+DEG30);
+    dartCorners[2]=xy(0,0);
+    dartCorners[1]=hypot(width(),height())*0.1/scale*cossin(dartAngle-DEG30);
+  }
+  for (i=0;i<4;i++)
+    polygon<<worldToWindow(dartCorners[i]);
+  painter.setBrush(Qt::white);
+  painter.drawPolygon(polygon);
+  // Paint some triangles in the TIN in colors depending on their gradient.
   for (i=0;i<net.triangles.size() && (i==0 || elapsed<cr::milliseconds(20));i++)
   {
     if (++triangleNum>=net.triangles.size())
@@ -179,6 +202,7 @@ void TinCanvas::setSize()
   lis.resize(width()-20,height()-20);
   sizeToFit();
   frameBuffer=QPixmap(width(),height());
+  frameBuffer.fill(Qt::white);
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)

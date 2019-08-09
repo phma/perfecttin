@@ -52,6 +52,6 @@ private:
   xy ballPos;
   int triangleNum;
   int lastOpcount;
-  int ballAngle;
+  int ballAngle,dartAngle;
 };
 #endif

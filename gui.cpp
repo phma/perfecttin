@@ -65,10 +65,5 @@ int main(int argc, char *argv[])
   waitForThreads(TH_STOP);
   joinThreads();
   sz=net.convexHull.size();
-  for (i=0;i<sz;i++)
-  {
-    cout<<dist((xy)*net.convexHull[i],(xy)*net.convexHull[(i+1)%sz])<<' '<<hex;
-    cout<<dir((xy)*net.convexHull[i],(xy)*net.convexHull[(i+1)%sz])<<'\n'<<dec;
-  }
   return exitStatus;
 }

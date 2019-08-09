@@ -246,6 +246,19 @@ void pointlist::insertHullPoint(point *newpnt,point *prec)
     swap(convexHull[i],convexHull[i+1]);
 }
 
+int pointlist::closestHullPoint(xy pnt)
+{
+  int i,ret;
+  double d,closeDist=INFINITY;
+  for (i=0;i<convexHull.size();i++)
+    if ((d=dist((xy)*convexHull[i],pnt))<closeDist)
+    {
+      ret=i;
+      closeDist=d;
+    }
+  return ret;
+}
+
 void pointlist::makeqindex()
 {
   vector<xy> plist;
