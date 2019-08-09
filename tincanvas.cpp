@@ -24,6 +24,8 @@
 #include "tincanvas.h"
 #include "boundrect.h"
 #include "octagon.h"
+#include "angle.h"
+#include "threads.h"
 #include "ldecimal.h"
 
 using namespace std;
@@ -95,6 +97,7 @@ void TinCanvas::sizeToFit()
 void TinCanvas::tick()
 {
   int i;
+  int thisOpcount=opcount;
   double r,g,b;
   xy gradient,A,B,C;
   QPolygonF polygon;
@@ -105,6 +108,8 @@ void TinCanvas::tick()
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.setPen(Qt::NoPen);
   brush.setStyle(Qt::SolidPattern);
+  ballAngle+=lrint(8388608*sqrt((unsigned)(thisOpcount-lastOpcount)));
+  lastOpcount=thisOpcount;
   ballPos=lis.move()+xy(10,10);
   switch ((ballPos.gety()>oldBallPos.gety())*2+(ballPos.getx()>oldBallPos.getx()))
   {
@@ -174,10 +179,15 @@ void TinCanvas::setSize()
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   QPainter painter(this);
-  painter.setBrush(brush);
+  QRectF rect(ballPos.getx()-10,ballPos.gety()-10,20,20);
+  painter.setBrush(Qt::red);
+  painter.setPen(Qt::NoPen);
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
-  painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
+  //painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
+  painter.drawChord(rect,lrint(bintodeg(ballAngle)*16),2880);
+  painter.setBrush(Qt::blue);
+  painter.drawChord(rect,lrint(bintodeg(ballAngle+DEG180)*16),2880);
 }
 
 void TinCanvas::resizeEvent(QResizeEvent *event)

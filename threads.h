@@ -47,6 +47,7 @@ struct ThreadAction
 extern boost::mutex wingEdge;
 extern boost::mutex adjLog;
 extern double stageTolerance;
+extern int opcount;
 
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);

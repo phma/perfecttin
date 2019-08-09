@@ -51,5 +51,7 @@ private:
   double scale;
   xy ballPos;
   int triangleNum;
+  int lastOpcount;
+  int ballAngle;
 };
 #endif
