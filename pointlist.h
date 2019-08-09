@@ -49,8 +49,10 @@ public:
    * when a vector is resized.
    */
   qindex qinx;
+  std::vector<point*> convexHull;
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1);
+  void insertHullPoint(point *newpnt,point *prec);
   void clear();
   int size();
   void clearTin();

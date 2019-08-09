@@ -125,6 +125,7 @@ point *bend(edge *e)
     e->tria=&net.triangles[newTriNum];
     net.edges[newEdgeNum  ].trib=&net.triangles[newTriNum];
     net.edges[newEdgeNum+1].tria=&net.triangles[newTriNum];
+    net.insertHullPoint(pnt,e->a);
   }
   else
   {
@@ -137,6 +138,7 @@ point *bend(edge *e)
     e->trib=&net.triangles[newTriNum];
     net.edges[newEdgeNum  ].tria=&net.triangles[newTriNum];
     net.edges[newEdgeNum+1].trib=&net.triangles[newTriNum];
+    net.insertHullPoint(pnt,e->b);
   }
   e->setNeighbors();
   //assert(net.checkTinConsistency());

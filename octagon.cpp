@@ -157,7 +157,10 @@ double makeOctagon()
     net.revtriangles[&net.triangles[i]]=i;
   }
   for (i=1;i<=8;i++)
+  {
     cornerPointers.push_back(&net.points[i]);
+    net.convexHull.push_back(&net.points[i]);
+  }
   logAdjustment(adjustElev(trianglePointers,cornerPointers));
   for (i=0;i<6;i++)
     for (n=0;n<net.triangles[i].dots.size();n++)

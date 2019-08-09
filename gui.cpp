@@ -22,6 +22,9 @@
 #include <QtGui>
 #include <QtWidgets>
 #include <QTranslator>
+#include <iostream>
+#include "point.h"
+#include "octagon.h"
 #include "config.h"
 #include "mainwindow.h"
 #include "threads.h"
@@ -31,6 +34,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   int exitStatus;
+  int i,sz;
   QApplication app(argc, argv);
   QTranslator translator,qtTranslator;
   int nthreads;
@@ -60,5 +64,11 @@ int main(int argc, char *argv[])
   exitStatus=app.exec();
   waitForThreads(TH_STOP);
   joinThreads();
+  sz=net.convexHull.size();
+  for (i=0;i<sz;i++)
+  {
+    cout<<dist((xy)*net.convexHull[i],(xy)*net.convexHull[(i+1)%sz])<<' '<<hex;
+    cout<<dir((xy)*net.convexHull[i],(xy)*net.convexHull[(i+1)%sz])<<'\n'<<dec;
+  }
   return exitStatus;
 }

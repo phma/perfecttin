@@ -33,6 +33,7 @@ void pointlist::clear()
   edges.clear();
   points.clear();
   revpoints.clear();
+  convexHull.clear();
 }
 
 void pointlist::clearTin()
@@ -231,6 +232,18 @@ int pointlist::addtriangle(int n)
     revtriangles[&triangles[newTriNum+i]]=newTriNum+i;
   }
   return newTriNum;
+}
+
+void pointlist::insertHullPoint(point *newpnt,point *prec)
+/* Inserts a point into the convex hull, which usually has much fewer points
+ * than a path across the middle of the TIN. It is used to paint the space
+ * around the TIN in the GUI.
+ */
+{
+  int i;
+  convexHull.push_back(newpnt);
+  for (i=convexHull.size()-2;i>-1 && convexHull[i]!=prec;i--)
+    swap(convexHull[i],convexHull[i+1]);
 }
 
 void pointlist::makeqindex()
