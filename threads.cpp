@@ -57,6 +57,10 @@ vector<int> cleanBuckets;
  * since the bucket was added up.
  */
 int opcount;
+const char statusNames[][8]=
+{
+  "None","Run","Pause","Wait","Stop"
+};
 
 void markBucketClean(int bucket)
 {
@@ -275,6 +279,7 @@ void unlockTriangles(int thread)
 void setThreadCommand(int newStatus)
 {
   threadCommand=newStatus;
+  cout<<statusNames[newStatus]<<endl;
 }
 
 int getThreadStatus()
