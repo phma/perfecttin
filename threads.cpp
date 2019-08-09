@@ -375,7 +375,7 @@ void TinThread::operator()(int thread)
       switch (act.opcode)
       {
 	case ACT_LOAD:
-	  readLas(act.filename);
+	  readCloud(act.filename);
 	  unsleep(thread);
 	  break;
 	case ACT_OCTAGON:
