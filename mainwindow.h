@@ -55,7 +55,7 @@ protected:
   void closeEvent(QCloseEvent *event) override;
 private:
   int lastNumDots,lastNumTriangles;
-  double lastTolerance,lastStageTolerance,rmsadj;
+  double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
   double tolerance,inUnit,outUnit;
   std::string fileNames,saveFileName,lastFileName;

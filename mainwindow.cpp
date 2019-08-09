@@ -63,6 +63,7 @@ void MainWindow::tick()
   int numDots=cloud.size();
   int tstatus=getThreadStatus();
   int numTriangles=net.triangles.size();
+  ThreadAction ta;
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
   {
     if (lastNumTriangles<4 && numTriangles>4)
@@ -82,6 +83,30 @@ void MainWindow::tick()
     lastTolerance=tolerance;
     lastStageTolerance=stageTolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
+  }
+  if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
+  {
+    areadone=areaDone(stageTolerance);
+    if (areadone==1 && actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
+      if (writtenTolerance>stageTolerance)
+      {
+	ta.param1=outUnit;
+	ta.opcode=ACT_WRITE_DXF;
+	ta.filename=saveFileName+".dxf";
+	enqueueAction(ta);
+	ta.opcode=ACT_WRITE_TIN;
+	ta.filename=saveFileName+".tin";
+	enqueueAction(ta);
+	writtenTolerance=stageTolerance;
+      }
+      else
+	if (stageTolerance>tolerance)
+	{
+	  stageTolerance/=2;
+	  setThreadCommand(TH_RUN);
+	}
+	else
+	  setThreadCommand(TH_WAIT);
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   {
@@ -167,6 +192,7 @@ void MainWindow::startConversion()
     saveFileName=files[0].toStdString();
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
+    writtenTolerance=INFINITY;
     fileNames=baseName(saveFileName)+".[dxf|tin]";
     fileMsg->setText(QString::fromStdString(fileNames));
   }
