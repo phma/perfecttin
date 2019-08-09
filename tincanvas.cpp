@@ -138,7 +138,7 @@ void TinCanvas::tick()
       break;
   }
   update(QRegion(swath));
-  for (i=0;i<net.triangles.size() && elapsed<cr::milliseconds(20);i++)
+  for (i=0;i<net.triangles.size() && (i==0 || elapsed<cr::milliseconds(20));i++)
   {
     if (++triangleNum>=net.triangles.size())
       triangleNum=0;
