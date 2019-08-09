@@ -143,7 +143,7 @@ void TinCanvas::tick()
   // Paint a dart (concave quadrilateral) outside the TIN white.
   dartAngle+=PHITURN;
   dartCorners[0]=hypot(width(),height())*0.51/scale*cossin(dartAngle)+worldCenter;
-  if (sz=net.convexHull.size())
+  if ((sz=net.convexHull.size()) && !net.convexHull[0]->isnan())
   {
     i=net.closestHullPoint(dartCorners[0]);
     dartCorners[1]=*net.convexHull[(i+sz-1)%sz];
