@@ -29,6 +29,7 @@
 #include "ldecimal.h"
 
 using namespace std;
+namespace cr=boost::chrono;
 
 QPoint qptrnd(xy pnt)
 {
@@ -102,6 +103,8 @@ void TinCanvas::tick()
   xy gradient,A,B,C;
   QPolygonF polygon;
   QPolygon swath;
+  cr::nanoseconds elapsed;
+  cr::time_point<cr::steady_clock> timeStart=clk.now();
   xy oldBallPos=ballPos;
   QPainter painter(&frameBuffer);
   QBrush brush;
@@ -135,7 +138,7 @@ void TinCanvas::tick()
       break;
   }
   update(QRegion(swath));
-  for (i=0;i<1;i++)
+  for (i=0;i<net.triangles.size() && elapsed<cr::milliseconds(20);i++)
   {
     if (++triangleNum>=net.triangles.size())
       triangleNum=0;
@@ -162,9 +165,11 @@ void TinCanvas::tick()
 	b=0;
       brush.setColor(QColor::fromRgbF(r,g,b));
       painter.setBrush(brush);
+      polygon=QPolygon();
       polygon<<worldToWindow(A)<<worldToWindow(B)<<worldToWindow(C);
       painter.drawConvexPolygon(polygon);
     }
+    elapsed=clk.now()-timeStart;
   }
 }
 

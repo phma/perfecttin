@@ -48,6 +48,7 @@ extern boost::mutex wingEdge;
 extern boost::mutex adjLog;
 extern double stageTolerance;
 extern int opcount;
+extern boost::chrono::steady_clock clk;
 
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
