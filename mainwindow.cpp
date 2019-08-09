@@ -24,6 +24,7 @@
 #include "threads.h"
 #include "ldecimal.h"
 #include "cloud.h"
+#include "adjelev.h"
 #include "fileio.h"
 #include "octagon.h"
 using namespace std;
@@ -81,6 +82,17 @@ void MainWindow::tick()
     lastTolerance=tolerance;
     lastStageTolerance=stageTolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
+  }
+  if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
+  {
+    areadone=areaDone(stageTolerance);
+    rmsadj=rmsAdjustment();
+    if (livelock(areadone,rmsadj))
+    {
+      randomizeSleep();
+    }
+    if (areadone==1 && allBucketsClean())
+      setThreadCommand(TH_PAUSE);
   }
   if (tstatus==1048577*TH_WAIT+TH_ASLEEP && actionQueueEmpty() &&
       !(toleranceRatio>0) && net.triangles.size()==6)
