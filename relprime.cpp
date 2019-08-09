@@ -22,8 +22,10 @@
 #include <map>
 #include <cmath>
 #include "relprime.h"
+#include "threads.h"
 
 using namespace std;
+using namespace boost;
 
 const double quadirr[]=
 {
@@ -31,6 +33,7 @@ const double quadirr[]=
 };
 
 map<unsigned long,unsigned> relprimes;
+mutex primeMutex;
 
 unsigned gcd(unsigned a,unsigned b)
 {
@@ -57,6 +60,7 @@ unsigned relprime(unsigned n,int thread)
   thread%=6542;
   if (thread<0)
     thread+=6542;
+  primeMutex.lock();
   ret=relprimes[((unsigned long)thread<<32)+n];
   if (!ret)
   {
@@ -67,5 +71,6 @@ unsigned relprime(unsigned n,int thread)
       ret=twice-ret+(ret<=phin);
     relprimes[((unsigned long)thread<<32)+n]=ret;
   }
+  primeMutex.unlock();
   return ret;
 }
