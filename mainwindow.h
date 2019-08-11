@@ -64,6 +64,7 @@ private:
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
+  QProgressBar *doneBar,*busyBar;
   QAction *loadAction,*convertAction,*clearAction;
   QAction *configureAction;
   TinCanvas *canvas;

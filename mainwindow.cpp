@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
 	  this,SLOT(setSettings(double,double,double,int)));
   connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
+  doneBar=new QProgressBar(this);
+  busyBar=new QProgressBar(this);
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
@@ -256,6 +258,8 @@ void MainWindow::makeStatusBar()
   statusBar()->addWidget(fileMsg);
   statusBar()->addWidget(dotTriangleMsg);
   statusBar()->addWidget(toleranceMsg);
+  statusBar()->addWidget(doneBar);
+  statusBar()->addWidget(busyBar);
   statusBar()->show();
 }
 
