@@ -122,6 +122,8 @@ void MainWindow::tick()
     if (areadone==1 && allBucketsClean())
       setThreadCommand(TH_PAUSE);
   }
+  if (tstatus==1048577*TH_WAIT+TH_ASLEEP && actionQueueEmpty())
+    currentAction=0;
   if (tstatus==1048577*TH_WAIT+TH_ASLEEP && actionQueueEmpty() &&
       !(toleranceRatio>0) && net.triangles.size()==6)
   { // It's finished making the octagon, and all threads are waiting and asleep.
@@ -139,7 +141,6 @@ void MainWindow::tick()
 	stageTolerance*=2;
       setThreadCommand(TH_RUN);
     }
-    currentAction=0;
   }
 }
 

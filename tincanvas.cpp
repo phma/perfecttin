@@ -200,6 +200,9 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   int tstatus=getThreadStatus();
   QPainter painter(this);
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
+  QRectF sclera(ballPos.getx()-10,ballPos.gety()-5,20,10);
+  QRectF iris(ballPos.getx()-5,ballPos.gety()-5,10,10);
+  QRectF pupil(ballPos.getx()-2,ballPos.gety()-2,4,4);
   QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
   QPolygonF octagon;
   double x0,x1,y;
@@ -250,6 +253,15 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.setBrush(Qt::darkGreen);
       painter.setPen(Qt::NoPen);
       painter.drawPolygon(octagon);
+      break;
+    case -ACT_LOAD:
+      painter.setPen(Qt::NoPen);
+      painter.setBrush(Qt::lightGray);
+      painter.drawEllipse(sclera);
+      painter.setBrush(Qt::blue);
+      painter.drawEllipse(iris);
+      painter.setBrush(Qt::black);
+      painter.drawEllipse(pupil);
       break;
     case 0:
       painter.setBrush(Qt::lightGray);
