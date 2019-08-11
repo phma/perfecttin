@@ -201,7 +201,16 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   QPainter painter(this);
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
   QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
+  QPolygonF octagon;
   double x0,x1,y;
+  octagon<<QPointF(ballPos.getx()-10,ballPos.gety()-4.14);
+  octagon<<QPointF(ballPos.getx()-4.14,ballPos.gety()-10);
+  octagon<<QPointF(ballPos.getx()+4.14,ballPos.gety()-10);
+  octagon<<QPointF(ballPos.getx()+10,ballPos.gety()-4.14);
+  octagon<<QPointF(ballPos.getx()+10,ballPos.gety()+4.14);
+  octagon<<QPointF(ballPos.getx()+4.14,ballPos.gety()+10);
+  octagon<<QPointF(ballPos.getx()-4.14,ballPos.gety()+10);
+  octagon<<QPointF(ballPos.getx()-10,ballPos.gety()+4.14);
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
   if ((tstatus&0x3ffbfeff)%1048577==0)
@@ -237,6 +246,11 @@ void TinCanvas::paintEvent(QPaintEvent *event)
 	if (x1>x0)
 	  painter.drawLine(QPointF(x0,y),QPointF(x1,y));
       }
+      break;
+    case -ACT_OCTAGON:
+      painter.setBrush(Qt::darkGreen);
+      painter.setPen(Qt::NoPen);
+      painter.drawPolygon(octagon);
       break;
   }
 }
