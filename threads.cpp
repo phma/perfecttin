@@ -337,7 +337,9 @@ void TinThread::operator()(int thread)
     {
       threadStatus[thread]=TH_RUN;
       edgeResult=edgeop(&net.edges[e],stageTolerance,thread);
+      wingEdge.lock();
       e=(e+relprime(net.edges.size(),thread))%net.edges.size();
+      wingEdge.unlock();
       triResult=triop(&net.triangles[t],stageTolerance,thread);
       t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
       if (triResult==2 || edgeResult==2) // deadlock
