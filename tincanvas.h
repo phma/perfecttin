@@ -46,6 +46,7 @@ private:
   xy windowCenter,worldCenter;
   double scale;
   xy ballPos;
+  int penPos;
   int triangleNum;
   int lastOpcount;
   int ballAngle,dartAngle;

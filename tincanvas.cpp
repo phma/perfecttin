@@ -103,6 +103,7 @@ void TinCanvas::tick()
   // Compute the new position of the ball, and update a swath containing the ball's motion.
   ballAngle+=lrint(8388608*sqrt((unsigned)(thisOpcount-lastOpcount)));
   lastOpcount=thisOpcount;
+  penPos=(penPos+5)%144;
   ballPos=lis.move()+xy(10,10);
   switch ((ballPos.gety()>oldBallPos.gety())*2+(ballPos.getx()>oldBallPos.getx()))
   {
@@ -195,11 +196,12 @@ void TinCanvas::setSize()
 
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
-  int state;
+  int state,i;
   int tstatus=getThreadStatus();
   QPainter painter(this);
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
   QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
+  double x0,x1,y;
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
   if ((tstatus&0x3ffbfeff)%1048577==0)
@@ -217,6 +219,24 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.drawChord(square,lrint(bintodeg(ballAngle)*16),2880);
       painter.setBrush(Qt::blue);
       painter.drawChord(square,lrint(bintodeg(ballAngle+DEG180)*16),2880);
+      break;
+    case -ACT_WRITE_DXF:
+    case -ACT_WRITE_TIN:
+      painter.setBrush(Qt::white);
+      painter.setPen(Qt::NoPen);
+      painter.drawRect(paper);
+      painter.setPen(Qt::black);
+      for (i=0;i<8;i++)
+      {
+	y=ballPos.gety()-9+i*18./7;
+	x0=ballPos.getx()-6;
+	if (penPos/18==i)
+	  x1=x0+(i%18+0.5)*2/3;
+	else
+	  x1=x0+12*(i<penPos/18);
+	if (x1>x0)
+	  painter.drawLine(QPointF(x0,y),QPointF(x1,y));
+      }
       break;
   }
 }
