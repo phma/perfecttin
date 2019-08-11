@@ -281,7 +281,7 @@ void unlockTriangles(int thread)
 void setThreadCommand(int newStatus)
 {
   threadCommand=newStatus;
-  cout<<statusNames[newStatus]<<endl;
+  //cout<<statusNames[newStatus]<<endl;
 }
 
 int getThreadStatus()
