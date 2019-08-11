@@ -30,8 +30,6 @@ class TinCanvas: public QWidget
   Q_OBJECT
 public:
   TinCanvas(QWidget *parent=0);
-  void setPen(const QPen &qpen);
-  void setBrush(const QBrush &qbrush);
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
 signals:
@@ -43,8 +41,6 @@ protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
-  QPen pen;
-  QBrush brush;
   QPixmap frameBuffer;
   Lissajous lis;
   xy windowCenter,worldCenter;

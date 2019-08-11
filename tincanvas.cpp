@@ -41,20 +41,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   int i,j,rgb;
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
-  setBrush(Qt::red);
-  setPen(Qt::NoPen);
   setMinimumSize(40,30);
   triangleNum=0;
-}
-
-void TinCanvas::setPen(const QPen &qpen)
-{
-  pen=qpen;
-}
-
-void TinCanvas::setBrush(const QBrush &qbrush)
-{
-  brush=qbrush;
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
