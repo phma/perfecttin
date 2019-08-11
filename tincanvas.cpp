@@ -195,16 +195,30 @@ void TinCanvas::setSize()
 
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
+  int state;
+  int tstatus=getThreadStatus();
   QPainter painter(this);
-  QRectF rect(ballPos.getx()-10,ballPos.gety()-10,20,20);
-  painter.setBrush(Qt::red);
-  painter.setPen(Qt::NoPen);
+  QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
+  QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
-  //painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
-  painter.drawChord(rect,lrint(bintodeg(ballAngle)*16),2880);
-  painter.setBrush(Qt::blue);
-  painter.drawChord(rect,lrint(bintodeg(ballAngle+DEG180)*16),2880);
+  if ((tstatus&0x3ffbfeff)%1048577==0)
+    state=(tstatus&0x3ffbfeff)/1048577;
+  else
+    state=0;
+  if ((state==TH_WAIT || state==TH_PAUSE) && currentAction)
+    state=-currentAction;
+  switch (state)
+  {
+    case TH_RUN:
+      painter.setBrush(Qt::red);
+      painter.setPen(Qt::NoPen);
+      //painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
+      painter.drawChord(square,lrint(bintodeg(ballAngle)*16),2880);
+      painter.setBrush(Qt::blue);
+      painter.drawChord(square,lrint(bintodeg(ballAngle+DEG180)*16),2880);
+      break;
+  }
 }
 
 void TinCanvas::resizeEvent(QResizeEvent *event)
