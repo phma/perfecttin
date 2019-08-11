@@ -222,7 +222,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   switch (state)
   {
     case TH_RUN:
-      painter.setBrush(Qt::red);
+      painter.setBrush(Qt::yellow);
       painter.setPen(Qt::NoPen);
       //painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
       painter.drawChord(square,lrint(bintodeg(ballAngle)*16),2880);
