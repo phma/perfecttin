@@ -224,7 +224,6 @@ void TinCanvas::paintEvent(QPaintEvent *event)
     case TH_RUN:
       painter.setBrush(Qt::yellow);
       painter.setPen(Qt::NoPen);
-      //painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
       painter.drawChord(square,lrint(bintodeg(ballAngle)*16),2880);
       painter.setBrush(Qt::blue);
       painter.drawChord(square,lrint(bintodeg(ballAngle+DEG180)*16),2880);
@@ -251,6 +250,11 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.setBrush(Qt::darkGreen);
       painter.setPen(Qt::NoPen);
       painter.drawPolygon(octagon);
+      break;
+    case 0:
+      painter.setBrush(Qt::lightGray);
+      painter.setPen(Qt::NoPen);
+      painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
       break;
   }
 }
