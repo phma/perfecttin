@@ -143,6 +143,15 @@ double areaDone(double tolerance)
   return ret;
 }
 
+double busyFraction()
+{
+  int i,numBusy=0;
+  for (i=0;i<threadStatus.size();i++)
+    if ((threadStatus[i]&256)==0)
+      numBusy++;
+  return (double)numBusy/i;
+}
+
 bool livelock(double areadone,double rmsadj)
 {
   static double lastAreaDone,lastRmsAdj;

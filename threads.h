@@ -56,6 +56,7 @@ void markBucketDirty(int bucket);
 bool allBucketsClean();
 void resizeBuckets(int n);
 double areaDone(double tolerance);
+double busyFraction();
 bool livelock(double areadone,double rmsadj);
 void startThreads(int n);
 void joinThreads();

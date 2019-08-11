@@ -58,6 +58,7 @@ private:
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
   double tolerance,inUnit,outUnit;
+  double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
   QTimer *timer;
   QFileDialog *fileDialog;

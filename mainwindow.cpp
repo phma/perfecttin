@@ -43,6 +43,9 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
   doneBar=new QProgressBar(this);
   busyBar=new QProgressBar(this);
+  doneBar->setRange(0,16777216);
+  busyBar->setRange(0,16777216);
+  lpfBusyFraction=0;
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
@@ -86,9 +89,12 @@ void MainWindow::tick()
     lastStageTolerance=stageTolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
   }
+  lpfBusyFraction=(16*lpfBusyFraction+busyFraction())/17;
+  busyBar->setValue(lrint(lpfBusyFraction*16777216));
   if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
   {
     areadone=areaDone(stageTolerance);
+    doneBar->setValue(lrint(areadone*16777216));
     if (areadone==1 && actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
