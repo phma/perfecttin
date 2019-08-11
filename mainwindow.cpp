@@ -100,6 +100,7 @@ void MainWindow::tick()
 	writtenTolerance=stageTolerance;
       }
       else
+      {
 	if (stageTolerance>tolerance)
 	{
 	  stageTolerance/=2;
@@ -107,6 +108,8 @@ void MainWindow::tick()
 	}
 	else
 	  setThreadCommand(TH_WAIT);
+	currentAction=0;
+      }
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   {
@@ -136,6 +139,7 @@ void MainWindow::tick()
 	stageTolerance*=2;
       setThreadCommand(TH_RUN);
     }
+    currentAction=0;
   }
 }
 

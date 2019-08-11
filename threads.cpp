@@ -48,6 +48,7 @@ vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
 queue<ThreadAction> actQueue;
+int currentAction;
 
 cr::steady_clock clk;
 vector<int> cleanBuckets;
@@ -183,6 +184,7 @@ ThreadAction dequeueAction()
   {
     ret=actQueue.front();
     actQueue.pop();
+    currentAction=ret.opcode;
   }
   actMutex.unlock();
   return ret;
