@@ -94,7 +94,6 @@ void MainWindow::tick()
   if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
   {
     areadone=areaDone(stageTolerance);
-    doneBar->setValue(lrint(areadone*16777216));
     if (areadone==1 && actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
@@ -122,6 +121,7 @@ void MainWindow::tick()
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   {
     areadone=areaDone(stageTolerance);
+    doneBar->setValue(lrint(areadone*16777216));
     rmsadj=rmsAdjustment();
     if (livelock(areadone,rmsadj))
     {
