@@ -94,7 +94,7 @@ void MainWindow::tick()
   if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
   {
     areadone=areaDone(stageTolerance);
-    if (areadone==1 && actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
+    if (actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
 	ta.param1=outUnit;
