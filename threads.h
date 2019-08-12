@@ -47,7 +47,7 @@ struct ThreadAction
 extern boost::mutex wingEdge;
 extern boost::mutex adjLog;
 extern double stageTolerance;
-extern int opcount;
+extern int opcount,trianglesToPaint;
 extern int currentAction;
 extern boost::chrono::steady_clock clk;
 

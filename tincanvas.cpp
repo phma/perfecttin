@@ -92,7 +92,7 @@ void TinCanvas::tick()
   xy dartCorners[4];
   QPolygonF polygon;
   QPolygon swath;
-  cr::nanoseconds elapsed;
+  cr::nanoseconds elapsed=cr::milliseconds(0);
   cr::time_point<cr::steady_clock> timeStart=clk.now();
   xy oldBallPos=ballPos;
   QPainter painter(&frameBuffer);
@@ -150,7 +150,7 @@ void TinCanvas::tick()
   painter.setBrush(Qt::white);
   painter.drawPolygon(polygon);
   // Paint some triangles in the TIN in colors depending on their gradient.
-  for (i=0;i<net.triangles.size() && (i==0 || elapsed<cr::milliseconds(20));i++)
+  for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
   {
     if (++triangleNum>=net.triangles.size())
       triangleNum=0;
@@ -192,6 +192,10 @@ void TinCanvas::setSize()
   sizeToFit();
   frameBuffer=QPixmap(width(),height());
   frameBuffer.fill(Qt::white);
+  trianglesToPaint=3*net.triangles.size();
+  /* It takes three coats of paint to color the framebuffer well
+   * after it has been cleared to white.
+   */
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)

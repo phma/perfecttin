@@ -57,7 +57,7 @@ vector<int> cleanBuckets;
  * if a triangle whose area is added in the bucket has changed
  * since the bucket was added up.
  */
-int opcount;
+int opcount,trianglesToPaint;
 const char statusNames[][8]=
 {
   "None","Run","Pause","Wait","Stop"
@@ -78,6 +78,7 @@ void markBucketDirty(int bucket)
   bucket&=(cleanBuckets.size()-1); // size is always a power of 2
   cleanBuckets[bucket]=0;
   opcount++;
+  trianglesToPaint=net.triangles.size()*3;
   bucketMutex.unlock();
 }
 
