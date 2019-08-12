@@ -77,9 +77,10 @@ void writeDxf(string outputFile,bool asc,double outUnit)
 
 void readCloud(string inputFile)
 {
+  int already=cloud.size();
   readPly(inputFile);
-  if (cloud.size()==0)
+  if (cloud.size()==already)
     readLas(inputFile);
-  if (cloud.size())
-    cout<<"Read "<<cloud.size()<<" dots\n";
+  if (cloud.size()>already)
+    cout<<"Read "<<cloud.size()-already<<" dots\n";
 }
