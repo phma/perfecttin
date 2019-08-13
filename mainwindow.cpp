@@ -121,13 +121,13 @@ void MainWindow::tick()
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   {
     areadone=areaDone(stageTolerance);
-    doneBar->setValue(lrint(areadone*16777216));
+    doneBar->setValue(lrint(areadone[0]*16777216));
     rmsadj=rmsAdjustment();
-    if (livelock(areadone,rmsadj))
+    if (livelock(areadone[0],rmsadj))
     {
       randomizeSleep();
     }
-    if (areadone==1 && allBucketsClean())
+    if (areadone[0]==1 && allBucketsClean())
       setThreadCommand(TH_PAUSE);
   }
   if (tstatus==1048577*TH_WAIT+TH_ASLEEP && actionQueueEmpty())

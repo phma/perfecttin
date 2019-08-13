@@ -105,12 +105,13 @@ void resizeBuckets(int n)
   bucketMutex.unlock();
 }
 
-double areaDone(double tolerance)
+array<double,2> areaDone(double tolerance)
 {
-  vector<double> allTri,doneTri;
+  vector<double> allTri,doneTri,doneq2Tri;
   static int overtimeCount=0,bucket=0;
   int i;
-  double ret;
+  double allSum;
+  array<double,2> ret;
   cr::nanoseconds elapsed;
   cr::time_point<cr::steady_clock> timeStart=clk.now();
   if (allBuckets.size()==0)
@@ -131,10 +132,15 @@ double areaDone(double tolerance)
     allTri.push_back(net.triangles[i].sarea);
     if (net.triangles[i].inTolerance(tolerance))
       doneTri.push_back(net.triangles[i].sarea);
+    if (net.triangles[i].inTolerance(M_SQRT2*tolerance))
+      doneq2Tri.push_back(net.triangles[i].sarea);
   }
   allBuckets[bucket]=pairwisesum(allTri);
   doneBuckets[bucket]=pairwisesum(doneTri);
-  ret=pairwisesum(doneBuckets)/pairwisesum(allBuckets);
+  doneq2Buckets[bucket]=pairwisesum(doneq2Tri);
+  allSum=pairwisesum(allBuckets);
+  ret[0]=pairwisesum(doneBuckets)/allSum;
+  ret[1]=pairwisesum(doneq2Buckets)/allSum;
   markBucketClean(bucket);
   elapsed=clk.now()-timeStart;
   if (elapsed>cr::milliseconds(20))

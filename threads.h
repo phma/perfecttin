@@ -22,6 +22,7 @@
 
 #include <boost/thread.hpp>
 #include <vector>
+#include <array>
 
 // These are used as both commands to the threads and status from the threads.
 #define TH_RUN 1
@@ -55,7 +56,7 @@ void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
 bool allBucketsClean();
 void resizeBuckets(int n);
-double areaDone(double tolerance);
+std::array<double,2> areaDone(double tolerance);
 double busyFraction();
 bool livelock(double areadone,double rmsadj);
 void startThreads(int n);

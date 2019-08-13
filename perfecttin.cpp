@@ -234,14 +234,14 @@ int main(int argc, char *argv[])
     }
     for (i=0;i<cloud.size();i++)
       cloud[i]*=inUnit;
-    areadone=makeOctagon();
-    if (!std::isfinite(areadone))
+    areadone[0]=makeOctagon();
+    if (!std::isfinite(areadone[0]))
     {
       cerr<<"Point cloud covers no area or has infinite or NaN points\n";
       done=true;
     }
     stageTolerance=tolerance;
-    while (stageTolerance<areadone)
+    while (stageTolerance<areadone[0])
       stageTolerance*=2;
     if (!done)
     {
@@ -273,17 +273,17 @@ int main(int argc, char *argv[])
 	areadone=areaDone(stageTolerance);
 	rmsadj=rmsAdjustment();
 	cout<<"Toler "<<stageTolerance;
-	cout<<"  "<<ldecimal(areadone*100,areadone*(1-areadone)*10)<<"% done  ";
+	cout<<"  "<<ldecimal(areadone[0]*100,areadone[0]*(1-areadone[0])*10)<<"% done  ";
 	cout<<net.triangles.size()<<" tri  adj ";
 	cout<<ldecimal(rmsadj,tolerance/100)<<"     \r";
 	cout.flush();
 	then=now;
-	if (livelock(areadone,rmsadj))
+	if (livelock(areadone[0],rmsadj))
 	{
 	  //cerr<<"Livelock detected\n";
 	  randomizeSleep();
 	}
-	if (areadone==1 && allBucketsClean())
+	if (areadone[0]==1 && allBucketsClean())
 	{
 	  waitForThreads(TH_PAUSE);
 	  net.makeqindex();
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
       cout<<'\n';
       ps.close();
     }
-    if (outputFile.length() && areadone==1)
+    if (outputFile.length() && areadone[0]==1)
     {
       writeDxf(outputFile+".dxf",asciiFormat,outUnit);
       writeTinText(outputFile+".tin",outUnit);

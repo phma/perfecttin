@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <array>
 #include "pointlist.h"
 
 extern pointlist net;
-extern double clipLow,clipHigh,areadone;
+extern double clipLow,clipHigh;
+extern std::array<double,2> areadone;
 double makeOctagon();
