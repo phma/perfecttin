@@ -57,6 +57,7 @@ vector<int> cleanBuckets;
  * if a triangle whose area is added in the bucket has changed
  * since the bucket was added up.
  */
+vector<double> allBuckets,doneBuckets,doneq2Buckets;
 int opcount,trianglesToPaint;
 const char statusNames[][8]=
 {
@@ -98,13 +99,15 @@ void resizeBuckets(int n)
 {
   bucketMutex.lock();
   cleanBuckets.resize(n);
+  allBuckets.resize(n);
+  doneBuckets.resize(n);
+  doneq2Buckets.resize(n);
   bucketMutex.unlock();
 }
 
 double areaDone(double tolerance)
 {
   vector<double> allTri,doneTri;
-  static vector<double> allBuckets,doneBuckets;
   static int overtimeCount=0,bucket=0;
   int i;
   double ret;
@@ -119,8 +122,6 @@ double areaDone(double tolerance)
   if (overtimeCount==8)
   {
     resizeBuckets(allBuckets.size()*2);
-    allBuckets.resize(allBuckets.size()*2);
-    doneBuckets.resize(doneBuckets.size()*2);
     overtimeCount=0;
     //cout<<allBuckets.size()<<" buckets \n";
   }
