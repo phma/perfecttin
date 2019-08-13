@@ -127,7 +127,7 @@ void MainWindow::tick()
     {
       randomizeSleep();
     }
-    if (areadone[0]==1 && allBucketsClean())
+    if ((areadone[0]==1 && allBucketsClean()) || (areadone[1]==1 && stageTolerance>tolerance))
       setThreadCommand(TH_PAUSE);
   }
   if (tstatus==1048577*TH_WAIT+TH_ASLEEP && actionQueueEmpty())

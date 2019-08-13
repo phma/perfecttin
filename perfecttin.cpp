@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 	  //cerr<<"Livelock detected\n";
 	  randomizeSleep();
 	}
-	if (areadone[0]==1 && allBucketsClean())
+	if ((areadone[0]==1 && allBucketsClean()) || (areadone[1]==1 && stageTolerance>tolerance))
 	{
 	  waitForThreads(TH_PAUSE);
 	  net.makeqindex();
