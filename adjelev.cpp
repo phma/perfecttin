@@ -99,16 +99,18 @@ void logAdjustment(adjustRecord rec)
 double rmsAdjustment()
 // Returns the square root of the average of recent adjustments.
 {
-  int nRecent=lrint(sqrt(adjustmentLog.size()));
+  int nRecent;
   vector<double> xsq;
-  int i;
+  int i,sz;
   adjLog.lock();
-  for (i=adjustmentLog.size()-1;i>=0 && xsq.size()<nRecent;i--)
+  sz=adjustmentLog.size();
+  adjLog.unlock();
+  nRecent=lrint(sqrt(sz));
+  for (i=sz-1;i>=0 && xsq.size()<nRecent;i--)
     if (std::isfinite(adjustmentLog[i].msAdjustment))
       xsq.push_back(adjustmentLog[i].msAdjustment);
   if (std::isnan(sqrt(pairwisesum(xsq)/xsq.size())))
     i++;
-  adjLog.unlock();
   return sqrt(pairwisesum(xsq)/xsq.size());
 }
 
