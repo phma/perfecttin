@@ -144,3 +144,10 @@ void adjustLooseCorners(double tolerance)
     looseCorners[i]->raise(pairwisesum(nextCornerElev)/nextCornerElev.size()-looseCorners[i]->elev());
   }
 }
+
+void clearLog()
+{
+  adjLog.lock();
+  adjustmentLog.clear();
+  adjLog.unlock();
+}

@@ -205,6 +205,7 @@ void MainWindow::startConversion()
     saveFileName=files[0].toStdString();
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
+    clearLog();
     writtenTolerance=INFINITY;
     fileNames=baseName(saveFileName)+".[dxf|tin]";
     fileMsg->setText(QString::fromStdString(fileNames));
