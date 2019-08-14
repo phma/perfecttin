@@ -39,8 +39,11 @@ signals:
   void settingsChanged(double iu,double ou,double tol,int thr);
 public slots:
   void set(double inUnit,double outUnit,double tolerance,int threads);
+  void updateToleranceConversion();
   virtual void accept();
 private:
+  QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel;
+  QLabel *toleranceInUnit,*toleranceOutUnit;
   QComboBox *inUnitBox,*outUnitBox,*toleranceBox;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;

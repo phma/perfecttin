@@ -19,7 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
 #include "configdialog.h"
+#include "ldecimal.h"
 
 const double conversionFactors[4]={1,0.3048,12e2/3937,0.3047996};
 const char unitNames[4][12]={"Meter","Int'l foot","US foot","Indian foot"};
@@ -32,6 +34,11 @@ const char toleranceStr[10][7]=
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
 {
   int i;
+  inUnitLabel=new QLabel(this);
+  outUnitLabel=new QLabel(this);
+  toleranceLabel=new QLabel(this);
+  toleranceInUnit=new QLabel(this);
+  toleranceOutUnit=new QLabel(this);
   inUnitBox=new QComboBox(this);
   outUnitBox=new QComboBox(this);
   toleranceBox=new QComboBox(this);
@@ -40,14 +47,23 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   threadInput=new QLineEdit(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
+  gridLayout->addWidget(inUnitLabel,0,0);
+  gridLayout->addWidget(outUnitLabel,0,2);
   gridLayout->addWidget(inUnitBox,1,0);
+  gridLayout->addWidget(toleranceLabel,1,1);
   gridLayout->addWidget(outUnitBox,1,2);
+  gridLayout->addWidget(toleranceInUnit,2,0);
   gridLayout->addWidget(toleranceBox,2,1);
+  gridLayout->addWidget(toleranceOutUnit,2,2);
   gridLayout->addWidget(threadInput,3,1);
   gridLayout->addWidget(okButton,4,0);
   gridLayout->addWidget(cancelButton,4,2);
+  toleranceLabel->setAlignment(Qt::AlignHCenter);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+  connect(inUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
+  connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
+  connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
 void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int threads)
@@ -56,6 +72,9 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
   inUnitBox->clear();
   outUnitBox->clear();
   toleranceBox->clear();
+  inUnitLabel->setText(tr("Input unit"));
+  outUnitLabel->setText(tr("Output unit"));
+  toleranceLabel->setText(tr("Tolerance"));
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
     inUnitBox->addItem(tr(unitNames[i]));
@@ -74,6 +93,18 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
     if (tolerance==tolerances[i])
       toleranceBox->setCurrentIndex(i);
   threadInput->setText(QString::number(threads));
+}
+
+void ConfigurationDialog::updateToleranceConversion()
+{
+  double tolIn,tolOut;
+  tolIn=tolerances[toleranceBox->currentIndex()]/conversionFactors[inUnitBox->currentIndex()];
+  tolOut=tolerances[toleranceBox->currentIndex()]/conversionFactors[outUnitBox->currentIndex()];
+  if (std::isfinite(tolIn) && std::isfinite(tolOut))
+  {
+    toleranceInUnit->setText(QString::fromStdString(ldecimal(tolIn,tolIn/1000)));
+    toleranceOutUnit->setText(QString::fromStdString(ldecimal(tolOut,tolOut/1000)));
+  }
 }
 
 void ConfigurationDialog::accept()
