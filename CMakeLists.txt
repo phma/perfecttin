@@ -30,6 +30,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
+qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp
                dxf.cpp edgeop.cpp fileio.cpp las.cpp ldecimal.cpp
@@ -44,7 +45,8 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
-               threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp)
+               threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
+               ${qm_files})
 target_link_libraries(perfecttin ${Boost_LIBRARIES})
 target_link_libraries(perfecttin-gui ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
 if (${LibPLYXX_FOUND})
@@ -59,6 +61,7 @@ check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
 install(TARGETS perfecttin DESTINATION bin)
+install(FILES ${qm_files} DESTINATION share/perfecttin)
 
 test_big_endian(BIGENDIAN)
 check_type_size("int" INT)
