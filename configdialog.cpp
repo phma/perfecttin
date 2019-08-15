@@ -22,6 +22,7 @@
 #include <cmath>
 #include "configdialog.h"
 #include "ldecimal.h"
+#include "threads.h"
 
 const double conversionFactors[4]={1,0.3048,12e2/3937,0.3047996};
 const char unitNames[4][12]={"Meter","Int'l foot","US foot","Indian foot"};
@@ -39,6 +40,8 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   toleranceLabel=new QLabel(this);
   toleranceInUnit=new QLabel(this);
   toleranceOutUnit=new QLabel(this);
+  threadLabel=new QLabel(this);
+  threadDefault=new QLabel(this);
   inUnitBox=new QComboBox(this);
   outUnitBox=new QComboBox(this);
   toleranceBox=new QComboBox(this);
@@ -55,7 +58,9 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(toleranceInUnit,2,0);
   gridLayout->addWidget(toleranceBox,2,1);
   gridLayout->addWidget(toleranceOutUnit,2,2);
+  gridLayout->addWidget(threadLabel,3,0);
   gridLayout->addWidget(threadInput,3,1);
+  gridLayout->addWidget(threadDefault,3,2);
   gridLayout->addWidget(okButton,4,0);
   gridLayout->addWidget(cancelButton,4,2);
   toleranceLabel->setAlignment(Qt::AlignHCenter);
@@ -75,6 +80,8 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
   inUnitLabel->setText(tr("Input unit"));
   outUnitLabel->setText(tr("Output unit"));
   toleranceLabel->setText(tr("Tolerance"));
+  threadLabel->setText(tr("Threads:"));
+  threadDefault->setText(tr("default is %n","",boost::thread::hardware_concurrency()));
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
     inUnitBox->addItem(tr(unitNames[i]));

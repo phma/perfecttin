@@ -42,7 +42,7 @@ public slots:
   void updateToleranceConversion();
   virtual void accept();
 private:
-  QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel;
+  QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel,*threadLabel,*threadDefault;
   QLabel *toleranceInUnit,*toleranceOutUnit;
   QComboBox *inUnitBox,*outUnitBox,*toleranceBox;
   QPushButton *okButton,*cancelButton;
