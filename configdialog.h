@@ -26,6 +26,7 @@
 #include <QDialog>
 #include <QLabel>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QGridLayout>
@@ -36,18 +37,20 @@ class ConfigurationDialog: public QDialog
 public:
   ConfigurationDialog(QWidget *parent=0);
 signals:
-  void settingsChanged(double iu,double ou,double tol,int thr);
+  void settingsChanged(double iu,double ou,double tol,int thr,bool dxf);
 public slots:
-  void set(double inUnit,double outUnit,double tolerance,int threads);
+  void set(double inUnit,double outUnit,double tolerance,int threads,bool dxf);
   void updateToleranceConversion();
   virtual void accept();
 private:
-  QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel,*threadLabel,*threadDefault;
+  QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel;
+  QLabel *threadLabel,*threadDefault,*dxfTextLabel;
   QLabel *toleranceInUnit,*toleranceOutUnit;
   QComboBox *inUnitBox,*outUnitBox,*toleranceBox;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
   QLineEdit *threadInput;
+  QCheckBox *dxfCheck;
 };
 #endif
 

@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   configDialog=new ConfigurationDialog(this);
   fileDialog=new QFileDialog(this);
   msgBox=new QMessageBox(this);
-  connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
-	  this,SLOT(setSettings(double,double,double,int)));
+  connect(configDialog,SIGNAL(settingsChanged(double,double,double,int,bool)),
+	  this,SLOT(setSettings(double,double,double,int,bool)));
   connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   doneBar=new QProgressBar(this);
@@ -100,6 +100,7 @@ void MainWindow::tick()
       if (writtenTolerance>stageTolerance)
       {
 	ta.param1=outUnit;
+	ta.param0=dxfText;
 	ta.opcode=ACT_WRITE_DXF;
 	ta.filename=saveFileName+".dxf";
 	enqueueAction(ta);
@@ -223,7 +224,7 @@ void MainWindow::clearCloud()
 
 void MainWindow::configure()
 {
-  configDialog->set(inUnit,outUnit,tolerance,numberThreads);
+  configDialog->set(inUnit,outUnit,tolerance,numberThreads,dxfText);
   configDialog->open();
 }
 
@@ -286,6 +287,7 @@ void MainWindow::readSettings()
   tolerance=settings.value("tolerance",0.1).toDouble();
   inUnit=settings.value("inUnit",1).toDouble();
   outUnit=settings.value("outUnit",1).toDouble();
+  dxfText=settings.value("dxfText",false).toBool();
 }
 
 void MainWindow::writeSettings()
@@ -297,13 +299,15 @@ void MainWindow::writeSettings()
   settings.setValue("tolerance",tolerance);
   settings.setValue("inUnit",inUnit);
   settings.setValue("outUnit",outUnit);
+  settings.setValue("dxfText",dxfText);
 }
 
-void MainWindow::setSettings(double iu,double ou,double tol,int thr)
+void MainWindow::setSettings(double iu,double ou,double tol,int thr,bool dxf)
 {
   inUnit=iu;
   outUnit=ou;
   tolerance=tol;
   numberThreads=thr;
+  dxfText=dxf;
   writeSettings();
 }

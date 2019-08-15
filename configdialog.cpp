@@ -48,6 +48,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   threadInput=new QLineEdit(this);
+  dxfCheck=new QCheckBox(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(inUnitLabel,0,0);
@@ -61,8 +62,9 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(threadLabel,3,0);
   gridLayout->addWidget(threadInput,3,1);
   gridLayout->addWidget(threadDefault,3,2);
-  gridLayout->addWidget(okButton,4,0);
-  gridLayout->addWidget(cancelButton,4,2);
+  gridLayout->addWidget(dxfCheck,4,1);
+  gridLayout->addWidget(okButton,5,0);
+  gridLayout->addWidget(cancelButton,5,2);
   toleranceLabel->setAlignment(Qt::AlignHCenter);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
@@ -71,7 +73,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
-void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int threads)
+void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int threads,bool dxf)
 {
   int i;
   inUnitBox->clear();
@@ -82,6 +84,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
   toleranceLabel->setText(tr("Tolerance"));
   threadLabel->setText(tr("Threads:"));
   threadDefault->setText(tr("default is %n","",boost::thread::hardware_concurrency()));
+  dxfCheck->setText(tr("Text mode DXF"));
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
     inUnitBox->addItem(tr(unitNames[i]));
@@ -100,6 +103,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int 
     if (tolerance==tolerances[i])
       toleranceBox->setCurrentIndex(i);
   threadInput->setText(QString::number(threads));
+  dxfCheck->setCheckState(dxf?Qt::Checked:Qt::Unchecked);
 }
 
 void ConfigurationDialog::updateToleranceConversion()
@@ -119,6 +123,7 @@ void ConfigurationDialog::accept()
   settingsChanged(conversionFactors[inUnitBox->currentIndex()],
 		  conversionFactors[outUnitBox->currentIndex()],
 		  tolerances[toleranceBox->currentIndex()],
-		  threadInput->text().toInt());
+		  threadInput->text().toInt(),
+		  dxfCheck->checkState()>0);
   QDialog::accept();
 }

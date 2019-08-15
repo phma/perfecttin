@@ -47,7 +47,7 @@ signals:
   void noCloudArea();
 public slots:
   void tick();
-  void setSettings(double iu,double ou,double tol,int thr);
+  void setSettings(double iu,double ou,double tol,int thr,bool dxf);
   void loadFile();
   void startConversion();
   void clearCloud();
@@ -59,6 +59,7 @@ private:
   int lastNumDots,lastNumTriangles;
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
+  bool dxfText;
   double tolerance,inUnit,outUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
