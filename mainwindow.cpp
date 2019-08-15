@@ -38,9 +38,11 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
   fileDialog=new QFileDialog(this);
+  msgBox=new QMessageBox(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,double,int)),
 	  this,SLOT(setSettings(double,double,double,int)));
   connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
+  connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   doneBar=new QProgressBar(this);
   busyBar=new QProgressBar(this);
   doneBar->setRange(0,16777216);
@@ -139,7 +141,7 @@ void MainWindow::tick()
     {
       clearCloud();
       net.clear();
-      // send a signal to pop up an error
+      noCloudArea();
     }
     else
     {
@@ -225,6 +227,11 @@ void MainWindow::configure()
   configDialog->open();
 }
 
+void MainWindow::msgNoCloudArea()
+{
+  msgBox->warning(this,tr("PerfectTIN"),tr("Point cloud no area"));
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
   writeSettings();
@@ -300,4 +307,3 @@ void MainWindow::setSettings(double iu,double ou,double tol,int thr)
   numberThreads=thr;
   writeSettings();
 }
-

@@ -44,6 +44,7 @@ public:
   }
 signals:
   void octagonReady();
+  void noCloudArea();
 public slots:
   void tick();
   void setSettings(double iu,double ou,double tol,int thr);
@@ -51,6 +52,7 @@ public slots:
   void startConversion();
   void clearCloud();
   void configure();
+  void msgNoCloudArea();
 protected:
   void closeEvent(QCloseEvent *event) override;
 private:
@@ -62,6 +64,7 @@ private:
   std::string fileNames,saveFileName,lastFileName;
   QTimer *timer;
   QFileDialog *fileDialog;
+  QMessageBox *msgBox;
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
