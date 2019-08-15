@@ -360,10 +360,7 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_PAUSE)
     { // The job is ongoing, but has to pause to write out the files.
       threadStatus[thread]=TH_PAUSE;
-      if (thread)
-	act.opcode=0;
-      else
-	act=dequeueAction();
+      act=dequeueAction();
       switch (act.opcode)
       {
 	case ACT_LOAD:
