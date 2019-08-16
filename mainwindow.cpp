@@ -121,6 +121,7 @@ void MainWindow::tick()
 	else
 	  setThreadCommand(TH_WAIT);
 	currentAction=0;
+	canvas->update();
       }
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
