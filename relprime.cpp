@@ -33,7 +33,7 @@ const double quadirr[]=
 };
 
 map<unsigned long,unsigned> relprimes;
-mutex primeMutex;
+shared_mutex primeMutex;
 
 unsigned gcd(unsigned a,unsigned b)
 {
@@ -60,8 +60,9 @@ unsigned relprime(unsigned n,int thread)
   thread%=6542;
   if (thread<0)
     thread+=6542;
-  primeMutex.lock();
+  primeMutex.lock_shared();
   ret=relprimes[((unsigned long)thread<<32)+n];
+  primeMutex.unlock_shared();
   if (!ret)
   {
     phin=n*quadirr[thread];
@@ -69,8 +70,9 @@ unsigned relprime(unsigned n,int thread)
     twice=2*ret-(ret>phin);
     while (gcd(ret,n)!=1 || ret>n)
       ret=twice-ret+(ret<=phin);
+    primeMutex.lock();
     relprimes[((unsigned long)thread<<32)+n]=ret;
+    primeMutex.unlock();
   }
-  primeMutex.unlock();
   return ret;
 }
