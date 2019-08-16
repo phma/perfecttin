@@ -45,7 +45,7 @@ struct ThreadAction
   std::string filename;
 };
 
-extern boost::mutex wingEdge;
+extern boost::shared_mutex wingEdge;
 extern boost::mutex adjLog;
 extern double stageTolerance;
 extern int opcount,trianglesToPaint;

@@ -34,7 +34,7 @@ using namespace std;
 using namespace boost;
 namespace cr=boost::chrono;
 
-mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
+shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 mutex triMutex; // Lock this while locking or unlocking triangles.
 mutex adjLog;
 mutex actMutex;
@@ -344,10 +344,10 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
-      wingEdge.lock();
+      wingEdge.lock_shared();
       e=(e+relprime(net.edges.size(),thread))%net.edges.size();
       t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
-      wingEdge.unlock();
+      wingEdge.unlock_shared();
       edgeResult=edgeop(&net.edges[e],stageTolerance,thread);
       triResult=triop(&net.triangles[t],stageTolerance,thread);
       if (triResult==2 || edgeResult==2) // deadlock
