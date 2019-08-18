@@ -267,6 +267,19 @@ void randomizeSleep()
     sleepTime[i]=rng.usrandom()/32.768;
 }
 
+set<int> whichLocks(vector<int> triangles)
+{
+  set<int> ret;
+  int i;
+  for (i=0;i<triangles.size();i++)
+  {
+    ret.insert(mtxSquare(*net.triangles[triangles[i]].a));
+    ret.insert(mtxSquare(*net.triangles[triangles[i]].b));
+    ret.insert(mtxSquare(*net.triangles[triangles[i]].c));
+  }
+  return ret;
+}
+
 bool lockTriangles(int thread,vector<int> triangles)
 /* Either it locks all the triangles, and returns true,
  * or it locks nothing, and returns false.
@@ -274,7 +287,10 @@ bool lockTriangles(int thread,vector<int> triangles)
 {
   bool ret=true;
   int i;
-  triMutex[0].lock();
+  set<int> lockSet=whichLocks(triangles);
+  set<int>::iterator j;
+  for (j=lockSet.begin();j!=lockSet.end();j++)
+    triMutex[*j].lock();
   for (i=0;i<triangles.size();i++)
   {
     while (triangles[i]>=triangleHolders.size())
@@ -285,19 +301,24 @@ bool lockTriangles(int thread,vector<int> triangles)
   }
   for (i=0;ret && i<triangles.size();i++)
     triangleHolders[triangles[i]]=thread;
-  triMutex[0].unlock();
+  for (j=lockSet.begin();j!=lockSet.end();j++)
+    triMutex[*j].unlock();
   return ret;
 }
 
 void unlockTriangles(int thread)
 {
   int i;
-  triMutex[0].lock();
+  set<int> lockSet=whichLocks(heldTriangles[thread]);
+  set<int>::iterator j;
+  for (j=lockSet.begin();j!=lockSet.end();j++)
+    triMutex[*j].lock();
   for (i=0;i<heldTriangles[thread].size();i++)
     if (triangleHolders[heldTriangles[thread][i]]==thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
   heldTriangles[thread].clear();
-  triMutex[0].unlock();
+  for (j=lockSet.begin();j!=lockSet.end();j++)
+    triMutex[*j].unlock();
 }
 
 void setThreadCommand(int newStatus)
