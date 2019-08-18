@@ -111,6 +111,7 @@ array<double,2> areaDone(double tolerance)
   vector<double> allTri,doneTri,doneq2Tri;
   static int overtimeCount=0,bucket=0;
   int i;
+  triangle *tri;
   double allSum;
   array<double,2> ret;
   cr::nanoseconds elapsed;
@@ -133,8 +134,12 @@ array<double,2> areaDone(double tolerance)
     allTri.push_back(net.triangles[i].sarea);
     if (net.triangles[i].inTolerance(tolerance))
       doneTri.push_back(net.triangles[i].sarea);
+    else
+      tri=&net.triangles[i];
     if (net.triangles[i].inTolerance(M_SQRT2*tolerance))
       doneq2Tri.push_back(net.triangles[i].sarea);
+    else
+      tri=&net.triangles[i];
   }
   allBuckets[bucket]=pairwisesum(allTri);
   doneBuckets[bucket]=pairwisesum(doneTri);
