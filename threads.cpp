@@ -270,13 +270,24 @@ void randomizeSleep()
 set<int> whichLocks(vector<int> triangles)
 {
   set<int> ret;
+  triangle *tri;
+  point *a,*b,*c;
   int i;
   for (i=0;i<triangles.size();i++)
   {
-    ret.insert(mtxSquare(*net.triangles[triangles[i]].a));
-    ret.insert(mtxSquare(*net.triangles[triangles[i]].b));
-    ret.insert(mtxSquare(*net.triangles[triangles[i]].c));
+    tri=&net.triangles[triangles[i]];
+    a=tri->a;
+    b=tri->b;
+    c=tri->c;
+    if (a)
+      ret.insert(mtxSquare(*a));
+    if (b)
+      ret.insert(mtxSquare(*b));
+    if (c)
+      ret.insert(mtxSquare(*c));
   }
+  if (ret.size()==0)
+    ret.insert(0);
   return ret;
 }
 
