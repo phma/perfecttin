@@ -35,7 +35,7 @@ using namespace boost;
 namespace cr=boost::chrono;
 
 shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
-mutex triMutex; // Lock this while locking or unlocking triangles.
+map<int,mutex> triMutex; // Lock this while locking or unlocking triangles.
 mutex adjLog;
 mutex actMutex;
 mutex bucketMutex;
@@ -175,12 +175,16 @@ bool livelock(double areadone,double rmsadj)
 
 void startThreads(int n)
 {
-  int i;
+  int i,m;
   threadCommand=TH_WAIT;
   threadStatus.resize(n);
   heldTriangles.resize(n);
   sleepTime.resize(n);
   initTempPointlist(n);
+  m=ceil(sqrt(3*n));
+  m=m*m;
+  for (i=0;i<m;i++)
+    triMutex[i];
   for (i=0;i<n;i++)
     threads.push_back(thread(TinThread(),i));
 }
@@ -269,7 +273,7 @@ bool lockTriangles(int thread,vector<int> triangles)
 {
   bool ret=true;
   int i;
-  triMutex.lock();
+  triMutex[0].lock();
   for (i=0;i<triangles.size();i++)
   {
     while (triangles[i]>=triangleHolders.size())
@@ -280,19 +284,19 @@ bool lockTriangles(int thread,vector<int> triangles)
   }
   for (i=0;ret && i<triangles.size();i++)
     triangleHolders[triangles[i]]=thread;
-  triMutex.unlock();
+  triMutex[0].unlock();
   return ret;
 }
 
 void unlockTriangles(int thread)
 {
   int i;
-  triMutex.lock();
+  triMutex[0].lock();
   for (i=0;i<heldTriangles[thread].size();i++)
     if (triangleHolders[heldTriangles[thread][i]]==thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
   heldTriangles[thread].clear();
-  triMutex.unlock();
+  triMutex[0].unlock();
 }
 
 void setThreadCommand(int newStatus)
