@@ -50,7 +50,8 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   {
     ndots+=tri[i]->dots.size();
     tri[i]->flatten(); // sets sarea, needed for areaCoord
-    markBucketDirty(net.revtriangles[tri[i]]);
+    if (net.revtriangles.count(tri[i]))
+      markBucketDirty(net.revtriangles[tri[i]]);
   }
   a.resize(ndots,pnt.size());
   for (ndots=i=0;i<tri.size();i++)
@@ -83,7 +84,8 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   }
   ret.msAdjustment=pairwisesum(xsq)/xsq.size();
   for (i=0;i<tri.size();i++)
-    markBucketDirty(net.revtriangles[tri[i]]);
+    if (net.revtriangles.count(tri[i]))
+      markBucketDirty(net.revtriangles[tri[i]]);
   //if (singular)
     //cout<<"Matrix in least squares is singular"<<endl;
   return ret;
