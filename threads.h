@@ -51,6 +51,7 @@ extern double stageTolerance;
 extern int opcount,trianglesToPaint;
 extern int currentAction;
 extern boost::chrono::steady_clock clk;
+extern int mtxSquareSize;
 
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);

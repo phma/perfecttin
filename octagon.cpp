@@ -38,6 +38,7 @@ using namespace std;
 pointlist net;
 double clipLow,clipHigh;
 array<double,2> areadone={0,0};
+double mtxSquareSide;
 
 double makeOctagon()
 /* Creates an octagon which encloses cloud (defined in ply.cpp) and divides it
@@ -150,12 +151,15 @@ double makeOctagon()
   }
   cloud.clear();
   cloud.shrink_to_fit();
+  mtxSquareSide=0;
   for (i=0;i<6;i++)
   {
     //cout<<"triangle "<<i<<" has "<<net.triangles[i].dots.size()<<" dots\n";
     trianglePointers.push_back(&net.triangles[i]);
     net.revtriangles[&net.triangles[i]]=i;
+    mtxSquareSide+=net.triangles[i].area();
   }
+  mtxSquareSide=sqrt(mtxSquareSide/2)/mtxSquareSize;
   for (i=1;i<=8;i++)
   {
     cornerPointers.push_back(&net.points[i]);
@@ -177,3 +181,18 @@ double makeOctagon()
   return maxerr;
 }
 
+int mtxSquare(xy pnt)
+/* The plane is divided into squares, where each square corresponds to one mutex
+ * of triMutex. The number of these mutexes is at least thrice the number of threads.
+ * This function returns the number of the mutex corresponding to pnt.
+ */
+{
+  int x,y;
+  x=lrint(pnt.getx()/mtxSquareSide)%mtxSquareSize;
+  y=lrint(pnt.gety()/mtxSquareSide)%mtxSquareSize;
+  if (x<0)
+    x+=mtxSquareSize;
+  if (y<0)
+    y+=mtxSquareSize;
+  return y*mtxSquareSize+x;
+}

@@ -49,6 +49,7 @@ vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
 queue<ThreadAction> actQueue;
 int currentAction;
+int mtxSquareSize;
 
 cr::steady_clock clk;
 vector<int> cleanBuckets;
@@ -181,8 +182,8 @@ void startThreads(int n)
   heldTriangles.resize(n);
   sleepTime.resize(n);
   initTempPointlist(n);
-  m=ceil(sqrt(3*n));
-  m=m*m;
+  mtxSquareSize=ceil(sqrt(3*n));
+  m=mtxSquareSize*mtxSquareSize;
   for (i=0;i<m;i++)
     triMutex[i];
   for (i=0;i<n;i++)

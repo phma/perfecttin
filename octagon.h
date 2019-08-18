@@ -26,3 +26,4 @@ extern pointlist net;
 extern double clipLow,clipHigh;
 extern std::array<double,2> areadone;
 double makeOctagon();
+int mtxSquare(xy pnt);
