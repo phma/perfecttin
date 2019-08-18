@@ -88,6 +88,7 @@ manysum& manysum::operator+=(double x)
     else
       x=0;
   }
+  return *this;
 }
 
 manysum& manysum::operator-=(double x)
@@ -113,6 +114,7 @@ manysum& manysum::operator-=(double x)
     else
       x=0;
   }
+  return *this;
 }
 
 double pairwisesum(double *a,unsigned n)
