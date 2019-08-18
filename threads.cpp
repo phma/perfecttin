@@ -303,11 +303,13 @@ bool lockTriangles(int thread,vector<int> triangles)
 {
   bool ret=true;
   int i;
+  int origSz;
   set<int> lockSet=whichLocks(triangles);
   set<int>::iterator j;
   for (j=lockSet.begin();j!=lockSet.end();j++)
     triMutex[*j].lock();
-  for (i=0;i<triangles.size();i++)
+  origSz=heldTriangles[thread].size();
+  for (i=0;ret && i<triangles.size();i++)
   {
     while (triangles[i]>=triangleHolders.size())
       triangleHolders.push_back(-1);
@@ -315,6 +317,8 @@ bool lockTriangles(int thread,vector<int> triangles)
     if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
       ret=false;
   }
+  if (!ret)
+    heldTriangles[thread].resize(origSz);
   for (i=0;ret && i<triangles.size();i++)
     triangleHolders[triangles[i]]=thread;
   for (j=lockSet.begin();j!=lockSet.end();j++)
