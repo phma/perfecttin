@@ -182,7 +182,7 @@ void startThreads(int n)
   heldTriangles.resize(n);
   sleepTime.resize(n);
   initTempPointlist(n);
-  mtxSquareSize=ceil(sqrt(3*n));
+  mtxSquareSize=ceil(sqrt(33*n));
   m=mtxSquareSize*mtxSquareSize;
   for (i=0;i<m;i++)
     triMutex[i];
