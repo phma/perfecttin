@@ -31,6 +31,8 @@ find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
+# To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
+
 add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp
                dxf.cpp edgeop.cpp fileio.cpp las.cpp ldecimal.cpp
