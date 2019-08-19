@@ -63,6 +63,11 @@ triangle::triangle()
   vError=INFINITY;
 }
 
+bool triangle::ptValid()
+{
+  return a&&b&&c;
+}
+
 double triangle::area()
 {
   return area3(*a,*b,*c);

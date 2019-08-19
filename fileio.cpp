@@ -69,7 +69,10 @@ void writeDxf(string outputFile,bool asc,double outUnit)
   tableSection(dxfCodes);
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
-    insertTriangle(dxfCodes,net.triangles[i],outUnit);
+    if (net.triangles[i].ptValid())
+      insertTriangle(dxfCodes,net.triangles[i],outUnit);
+    else
+      cerr<<"Invalid triangle "<<i<<endl;
   closeEntitySection(dxfCodes);
   dxfEnd(dxfCodes);
   writeDxfGroups(dxfFile,dxfCodes,asc);

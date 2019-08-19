@@ -74,6 +74,7 @@ public:
   int flags;
   double aElev,bElev,cElev,vError;
   triangle();
+  bool ptValid();
   void setneighbor(triangle *neigh);
   void setnoneighbor(edge *neigh);
   double areaCoord(xy pnt,point *v);
