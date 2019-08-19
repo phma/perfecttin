@@ -314,6 +314,11 @@ bool lockTriangles(int thread,vector<int> triangles)
     while (triangles[i]>=triangleHolders.size())
       triangleHolders.push_back(-1);
     heldTriangles[thread].push_back(triangles[i]);
+    if (triangleHolders[triangles[i]]>=(signed)heldTriangles.size())
+    {
+      cerr<<"triangleHolders["<<triangles[i]<<"] contains garbage\n";
+      triangleHolders[triangles[i]]=-1;
+    }
     if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
       ret=false;
   }
