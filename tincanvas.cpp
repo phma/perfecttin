@@ -189,11 +189,28 @@ void TinCanvas::tick()
 
 void TinCanvas::setSize()
 {
+  double oldScale=scale;
+  xy oldWindowCenter=windowCenter;
+  QTransform tf;
   windowCenter=xy(width(),height())/2.;
   lis.resize(width()-20,height()-20);
   sizeToFit();
-  frameBuffer=QPixmap(width(),height());
-  frameBuffer.fill(Qt::white);
+  if (frameBuffer.isNull())
+  {
+    frameBuffer=QPixmap(width(),height());
+    frameBuffer.fill(Qt::white);
+  }
+  else
+  {
+    tf.translate(-oldWindowCenter.getx(),-oldWindowCenter.gety());
+    tf.scale(scale/oldScale,scale/oldScale);
+    tf.translate(windowCenter.getx(),windowCenter.gety());
+    QPixmap frameTemp=frameBuffer.transformed(tf);
+    frameBuffer=QPixmap(width(),height());
+    QPainter painter(&frameBuffer);
+    QRect rect(0,0,frameTemp.width(),frameTemp.height());
+    painter.drawPixmap(rect,frameTemp,rect);
+  }
   trianglesToPaint=3*net.triangles.size();
   /* It takes three coats of paint to color the framebuffer well
    * after it has been cleared to white.
