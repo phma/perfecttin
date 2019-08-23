@@ -191,7 +191,7 @@ void TinCanvas::setSize()
 {
   double oldScale=scale;
   xy oldWindowCenter=windowCenter;
-  int dx,dy,cx,cy;
+  int dx,dy;
   QTransform tf;
   windowCenter=xy(width(),height())/2.;
   lis.resize(width()-20,height()-20);
@@ -208,16 +208,16 @@ void TinCanvas::setSize()
     tf.translate(windowCenter.getx(),windowCenter.gety());
     QPixmap frameTemp=frameBuffer.transformed(tf);
     frameBuffer=QPixmap(width(),height());
-    frameBuffer.fill(Qt::blue);
+    frameBuffer.fill(Qt::white);
     QPainter painter(&frameBuffer);
     dx=(width()-frameTemp.width())/2;
     dy=(height()-frameTemp.height())/2;
-    cx=(dx<0)?-dx:0;
-    cy=(dy<0)?-dy:0;
     cout<<"Transformed size "<<frameTemp.width()<<','<<frameTemp.height();
     cout<<" New size "<<width()<<','<<height()<<" Diff "<<dx<<','<<dy<<endl;
-    QRect rect0(cx,cy,frameTemp.width()-cx,frameTemp.height()-cy);
-    QRect rect1(dx+cx,dy+cy,frameTemp.width()+dx-cy,frameTemp.height()+dy-cy);
+    //QRect rect0(cx,cy,frameTemp.width()-cx,frameTemp.height()-cy);
+    //QRect rect1(dx+cx,dy+cy,frameTemp.width()+dx-cy,frameTemp.height()+dy-cy);
+    QRect rect0(0,0,frameTemp.width(),frameTemp.height());
+    QRect rect1(dx,dy,frameTemp.width(),frameTemp.height());
     painter.drawPixmap(rect1,frameTemp,rect0);
     update();
   }
