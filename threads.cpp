@@ -319,10 +319,12 @@ bool lockTriangles(int thread,vector<int> triangles)
   origSz=heldTriangles[thread].size();
   for (i=0;ret && i<triangles.size();i++)
   {
-    holderMutex.lock();
-    while (triangles[i]>=triangleHolders.size())
-      triangleHolders.push_back(-1);
-    holderMutex.unlock();
+    if (triangles[i]>=triangleHolders.size())
+    {
+      holderMutex.lock();
+      triangleHolders.resize(triangles[i]+1,-1);
+      holderMutex.unlock();
+    }
     holderMutex.lock_shared();
     heldTriangles[thread].push_back(triangles[i]);
     if (triangleHolders[triangles[i]]>=(signed)heldTriangles.size())
