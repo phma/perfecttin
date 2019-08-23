@@ -36,6 +36,7 @@ namespace cr=boost::chrono;
 
 shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 map<int,mutex> triMutex; // Lock this while locking or unlocking triangles.
+shared_mutex holderMutex; // for triangleHolders
 mutex adjLog;
 mutex actMutex;
 mutex bucketMutex;
@@ -299,6 +300,13 @@ set<int> whichLocks(vector<int> triangles)
 bool lockTriangles(int thread,vector<int> triangles)
 /* Either it locks all the triangles, and returns true,
  * or it locks nothing, and returns false.
+ *
+ * holderMutex is there to prevent one thread from accessing triangleHolders
+ * while another thread is moving it to resize it. It is *not* there to prevent
+ * two threads from accessing the same element of triangleHolders at the same
+ * time; that's what triMutex is for. triMutex divides the plane into squares,
+ * so when the triangles are small, it's likely that all the triangles being
+ * locked at once are covered by one triMutex.
  */
 {
   bool ret=true;
@@ -311,8 +319,11 @@ bool lockTriangles(int thread,vector<int> triangles)
   origSz=heldTriangles[thread].size();
   for (i=0;ret && i<triangles.size();i++)
   {
+    holderMutex.lock();
     while (triangles[i]>=triangleHolders.size())
       triangleHolders.push_back(-1);
+    holderMutex.unlock();
+    holderMutex.lock_shared();
     heldTriangles[thread].push_back(triangles[i]);
     if (triangleHolders[triangles[i]]>=(signed)heldTriangles.size())
     {
@@ -321,11 +332,14 @@ bool lockTriangles(int thread,vector<int> triangles)
     }
     if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
       ret=false;
+    holderMutex.unlock_shared();
   }
   if (!ret)
     heldTriangles[thread].resize(origSz);
+  holderMutex.lock_shared();
   for (i=0;ret && i<triangles.size();i++)
     triangleHolders[triangles[i]]=thread;
+  holderMutex.unlock_shared();
   for (j=lockSet.begin();j!=lockSet.end();j++)
     triMutex[*j].unlock();
   return ret;
