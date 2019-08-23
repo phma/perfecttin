@@ -212,10 +212,6 @@ void TinCanvas::setSize()
     QPainter painter(&frameBuffer);
     dx=(width()-frameTemp.width())/2;
     dy=(height()-frameTemp.height())/2;
-    cout<<"Transformed size "<<frameTemp.width()<<','<<frameTemp.height();
-    cout<<" New size "<<width()<<','<<height()<<" Diff "<<dx<<','<<dy<<endl;
-    //QRect rect0(cx,cy,frameTemp.width()-cx,frameTemp.height()-cy);
-    //QRect rect1(dx+cx,dy+cy,frameTemp.width()+dx-cy,frameTemp.height()+dy-cy);
     QRect rect0(0,0,frameTemp.width(),frameTemp.height());
     QRect rect1(dx,dy,frameTemp.width(),frameTemp.height());
     painter.drawPixmap(rect1,frameTemp,rect0);
