@@ -73,7 +73,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
-void ConfigurationDialog::set(double inUnit,double outUnit,double tolerance,int threads,bool dxf)
+void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf)
 {
   int i;
   inUnitBox->clear();
@@ -122,6 +122,7 @@ void ConfigurationDialog::accept()
 {
   settingsChanged(conversionFactors[inUnitBox->currentIndex()],
 		  conversionFactors[outUnitBox->currentIndex()],
+		  dxfCheck->checkState()>0, //FIXME
 		  tolerances[toleranceBox->currentIndex()],
 		  threadInput->text().toInt(),
 		  dxfCheck->checkState()>0);

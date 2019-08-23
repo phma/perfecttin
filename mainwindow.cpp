@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   configDialog=new ConfigurationDialog(this);
   fileDialog=new QFileDialog(this);
   msgBox=new QMessageBox(this);
-  connect(configDialog,SIGNAL(settingsChanged(double,double,double,int,bool)),
-	  this,SLOT(setSettings(double,double,double,int,bool)));
+  connect(configDialog,SIGNAL(settingsChanged(double,double,bool,double,int,bool)),
+	  this,SLOT(setSettings(double,double,bool,double,int,bool)));
   connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   doneBar=new QProgressBar(this);
@@ -227,7 +227,7 @@ void MainWindow::clearCloud()
 
 void MainWindow::configure()
 {
-  configDialog->set(inUnit,outUnit,tolerance,numberThreads,dxfText);
+  configDialog->set(inUnit,outUnit,sameUnits,tolerance,numberThreads,dxfText);
   configDialog->open();
 }
 
@@ -290,6 +290,7 @@ void MainWindow::readSettings()
   tolerance=settings.value("tolerance",0.1).toDouble();
   inUnit=settings.value("inUnit",1).toDouble();
   outUnit=settings.value("outUnit",1).toDouble();
+  sameUnits=settings.value("sameUnits",false).toBool();
   dxfText=settings.value("dxfText",false).toBool();
 }
 
@@ -302,13 +303,15 @@ void MainWindow::writeSettings()
   settings.setValue("tolerance",tolerance);
   settings.setValue("inUnit",inUnit);
   settings.setValue("outUnit",outUnit);
+  settings.setValue("sameUnits",sameUnits);
   settings.setValue("dxfText",dxfText);
 }
 
-void MainWindow::setSettings(double iu,double ou,double tol,int thr,bool dxf)
+void MainWindow::setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf)
 {
   inUnit=iu;
   outUnit=ou;
+  sameUnits=ieqo;
   tolerance=tol;
   numberThreads=thr;
   dxfText=dxf;
