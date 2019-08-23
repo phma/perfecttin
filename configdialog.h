@@ -41,6 +41,7 @@ signals:
 public slots:
   void set(double inUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf);
   void updateToleranceConversion();
+  void updateSameUnits(int index);
   virtual void accept();
 private:
   QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel;
@@ -50,7 +51,7 @@ private:
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
   QLineEdit *threadInput;
-  QCheckBox *dxfCheck;
+  QCheckBox *dxfCheck,*sameCheck;
 };
 #endif
 

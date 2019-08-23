@@ -49,9 +49,11 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   cancelButton=new QPushButton(tr("Cancel"),this);
   threadInput=new QLineEdit(this);
   dxfCheck=new QCheckBox(this);
+  sameCheck=new QCheckBox(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(inUnitLabel,0,0);
+  gridLayout->addWidget(sameCheck,0,1);
   gridLayout->addWidget(outUnitLabel,0,2);
   gridLayout->addWidget(inUnitBox,1,0);
   gridLayout->addWidget(toleranceLabel,1,1);
@@ -68,6 +70,8 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   toleranceLabel->setAlignment(Qt::AlignHCenter);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+  connect(inUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
+  connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
   connect(inUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
@@ -80,6 +84,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double
   outUnitBox->clear();
   toleranceBox->clear();
   inUnitLabel->setText(tr("Input unit"));
+  sameCheck->setText(tr("Same units"));
   outUnitLabel->setText(tr("Output unit"));
   toleranceLabel->setText(tr("Tolerance"));
   threadLabel->setText(tr("Threads:"));
@@ -90,6 +95,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double
     inUnitBox->addItem(tr(unitNames[i]));
     outUnitBox->addItem(tr(unitNames[i]));
   }
+  sameCheck->setCheckState(Qt::Unchecked);
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
     if (inUnit==conversionFactors[i])
@@ -97,6 +103,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double
     if (outUnit==conversionFactors[i])
       outUnitBox->setCurrentIndex(i);
   }
+  sameCheck->setCheckState(sameUnits?Qt::Checked:Qt::Unchecked);
   for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
     toleranceBox->addItem(tr(toleranceStr[i]));
   for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
@@ -118,11 +125,20 @@ void ConfigurationDialog::updateToleranceConversion()
   }
 }
 
+void ConfigurationDialog::updateSameUnits(int index)
+{
+  if (sameCheck->checkState())
+  {
+    inUnitBox->setCurrentIndex(index);
+    outUnitBox->setCurrentIndex(index);
+  }
+}
+
 void ConfigurationDialog::accept()
 {
   settingsChanged(conversionFactors[inUnitBox->currentIndex()],
 		  conversionFactors[outUnitBox->currentIndex()],
-		  dxfCheck->checkState()>0, //FIXME
+		  sameCheck->checkState()>0,
 		  tolerances[toleranceBox->currentIndex()],
 		  threadInput->text().toInt(),
 		  dxfCheck->checkState()>0);
