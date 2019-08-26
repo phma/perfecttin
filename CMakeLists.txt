@@ -30,6 +30,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
+qt5_add_resources(lib_resources perfecttin.qrc)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
@@ -48,7 +49,7 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
-               ${qm_files})
+               ${lib_resources} ${qm_files})
 target_link_libraries(perfecttin ${Boost_LIBRARIES})
 target_link_libraries(perfecttin-gui ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
 if (${LibPLYXX_FOUND})

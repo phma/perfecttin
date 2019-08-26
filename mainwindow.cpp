@@ -32,6 +32,7 @@ using namespace std;
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
   setWindowTitle(QApplication::translate("main", "PerfectTIN"));
+  setWindowIcon(QIcon(":/perfecttin.png"));
   fileMsg=new QLabel(this);
   dotTriangleMsg=new QLabel(this);
   toleranceMsg=new QLabel(this);
