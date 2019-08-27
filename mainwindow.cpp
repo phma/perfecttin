@@ -240,9 +240,14 @@ void MainWindow::msgNoCloudArea()
 void MainWindow::aboutProgram()
 {
   QString progName=tr("PerfectTIN");
+#ifdef LibPLYXX_FOUND
+  QString rajotte=tr("\nPLY file code © Simon Rajotte, MIT license");
+#else
+  QString rajotte("");
+#endif
   QMessageBox::about(this,tr("PerfectTIN"),
-		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense GPL 3 or later")
-		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR));
+		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense GPL 3 or later%4")
+		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR).arg(rajotte));
 }
 
 void MainWindow::aboutQt()
