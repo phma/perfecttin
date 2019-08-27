@@ -39,6 +39,15 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
  * The triangles should be all those that have at least one corner in
  * the list of points. Corners of triangles which are not in pnt will not
  * be adjusted.
+ *
+ * This function spends approximately equal amounts of time in areaCoord,
+ * elevation, and linearLeastSquares (most of which is transmult). To spread
+ * the work over threads when there are few triangles, therefore, I should
+ * create tasks consisting of a block of about 65536 dots all from one triangle,
+ * which are to be run through areaCoord, elevation, and transmult, and combine
+ * the resulting square matrices and column matrices once all the tasks are done.
+ * Any idle thread can do a task; this function will do whatever tasks are not
+ * picked up by other threads.
  */
 {
   int i,j,k,ndots;
