@@ -53,6 +53,8 @@ public slots:
   void clearCloud();
   void configure();
   void msgNoCloudArea();
+  void aboutProgram();
+  void aboutQt();
 protected:
   void closeEvent(QCloseEvent *event) override;
 private:
@@ -72,5 +74,6 @@ private:
   QProgressBar *doneBar,*busyBar;
   QAction *loadAction,*convertAction,*clearAction;
   QAction *configureAction;
+  QAction *aboutProgramAction,*aboutQtAction;
   TinCanvas *canvas;
 };

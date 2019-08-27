@@ -237,6 +237,19 @@ void MainWindow::msgNoCloudArea()
   msgBox->warning(this,tr("PerfectTIN"),tr("Point cloud no area"));
 }
 
+void MainWindow::aboutProgram()
+{
+  QString progName=tr("PerfectTIN");
+  QMessageBox::about(this,tr("PerfectTIN"),
+		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense GPL 3 or later")
+		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR));
+}
+
+void MainWindow::aboutQt()
+{
+  QMessageBox::aboutQt(this,tr("PerfectTIN"));
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
   writeSettings();
@@ -270,6 +283,15 @@ void MainWindow::makeActions()
   configureAction->setText(tr("Configure"));
   settingsMenu->addAction(configureAction);
   connect(configureAction,SIGNAL(triggered(bool)),this,SLOT(configure()));
+  // Help menu
+  aboutProgramAction=new QAction(this);
+  aboutProgramAction->setText(tr("About PerfectTIN"));
+  helpMenu->addAction(aboutProgramAction);
+  connect(aboutProgramAction,SIGNAL(triggered(bool)),this,SLOT(aboutProgram()));
+  aboutQtAction=new QAction(this);
+  aboutQtAction->setText(tr("About Qt"));
+  helpMenu->addAction(aboutQtAction);
+  connect(aboutQtAction,SIGNAL(triggered(bool)),this,SLOT(aboutQt()));
 }
 
 void MainWindow::makeStatusBar()
