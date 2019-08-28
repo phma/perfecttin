@@ -362,6 +362,17 @@ void unlockTriangles(int thread)
     triMutex[*j].unlock();
 }
 
+void clearTriangleLocks()
+{
+  int i;
+  holderMutex.lock();
+  triangleHolders.clear();
+  triangleHolders.shrink_to_fit();
+  for (i=0;i<heldTriangles.size();i++)
+    heldTriangles[i].clear();
+  holderMutex.unlock();
+}
+
 void setThreadCommand(int newStatus)
 {
   threadCommand=newStatus;

@@ -71,6 +71,7 @@ double maxSleepTime();
 void randomizeSleep();
 bool lockTriangles(int thread,std::vector<int> triangles);
 void unlockTriangles(int thread);
+void clearTriangleLocks();
 void setThreadCommand(int newStatus);
 int getThreadStatus();
 void waitForThreads(int newStatus);

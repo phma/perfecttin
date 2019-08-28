@@ -58,6 +58,7 @@ double makeOctagon()
   net.clear();
   net.triangles[0]; // Create a dummy triangle so that the GUI says "Making octagon"
   resizeBuckets(1);
+  clearTriangleLocks();
   for (i=0;i<cloud.size();i++)
   {
     orthogonal.include(cloud[i]);
