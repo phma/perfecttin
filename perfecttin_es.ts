@@ -4,42 +4,62 @@
 <context>
     <name>ConfigurationDialog</name>
     <message>
-        <location filename="configdialog.cpp" line="48"/>
+        <location filename="configdialog.cpp" line="30"/>
+        <source>Meter</source>
+        <translation>Metro</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="31"/>
+        <source>Int&apos;l foot</source>
+        <translation>Pie internacional</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="32"/>
+        <source>US foot</source>
+        <translation>Pie EE.UU.</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="33"/>
+        <source>Indian foot</source>
+        <translation>Pie indio</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="54"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="49"/>
+        <location filename="configdialog.cpp" line="55"/>
         <source>Cancel</source>
         <translation>Anular</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="86"/>
+        <location filename="configdialog.cpp" line="92"/>
         <source>Input unit</source>
         <translation>Unidad de entrada</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="87"/>
+        <location filename="configdialog.cpp" line="93"/>
         <source>Same units</source>
         <translation>Mismas unidades</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="88"/>
+        <location filename="configdialog.cpp" line="94"/>
         <source>Output unit</source>
         <translation>Unidad de salida</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="89"/>
+        <location filename="configdialog.cpp" line="95"/>
         <source>Tolerance</source>
         <translation>Tolerancia</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="90"/>
+        <location filename="configdialog.cpp" line="96"/>
         <source>Threads:</source>
         <translation>Hilos:</translation>
     </message>
     <message numerus="yes">
-        <location filename="configdialog.cpp" line="91"/>
+        <location filename="configdialog.cpp" line="97"/>
         <source>default is %n</source>
         <translation>
             <numerusform>%n predeterminado</numerusform>
@@ -47,7 +67,7 @@
         </translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="92"/>
+        <location filename="configdialog.cpp" line="98"/>
         <source>Text mode DXF</source>
         <translation>DXF formato texto</translation>
     </message>

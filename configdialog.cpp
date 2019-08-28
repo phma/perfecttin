@@ -25,7 +25,13 @@
 #include "threads.h"
 
 const double conversionFactors[4]={1,0.3048,12e2/3937,0.3047996};
-const char unitNames[4][12]={"Meter","Int'l foot","US foot","Indian foot"};
+const char unitNames[4][12]=
+{
+  QT_TRANSLATE_NOOP("ConfigurationDialog","Meter"),
+  QT_TRANSLATE_NOOP("ConfigurationDialog","Int'l foot"),
+  QT_TRANSLATE_NOOP("ConfigurationDialog","US foot"),
+  QT_TRANSLATE_NOOP("ConfigurationDialog","Indian foot")
+};
 const double tolerances[10]={1e-2,25e-3,5e-2,1e-1,15e-2,2e-1,1/3.,2/3.,1.,10/3.};
 const char toleranceStr[10][7]=
 {
