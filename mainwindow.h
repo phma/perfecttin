@@ -42,6 +42,7 @@ public:
   {
     return numberThreads;
   }
+  bool conversionBusy();
 signals:
   void octagonReady();
   void noCloudArea();

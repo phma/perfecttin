@@ -87,6 +87,7 @@ void TinCanvas::tick()
 {
   int i,sz;
   int thisOpcount=opcount;
+  int tstatus=getThreadStatus();
   double r,g,b;
   xy gradient,A,B,C;
   xy dartCorners[4];
@@ -100,6 +101,12 @@ void TinCanvas::tick()
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.setPen(Qt::NoPen);
   brush.setStyle(Qt::SolidPattern);
+  if ((tstatus&0x3ffbfeff)%1048577==0)
+    state=(tstatus&0x3ffbfeff)/1048577;
+  else
+    state=0;
+  if ((state==TH_WAIT || state==TH_PAUSE) && currentAction)
+    state=-currentAction;
   // Compute the new position of the ball, and update a swath containing the ball's motion.
   ballAngle+=lrint(8388608*sqrt((unsigned)(thisOpcount-lastOpcount)));
   lastOpcount=thisOpcount;
@@ -225,8 +232,7 @@ void TinCanvas::setSize()
 
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
-  int state,i;
-  int tstatus=getThreadStatus();
+  int i;
   QPainter painter(this);
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
   QRectF sclera(ballPos.getx()-10,ballPos.gety()-5,20,10);
@@ -245,12 +251,6 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()+4.14);
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
-  if ((tstatus&0x3ffbfeff)%1048577==0)
-    state=(tstatus&0x3ffbfeff)/1048577;
-  else
-    state=0;
-  if ((state==TH_WAIT || state==TH_PAUSE) && currentAction)
-    state=-currentAction;
   switch (state)
   {
     case TH_RUN:

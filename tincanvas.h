@@ -32,6 +32,7 @@ public:
   TinCanvas(QWidget *parent=0);
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
+  int state;
 signals:
 public slots:
   void sizeToFit();

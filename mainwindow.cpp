@@ -73,7 +73,7 @@ void MainWindow::tick()
   int numTriangles=net.triangles.size();
   ThreadAction ta;
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
-  {
+  { // Number of dots or triangles has changed: update status bar
     if (lastNumTriangles<4 && numTriangles>4)
       octagonReady();
     if (numTriangles<lastNumTriangles || ((numTriangles^lastNumTriangles)&1))
@@ -89,7 +89,7 @@ void MainWindow::tick()
   }
   toleranceRatio=stageTolerance/tolerance;
   if (tolerance!=lastTolerance || stageTolerance!=lastStageTolerance)
-  {
+  { // Tolerance has changed: update status bar
     lastTolerance=tolerance;
     lastStageTolerance=stageTolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
@@ -97,7 +97,7 @@ void MainWindow::tick()
   lpfBusyFraction=(16*lpfBusyFraction+busyFraction())/17;
   busyBar->setValue(lrint(lpfBusyFraction*16777216));
   if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
-  {
+  { // Stage has completed: write files and go to next stage
     areadone=areaDone(stageTolerance);
     if (actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
@@ -126,7 +126,7 @@ void MainWindow::tick()
       }
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
-  {
+  { // Convesion is running: check whether stage is complete
     areadone=areaDone(stageTolerance);
     doneBar->setValue(lrint(areadone[0]*16777216));
     rmsadj=rmsAdjustment();
@@ -344,4 +344,13 @@ void MainWindow::setSettings(double iu,double ou,bool ieqo,double tol,int thr,bo
   numberThreads=thr;
   dxfText=dxf;
   writeSettings();
+}
+
+bool MainWindow::conversionBusy()
+{
+  return canvas->state==TH_RUN ||
+	 canvas->state==-ACT_WRITE_DXF ||
+	 canvas->state==-ACT_WRITE_TIN ||
+	 canvas->state==-ACT_OCTAGON ||
+	 canvas->state==0;
 }
