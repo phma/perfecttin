@@ -257,8 +257,24 @@ void MainWindow::aboutQt()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+  int result;
   writeSettings();
-  event->accept();
+  if (conversionBusy())
+  {
+    msgBox->setWindowTitle(tr("PerfectTIN"));
+    msgBox->setIcon(QMessageBox::Warning);
+    msgBox->setText(tr("A conversion is in progress."));
+    msgBox->setInformativeText(tr("Do you want to abort it and exit?"));
+    msgBox->setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+    msgBox->setDefaultButton(QMessageBox::No);
+    result=msgBox->exec();
+    if (result==QMessageBox::Yes)
+      event->accept();
+    else
+      event->ignore();
+  }
+  else
+    event->accept();
 }
 
 void MainWindow::makeActions()
@@ -348,7 +364,9 @@ void MainWindow::setSettings(double iu,double ou,bool ieqo,double tol,int thr,bo
 
 bool MainWindow::conversionBusy()
 {
+  //cout<<"state "<<canvas->state<<endl;
   return canvas->state==TH_RUN ||
+	 canvas->state==TH_PAUSE ||
 	 canvas->state==-ACT_WRITE_DXF ||
 	 canvas->state==-ACT_WRITE_TIN ||
 	 canvas->state==-ACT_OCTAGON ||
