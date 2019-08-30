@@ -66,6 +66,17 @@ MainWindow::~MainWindow()
 {
 }
 
+/* Rules for enabling actions:
+ * You cannot load a file while a conversion is in progress.
+ * You can load a file while loading another file (it will be queued).
+ * You cannot clear while loading a file or converting.
+ * You cannot start a conversion while loading a file or converting.
+ * You cannot stop a conversion unless one is in progress and has
+ * passed the octagon stage.
+ * You cannot resume a conversion unless one has been stopped
+ * and no file has been loaded and the TIN has not been cleared.
+ */
+
 void MainWindow::tick()
 {
   double toleranceRatio;
@@ -73,6 +84,33 @@ void MainWindow::tick()
   int tstatus=getThreadStatus();
   int numTriangles=net.triangles.size();
   ThreadAction ta;
+  if (lastState!=canvas->state)
+  {
+    if (lastState==-ACT_LOAD && canvas->state==TH_WAIT)
+    { // finished loading file
+      clearAction->setEnabled(true);
+      convertAction->setEnabled(true);
+    }
+    if (canvas->state==-ACT_LOAD)
+    { // started loading file
+      convertAction->setEnabled(false);
+      resumeAction->setEnabled(false);
+      clearAction->setEnabled(false);
+    }
+    if (canvas->state==TH_WAIT && conversionStopped)
+    {
+      stopAction->setEnabled(false);
+      resumeAction->setEnabled(true);
+      clearAction->setEnabled(true);
+    }
+    if (canvas->state==TH_RUN)
+    {
+      stopAction->setEnabled(true);
+      resumeAction->setEnabled(false);
+      clearAction->setEnabled(false);
+    }
+    lastState=canvas->state;
+  }
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
   { // Number of dots or triangles has changed: update status bar
     if (lastNumTriangles<4 && numTriangles>4)
@@ -82,7 +120,11 @@ void MainWindow::tick()
     lastNumDots=numDots;
     lastNumTriangles=numTriangles;
     if (numDots && numTriangles)
+    {
       dotTriangleMsg->setText(tr("Making octagon"));
+      convertAction->setEnabled(false);
+      clearAction->setEnabled(false);
+    }
     else if (numTriangles)
       dotTriangleMsg->setText(tr("%n triangles","",numTriangles));
     else
@@ -120,14 +162,20 @@ void MainWindow::tick()
 	  stageTolerance/=2;
 	  setThreadCommand(TH_RUN);
 	}
-	else
+	else // conversion is finished
+	{
 	  setThreadCommand(TH_WAIT);
+	  loadAction->setEnabled(true);
+	  convertAction->setEnabled(true);
+	  clearAction->setEnabled(true);
+	  stopAction->setEnabled(false);
+	}
 	currentAction=0;
 	canvas->update();
       }
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
-  { // Convesion is running: check whether stage is complete
+  { // Conversion is running: check whether stage is complete
     areadone=areaDone(stageTolerance);
     doneBar->setValue(lrint(areadone[0]*16777216));
     rmsadj=rmsAdjustment();
@@ -156,6 +204,7 @@ void MainWindow::tick()
       while (stageTolerance*2<tolerance*toleranceRatio)
 	stageTolerance*=2;
       setThreadCommand(TH_RUN);
+      stopAction->setEnabled(true);
     }
   }
 }
@@ -317,11 +366,13 @@ void MainWindow::makeActions()
   stopAction=new QAction(this);
   stopAction->setIcon(QIcon::fromTheme("process-stop"));
   stopAction->setText(tr("Stop"));
+  stopAction->setEnabled(false);
   fileMenu->addAction(stopAction);
   connect(stopAction,SIGNAL(triggered(bool)),this,SLOT(stopConversion()));
   resumeAction=new QAction(this);
   //resumeAction->setIcon(QIcon::fromTheme("edit-clear"));
   resumeAction->setText(tr("Resume"));
+  resumeAction->setEnabled(false);
   fileMenu->addAction(resumeAction);
   connect(resumeAction,SIGNAL(triggered(bool)),this,SLOT(resumeConversion()));
   exitAction=new QAction(this);

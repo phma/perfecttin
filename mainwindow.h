@@ -64,6 +64,7 @@ private:
   int lastNumDots,lastNumTriangles;
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
+  int lastState; // state is in TinCanvas
   bool dxfText,sameUnits,conversionStopped;
   double tolerance,inUnit,outUnit;
   double lpfBusyFraction;
