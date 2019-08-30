@@ -69,6 +69,7 @@ MainWindow::~MainWindow()
 /* Rules for enabling actions:
  * You cannot load a file while a conversion is in progress.
  * You can load a file while loading another file (it will be queued).
+ * You can load a file while a conversion is stopped, but then you cannot resume.
  * You cannot clear while loading a file or converting.
  * You cannot start a conversion while loading a file or converting.
  * You cannot stop a conversion unless one is in progress and has
@@ -86,6 +87,7 @@ void MainWindow::tick()
   ThreadAction ta;
   if (lastState!=canvas->state)
   {
+    //cout<<"Last state "<<lastState<<" Current state "<<canvas->state<<endl;
     if (lastState==-ACT_LOAD && canvas->state==TH_WAIT)
     { // finished loading file
       clearAction->setEnabled(true);
@@ -96,15 +98,18 @@ void MainWindow::tick()
       convertAction->setEnabled(false);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
+      conversionStopped=false;
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
+      loadAction->setEnabled(true);
       stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
       clearAction->setEnabled(true);
     }
     if (canvas->state==TH_RUN)
     {
+      loadAction->setEnabled(false);
       stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
@@ -122,6 +127,7 @@ void MainWindow::tick()
     if (numDots && numTriangles)
     {
       dotTriangleMsg->setText(tr("Making octagon"));
+      loadAction->setEnabled(false);
       convertAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
