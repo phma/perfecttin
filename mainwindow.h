@@ -51,6 +51,8 @@ public slots:
   void setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
   void loadFile();
   void startConversion();
+  void stopConversion();
+  void resumeConversion();
   void clearCloud();
   void configure();
   void msgNoCloudArea();
@@ -62,7 +64,7 @@ private:
   int lastNumDots,lastNumTriangles;
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
-  bool dxfText,sameUnits;
+  bool dxfText,sameUnits,conversionStopped;
   double tolerance,inUnit,outUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;

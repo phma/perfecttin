@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   doneBar->setRange(0,16777216);
   busyBar->setRange(0,16777216);
   lpfBusyFraction=0;
+  conversionStopped=false;
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
@@ -219,6 +220,21 @@ void MainWindow::startConversion()
   }
 }
 
+void MainWindow::stopConversion()
+{
+  setThreadCommand(TH_WAIT);
+  conversionStopped=true;
+}
+
+void MainWindow::resumeConversion()
+{
+  if (conversionStopped)
+  {
+    setThreadCommand(TH_RUN);
+    conversionStopped=false;
+  }
+}
+
 void MainWindow::clearCloud()
 {
   cloud.clear();
@@ -302,12 +318,12 @@ void MainWindow::makeActions()
   stopAction->setIcon(QIcon::fromTheme("process-stop"));
   stopAction->setText(tr("Stop"));
   fileMenu->addAction(stopAction);
-  //connect(stopAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
+  connect(stopAction,SIGNAL(triggered(bool)),this,SLOT(stopConversion()));
   resumeAction=new QAction(this);
   //resumeAction->setIcon(QIcon::fromTheme("edit-clear"));
   resumeAction->setText(tr("Resume"));
   fileMenu->addAction(resumeAction);
-  //connect(resumeAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
+  connect(resumeAction,SIGNAL(triggered(bool)),this,SLOT(resumeConversion()));
   exitAction=new QAction(this);
   exitAction->setIcon(QIcon::fromTheme("application-exit"));
   exitAction->setText(tr("Exit"));
