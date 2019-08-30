@@ -422,12 +422,17 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
-      wingEdge.lock_shared();
-      e=(e+relprime(net.edges.size(),thread))%net.edges.size();
-      t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
-      wingEdge.unlock_shared();
-      edgeResult=edgeop(&net.edges[e],stageTolerance,thread);
-      triResult=triop(&net.triangles[t],stageTolerance,thread);
+      if (net.edges.size() && net.triangles.size())
+      {
+	wingEdge.lock_shared();
+	e=(e+relprime(net.edges.size(),thread))%net.edges.size();
+	t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
+	wingEdge.unlock_shared();
+	edgeResult=edgeop(&net.edges[e],stageTolerance,thread);
+	triResult=triop(&net.triangles[t],stageTolerance,thread);
+      }
+      else
+	triResult=edgeResult=2;
       if (triResult==2 || edgeResult==2) // deadlock
 	sleepDead(thread);
       else if (triResult==1 || edgeResult==1)
