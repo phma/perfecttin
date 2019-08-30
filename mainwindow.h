@@ -74,6 +74,7 @@ private:
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
   QProgressBar *doneBar,*busyBar;
   QAction *loadAction,*convertAction,*clearAction;
+  QAction *stopAction,*resumeAction,*exitAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   TinCanvas *canvas;

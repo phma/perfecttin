@@ -298,6 +298,21 @@ void MainWindow::makeActions()
   clearAction->setText(tr("Clear"));
   fileMenu->addAction(clearAction);
   connect(clearAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
+  stopAction=new QAction(this);
+  stopAction->setIcon(QIcon::fromTheme("process-stop"));
+  stopAction->setText(tr("Stop"));
+  fileMenu->addAction(stopAction);
+  //connect(stopAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
+  resumeAction=new QAction(this);
+  //resumeAction->setIcon(QIcon::fromTheme("edit-clear"));
+  resumeAction->setText(tr("Resume"));
+  fileMenu->addAction(resumeAction);
+  //connect(resumeAction,SIGNAL(triggered(bool)),this,SLOT(clearCloud()));
+  exitAction=new QAction(this);
+  exitAction->setIcon(QIcon::fromTheme("application-exit"));
+  exitAction->setText(tr("Exit"));
+  fileMenu->addAction(exitAction);
+  connect(exitAction,SIGNAL(triggered(bool)),this,SLOT(close()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
