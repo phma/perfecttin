@@ -75,12 +75,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="84"/>
+        <location filename="mainwindow.cpp" line="129"/>
         <source>Making octagon</source>
         <translation>Making octagon</translation>
     </message>
     <message numerus="yes">
-        <location filename="mainwindow.cpp" line="86"/>
+        <location filename="mainwindow.cpp" line="135"/>
         <source>%n triangles</source>
         <translation>
             <numerusform>%n triangle</numerusform>
@@ -88,7 +88,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="mainwindow.cpp" line="88"/>
+        <location filename="mainwindow.cpp" line="137"/>
         <source>%n dots</source>
         <translation>
             <numerusform>%n dot</numerusform>
@@ -96,52 +96,53 @@
         </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="168"/>
+        <location filename="mainwindow.cpp" line="224"/>
         <source>Load Point Cloud File</source>
         <translation>Load point cloud file</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="173"/>
+        <location filename="mainwindow.cpp" line="229"/>
         <source>(*.las);;(*.ply);;(*)</source>
         <translation>Laser files (*.las);;Polygon files (*.ply);;All files(*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="175"/>
+        <location filename="mainwindow.cpp" line="231"/>
         <source>(*.las);;(*)</source>
         <translation>Laser files (*.las);;All files(*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="203"/>
+        <location filename="mainwindow.cpp" line="259"/>
         <source>Convert to TIN</source>
         <translation>Convert to TIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="207"/>
+        <location filename="mainwindow.cpp" line="263"/>
         <source>*</source>
         <translation>All files (*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="237"/>
-        <location filename="mainwindow.cpp" line="242"/>
-        <location filename="mainwindow.cpp" line="248"/>
-        <location filename="mainwindow.cpp" line="255"/>
+        <location filename="mainwindow.cpp" line="308"/>
+        <location filename="mainwindow.cpp" line="313"/>
+        <location filename="mainwindow.cpp" line="319"/>
+        <location filename="mainwindow.cpp" line="326"/>
+        <location filename="mainwindow.cpp" line="335"/>
         <source>PerfectTIN</source>
         <translation>PerfectTIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="237"/>
+        <location filename="mainwindow.cpp" line="308"/>
         <source>Point cloud no area</source>
         <translation>Point cloud covers no area or has infinite or NaN points</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="244"/>
+        <location filename="mainwindow.cpp" line="315"/>
         <source>
 PLY file code © Simon Rajotte, MIT license</source>
         <translation>
 PLY file code © Simon Rajotte, MIT license</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="249"/>
+        <location filename="mainwindow.cpp" line="320"/>
         <source>%1
 Version %2
 Copyright %3 Pierre Abbat
@@ -152,47 +153,72 @@ Copyright %3 Pierre Abbat
 License GPL 3 or later%4</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="266"/>
+        <location filename="mainwindow.cpp" line="337"/>
+        <source>A conversion is in progress.</source>
+        <translation>A conversion is in progress.</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="338"/>
+        <source>Do you want to abort it and exit?</source>
+        <translation>Do you want to abort it and exit?</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="353"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="267"/>
+        <location filename="mainwindow.cpp" line="354"/>
         <source>&amp;Settings</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="268"/>
+        <location filename="mainwindow.cpp" line="355"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="272"/>
+        <location filename="mainwindow.cpp" line="359"/>
         <source>Load</source>
         <translation>Load</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="277"/>
+        <location filename="mainwindow.cpp" line="364"/>
         <source>Convert</source>
         <translation>Convert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="282"/>
+        <location filename="mainwindow.cpp" line="369"/>
         <source>Clear</source>
         <translation>Clear</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="288"/>
+        <location filename="mainwindow.cpp" line="374"/>
+        <source>Stop</source>
+        <translation>Stop</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="380"/>
+        <source>Resume</source>
+        <translation>Resume</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="386"/>
+        <source>Exit</source>
+        <translation>Exit</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="392"/>
         <source>Configure</source>
         <translation>Configure</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="293"/>
+        <location filename="mainwindow.cpp" line="397"/>
         <source>About PerfectTIN</source>
         <translation>About PerfectTIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="297"/>
+        <location filename="mainwindow.cpp" line="401"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
     </message>
