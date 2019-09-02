@@ -57,6 +57,7 @@ void flip(edge *e)
   wingEdge.lock();
   e->flip(&net);
   //assert(net.checkTinConsistency());
+  wingEdge.unlock();
   allDots.resize(e->tria->dots.size()+e->trib->dots.size());
   memmove(&allDots[0],&e->tria->dots[0],e->tria->dots.size()*sizeof(xyz));
   memmove(&allDots[e->tria->dots.size()],&e->trib->dots[0],e->trib->dots.size()*sizeof(xyz));
@@ -73,7 +74,6 @@ void flip(edge *e)
   e->trib->flatten();
   e->tria->unsetError();
   e->trib->unsetError();
-  wingEdge.unlock();
 }
 
 point *bend(edge *e)

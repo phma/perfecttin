@@ -91,6 +91,7 @@ point *split(triangle *tri)
   net.edges[newEdgeNum+1].setNeighbors();
   net.edges[newEdgeNum+2].setNeighbors();
   //assert(net.checkTinConsistency());
+  wingEdge.unlock();
   for (i=0;i<tri->dots.size();i++)
     if (net.triangles[newTriNum].in(tri->dots[i]))
       net.triangles[newTriNum].dots.push_back(tri->dots[i]);
@@ -105,7 +106,6 @@ point *split(triangle *tri)
   tri->flatten();
   net.triangles[newTriNum].flatten();
   net.triangles[newTriNum+1].flatten();
-  wingEdge.unlock();
   return pnt;
 }
 

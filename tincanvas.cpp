@@ -192,6 +192,8 @@ void TinCanvas::tick()
     }
     elapsed=clk.now()-timeStart;
   }
+  //if (elapsed>cr::milliseconds(50))
+    //cout<<"tick got stuck\n";
 }
 
 void TinCanvas::setSize()
