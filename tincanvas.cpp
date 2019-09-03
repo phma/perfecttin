@@ -165,10 +165,12 @@ void TinCanvas::tick()
     wingEdge.unlock_shared();
     if (triangleNum<net.triangles.size() && net.triangles[triangleNum].a)
     {
+      wingEdge.lock_shared();
       gradient=net.triangles[triangleNum].gradient(net.triangles[triangleNum].centroid());
       A=*net.triangles[triangleNum].a;
       B=*net.triangles[triangleNum].b;
       C=*net.triangles[triangleNum].c;
+      wingEdge.unlock_shared();
       r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
       g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
       b=0.5-gradient.north()*0.483 -gradient.east()*0.1294;
