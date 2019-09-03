@@ -130,6 +130,7 @@ array<double,2> areaDone(double tolerance)
     //cout<<allBuckets.size()<<" buckets \n";
   }
   markBucketClean(bucket);
+  wingEdge.lock_shared();
   for (i=bucket;i<net.triangles.size();i+=allBuckets.size())
   {
     allTri.push_back(net.triangles[i].sarea);
@@ -142,6 +143,7 @@ array<double,2> areaDone(double tolerance)
     else
       tri=&net.triangles[i];
   }
+  wingEdge.unlock_shared();
   allBuckets[bucket]=pairwisesum(allTri);
   doneBuckets[bucket]=pairwisesum(doneTri);
   doneq2Buckets[bucket]=pairwisesum(doneq2Tri);
@@ -279,6 +281,7 @@ set<int> whichLocks(vector<int> triangles)
   triangle *tri;
   point *a,*b,*c;
   int i;
+  wingEdge.lock_shared();
   for (i=0;i<triangles.size();i++)
   {
     tri=&net.triangles[triangles[i]];
@@ -292,6 +295,7 @@ set<int> whichLocks(vector<int> triangles)
     if (c)
       ret.insert(mtxSquare(*c));
   }
+  wingEdge.unlock_shared();
   if (ret.size()==0)
     ret.insert(0);
   return ret;
@@ -416,6 +420,8 @@ void TinThread::operator()(int thread)
 {
   int i,e=0,t=0,d=0;
   int triResult,edgeResult;
+  edge *edg;
+  triangle *tri;
   ThreadAction act;
   while (threadCommand!=TH_STOP)
   {
@@ -426,10 +432,12 @@ void TinThread::operator()(int thread)
       {
 	wingEdge.lock_shared();
 	e=(e+relprime(net.edges.size(),thread))%net.edges.size();
+	edg=&net.edges[e];
 	t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
+	tri=&net.triangles[t];
 	wingEdge.unlock_shared();
-	edgeResult=edgeop(&net.edges[e],stageTolerance,thread);
-	triResult=triop(&net.triangles[t],stageTolerance,thread);
+	edgeResult=edgeop(edg,stageTolerance,thread);
+	triResult=triop(tri,stageTolerance,thread);
       }
       else
 	triResult=edgeResult=2;

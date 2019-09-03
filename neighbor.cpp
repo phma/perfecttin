@@ -35,7 +35,7 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
   edge *ed,*ed0;
   int i,j;
   set<triangle *>::iterator k;
-  wingEdge.lock();
+  wingEdge.lock_shared();
   for (i=0;i<corners.size();i++)
   {
     for (ed=ed0=corners[i]->line,j=0;j<net.edges.size() && (ed!=ed0 || j==0);ed=ed->next(corners[i]),j++)
@@ -46,6 +46,6 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
   for (k=tmpRet.begin();k!=tmpRet.end();k++)
     if (*k!=nullptr)
       ret.push_back(*k);
-  wingEdge.unlock();
+  wingEdge.unlock_shared();
   return ret;
 }

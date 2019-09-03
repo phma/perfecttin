@@ -38,6 +38,7 @@ point *split(triangle *tri)
  */
 {
   edge *sidea,*sideb,*sidec;
+  triangle *new0,*new1;
   vector<xyz> remainder; // the dots that remain in tri
   int i;
   wingEdge.lock();
@@ -66,12 +67,14 @@ point *split(triangle *tri)
   sideb->setnext(tri->c,&net.edges[newEdgeNum+2]);
   net.edges[newEdgeNum+2].setnext(tri->b,sidea);
   int newTriNum=net.addtriangle(2);
-  net.triangles[newTriNum].a=tri->a;
-  net.triangles[newTriNum].b=tri->b;
-  net.triangles[newTriNum].c=pnt;
-  net.triangles[newTriNum+1].a=tri->a;
-  net.triangles[newTriNum+1].b=pnt;
-  net.triangles[newTriNum+1].c=tri->c;
+  new0=&net.triangles[newTriNum];
+  new1=&net.triangles[newTriNum+1];
+  new0->a=tri->a;
+  new0->b=tri->b;
+  new0->c=pnt;
+  new1->a=tri->a;
+  new1->b=pnt;
+  new1->c=tri->c;
   tri->a=pnt;
   net.edges[newEdgeNum  ].tria=net.edges[newEdgeNum+2].trib=&net.triangles[newTriNum+1];
   net.edges[newEdgeNum+1].tria=net.edges[newEdgeNum  ].trib=&net.triangles[newTriNum];
@@ -93,19 +96,19 @@ point *split(triangle *tri)
   //assert(net.checkTinConsistency());
   wingEdge.unlock();
   for (i=0;i<tri->dots.size();i++)
-    if (net.triangles[newTriNum].in(tri->dots[i]))
-      net.triangles[newTriNum].dots.push_back(tri->dots[i]);
-    else if (net.triangles[newTriNum+1].in(tri->dots[i]))
-      net.triangles[newTriNum+1].dots.push_back(tri->dots[i]);
+    if (new0->in(tri->dots[i]))
+      new0->dots.push_back(tri->dots[i]);
+    else if (new1->in(tri->dots[i]))
+      new1->dots.push_back(tri->dots[i]);
     else
       remainder.push_back(tri->dots[i]);
     swap(tri->dots,remainder);
   tri->dots.shrink_to_fit();
-  net.triangles[newTriNum].dots.shrink_to_fit();
-  net.triangles[newTriNum+1].dots.shrink_to_fit();
+  new0->dots.shrink_to_fit();
+  new1->dots.shrink_to_fit();
   tri->flatten();
-  net.triangles[newTriNum].flatten();
-  net.triangles[newTriNum+1].flatten();
+  new0->flatten();
+  new1->flatten();
   return pnt;
 }
 
@@ -113,8 +116,10 @@ bool lockTriangles(int thread,vector<triangle *> triPtr)
 {
   vector<int> triangles;
   int i;
+  wingEdge.lock_shared();
   for (i=0;i<triPtr.size();i++)
     triangles.push_back(net.revtriangles[triPtr[i]]);
+  wingEdge.unlock_shared();
   return lockTriangles(thread,triangles);
 }
 
