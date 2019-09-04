@@ -80,9 +80,9 @@ void drawNet(PostScript &ps)
 	ps.setcolor((slope>1)?0:1-slope,(slope>1)?0:1-slope,1);
       else
       {
-	r=0.5+gradient.north()*0.3   -gradient.east()*0.4;
+	r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
 	g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
-	b=0.5+gradient.north()*0.4   -gradient.east()*0.3;
+	b=0.5-gradient.north()*0.483 -gradient.east()*0.1294;
 	if (r>1)
 	  r=1;
 	if (r<0)
