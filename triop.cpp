@@ -38,7 +38,8 @@ point *split(triangle *tri)
  */
 {
   edge *sidea,*sideb,*sidec;
-  triangle *new0,*new1;
+  triangle *newt0,*newt1;
+  edge *newe0,*newe1,*newe2;
   vector<xyz> remainder; // the dots that remain in tri
   int i;
   wingEdge.lock();
@@ -47,68 +48,71 @@ point *split(triangle *tri)
   net.addpoint(newPointNum,newPoint);
   point *pnt=&net.points[newPointNum];
   int newEdgeNum=net.edges.size();
-  net.edges[newEdgeNum].a=pnt;
-  net.edges[newEdgeNum].b=tri->a;
-  net.edges[newEdgeNum+1].a=pnt;
-  net.edges[newEdgeNum+1].b=tri->b;
-  net.edges[newEdgeNum+2].a=pnt;
-  net.edges[newEdgeNum+2].b=tri->c;
-  pnt->line=&net.edges[newEdgeNum];
+  newe0=&net.edges[newEdgeNum];
+  newe1=&net.edges[newEdgeNum+1];
+  newe2=&net.edges[newEdgeNum+2];
+  newe0->a=pnt;
+  newe0->b=tri->a;
+  newe1->a=pnt;
+  newe1->b=tri->b;
+  newe2->a=pnt;
+  newe2->b=tri->c;
+  pnt->line=newe0;
   sidea=tri->c->edg(tri);
   sideb=tri->a->edg(tri);
   sidec=tri->b->edg(tri);
-  net.edges[newEdgeNum  ].setnext(pnt,&net.edges[newEdgeNum+1]);
-  net.edges[newEdgeNum+1].setnext(pnt,&net.edges[newEdgeNum+2]);
-  net.edges[newEdgeNum+2].setnext(pnt,&net.edges[newEdgeNum  ]);
-  sidea->setnext(tri->b,&net.edges[newEdgeNum+1]);
-  net.edges[newEdgeNum+1].setnext(tri->b,sidec);
-  sidec->setnext(tri->a,&net.edges[newEdgeNum  ]);
-  net.edges[newEdgeNum  ].setnext(tri->b,sideb);
-  sideb->setnext(tri->c,&net.edges[newEdgeNum+2]);
-  net.edges[newEdgeNum+2].setnext(tri->b,sidea);
+  newe0->setnext(pnt,newe1);
+  newe1->setnext(pnt,newe2);
+  newe2->setnext(pnt,newe0);
+  sidea->setnext(tri->b,newe1);
+  newe1->setnext(tri->b,sidec);
+  sidec->setnext(tri->a,newe0);
+  newe0->setnext(tri->b,sideb);
+  sideb->setnext(tri->c,newe2);
+  newe2->setnext(tri->b,sidea);
   int newTriNum=net.addtriangle(2);
-  new0=&net.triangles[newTriNum];
-  new1=&net.triangles[newTriNum+1];
-  new0->a=tri->a;
-  new0->b=tri->b;
-  new0->c=pnt;
-  new1->a=tri->a;
-  new1->b=pnt;
-  new1->c=tri->c;
+  newt0=&net.triangles[newTriNum];
+  newt1=&net.triangles[newTriNum+1];
+  newt0->a=tri->a;
+  newt0->b=tri->b;
+  newt0->c=pnt;
+  newt1->a=tri->a;
+  newt1->b=pnt;
+  newt1->c=tri->c;
   tri->a=pnt;
-  net.edges[newEdgeNum  ].tria=net.edges[newEdgeNum+2].trib=&net.triangles[newTriNum+1];
-  net.edges[newEdgeNum+1].tria=net.edges[newEdgeNum  ].trib=&net.triangles[newTriNum];
-  net.edges[newEdgeNum+2].tria=net.edges[newEdgeNum+1].trib=tri;
+  newe0->tria=newe2->trib=newt1;
+  newe1->tria=newe0->trib=newt0;
+  newe2->tria=newe1->trib=tri;
   if (sideb->tria==tri)
-    sideb->tria=&net.triangles[newTriNum+1];
+    sideb->tria=newt1;
   if (sideb->trib==tri)
-    sideb->trib=&net.triangles[newTriNum+1];
+    sideb->trib=newt1;
   if (sidec->tria==tri)
-    sidec->tria=&net.triangles[newTriNum];
+    sidec->tria=newt0;
   if (sidec->trib==tri)
-    sidec->trib=&net.triangles[newTriNum];
+    sidec->trib=newt0;
   sidea->setNeighbors();
   sideb->setNeighbors();
   sidec->setNeighbors();
-  net.edges[newEdgeNum  ].setNeighbors();
-  net.edges[newEdgeNum+1].setNeighbors();
-  net.edges[newEdgeNum+2].setNeighbors();
+  newe0->setNeighbors();
+  newe1->setNeighbors();
+  newe2->setNeighbors();
   //assert(net.checkTinConsistency());
   wingEdge.unlock();
   for (i=0;i<tri->dots.size();i++)
-    if (new0->in(tri->dots[i]))
-      new0->dots.push_back(tri->dots[i]);
-    else if (new1->in(tri->dots[i]))
-      new1->dots.push_back(tri->dots[i]);
+    if (newt0->in(tri->dots[i]))
+      newt0->dots.push_back(tri->dots[i]);
+    else if (newt1->in(tri->dots[i]))
+      newt1->dots.push_back(tri->dots[i]);
     else
       remainder.push_back(tri->dots[i]);
     swap(tri->dots,remainder);
   tri->dots.shrink_to_fit();
-  new0->dots.shrink_to_fit();
-  new1->dots.shrink_to_fit();
+  newt0->dots.shrink_to_fit();
+  newt1->dots.shrink_to_fit();
   tri->flatten();
-  new0->flatten();
-  new1->flatten();
+  newt0->flatten();
+  newt1->flatten();
   return pnt;
 }
 
