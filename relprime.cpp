@@ -25,7 +25,6 @@
 #include "threads.h"
 
 using namespace std;
-using namespace boost;
 
 const double quadirr[]=
 {

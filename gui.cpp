@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
   MainWindow window;
   nthreads=window.getNumberThreads();
   if (nthreads<1)
-    nthreads=boost::thread::hardware_concurrency();
+    nthreads=thread::hardware_concurrency();
   if (nthreads<1)
     nthreads=2;
   startThreads(nthreads);

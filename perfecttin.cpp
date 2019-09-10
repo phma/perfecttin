@@ -20,7 +20,7 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <boost/program_options.hpp>
-#include <boost/chrono.hpp>
+#include <chrono>
 #include "ply.h"
 #include "config.h"
 #include "las.h"
@@ -42,7 +42,7 @@
 
 using namespace std;
 namespace po=boost::program_options;
-namespace cr=boost::chrono;
+namespace cr=chrono;
 
 xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 {
   PostScript ps;
   int i,e,t,d;
-  int nthreads=boost::thread::hardware_concurrency();
+  int nthreads=thread::hardware_concurrency();
   time_t now,then;
   double tolerance,rmsadj;
   bool done=false;
@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
     tri=&net.triangles[0];
     for (i=e=t=d=0;!done;i++)
     {
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(1));
+      this_thread::sleep_for(chrono::milliseconds(1));
       now=time(nullptr);
       if (now!=then)
       {

@@ -24,6 +24,8 @@
 #include "ldecimal.h"
 #include "threads.h"
 
+using namespace std;
+
 const double conversionFactors[4]={1,0.3048,12e2/3937,0.3047996};
 const char unitNames[4][12]=
 {
@@ -94,7 +96,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double
   outUnitLabel->setText(tr("Output unit"));
   toleranceLabel->setText(tr("Tolerance"));
   threadLabel->setText(tr("Threads:"));
-  threadDefault->setText(tr("default is %n","",boost::thread::hardware_concurrency()));
+  threadDefault->setText(tr("default is %n","",thread::hardware_concurrency()));
   dxfCheck->setText(tr("Text mode DXF"));
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {

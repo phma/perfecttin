@@ -29,7 +29,7 @@
 #include "ldecimal.h"
 
 using namespace std;
-namespace cr=boost::chrono;
+namespace cr=std::chrono;
 
 QPoint qptrnd(xy pnt)
 {

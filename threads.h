@@ -20,7 +20,10 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/thread.hpp>
+#include <thread>
+#include <mutex>
+#include <shared_mutex>
+#include <chrono>
 #include <vector>
 #include <array>
 
@@ -45,12 +48,12 @@ struct ThreadAction
   std::string filename;
 };
 
-extern boost::shared_mutex wingEdge;
-extern boost::mutex adjLog;
+extern std::shared_mutex wingEdge;
+extern std::mutex adjLog;
 extern double stageTolerance;
 extern int opcount,trianglesToPaint;
 extern int currentAction;
-extern boost::chrono::steady_clock clk;
+extern std::chrono::steady_clock clk;
 extern int mtxSquareSize;
 
 void markBucketClean(int bucket);

@@ -31,8 +31,7 @@
 #include "relprime.h"
 #include "manysum.h"
 using namespace std;
-using namespace boost;
-namespace cr=boost::chrono;
+namespace cr=std::chrono;
 
 shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
 map<int,mutex> triMutex; // Lock this while locking or unlocking triangles.

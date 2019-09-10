@@ -21,7 +21,7 @@ include(CheckTypeSize)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/perfecttin)
@@ -29,7 +29,7 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/perfecttin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
-find_package(Boost REQUIRED COMPONENTS program_options locale chrono thread)
+find_package(Boost REQUIRED COMPONENTS program_options locale)
 qt5_add_resources(lib_resources perfecttin.qrc)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
@@ -50,8 +50,8 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                ${lib_resources} ${qm_files})
-target_link_libraries(perfecttin ${Boost_LIBRARIES})
-target_link_libraries(perfecttin-gui ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
+target_link_libraries(perfecttin pthread ${Boost_LIBRARIES})
+target_link_libraries(perfecttin-gui pthread ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
 if (${LibPLYXX_FOUND})
 target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})
 target_link_libraries(perfecttin-gui ${LibPLYXX_LIBRARY})
@@ -72,7 +72,7 @@ check_type_size("int *" INT_POINTER)
 
 set(PERFECTTIN_MAJOR_VERSION 0)
 set(PERFECTTIN_MINOR_VERSION 2)
-set(PERFECTTIN_PATCH_VERSION 0)
+set(PERFECTTIN_PATCH_VERSION 0+)
 set(PERFECTTIN_VERSION ${PERFECTTIN_MAJOR_VERSION}.${PERFECTTIN_MINOR_VERSION}.${PERFECTTIN_PATCH_VERSION})
 set(COPY_YEAR 2019)
 
