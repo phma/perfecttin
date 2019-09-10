@@ -29,7 +29,7 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/perfecttin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
-find_package(Boost REQUIRED COMPONENTS program_options locale)
+find_package(Boost REQUIRED COMPONENTS program_options)
 qt5_add_resources(lib_resources perfecttin.qrc)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
