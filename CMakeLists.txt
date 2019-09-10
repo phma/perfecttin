@@ -29,11 +29,12 @@ set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/perfecttin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
-find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(Boost COMPONENTS program_options)
 qt5_add_resources(lib_resources perfecttin.qrc)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
+if (${Boost_FOUND})
 add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp
                dxf.cpp edgeop.cpp fileio.cpp las.cpp ldecimal.cpp
@@ -41,6 +42,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp cloud.cpp cogo.cpp configdialog.cpp
                dxf.cpp edgeop.cpp fileio.cpp gui.cpp las.cpp ldecimal.cpp
@@ -50,10 +52,14 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                ${lib_resources} ${qm_files})
+if (${Boost_FOUND})
 target_link_libraries(perfecttin pthread ${Boost_LIBRARIES})
+endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui pthread ${Boost_LIBRARIES} Qt5::Widgets Qt5::Core)
 if (${LibPLYXX_FOUND})
+if (${Boost_FOUND})
 target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})
+endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${LibPLYXX_LIBRARY})
 endif (${LibPLYXX_FOUND})
 
@@ -63,7 +69,10 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
-install(TARGETS perfecttin perfecttin-gui DESTINATION bin)
+if (${Boost_FOUND})
+install(TARGETS perfecttin DESTINATION bin)
+endif (${Boost_FOUND})
+install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
 
 test_big_endian(BIGENDIAN)
