@@ -31,17 +31,23 @@
 #include "relprime.h"
 #include "manysum.h"
 using namespace std;
+#ifdef __MINGW64__
+using namespace mingw_stdthread;
+namespace th=mingw_stdthread;
+#else
+namespace th=std;
+#endif
 namespace cr=std::chrono;
 
-shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
-map<int,mutex> triMutex; // Lock this while locking or unlocking triangles.
-shared_mutex holderMutex; // for triangleHolders
-mutex adjLog;
-mutex actMutex;
-mutex bucketMutex;
+th::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
+map<int,th::mutex> triMutex; // Lock this while locking or unlocking triangles.
+th::shared_mutex holderMutex; // for triangleHolders
+th::mutex adjLog;
+th::mutex actMutex;
+th::mutex bucketMutex;
 
 int threadCommand;
-vector<thread> threads;
+vector<th::thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<double> sleepTime;
 vector<int> triangleHolders; // one per triangle
@@ -194,7 +200,7 @@ void startThreads(int n)
   for (i=0;i<m;i++)
     triMutex[i];
   for (i=0;i<n;i++)
-    threads.push_back(thread(TinThread(),i));
+    threads.push_back(th::thread(TinThread(),i));
 }
 
 void joinThreads()
@@ -237,7 +243,7 @@ void sleep(int thread)
   if (sleepTime[thread]>1000)
     sleepTime[thread]=1000;
   threadStatus[thread]|=256;
-  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
+  th::this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
 }
 
@@ -246,7 +252,7 @@ void sleepDead(int thread)
 {
   sleepTime[thread]=sleepTime[thread]*(1+1./net.triangles.size())+0.1;
   threadStatus[thread]|=256;
-  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
+  th::this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
 }
 
@@ -411,7 +417,7 @@ void waitForThreads(int newStatus)
     for (i=n=0;i<threadStatus.size();i++)
       if ((threadStatus[i]&255)!=threadCommand)
 	n++;
-    this_thread::sleep_for(chrono::milliseconds(n));
+    th::this_thread::sleep_for(chrono::milliseconds(n));
   } while (n);
 }
 

@@ -20,9 +20,16 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef __MINGW64__
+#define MINGW_STDTHREAD_REDUNDANCY_WARNING
+#include <../mingw-std-threads/mingw.thread.h>
+#include <../mingw-std-threads/mingw.mutex.h>
+#include <../mingw-std-threads/mingw.shared_mutex.h>
+#else
 #include <thread>
 #include <mutex>
 #include <shared_mutex>
+#endif
 #include <chrono>
 #include <vector>
 #include <array>
@@ -48,8 +55,13 @@ struct ThreadAction
   std::string filename;
 };
 
+#ifdef __MINGW64__
+extern mingw_stdthread::shared_mutex wingEdge;
+extern mingw_stdthread::mutex adjLog;
+#else
 extern std::shared_mutex wingEdge;
 extern std::mutex adjLog;
+#endif
 extern double stageTolerance;
 extern int opcount,trianglesToPaint;
 extern int currentAction;
