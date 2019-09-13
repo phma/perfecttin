@@ -54,13 +54,15 @@ unsigned relprime(unsigned n,int thread)
  * q is the threadth quadratic irrational in the Quadlods order.
  */
 {
-  unsigned ret,twice;
+  unsigned ret=0,twice;
   double phin;
+  uint64_t inx=((uint64_t)thread<<32)+n;
   thread%=6542;
   if (thread<0)
     thread+=6542;
   primeMutex.lock_shared();
-  ret=relprimes[((uint64_t)thread<<32)+n];
+  if (relprimes.count(inx))
+    ret=relprimes[inx];
   primeMutex.unlock_shared();
   if (!ret)
   {
@@ -70,7 +72,7 @@ unsigned relprime(unsigned n,int thread)
     while (gcd(ret,n)!=1 || ret>n)
       ret=twice-ret+(ret<=phin);
     primeMutex.lock();
-    relprimes[((uint64_t)thread<<32)+n]=ret;
+    relprimes[inx]=ret;
     primeMutex.unlock();
   }
   return ret;
