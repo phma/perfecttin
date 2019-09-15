@@ -200,7 +200,10 @@ void startThreads(int n)
   for (i=0;i<m;i++)
     triMutex[i];
   for (i=0;i<n;i++)
+  {
     threads.push_back(th::thread(TinThread(),i));
+    th::this_thread::sleep_for(chrono::milliseconds(10));
+  }
 }
 
 void joinThreads()
