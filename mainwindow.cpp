@@ -20,8 +20,8 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "config.h"
-#include "mainwindow.h"
 #include "threads.h"
+#include "mainwindow.h"
 #include "ldecimal.h"
 #include "cloud.h"
 #include "adjelev.h"

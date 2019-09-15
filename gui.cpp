@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "threads.h"
 #include <QtGui>
 #include <QtWidgets>
 #include <QTranslator>
@@ -27,7 +28,6 @@
 #include "octagon.h"
 #include "config.h"
 #include "mainwindow.h"
-#include "threads.h"
 
 using namespace std;
 
