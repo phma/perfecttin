@@ -58,7 +58,7 @@ void LasHeader::open(std::string fileName)
   int whichNPoints=15;
   if (lasfile)
     close();
-  lasfile=new ifstream(fileName);
+  lasfile=new ifstream(fileName,ios::binary);
   magicBytes=readbeint(*lasfile);
   if (magicBytes==0x4c415346)
   {
