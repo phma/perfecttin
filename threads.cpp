@@ -45,6 +45,7 @@ th::shared_mutex holderMutex; // for triangleHolders
 th::mutex adjLog;
 th::mutex actMutex;
 th::mutex bucketMutex;
+th::mutex startMutex;
 
 int threadCommand;
 vector<th::thread> threads;
@@ -191,7 +192,6 @@ void startThreads(int n)
 {
   int i,m;
   threadCommand=TH_WAIT;
-  threadStatus.resize(n);
   heldTriangles.resize(n);
   sleepTime.resize(n);
   initTempPointlist(n);
@@ -428,6 +428,14 @@ void TinThread::operator()(int thread)
   edge *edg;
   triangle *tri;
   ThreadAction act;
+  startMutex.lock();
+  if (threadStatus.size()!=thread)
+  {
+    cout<<"Starting thread "<<threadStatus.size()<<", was passed "<<thread<<endl;
+    thread=threadStatus.size();
+  }
+  threadStatus.push_back(0);
+  startMutex.unlock();
   while (threadCommand!=TH_STOP)
   {
     if (threadCommand==TH_RUN)
