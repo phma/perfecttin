@@ -25,7 +25,6 @@
 
 #ifndef ANGLE_H
 #define ANGLE_H
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <string>
 
