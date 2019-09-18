@@ -20,11 +20,14 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <vector>
+#include <cmath>
 #include "dxf.h"
 #include "boundrect.h"
 #include "octagon.h"
 #include "ply.h"
 #include "las.h"
+#include "threads.h"
+#include "binio.h"
 #include "cloud.h"
 #include "fileio.h"
 using namespace std;
@@ -86,4 +89,80 @@ void readCloud(string inputFile)
     readLas(inputFile);
   if (cloud.size()>already)
     cout<<"Read "<<cloud.size()-already<<" dots\n";
+}
+
+void writePoint(ostream &file,xyz pnt)
+{
+  writeledouble(file,pnt.getx());
+  writeledouble(file,pnt.gety());
+  writeledouble(file,pnt.getz());
+}
+
+void writePoint4(ostream &file,xyz pnt)
+{
+  writelefloat(file,pnt.getx());
+  writelefloat(file,pnt.gety());
+  writelefloat(file,pnt.getz());
+}
+
+void writeTriangle(ostream &file,triangle *tri)
+{
+  int aInx,bInx,cInx;
+  int i;
+  xyz ctr;
+  wingEdge.lock_shared();
+  aInx=net.revpoints[tri->a];
+  bInx=net.revpoints[tri->b];
+  cInx=net.revpoints[tri->c];
+  wingEdge.unlock_shared();
+  ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
+  writeleint(file,aInx);
+  writeleint(file,bInx);
+  writeleint(file,cInx);
+  file.put(tri->dots.size()<255?tri->dots.size():255);
+  /* To save space, dots are written in 4-byte floats as the difference from
+   * the centroid. If there are at least 255 dots, the end is marked with NAN.
+   */
+  for (i=0;i<tri->dots.size();i++)
+    writePoint4(file,tri->dots[i]-ctr);
+  if (tri->dots.size()>=255)
+    writelefloat(file,NAN);
+}
+
+void writeCheckpoint(string inputFile,int tolRatio,double tolerance)
+/* inputFile contains the tolerance ratio, unless it's 1.
+ * tolerance is the final, not stage, tolerance. This can cause weirdness
+ * if one changes the tolerance during a conversion.
+ */
+{
+  int i;
+  unsigned checkSum=0;
+  xyz pnt;
+  triangle *tri;
+  ofstream checkFile(inputFile,ios::binary);
+  writeleshort(checkFile,6);
+  writeleshort(checkFile,28);
+  writeleshort(checkFile,496);
+  writeleshort(checkFile,8128);
+  writeleint(checkFile,tolRatio);
+  writeledouble(checkFile,NAN); // will be filled in later with tolerance
+  writeleint(checkFile,net.points.size());
+  writeleint(checkFile,net.triangles.size());
+  for (i=1;i<=net.points.size();i++)
+  {
+    wingEdge.lock_shared();
+    pnt=net.points[i];
+    wingEdge.unlock_shared();
+    writePoint(checkFile,pnt);
+  }
+  for (i=0;i<net.triangles.size();i++)
+  {
+    wingEdge.lock_shared();
+    tri=&net.triangles[i];
+    wingEdge.unlock_shared();
+    writeTriangle(checkFile,tri);
+  }
+  checkFile.flush();
+  checkFile.seekp(12,ios::beg);
+  writeledouble(checkFile,tolerance);
 }
