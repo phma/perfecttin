@@ -87,6 +87,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     }
     else
     {
+      oldelev=pnt[k]->elev();
       ret.validMatrix=false;
     }
     xsq.push_back(sqr(pnt[k]->elev()-oldelev));
