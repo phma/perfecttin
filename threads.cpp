@@ -366,9 +366,11 @@ void unlockTriangles(int thread)
   set<int>::iterator j;
   for (j=lockSet.begin();j!=lockSet.end();j++)
     triMutex[*j].lock();
+  holderMutex.lock_shared();
   for (i=0;i<heldTriangles[thread].size();i++)
     if (triangleHolders[heldTriangles[thread][i]]==thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
+  holderMutex.unlock_shared();
   heldTriangles[thread].clear();
   for (j=lockSet.begin();j!=lockSet.end();j++)
     triMutex[*j].unlock();
