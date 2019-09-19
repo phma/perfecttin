@@ -81,14 +81,16 @@ void writeDxf(string outputFile,bool asc,double outUnit)
   writeDxfGroups(dxfFile,dxfCodes,asc);
 }
 
-void readCloud(string inputFile)
+void readCloud(string inputFile,double inUnit)
 {
-  int already=cloud.size();
+  int i,already=cloud.size();
   readPly(inputFile);
   if (cloud.size()==already)
     readLas(inputFile);
   if (cloud.size()>already)
     cout<<"Read "<<cloud.size()-already<<" dots\n";
+  for (i=already;i<cloud.size();i++)
+    cloud[i]*=inUnit;
 }
 
 void writePoint(ostream &file,xyz pnt)

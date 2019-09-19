@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
   if (validCmd)
   {
     if (inputFile.length())
-      readCloud(inputFile);
+      readCloud(inputFile,inUnit);
     else if (doTestPattern)
     {
       setsurface(CIRPAR);
@@ -232,8 +232,6 @@ int main(int argc, char *argv[])
 	cerr<<"No point cloud found in "<<inputFile<<endl;
       done=true;
     }
-    for (i=0;i<cloud.size();i++)
-      cloud[i]*=inUnit;
     areadone[0]=makeOctagon();
     if (!std::isfinite(areadone[0]))
     {

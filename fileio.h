@@ -24,5 +24,5 @@
 std::string noExt(std::string fileName);
 std::string baseName(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit);
-void readCloud(std::string inputFile);
+void readCloud(std::string inputFile,double inUnit);
 void writeCheckpoint(std::string inputFile,int tolRatio,double tolerance);
