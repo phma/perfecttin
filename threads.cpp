@@ -334,7 +334,8 @@ bool lockTriangles(int thread,vector<int> triangles)
     if (triangles[i]>=triangleHolders.size())
     {
       holderMutex.lock();
-      triangleHolders.resize(triangles[i]+1,-1);
+      if (triangles[i]>=triangleHolders.size()) // in case another thread resizes it
+        triangleHolders.resize(triangles[i]+1,-1);
       holderMutex.unlock();
     }
     holderMutex.lock_shared();
