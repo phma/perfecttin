@@ -46,8 +46,6 @@ find_package(LibPLYXX)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(Boost COMPONENTS program_options)
 find_package(Threads)
-message(STATUS "Compiler is " ${CMAKE_CXX_COMPILER_ID} " Thread lib is " ${CMAKE_THREAD_LIBS_INIT})
-message(STATUS "Boost is " ${Boost_LIBRARIES})
 
 qt5_add_resources(lib_resources perfecttin.qrc)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
