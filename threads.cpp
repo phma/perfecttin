@@ -367,8 +367,13 @@ void unlockTriangles(int thread)
   for (j=lockSet.begin();j!=lockSet.end();j++)
     triMutex[*j].lock();
   holderMutex.lock_shared();
+  /* It is possible somehow for heldTriangles to hold a number of a triangle
+   * that exists, but hasn't been added to triangleHolders yet. In this case,
+   * assume that the nonexistent entry contains -1 and don't bother setting it.
+   */
   for (i=0;i<heldTriangles[thread].size();i++)
-    if (triangleHolders[heldTriangles[thread][i]]==thread)
+    if (heldTriangles[thread][i]<triangleHolders.size() &&
+        triangleHolders[heldTriangles[thread][i]]==thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
   holderMutex.unlock_shared();
   heldTriangles[thread].clear();
