@@ -67,7 +67,7 @@ unsigned relprime(unsigned n,int thread)
   if (!ret)
   {
     phin=n*quadirr[thread];
-    ret=rint(phin);
+    ret=lrint(phin);
     twice=2*ret-(ret>phin);
     while (gcd(ret,n)!=1 || ret>n)
       ret=twice-ret+(ret<=phin);

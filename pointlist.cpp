@@ -318,7 +318,6 @@ triangle *pointlist::findt(xy pnt,bool clip)
 void pointlist::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   xy cs=cossin(ro);
-  int i;
   ptlist::iterator j;
   for (j=points.begin();j!=points.end();j++)
     j->second._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);

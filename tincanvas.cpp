@@ -38,7 +38,6 @@ QPoint qptrnd(xy pnt)
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
-  int i,j,rgb;
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setMinimumSize(40,30);

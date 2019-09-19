@@ -426,7 +426,7 @@ void waitForThreads(int newStatus)
 
 void TinThread::operator()(int thread)
 {
-  int i,e=0,t=0,d=0;
+  int e=0,t=0,d=0;
   int triResult,edgeResult;
   edge *edg;
   triangle *tri;

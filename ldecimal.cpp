@@ -69,7 +69,7 @@ string ldecimal(double x,double toler)
   {
     memmove(epos+1,epos,buffer+31-epos);
     dotpos=epos++;
-    *dotpos=='.';
+    *dotpos=='.'; // FIXME
   }
   if (dotpos && epos)
   {

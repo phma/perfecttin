@@ -379,7 +379,7 @@ void pointlist::maketriangles()
   int i,j;
   point *a,*b,*c,*d;
   edge *e;
-  triangle cib,*t;
+  triangle cib;
   triangles.clear();
   for (i=0;i<edges.size();i++)
   {

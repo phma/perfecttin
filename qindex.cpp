@@ -290,7 +290,7 @@ vector<qindex*> qindex::traverse(int dir)
 
 void qindex::settri(triangle *starttri)
 {
-  int i,j;
+  int i;
   triangle *thistri;
   vector<qindex*> chain;
   chain=traverse();

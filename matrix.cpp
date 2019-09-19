@@ -153,7 +153,7 @@ matrix matrix::operator*(matrix &b)
   if (columns!=b.rows)
     throw matrixmismatch;
   matrix ret(rows,b.columns);
-  int h,i,j,k;
+  int i,j,k;
   double *sum;
   sum=new double[columns];
   for (i=0;i<rows;i++)
@@ -359,7 +359,7 @@ bool matrix::findpivot(matrix &b,int row,int column)
  * This tells _determinant to multiply by -1.
  */
 {
-  int i,j,k,pivotrow;
+  int i,j,pivotrow;
   double *squares,*ratios,*thisrow,maxratio;
   squares=new double[columns];
   ratios=new double[rows];
@@ -393,7 +393,7 @@ bool matrix::findpivot(matrix &b,int row,int column)
 
 double matrix::_determinant()
 {
-  int i,j,lastpivot,runlen;
+  int i,j,lastpivot=-1,runlen;
   vector<double> factors;
   rowsult rsult;
   for (i=0;i<rows;i++)

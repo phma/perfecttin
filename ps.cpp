@@ -306,7 +306,6 @@ void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
  */
 {
   xy mid,disp,base,ab1,ab2,a,b;
-  char *rgb;
   a=*lin.a;
   b=*lin.b;
   a=turn(a,orientation);
