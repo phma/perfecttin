@@ -191,10 +191,16 @@ long double pairwisesum(long double *a,unsigned n)
 
 double pairwisesum(vector<double> &a)
 {
-  return pairwisesum(&a[0],a.size());
+  if (a.size())
+    return pairwisesum(&a[0],a.size());
+  else
+    return 0;
 }
 
 long double pairwisesum(vector<long double> &a)
 {
-  return pairwisesum(&a[0],a.size());
+  if (a.size())
+    return pairwisesum(&a[0],a.size());
+  else
+    return 0;
 }
