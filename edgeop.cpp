@@ -172,7 +172,7 @@ bool shouldFlip(edge *e,double tolerance,int thread)
   triangle *tri;
   bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
   double elev13,elev24,elev5;
-  double crit1=-999,crit2,crit3,crit4;
+  double crit1=-999,crit2=0,crit3=0,crit4=0;
   double areas[4];
   int ndots[4];
   vector<triangle *> alltris;
