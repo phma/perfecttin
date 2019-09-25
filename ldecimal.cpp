@@ -59,7 +59,8 @@ string ldecimal(double x,double toler)
     x2=atof(buffer);
     if (h>0 && (fabs(x-x2)<=toler || i>=DBL_DIG+3))
       break;
-    if (fabs(x-x2)>toler || i<=0)
+    // GCC atof("inf")==0. MSVC atof("inf")=INFINITY.
+    if (fabs(x-x2)>toler || std::isnan(x-x2) || i<=0)
       h=1;
     i+=h;
   }

@@ -171,7 +171,7 @@ int rottobin(double angle)
     fprt-=2;
   if (fprt<-1)
     fprt+=2;
-  return lrint(2147483648.*fprt);
+  return (int)llrint(2147483648.*fprt);
 }
 
 int degtobin(double angle)
