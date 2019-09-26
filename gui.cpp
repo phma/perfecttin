@@ -38,13 +38,20 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   QTranslator translator,qtTranslator;
   int nthreads;
+  string exeFileName=argv[0],exeDir;
+  size_t slashPos;
+  slashPos=exeFileName.find_last_of("/\\");
+  if (slashPos<exeFileName.length())
+    exeDir=exeFileName.substr(0,slashPos);
+  else
+    exeDir=".";
   if (qtTranslator.load(QLocale(),QLatin1String("qt"),QLatin1String("_"),
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
     app.installTranslator(&qtTranslator);
   if (translator.load(QLocale(),QLatin1String("perfecttin"),
-                      QLatin1String("_"),QLatin1String(".")))
+                      QLatin1String("_"),QString::fromStdString(exeDir)))
   {
-    //cout<<"Translations found in current directory"<<endl;
+    //cout<<"Translations found in executable's directory"<<endl;
     app.installTranslator(&translator);
   }
   else if (translator.load(QLocale(),QLatin1String("perfecttin"),
