@@ -131,6 +131,13 @@ void writeTriangle(ostream &file,triangle *tri)
     writelefloat(file,NAN);
 }
 
+const int ptinHeaderFormat=0x00000014;
+/* ptinHeaderFormat counts all bytes after the header format itself and before
+ * the start of points. The low two bytes are the count of bytes; the high
+ * two bytes are used to disambiguate between header formats that have
+ * the same number of bytes.
+ */
+
 void writePtin(string inputFile,int tolRatio,double tolerance)
 /* inputFile contains the tolerance ratio, unless it's 1.
  * tolerance is the final, not stage, tolerance. This can cause weirdness
@@ -146,6 +153,7 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
   writeleshort(checkFile,28);
   writeleshort(checkFile,496);
   writeleshort(checkFile,8128);
+  writeleint(checkFile,ptinHeaderFormat);
   writeleint(checkFile,tolRatio);
   writeledouble(checkFile,NAN); // will be filled in later with tolerance
   writeleint(checkFile,net.points.size());
@@ -165,6 +173,6 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
     writeTriangle(checkFile,tri);
   }
   checkFile.flush();
-  checkFile.seekp(12,ios::beg);
+  checkFile.seekp(16,ios::beg);
   writeledouble(checkFile,tolerance);
 }
