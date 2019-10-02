@@ -131,7 +131,7 @@ void writeTriangle(ostream &file,triangle *tri)
     writelefloat(file,NAN);
 }
 
-void writeCheckpoint(string inputFile,int tolRatio,double tolerance)
+void writePtin(string inputFile,int tolRatio,double tolerance)
 /* inputFile contains the tolerance ratio, unless it's 1.
  * tolerance is the final, not stage, tolerance. This can cause weirdness
  * if one changes the tolerance during a conversion.
