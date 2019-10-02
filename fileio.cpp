@@ -166,7 +166,7 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
     wingEdge.unlock_shared();
     writePoint(checkFile,pnt);
   }
-  for (i=1;i<=net.convexHull.size();i++)
+  for (i=0;i<net.convexHull.size();i++)
   {
     wingEdge.lock_shared();
     n=net.revpoints[net.convexHull[i]];
