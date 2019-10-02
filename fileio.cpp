@@ -131,7 +131,7 @@ void writeTriangle(ostream &file,triangle *tri)
     writelefloat(file,NAN);
 }
 
-const int ptinHeaderFormat=0x00000014;
+const int ptinHeaderFormat=0x00000018;
 /* ptinHeaderFormat counts all bytes after the header format itself and before
  * the start of points. The low two bytes are the count of bytes; the high
  * two bytes are used to disambiguate between header formats that have
@@ -144,7 +144,7 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
  * if one changes the tolerance during a conversion.
  */
 {
-  int i;
+  int i,n;
   unsigned checkSum=0;
   xyz pnt;
   triangle *tri;
@@ -157,6 +157,7 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
   writeleint(checkFile,tolRatio);
   writeledouble(checkFile,NAN); // will be filled in later with tolerance
   writeleint(checkFile,net.points.size());
+  writeleint(checkFile,net.convexHull.size());
   writeleint(checkFile,net.triangles.size());
   for (i=1;i<=net.points.size();i++)
   {
@@ -164,6 +165,13 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
     pnt=net.points[i];
     wingEdge.unlock_shared();
     writePoint(checkFile,pnt);
+  }
+  for (i=1;i<=net.convexHull.size();i++)
+  {
+    wingEdge.lock_shared();
+    n=net.revpoints[net.convexHull[i]];
+    wingEdge.unlock_shared();
+    writeleint(checkFile,n);
   }
   for (i=0;i<net.triangles.size();i++)
   {
