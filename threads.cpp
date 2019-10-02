@@ -494,6 +494,10 @@ void TinThread::operator()(int thread)
 	  writeTinText(act.filename,act.param1);
 	  unsleep(thread);
 	  break;
+	case ACT_WRITE_PTIN:
+	  writePtin(act.filename,act.param0,act.param1);
+	  unsleep(thread);
+	  break;
 	default:
 	  sleep(thread);
       }
@@ -526,6 +530,10 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_WRITE_TIN:
 	  cerr<<"Can't write TIN in wait state\n";
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_PTIN:
+	  cerr<<"Can't write PTIN in wait state\n";
 	  unsleep(thread);
 	  break;
 	default:

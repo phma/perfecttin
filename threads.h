@@ -41,11 +41,13 @@
 #define TH_STOP 4
 #define TH_ASLEEP 256
 
-// These are used to tell thread 0 to do things while threads are in pause or wait state.
+// These are used to tell thread 0 to do things while threads are in wait state,
+// or any thread to do things while threads are in pause state.
 #define ACT_LOAD 1
 #define ACT_OCTAGON 2
 #define ACT_WRITE_DXF 3
 #define ACT_WRITE_TIN 4
+#define ACT_WRITE_PTIN 5
 
 struct ThreadAction
 {

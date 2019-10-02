@@ -159,6 +159,11 @@ void MainWindow::tick()
 	ta.opcode=ACT_WRITE_TIN;
 	ta.filename=saveFileName+".tin";
 	enqueueAction(ta);
+	ta.param1=tolerance;
+	ta.param0=lrint(toleranceRatio);
+	ta.opcode=ACT_WRITE_PTIN;
+	ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
+	enqueueAction(ta);
 	writtenTolerance=stageTolerance;
       }
       else
@@ -457,6 +462,7 @@ bool MainWindow::conversionBusy()
 	 canvas->state==TH_PAUSE ||
 	 canvas->state==-ACT_WRITE_DXF ||
 	 canvas->state==-ACT_WRITE_TIN ||
+	 canvas->state==-ACT_WRITE_PTIN ||
 	 canvas->state==-ACT_OCTAGON ||
 	 canvas->state==0;
 }
