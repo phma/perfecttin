@@ -50,6 +50,7 @@ public:
    */
   qindex qinx;
   std::vector<point*> convexHull;
+  time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1);
   void insertHullPoint(point *newpnt,point *prec);
