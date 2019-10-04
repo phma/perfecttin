@@ -32,6 +32,12 @@
 #include "fileio.h"
 using namespace std;
 
+PtinHeader::PtinHeader()
+{
+  conversionTime=tolRatio=numPoints=numConvexHull=numTriangles=0;
+  tolerance=NAN;
+}
+
 /* These functions are common to the command-line and GUI programs.
  * In the GUI program, file I/O is done by a thread, one at a time (except
  * that multiple formats of the same TIN may be output by different threads
@@ -138,7 +144,7 @@ const int ptinHeaderFormat=0x00000020;
  * the same number of bytes.
  */
 
-void writePtin(string inputFile,int tolRatio,double tolerance)
+void writePtin(string outputFile,int tolRatio,double tolerance)
 /* inputFile contains the tolerance ratio, unless it's 1.
  * tolerance is the final, not stage, tolerance. This can cause weirdness
  * if one changes the tolerance during a conversion.
@@ -148,7 +154,7 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
   unsigned checkSum=0;
   xyz pnt;
   triangle *tri;
-  ofstream checkFile(inputFile,ios::binary);
+  ofstream checkFile(outputFile,ios::binary);
   writeleshort(checkFile,6);
   writeleshort(checkFile,28);
   writeleshort(checkFile,496);
@@ -184,4 +190,31 @@ void writePtin(string inputFile,int tolRatio,double tolerance)
   checkFile.flush();
   checkFile.seekp(24,ios::beg);
   writeledouble(checkFile,tolerance);
+}
+
+PtinHeader readPtinHeader(istream &inputFile)
+{
+  PtinHeader ret;
+  int headerFormat;
+  if (readleshort(inputFile)==6 && readleshort(inputFile)==28 &&
+      readleshort(inputFile)==496 && readleshort(inputFile)==8128)
+  {
+    headerFormat=readleint(inputFile);
+    switch (headerFormat)
+    {
+      case 0x00000020:
+	ret.conversionTime=readlelong(inputFile);
+	ret.tolRatio=readleint(inputFile);
+	ret.tolerance=readledouble(inputFile);
+	ret.numPoints=readleint(inputFile);
+	ret.numConvexHull=readleint(inputFile);
+	ret.numTriangles=readleint(inputFile);
+	break;
+      default:
+	ret.tolRatio=PT_UNKNOWN_HEADER_FORMAT;
+    }
+  }
+  else
+    ret.tolRatio=PT_NOT_PTIN_FILE;
+  return ret;
 }

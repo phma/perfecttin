@@ -21,8 +21,24 @@
  */
 #include <string>
 
+#define PT_UNKNOWN_HEADER_FORMAT -1
+#define PT_NOT_PTIN_FILE -2
+
+struct PtinHeader
+{
+  PtinHeader();
+  time_t conversionTime;
+  double tolerance; // NaN means file wasn't finished being written
+  int tolRatio;
+  int numPoints;
+  int numConvexHull;
+  int numTriangles;
+};
+
 std::string noExt(std::string fileName);
 std::string baseName(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit);
 void readCloud(std::string inputFile,double inUnit);
-void writePtin(std::string inputFile,int tolRatio,double tolerance);
+void writePtin(std::string outputFile,int tolRatio,double tolerance);
+PtinHeader readPtinHeader(std::istream &inputFile);
+PtinHeader readPtinHeader(std::string inputFile);
