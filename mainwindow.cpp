@@ -162,7 +162,10 @@ void MainWindow::tick()
 	ta.param1=tolerance;
 	ta.param0=lrint(toleranceRatio);
 	ta.opcode=ACT_WRITE_PTIN;
-	ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
+	if (ta.param0==1)
+	  ta.filename=saveFileName+".ptin";
+	else
+	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	enqueueAction(ta);
 	writtenTolerance=stageTolerance;
       }
