@@ -106,11 +106,31 @@ void writePoint(ostream &file,xyz pnt)
   writeledouble(file,pnt.getz());
 }
 
+xyz readPoint(istream &file)
+{
+  double x,y,z;
+  x=readledouble(file);
+  y=readledouble(file);
+  z=readledouble(file);
+  return xyz(x,y,z);
+}
+
 void writePoint4(ostream &file,xyz pnt)
 {
   writelefloat(file,pnt.getx());
   writelefloat(file,pnt.gety());
   writelefloat(file,pnt.getz());
+}
+
+xyz readPoint4(istream &file)
+{
+  double x,y,z;
+  z=y=x=readlefloat(file);
+  if (std::isfinite(y))
+    z=y=readlefloat(file);
+  if (std::isfinite(z))
+    z=readlefloat(file);
+  return xyz(x,y,z);
 }
 
 void writeTriangle(ostream &file,triangle *tri)
@@ -217,4 +237,10 @@ PtinHeader readPtinHeader(istream &inputFile)
   else
     ret.tolRatio=PT_NOT_PTIN_FILE;
   return ret;
+}
+
+PtinHeader readPtinHeader(std::string inputFile)
+{
+  ifstream ptinFile(inputFile,ios::binary);
+  return readPtinHeader(ptinFile);
 }
