@@ -233,6 +233,8 @@ PtinHeader readPtinHeader(istream &inputFile)
       default:
 	ret.tolRatio=PT_UNKNOWN_HEADER_FORMAT;
     }
+    if (ret.numTriangles!=2*ret.numPoints-ret.numConvexHull-2)
+      ret.tolRatio=PT_COUNT_MISMATCH;
   }
   else
     ret.tolRatio=PT_NOT_PTIN_FILE;
