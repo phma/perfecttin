@@ -266,6 +266,8 @@ PtinHeader readPtin(std::string inputFile)
     for (i=0;i<header.numConvexHull;i++)
     {
       n=readleint(ptinFile);
+      if (n<1 || n>header.numPoints)
+	header.tolRatio=PT_INVALID_POINT_NUMBER;
       net.convexHull.push_back(&net.points[n]);
     }
   if (header.tolRatio>0 && header.tolerance>0)
@@ -274,10 +276,16 @@ PtinHeader readPtin(std::string inputFile)
       n=net.addtriangle();
       tri=&net.triangles[n];
       m=readleint(ptinFile);
+      if (m<1 || m>header.numPoints)
+	header.tolRatio=PT_INVALID_POINT_NUMBER;
       tri->a=&net.points[m];
       m=readleint(ptinFile);
+      if (m<1 || m>header.numPoints)
+	header.tolRatio=PT_INVALID_POINT_NUMBER;
       tri->b=&net.points[m];
       m=readleint(ptinFile);
+      if (m<1 || m>header.numPoints)
+	header.tolRatio=PT_INVALID_POINT_NUMBER;
       tri->c=&net.points[m];
       ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
       tri->flatten();
