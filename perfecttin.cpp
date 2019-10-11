@@ -50,7 +50,7 @@ double inUnit=1,outUnit=1;
 const bool drawDots=false;
 const bool colorGradient=true;
 const bool colorAbsGradient=false;
-const bool doTestPattern=false;
+const bool doTestPattern=true;
 
 void drawNet(PostScript &ps)
 {
@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
   PostScript ps;
   int i,e,t,d;
   int nthreads=thread::hardware_concurrency();
+  int asterPoints=0;
   time_t now,then;
   double tolerance,rmsadj;
   bool done=false;
@@ -179,6 +180,7 @@ int main(int argc, char *argv[])
     ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
     ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
     ("ascii,a",po::bool_switch(&asciiFormat),"Output DXF in ASCII")
+    ("asteraceous",po::value<int>(&asterPoints),"Process an asteraceous test pattern")
     ("output,o",po::value<string>(&outputFile),"Output file");
   hidden.add_options()
     ("input",po::value<string>(&inputFile),"Input file");
@@ -222,10 +224,10 @@ int main(int argc, char *argv[])
   {
     if (inputFile.length())
       readCloud(inputFile,inUnit);
-    else if (doTestPattern)
+    else if (doTestPattern && asterPoints>0)
     {
       setsurface(CIRPAR);
-      aster(100000);
+      aster(asterPoints);
     }
     if (cloud.size()==0)
     {
