@@ -292,7 +292,8 @@ PtinHeader readPtin(std::string inputFile)
       tri->c=&net.points[m];
       ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
       tri->flatten();
-      if (!tri->sarea>0)
+      //cout<<i<<' '<<tri->sarea<<endl;
+      if (!(tri->sarea>0)) // so written to catch the NaN case
 	header.tolRatio=PT_BACKWARD_TRIANGLE;
       m=ptinFile.get()&255;
       if (m<255)
