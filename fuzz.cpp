@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
   if (command=="readPtin")
     readPtin(file);
   exitStatus=0;
-  sz=net.convexHull.size();
+  sz=net.edges.size();
+  cout<<sz<<" edges\n";
   return exitStatus;
 }
