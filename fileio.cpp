@@ -296,5 +296,9 @@ PtinHeader readPtin(std::string inputFile)
 	  tri->dots.push_back(pnt);
 	}
     }
+  if (header.tolRatio>0 && header.tolerance>0)
+    net.makeEdges();
+  else if (readingStarted)
+    net.clear();
   return header;
 }
