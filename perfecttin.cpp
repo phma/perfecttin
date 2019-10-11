@@ -300,15 +300,16 @@ int main(int argc, char *argv[])
 	    ta.opcode=ACT_WRITE_TIN;
 	    ta.filename=outputFile+".tin";
 	    enqueueAction(ta);
-	    //ta.param1=tolerance;
-	    //ta.param0=lrint(toleranceRatio);
-	    //ta.opcode=ACT_WRITE_PTIN;
-	    //ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
-	    //enqueueAction(ta);
+	    ta.param1=tolerance;
+	    ta.param0=lrint(stageTolerance/tolerance);
+	    ta.opcode=ACT_WRITE_PTIN;
+	    if (ta.param0==1)
+	      ta.filename=outputFile+".ptin";
+	    else
+	      ta.filename=outputFile+"."+to_string(ta.param0)+".ptin";
+	    enqueueAction(ta);
 	    drawNet(ps);
 	    waitForQueueEmpty();
-	    //writeDxf(outputFile+".dxf",asciiFormat,outUnit);
-	    //writeTinText(outputFile+".tin",outUnit);
 	    waitForThreads(TH_RUN);
 	  }
 	}
