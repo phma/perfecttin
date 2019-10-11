@@ -92,6 +92,7 @@ void clearTriangleLocks();
 void setThreadCommand(int newStatus);
 int getThreadStatus();
 void waitForThreads(int newStatus);
+void waitForQueueEmpty();
 
 class TinThread
 {

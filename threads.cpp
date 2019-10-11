@@ -432,6 +432,20 @@ void waitForThreads(int newStatus)
   } while (n);
 }
 
+void waitForQueueEmpty()
+// Waits until the action queue is empty and all threads have completed their actions.
+{
+  int i,n;
+  do
+  {
+    n=actQueue.size();
+    for (i=0;i<threadStatus.size();i++)
+      if (threadStatus[i]<256)
+	n++;
+    th::this_thread::sleep_for(chrono::milliseconds(n));
+  } while (n);
+}
+
 void TinThread::operator()(int thread)
 {
   int e=0,t=0,d=0;

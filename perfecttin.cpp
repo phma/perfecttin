@@ -165,6 +165,7 @@ int main(int argc, char *argv[])
   triangle *tri;
   string inputFile,outputFile;
   string unitStr;
+  ThreadAction ta;
   bool validArgs,validCmd=true;
   po::options_description generic("Options");
   po::options_description hidden("Hidden options");
@@ -291,9 +292,23 @@ int main(int argc, char *argv[])
 	    done=true;
 	  else
 	  {
+	    ta.param1=outUnit;
+	    ta.param0=asciiFormat;
+	    ta.opcode=ACT_WRITE_DXF;
+	    ta.filename=outputFile+".dxf";
+	    enqueueAction(ta);
+	    ta.opcode=ACT_WRITE_TIN;
+	    ta.filename=outputFile+".tin";
+	    enqueueAction(ta);
+	    //ta.param1=tolerance;
+	    //ta.param0=lrint(toleranceRatio);
+	    //ta.opcode=ACT_WRITE_PTIN;
+	    //ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
+	    //enqueueAction(ta);
 	    drawNet(ps);
-	    writeDxf(outputFile+".dxf",asciiFormat,outUnit);
-	    writeTinText(outputFile+".tin",outUnit);
+	    waitForQueueEmpty();
+	    //writeDxf(outputFile+".dxf",asciiFormat,outUnit);
+	    //writeTinText(outputFile+".tin",outUnit);
 	    waitForThreads(TH_RUN);
 	  }
 	}
