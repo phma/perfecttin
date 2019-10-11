@@ -69,17 +69,24 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                qindex.cpp random.cpp relprime.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                ${lib_resources} ${qm_files})
+add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp boundrect.cpp cloud.cpp cogo.cpp dxf.cpp
+               edgeop.cpp fileio.cpp fuzz.cpp las.cpp ldecimal.cpp
+               leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
+               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
+               relprime.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_compile_definitions(perfecttin PUBLIC _USE_MATH_DEFINES)
 endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::Core)
+target_link_libraries(fuzzptin ${CMAKE_THREAD_LIBS_INIT})
 target_compile_definitions(perfecttin-gui PUBLIC _USE_MATH_DEFINES)
 if (${LibPLYXX_FOUND})
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})
 endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${LibPLYXX_LIBRARY})
+target_link_libraries(fuzzptin ${LibPLYXX_LIBRARY})
 endif (${LibPLYXX_FOUND})
 
 include(CheckIncludeFiles)
