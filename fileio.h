@@ -29,7 +29,7 @@ struct PtinHeader
   PtinHeader();
   time_t conversionTime;
   double tolerance; // NaN means file wasn't finished being written
-  int tolRatio;
+  int tolRatio; // negative means an error
   int numPoints;
   int numConvexHull;
   int numTriangles;
@@ -42,3 +42,4 @@ void readCloud(std::string inputFile,double inUnit);
 void writePtin(std::string outputFile,int tolRatio,double tolerance);
 PtinHeader readPtinHeader(std::istream &inputFile);
 PtinHeader readPtinHeader(std::string inputFile);
+PtinHeader readPtin(std::string inputFile);

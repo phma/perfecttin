@@ -244,3 +244,57 @@ PtinHeader readPtinHeader(std::string inputFile)
   ifstream ptinFile(inputFile,ios::binary);
   return readPtinHeader(ptinFile);
 }
+
+PtinHeader readPtin(std::string inputFile)
+{
+  ifstream ptinFile(inputFile,ios::binary);
+  PtinHeader header;
+  int i,j,m,n;
+  triangle *tri;
+  xyz pnt,ctr;
+  bool readingStarted=false;
+  header=readPtinHeader(ptinFile);
+  if (header.tolRatio>0 && header.tolerance>0)
+  {
+    net.clear();
+    cloud.clear();
+    readingStarted=true;
+    for (i=1;i<=header.numPoints;i++)
+      net.points[i]=point(readPoint(ptinFile));
+  }
+  if (header.tolRatio>0 && header.tolerance>0)
+    for (i=0;i<header.numConvexHull;i++)
+    {
+      n=readleint(ptinFile);
+      net.convexHull.push_back(&net.points[n]);
+    }
+  if (header.tolRatio>0 && header.tolerance>0)
+    for (i=0;i<header.numTriangles;i++)
+    {
+      n=net.addtriangle();
+      tri=&net.triangles[n];
+      m=readleint(ptinFile);
+      tri->a=&net.points[m];
+      m=readleint(ptinFile);
+      tri->b=&net.points[m];
+      m=readleint(ptinFile);
+      tri->c=&net.points[m];
+      ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
+      m=ptinFile.get()&255;
+      if (m<255)
+	for (j=0;j<m;j++)
+	{
+	  pnt=readPoint4(ptinFile)+ctr;
+	  tri->dots.push_back(pnt);
+	}
+      else
+	while (true)
+	{
+	  pnt=readPoint4(ptinFile)+ctr;
+	  if (pnt.isnan())
+	    break;
+	  tri->dots.push_back(pnt);
+	}
+    }
+  return header;
+}
