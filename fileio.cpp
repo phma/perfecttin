@@ -289,6 +289,8 @@ PtinHeader readPtin(std::string inputFile)
       tri->c=&net.points[m];
       ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
       tri->flatten();
+      if (!tri->sarea>0)
+	header.tolRatio=PT_BACKWARD_TRIANGLE;
       m=ptinFile.get()&255;
       if (m<255)
 	for (j=0;j<m;j++)
