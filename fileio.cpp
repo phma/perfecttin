@@ -125,11 +125,19 @@ void writePoint4(ostream &file,xyz pnt)
 xyz readPoint4(istream &file)
 {
   double x,y,z;
-  z=y=x=readlefloat(file);
-  if (std::isfinite(y))
-    z=y=readlefloat(file);
-  if (std::isfinite(z))
-    z=readlefloat(file);
+  if (file.eof())
+  {
+    x=INFINITY;
+    y=z=NAN;
+  }
+  else
+  {
+    z=y=x=readlefloat(file);
+    if (std::isfinite(y))
+      z=y=readlefloat(file);
+    if (std::isfinite(z))
+      z=readlefloat(file);
+  }
   return xyz(x,y,z);
 }
 
@@ -309,7 +317,11 @@ PtinHeader readPtin(std::string inputFile)
 	{
 	  pnt=readPoint4(ptinFile)+ctr;
 	  if (pnt.isnan())
+	  {
+	    if (std::isinf(pnt.getx()))
+	      header.tolRatio=PT_EOF;
 	    break;
+	  }
 	  tri->dots.push_back(pnt);
 	}
     }
