@@ -25,6 +25,7 @@
 #define PT_NOT_PTIN_FILE -2
 #define PT_INVALID_POINT_NUMBER -3
 #define PT_BACKWARD_TRIANGLE -4
+#define PT_INVALID_CONVEX_HULL -5
 
 struct PtinHeader
 {

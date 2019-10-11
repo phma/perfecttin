@@ -55,6 +55,7 @@ public:
   int addtriangle(int n=1);
   void insertHullPoint(point *newpnt,point *prec);
   int closestHullPoint(xy pnt);
+  bool validConvexHull();
   void clear();
   int size();
   void clearTin();

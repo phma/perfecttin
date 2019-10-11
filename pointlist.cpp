@@ -259,6 +259,26 @@ int pointlist::closestHullPoint(xy pnt)
   return ret;
 }
 
+bool pointlist::validConvexHull()
+/* Deflection angles around the convex hull must be positive (else it isn't convex)
+ * and no more than 45° (because it starts as an equiangular octagon).
+ */
+{
+  int i;
+  bool ret=true;
+  int deflectionAngle;
+  int sz=convexHull.size();
+  for (i=0;i<sz;i++)
+  {
+    deflectionAngle=foldangle(dir((xy)*convexHull[(i+1)%sz],(xy)*convexHull[i])-
+			      dir((xy)*convexHull[i],(xy)*convexHull[(i+sz-1)%sz]));
+    //cout<<i<<' '<<ldecimal(bintodeg(deflectionAngle))<<endl;
+    if (deflectionAngle<1 || deflectionAngle>DEG45+1)
+      ret=false;
+  }
+  return ret;
+}
+
 void pointlist::makeqindex()
 {
   vector<xy> plist;
