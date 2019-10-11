@@ -280,6 +280,7 @@ PtinHeader readPtin(std::string inputFile)
       m=readleint(ptinFile);
       tri->c=&net.points[m];
       ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
+      tri->flatten();
       m=ptinFile.get()&255;
       if (m<255)
 	for (j=0;j<m;j++)
