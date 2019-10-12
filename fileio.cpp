@@ -287,16 +287,20 @@ PtinHeader readPtin(std::string inputFile)
     for (i=0;i<header.numTriangles;i++)
     {
       n=net.addtriangle();
+      cout<<n<<' ';
       tri=&net.triangles[n];
       m=readleint(ptinFile);
+      cout<<m<<' ';
       if (m<1 || m>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
       tri->a=&net.points[m];
       m=readleint(ptinFile);
+      cout<<m<<' ';
       if (m<1 || m>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
       tri->b=&net.points[m];
       m=readleint(ptinFile);
+      cout<<m<<'\n';
       if (m<1 || m>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
       tri->c=&net.points[m];
