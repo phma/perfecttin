@@ -309,6 +309,11 @@ PtinHeader readPtin(std::string inputFile)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
       if (i)
 	edgeCheck+=skewsym(n,convexHull.back());
+      if (ptinFile.eof())
+      {
+	header.tolRatio=PT_EOF;
+	break;
+      }
       convexHull.push_back(n);
       net.convexHull.push_back(&net.points[n]);
     }
