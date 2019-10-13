@@ -323,7 +323,7 @@ PtinHeader readPtin(std::string inputFile)
     if (!net.validConvexHull())
       header.tolRatio=PT_INVALID_CONVEX_HULL;
   if (header.tolRatio>0 && header.tolerance>0)
-    for (i=0;i<header.numTriangles;i++)
+    for (i=0;i<header.numTriangles && header.tolRatio>0;i++)
     {
       n=net.addtriangle();
       //cout<<n<<' ';
