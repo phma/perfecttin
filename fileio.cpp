@@ -292,7 +292,14 @@ PtinHeader readPtin(std::string inputFile)
     cloud.clear();
     readingStarted=true;
     for (i=1;i<=header.numPoints;i++)
+    {
       net.points[i]=point(readPoint(ptinFile));
+      if (ptinFile.eof())
+      {
+	header.tolRatio=PT_EOF;
+	break;
+      }
+    }
   }
   if (header.tolRatio>0 && header.tolerance>0)
     for (i=0;i<header.numConvexHull;i++)
