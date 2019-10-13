@@ -285,6 +285,7 @@ bool triangle::iscorner(point *v)
 void triangle::flatten()
 {
   sarea=area();
+  peri=perimeter();
   setgradmat();
 }
 
