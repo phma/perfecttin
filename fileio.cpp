@@ -305,7 +305,8 @@ PtinHeader readPtin(std::string inputFile)
       convexHull.push_back(n);
       net.convexHull.push_back(&net.points[n]);
     }
-  edgeCheck+=skewsym(convexHull[0],convexHull.back());
+  if (convexHull.size())
+    edgeCheck+=skewsym(convexHull[0],convexHull.back());
   if (header.tolRatio>0 && header.tolerance>0)
     if (!net.validConvexHull())
       header.tolRatio=PT_INVALID_CONVEX_HULL;
