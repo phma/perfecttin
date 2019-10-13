@@ -28,6 +28,7 @@
 #include "las.h"
 #include "threads.h"
 #include "binio.h"
+#include "angle.h"
 #include "cloud.h"
 #include "fileio.h"
 using namespace std;
@@ -249,6 +250,25 @@ PtinHeader readPtinHeader(istream &inputFile)
   return ret;
 }
 
+int skewsym(int a,int b)
+/* skewsym(a,b)=-skewsym(b,a). This functions is used to check that every edge
+ * (a,b) in a triangle is matched by another edge (b,a) in another triangle
+ * or in the convex hull. It is nonlinear so that omitting a triangle will not
+ * result in 0.
+ */
+{
+  int a1,a2,b1,b2;
+  a1=a*0x69969669;
+  a2=a*PHITURN;
+  b1=b*0x69969669;
+  b2=b*PHITURN;
+  a1=((a1&0xffe00000)>>21)|(a1&0x1ff800)|((a1&0x7ff)<<21);
+  a2=((a2&0xffff0000)>>16)|((a2&0xffff)<<16);
+  b1=((b1&0xffe00000)>>21)|(b1&0x1ff800)|((b1&0x7ff)<<21);
+  b2=((b2&0xffff0000)>>16)|((b2&0xffff)<<16);
+  return a*b1*a2-b*a1*b2;
+}
+
 PtinHeader readPtinHeader(std::string inputFile)
 {
   ifstream ptinFile(inputFile,ios::binary);
@@ -259,7 +279,9 @@ PtinHeader readPtin(std::string inputFile)
 {
   ifstream ptinFile(inputFile,ios::binary);
   PtinHeader header;
-  int i,j,m,n;
+  int i,j,m,n,a,b,c;
+  int edgeCheck=0;
+  vector<int> convexHull;
   triangle *tri;
   xyz pnt,ctr;
   bool readingStarted=false;
@@ -278,8 +300,12 @@ PtinHeader readPtin(std::string inputFile)
       n=readleint(ptinFile);
       if (n<1 || n>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
+      if (i)
+	edgeCheck+=skewsym(n,convexHull.back());
+      convexHull.push_back(n);
       net.convexHull.push_back(&net.points[n]);
     }
+  edgeCheck+=skewsym(convexHull[0],convexHull.back());
   if (header.tolRatio>0 && header.tolerance>0)
     if (!net.validConvexHull())
       header.tolRatio=PT_INVALID_CONVEX_HULL;
@@ -287,28 +313,29 @@ PtinHeader readPtin(std::string inputFile)
     for (i=0;i<header.numTriangles;i++)
     {
       n=net.addtriangle();
-      cout<<n<<' ';
+      //cout<<n<<' ';
       tri=&net.triangles[n];
-      m=readleint(ptinFile);
-      cout<<m<<' ';
-      if (m<1 || m>header.numPoints)
+      a=readleint(ptinFile);
+      //cout<<a<<' ';
+      if (a<1 || a>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
-      tri->a=&net.points[m];
-      m=readleint(ptinFile);
-      cout<<m<<' ';
-      if (m<1 || m>header.numPoints)
+      tri->a=&net.points[a];
+      b=readleint(ptinFile);
+      //cout<<b<<' ';
+      if (b<1 || b>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
-      tri->b=&net.points[m];
-      m=readleint(ptinFile);
-      cout<<m<<'\n';
-      if (m<1 || m>header.numPoints)
+      tri->b=&net.points[b];
+      c=readleint(ptinFile);
+      //cout<<c<<'\n';
+      if (c<1 || c>header.numPoints)
 	header.tolRatio=PT_INVALID_POINT_NUMBER;
-      tri->c=&net.points[m];
+      tri->c=&net.points[c];
       ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
       tri->flatten();
       //cout<<i<<' '<<tri->sarea<<endl;
       if (!(tri->sarea>0)) // so written to catch the NaN case
 	header.tolRatio=PT_BACKWARD_TRIANGLE;
+      edgeCheck+=skewsym(a,b)+skewsym(b,c)+skewsym(c,a);
       m=ptinFile.get()&255;
       if (m<255)
 	for (j=0;j<m;j++)
@@ -329,6 +356,9 @@ PtinHeader readPtin(std::string inputFile)
 	  tri->dots.push_back(pnt);
 	}
     }
+  //cout<<"edgeCheck="<<edgeCheck<<endl;
+  if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)
+    header.tolRatio=PT_EDGE_MISMATCH;
   if (header.tolRatio>0 && header.tolerance>0)
     net.makeEdges();
   else if (readingStarted)

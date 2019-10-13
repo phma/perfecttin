@@ -28,6 +28,7 @@
 #define PT_BACKWARD_TRIANGLE -5
 #define PT_INVALID_CONVEX_HULL -6
 #define PT_EOF -7
+#define PT_EDGE_MISMATCH -8
 
 struct PtinHeader
 {
