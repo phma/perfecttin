@@ -251,7 +251,7 @@ PtinHeader readPtinHeader(istream &inputFile)
 }
 
 int skewsym(int a,int b)
-/* skewsym(a,b)=-skewsym(b,a). This functions is used to check that every edge
+/* skewsym(a,b)=-skewsym(b,a). This function is used to check that every edge
  * (a,b) in a triangle is matched by another edge (b,a) in another triangle
  * or in the convex hull. It is nonlinear so that omitting a triangle will not
  * result in 0.

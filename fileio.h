@@ -32,6 +32,12 @@
 #define PT_EOF -7
 #define PT_EDGE_MISMATCH -8
 #define PT_DOT_OUTSIDE -9
+/* Unknown header format: file was written by a newer version of PerfectTIN.
+ * Not ptin file: file is not a PerfectTIN file.
+ * Count mismatch: file is not a PerfectTIN file.
+ * Any other negative tolRatio value: file is corrupt.
+ * tolRatio>0 but tolerance is NaN: file was incompletely written.
+ */
 
 struct PtinHeader
 {
