@@ -53,7 +53,7 @@ vector<double> sleepTime;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
-queue<ThreadAction> actQueue;
+queue<ThreadAction> actQueue,resQueue;
 int currentAction;
 int mtxSquareSize;
 
@@ -237,6 +237,32 @@ void enqueueAction(ThreadAction a)
 bool actionQueueEmpty()
 {
   return actQueue.size()==0;
+}
+
+ThreadAction dequeueResult()
+{
+  ThreadAction ret;
+  ret.opcode=0;
+  actMutex.lock();
+  if (resQueue.size())
+  {
+    ret=resQueue.front();
+    resQueue.pop();
+  }
+  actMutex.unlock();
+  return ret;
+}
+
+void enqueueResult(ThreadAction a)
+{
+  actMutex.lock();
+  resQueue.push(a);
+  actMutex.unlock();
+}
+
+bool resultQueueEmpty()
+{
+  return resQueue.size()==0;
 }
 
 void sleep(int thread)
