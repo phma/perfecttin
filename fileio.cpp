@@ -353,13 +353,19 @@ PtinHeader readPtin(std::string inputFile)
       if (m<255)
 	for (j=0;j<m;j++)
 	{
-	  pnt=readPoint4(ptinFile)+ctr;
+	  pnt=readPoint4(ptinFile);
+	  if (xy(pnt).length()>tri->peri/3)
+	    header.tolRatio=PT_DOT_OUTSIDE;
+	  pnt+=ctr;
 	  tri->dots.push_back(pnt);
 	}
       else
 	while (true)
 	{
-	  pnt=readPoint4(ptinFile)+ctr;
+	  pnt=readPoint4(ptinFile);
+	  if (xy(pnt).length()>tri->peri/3)
+	    header.tolRatio=PT_DOT_OUTSIDE;
+	  pnt+=ctr;
 	  if (pnt.isnan())
 	  {
 	    if (std::isinf(pnt.getx()))
