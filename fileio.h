@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef FILEIO_H
+#define FILEIO_H
 #include <string>
 
 #define PT_UNKNOWN_HEADER_FORMAT -1
@@ -50,3 +52,4 @@ void writePtin(std::string outputFile,int tolRatio,double tolerance);
 PtinHeader readPtinHeader(std::istream &inputFile);
 PtinHeader readPtinHeader(std::string inputFile);
 PtinHeader readPtin(std::string inputFile);
+#endif

@@ -33,6 +33,7 @@
 #include <chrono>
 #include <vector>
 #include <array>
+#include "fileio.h"
 
 // These are used as both commands to the threads and status from the threads.
 #define TH_RUN 1
@@ -55,6 +56,7 @@ struct ThreadAction
   int param0;
   double param1;
   std::string filename;
+  PtinHeader ptinResult;
 };
 
 #ifdef __MINGW64__

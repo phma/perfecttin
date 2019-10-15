@@ -25,7 +25,6 @@
 #include "triop.h"
 #include "octagon.h"
 #include "random.h"
-#include "fileio.h"
 #include "tintext.h"
 #include "las.h"
 #include "relprime.h"
