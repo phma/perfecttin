@@ -521,6 +521,10 @@ void TinThread::operator()(int thread)
 	  cerr<<"Can't load a file in pause state\n";
 	  unsleep(thread);
 	  break;
+	case ACT_READ_PTIN:
+	  cerr<<"Can't open file in pause state\n";
+	  unsleep(thread);
+	  break;
 	case ACT_OCTAGON:
 	  cerr<<"Can't make octagon in pause state\n";
 	  unsleep(thread);
@@ -552,6 +556,11 @@ void TinThread::operator()(int thread)
       {
 	case ACT_LOAD:
 	  readCloud(act.filename,act.param1);
+	  unsleep(thread);
+	  break;
+	case ACT_READ_PTIN:
+	  act.ptinResult=readPtin(act.filename);
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_OCTAGON:

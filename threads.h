@@ -49,6 +49,7 @@
 #define ACT_WRITE_DXF 3
 #define ACT_WRITE_TIN 4
 #define ACT_WRITE_PTIN 5
+#define ACT_READ_PTIN 6
 
 struct ThreadAction
 {
