@@ -33,14 +33,16 @@ int main(int argc, char *argv[])
   int i,sz;
   int nthreads;
   string command,file;
+  PtinHeader header;
   if (argc>=2)
   {
     command=argv[1];
     file=argv[2];
   }
   if (command=="readPtin")
-    readPtin(file);
+    header=readPtin(file);
   exitStatus=0;
+  cout<<header.tolRatio<<"×"<<header.tolerance<<endl;
   sz=net.edges.size();
   cout<<sz<<" edges\n";
   return exitStatus;
