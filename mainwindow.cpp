@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   busyBar->setRange(0,16777216);
   lpfBusyFraction=0;
   conversionStopped=false;
+  showingResult=false;
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
@@ -223,6 +224,28 @@ void MainWindow::tick()
   }
 }
 
+void MainWindow::openFile()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Open PerfectTIN File"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+  fileDialog->selectFile("");
+  fileDialog->setNameFilter(tr("(*.ptin);;(*)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.opcode=ACT_READ_PTIN;
+    ta.filename=fileName;
+    enqueueAction(ta);
+  }
+}
+
 void MainWindow::loadFile()
 {
   int dialogResult;
@@ -362,6 +385,11 @@ void MainWindow::makeActions()
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
   // File menu
+  openAction=new QAction(this);
+  openAction->setIcon(QIcon::fromTheme("document-open"));
+  openAction->setText(tr("Open"));
+  fileMenu->addAction(openAction);
+  connect(openAction,SIGNAL(triggered(bool)),this,SLOT(openFile()));
   loadAction=new QAction(this);
   loadAction->setIcon(QIcon::fromTheme("document-open"));
   loadAction->setText(tr("Load"));

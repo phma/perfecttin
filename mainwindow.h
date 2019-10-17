@@ -49,6 +49,7 @@ signals:
 public slots:
   void tick();
   void setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
+  void openFile();
   void loadFile();
   void startConversion();
   void stopConversion();
@@ -65,7 +66,7 @@ private:
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
-  bool dxfText,sameUnits,conversionStopped;
+  bool dxfText,sameUnits,conversionStopped,showingResult;
   double tolerance,inUnit,outUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
@@ -76,7 +77,7 @@ private:
   QMenu *fileMenu,*settingsMenu,*helpMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
   QProgressBar *doneBar,*busyBar;
-  QAction *loadAction,*convertAction,*clearAction;
+  QAction *openAction,*loadAction,*convertAction,*clearAction;
   QAction *stopAction,*resumeAction,*exitAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
