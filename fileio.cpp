@@ -33,6 +33,8 @@
 #include "fileio.h"
 using namespace std;
 
+CoordCheck zCheck;
+
 PtinHeader::PtinHeader()
 {
   conversionTime=tolRatio=numPoints=numConvexHull=numTriangles=0;
@@ -56,6 +58,7 @@ CoordCheck& CoordCheck::operator<<(double val)
       sums[i]+=val;
   if ((count&63)==0) // stagger the periodic prunings among the sums
     sums[(count>>6)&63]+=0;
+  count++;
   return *this;
 }
 
@@ -186,7 +189,10 @@ void writeTriangle(ostream &file,triangle *tri)
    * the centroid. If there are at least 255 dots, the end is marked with NAN.
    */
   for (i=0;i<tri->dots.size();i++)
+  {
     writePoint4(file,tri->dots[i]-ctr);
+    zCheck<<tri->dots[i].getz();
+  }
   if (tri->dots.size()>=255)
     writelefloat(file,NAN);
 }
@@ -209,6 +215,8 @@ void writePtin(string outputFile,int tolRatio,double tolerance)
   xyz pnt;
   triangle *tri;
   ofstream checkFile(outputFile,ios::binary);
+  vector<double> zcheck;
+  zCheck.clear();
   writeleshort(checkFile,6);
   writeleshort(checkFile,28);
   writeleshort(checkFile,496);
@@ -241,6 +249,13 @@ void writePtin(string outputFile,int tolRatio,double tolerance)
     wingEdge.unlock_shared();
     writeTriangle(checkFile,tri);
   }
+  for (i=0;i<64;i++)
+    zcheck.push_back(zCheck[i]);
+  while (zcheck.size()>1 && zcheck[zcheck.size()-1]==zcheck[zcheck.size()-2])
+    zcheck.resize(zcheck.size()-1);
+  checkFile.put(zcheck.size());
+  for (i=0;i<zcheck.size();i++)
+    writeledouble(checkFile,zcheck[i]);
   checkFile.flush();
   checkFile.seekp(24,ios::beg);
   writeledouble(checkFile,tolerance);
