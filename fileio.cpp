@@ -39,6 +39,31 @@ PtinHeader::PtinHeader()
   tolerance=NAN;
 }
 
+void CoordCheck::clear()
+{
+  int i;
+  for (count=i=0;i<64;i++)
+    sums[i].clear();
+}
+
+CoordCheck& CoordCheck::operator<<(double val)
+{
+  int i;
+  for (i=0;i<64;i++)
+    if ((count>>i)&1)
+      sums[i]-=val;
+    else
+      sums[i]+=val;
+  if ((count&63)==0) // stagger the periodic prunings among the sums
+    sums[(count>>6)&63]+=0;
+  return *this;
+}
+
+double CoordCheck::operator[](int n)
+{
+  return sums[n&63].total();
+}
+
 /* These functions are common to the command-line and GUI programs.
  * In the GUI program, file I/O is done by a thread, one at a time (except
  * that multiple formats of the same TIN may be output by different threads

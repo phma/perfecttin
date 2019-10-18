@@ -22,6 +22,7 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 #include <string>
+#include "manysum.h"
 
 #define PT_UNKNOWN_HEADER_FORMAT -1
 #define PT_NOT_PTIN_FILE -2
@@ -48,6 +49,17 @@ struct PtinHeader
   int numPoints;
   int numConvexHull;
   int numTriangles;
+};
+
+class CoordCheck
+{
+private:
+  size_t count;
+  manysum sums[64];
+public:
+  void clear();
+  CoordCheck& operator<<(double val);
+  double operator[](int n);
 };
 
 std::string noExt(std::string fileName);
