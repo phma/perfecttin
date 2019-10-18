@@ -325,6 +325,8 @@ PtinHeader readPtin(std::string inputFile)
   triangle *tri;
   xyz pnt,ctr;
   bool readingStarted=false;
+  vector<double> zcheck;
+  zCheck.clear();
   header=readPtinHeader(ptinFile);
   if (header.tolRatio>0 && header.tolerance>0)
   {
@@ -398,6 +400,7 @@ PtinHeader readPtin(std::string inputFile)
 	    header.tolRatio=PT_DOT_OUTSIDE;
 	  pnt+=ctr;
 	  tri->dots.push_back(pnt);
+	  zCheck<<pnt.getz();
 	}
       else
 	while (true)
@@ -413,11 +416,23 @@ PtinHeader readPtin(std::string inputFile)
 	    break;
 	  }
 	  tri->dots.push_back(pnt);
+	  zCheck<<pnt.getz();
 	}
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
   if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)
     header.tolRatio=PT_EDGE_MISMATCH;
+  if (header.tolRatio>0 && header.tolerance>0)
+  {
+    n=ptinFile.get()&255;
+    for (i=0;i<n;i++)
+      zcheck.push_back(readledouble(ptinFile));
+    while (zcheck.size()<64)
+      zcheck.push_back(zcheck.back());
+    cout<<header.tolRatio*header.tolerance*sqrt(zCheck.getCount())<<endl;
+    for (i=0;i<n;i++)
+      cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<zcheck[i]-zCheck[i]<<endl;
+  }
   if (header.tolRatio>0 && header.tolerance>0)
     net.makeEdges();
   else if (readingStarted)

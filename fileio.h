@@ -60,6 +60,10 @@ public:
   void clear();
   CoordCheck& operator<<(double val);
   double operator[](int n);
+  size_t getCount()
+  {
+    return count;
+  }
 };
 
 std::string noExt(std::string fileName);
