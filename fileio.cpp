@@ -44,7 +44,7 @@ PtinHeader::PtinHeader()
 
 void CoordCheck::clear()
 {
-  int i;
+  count=0;
   memset(stage0,0,sizeof(stage0));
   memset(stage1,0,sizeof(stage1));
   memset(stage2,0,sizeof(stage2));
