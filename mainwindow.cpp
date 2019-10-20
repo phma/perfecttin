@@ -20,7 +20,6 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "config.h"
-#include "threads.h"
 #include "mainwindow.h"
 #include "ldecimal.h"
 #include "cloud.h"
@@ -86,6 +85,11 @@ void MainWindow::tick()
   int tstatus=getThreadStatus();
   int numTriangles=net.triangles.size();
   ThreadAction ta;
+  if (!showingResult && !resultQueueEmpty())
+  {
+    ta=dequeueResult();
+    gotResult(ta);
+  }
   if (lastState!=canvas->state)
   {
     //cout<<"Last state "<<lastState<<" Current state "<<canvas->state<<endl;

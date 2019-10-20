@@ -20,6 +20,9 @@
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef THREADS_H
+#define THREADS_H
+
 #ifdef __MINGW64__
 #define MINGW_STDTHREAD_REDUNDANCY_WARNING
 #include <../mingw-std-threads/mingw.thread.h>
@@ -104,3 +107,5 @@ class TinThread
 public:
   void operator()(int thread);
 };
+
+#endif

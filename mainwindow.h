@@ -27,6 +27,7 @@
 #include <array>
 #include "configdialog.h"
 #include "tincanvas.h"
+#include "threads.h"
 
 class MainWindow: public QMainWindow
 {
@@ -46,6 +47,7 @@ public:
 signals:
   void octagonReady();
   void noCloudArea();
+  void gotResult(ThreadAction ta);
 public slots:
   void tick();
   void setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
