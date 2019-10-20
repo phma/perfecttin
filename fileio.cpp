@@ -509,13 +509,15 @@ PtinHeader readPtin(std::string inputFile)
       zcheck.push_back(readledouble(ptinFile));
     while (zcheck.size()<64)
       zcheck.push_back(zcheck.back());
-    cout<<header.tolRatio*header.tolerance*sqrt(zCheck.getCount())<<endl;
+    //cout<<header.tolRatio*header.tolerance*sqrt(zCheck.getCount())<<endl;
     //for (i=0;i<n;i++)
       //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<zcheck[i]-zCheck[i]<<endl;
     for (i=0;i<64;i++)
       if (fabs(zcheck[i]-zCheck[i])>zError)
 	zError=fabs(zcheck[i]-zCheck[i]);
-    cout<<zError/(header.tolRatio*header.tolerance*sqrt(zCheck.getCount()))<<endl;
+    //cout<<zError/(header.tolRatio*header.tolerance*sqrt(zCheck.getCount()))<<endl;
+    if (zError>header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536)
+      header.tolRatio=PT_ZCHECK_FAIL;
   }
   if (header.tolRatio>0 && header.tolerance>0)
     net.makeEdges();

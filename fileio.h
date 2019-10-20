@@ -33,6 +33,7 @@
 #define PT_EOF -7
 #define PT_EDGE_MISMATCH -8
 #define PT_DOT_OUTSIDE -9
+#define PT_ZCHECK_FAIL -10
 /* Unknown header format: file was written by a newer version of PerfectTIN.
  * Not ptin file: file is not a PerfectTIN file.
  * Count mismatch: file is not a PerfectTIN file.
