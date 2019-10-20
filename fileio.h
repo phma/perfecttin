@@ -56,6 +56,8 @@ class CoordCheck
 private:
   size_t count;
   manysum sums[64];
+  double stage0[14][8192],stage1[27][8192],stage2[40][8192],
+         stage3[53][8192],stage4[64][4096];
 public:
   void clear();
   CoordCheck& operator<<(double val);

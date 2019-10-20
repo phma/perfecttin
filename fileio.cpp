@@ -21,6 +21,7 @@
  */
 #include <vector>
 #include <cmath>
+#include <cstring>
 #include "dxf.h"
 #include "boundrect.h"
 #include "octagon.h"
@@ -46,11 +47,17 @@ void CoordCheck::clear()
   int i;
   for (count=i=0;i<64;i++)
     sums[i].clear();
+  memset(stage0,0,sizeof(stage0));
+  memset(stage1,0,sizeof(stage1));
+  memset(stage2,0,sizeof(stage2));
+  memset(stage3,0,sizeof(stage3));
+  memset(stage4,0,sizeof(stage4));
 }
 
 CoordCheck& CoordCheck::operator<<(double val)
 {
   int i;
+  double lastStageSum;
   for (i=0;i<64;i++)
     if ((count>>i)&1)
       sums[i]-=val;
@@ -58,13 +65,97 @@ CoordCheck& CoordCheck::operator<<(double val)
       sums[i]+=val;
   if ((count&63)==0) // stagger the periodic prunings among the sums
     sums[(count>>6)&63]+=0;
+  for (i=0;i<13;i++)
+    if ((count>>i)&1)
+      stage0[i][count&8191]=-val;
+    else
+      stage0[i][count&8191]=val;
+  stage0[13][count&8191]=val;
+  if ((count&8191)==8191)
+  {
+    for (i=0;i<13;i++)
+      stage1[i][(count>>13)&8191]=pairwisesum(stage0[i],8192);
+    lastStageSum=pairwisesum(stage0[13],8192);
+    for (i=13;i<26;i++)
+      if ((count>>i)&1)
+	stage1[i][(count>>13)&8191]=-lastStageSum;
+      else
+	stage1[i][(count>>13)&8191]=lastStageSum;
+    stage1[26][(count>>13)&8191]=lastStageSum;
+    memset(stage0,0,sizeof(stage0));
+  }
+  if ((count&0x3ffffff)==0x3ffffff)
+  {
+    for (i=0;i<26;i++)
+      stage2[i][(count>>26)&8191]=pairwisesum(stage1[i],8192);
+    lastStageSum=pairwisesum(stage1[26],8192);
+    for (i=26;i<39;i++)
+      if ((count>>i)&1)
+	stage2[i][(count>>26)&8191]=-lastStageSum;
+      else
+	stage2[i][(count>>26)&8191]=lastStageSum;
+    stage2[39][(count>>26)&8191]=lastStageSum;
+    memset(stage1,0,sizeof(stage1));
+  }
+  if ((count&0x7fffffffff)==0x7fffffffff)
+  {
+    for (i=0;i<39;i++)
+      stage3[i][(count>>39)&8191]=pairwisesum(stage2[i],8192);
+    lastStageSum=pairwisesum(stage2[39],8192);
+    for (i=39;i<52;i++)
+      if ((count>>i)&1)
+	stage3[i][(count>>39)&8191]=-lastStageSum;
+      else
+	stage3[i][(count>>39)&8191]=lastStageSum;
+    stage3[52][(count>>39)&8191]=lastStageSum;
+    memset(stage2,0,sizeof(stage2));
+  }
+  if ((count&0xfffffffffffff)==0xfffffffffffff)
+  {
+    for (i=0;i<52;i++)
+      stage4[i][(count>>52)&8191]=pairwisesum(stage3[i],8192);
+    lastStageSum=pairwisesum(stage2[52],8192);
+    for (i=52;i<64;i++)
+      if ((count>>i)&1)
+	stage4[i][(count>>52)&8191]=-lastStageSum;
+      else
+	stage4[i][(count>>52)&8191]=lastStageSum;
+    memset(stage3,0,sizeof(stage3));
+  }
   count++;
   return *this;
 }
 
 double CoordCheck::operator[](int n)
 {
-  return sums[n&63].total();
+  double ret0,ret1;
+  int n0=n,n1=n,n2=n,n3=n;
+  int s0=1,s1=1,s2=1,s3=1;
+  if (n0>13)
+  {
+    n0=13;
+    s0=1-2*((count>>n)&1);
+  }
+  if (n1>26)
+  {
+    n1=26;
+    s1=1-2*((count>>n)&1);
+  }
+  if (n2>39)
+  {
+    n2=39;
+    s2=1-2*((count>>n)&1);
+  }
+  if (n3>52)
+  {
+    n3=52;
+    s3=1-2*((count>>n)&1);
+  }
+  ret0=sums[n&63].total();
+  ret1=pairwisesum(stage0[n0],8192)*s0+pairwisesum(stage1[n1],8192)*s1+
+       pairwisesum(stage2[n2],8192)*s2+pairwisesum(stage3[n3],8192)*s3+
+       pairwisesum(stage4[n],4096);
+  return ret1;
 }
 
 /* These functions are common to the command-line and GUI programs.
