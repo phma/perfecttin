@@ -59,6 +59,7 @@ public slots:
   void clearCloud();
   void configure();
   void msgNoCloudArea();
+  void handleResult(ThreadAction ta);
   void aboutProgram();
   void aboutQt();
 protected:

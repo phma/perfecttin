@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 	  this,SLOT(setSettings(double,double,bool,double,int,bool)));
   connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
+  connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
   doneBar=new QProgressBar(this);
   busyBar=new QProgressBar(this);
   doneBar->setRange(0,16777216);
@@ -341,6 +342,48 @@ void MainWindow::configure()
 void MainWindow::msgNoCloudArea()
 {
   msgBox->warning(this,tr("PerfectTIN"),tr("Point cloud no area"));
+}
+
+void MainWindow::handleResult(ThreadAction ta)
+/* Receives the result of reading a file. If an error happened, pops up a message.
+ * The file was read by a worker thread, which put the result in a queue.
+ */
+{
+  QString message;
+  showingResult=true;
+  octagonReady();
+  switch (ta.opcode)
+  {
+    case ACT_READ_PTIN:
+      if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)
+      {
+	tolerance=ta.ptinResult.tolerance;
+	stageTolerance=writtenTolerance=tolerance*ta.ptinResult.tolRatio;
+	saveFileName=noExt(ta.filename);
+	fileNames=baseName(saveFileName)+".ptin";
+	if (ta.ptinResult.tolRatio>1)
+	  conversionStopped=true;
+      }
+      else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
+	message=tr("File incomplete");
+      else
+	switch (ta.ptinResult.tolRatio)
+	{
+	  case PT_UNKNOWN_HEADER_FORMAT:
+	    message=tr("Newer version");
+	    break;
+	  case PT_NOT_PTIN_FILE:
+	  case PT_COUNT_MISMATCH:
+	    message=tr("Not ptin file");
+	    break;
+	  default:
+	    message=tr("File corrupt");
+	}
+      if (message.length())
+	msgBox->warning(this,tr("PerfectTIN"),message);
+      break;
+  }
+  showingResult=false;
 }
 
 void MainWindow::aboutProgram()
