@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   msgBox=new QMessageBox(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,bool,double,int,bool)),
 	  this,SLOT(setSettings(double,double,bool,double,int,bool)));
-  connect(this,SIGNAL(octagonReady()),canvas,SLOT(sizeToFit()));
+  connect(this,SIGNAL(octagonReady()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
   doneBar=new QProgressBar(this);

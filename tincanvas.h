@@ -36,9 +36,9 @@ public:
 signals:
 public slots:
   void sizeToFit();
+  void setSize();
   void tick();
 protected:
-  void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
