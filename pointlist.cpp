@@ -24,22 +24,27 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "ldecimal.h"
+#include "threads.h"
 
 using namespace std;
 
 void pointlist::clear()
 {
+  wingEdge.lock();
   triangles.clear();
   edges.clear();
   points.clear();
   revpoints.clear();
   convexHull.clear();
+  wingEdge.unlock();
 }
 
 void pointlist::clearTin()
 {
+  wingEdge.lock();
   triangles.clear();
   edges.clear();
+  wingEdge.unlock();
 }
 
 int pointlist::size()

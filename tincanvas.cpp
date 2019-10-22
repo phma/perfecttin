@@ -88,6 +88,7 @@ void TinCanvas::tick()
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
   double r,g,b;
+  triangle *tri;
   xy gradient,A,B,C;
   xy dartCorners[4];
   QPolygonF polygon;
@@ -161,14 +162,18 @@ void TinCanvas::tick()
     wingEdge.lock_shared();
     if (++triangleNum>=net.triangles.size())
       triangleNum=0;
+    if (triangleNum<net.triangles.size())
+      tri=&net.triangles[triangleNum];
+    else
+      tri=nullptr;
     wingEdge.unlock_shared();
-    if (triangleNum<net.triangles.size() && net.triangles[triangleNum].a)
+    if (tri && tri->a)
     {
       wingEdge.lock_shared();
-      gradient=net.triangles[triangleNum].gradient(net.triangles[triangleNum].centroid());
-      A=*net.triangles[triangleNum].a;
-      B=*net.triangles[triangleNum].b;
-      C=*net.triangles[triangleNum].c;
+      gradient=tri->gradient(tri->centroid());
+      A=*tri->a;
+      B=*tri->b;
+      C=*tri->c;
       wingEdge.unlock_shared();
       r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
       g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
