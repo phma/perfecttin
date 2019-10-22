@@ -447,6 +447,7 @@ PtinHeader readPtin(std::string inputFile)
   if (header.tolRatio>0 && header.tolerance>0)
     for (i=0;i<header.numTriangles && header.tolRatio>0;i++)
     {
+      wingEdge.lock();
       n=net.addtriangle();
       //cout<<n<<' ';
       tri=&net.triangles[n];
@@ -498,6 +499,7 @@ PtinHeader readPtin(std::string inputFile)
 	  tri->dots.push_back(pnt);
 	  zCheck<<pnt.getz();
 	}
+      wingEdge.unlock();
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
   if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)
