@@ -363,6 +363,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	if (ta.ptinResult.tolRatio>1)
 	{
 	  conversionStopped=true;
+	  resizeBuckets(1);
 	  if (extension(saveFileName)=="."+to_string(ta.ptinResult.tolRatio))
 	    saveFileName=noExt(saveFileName);
 	}
