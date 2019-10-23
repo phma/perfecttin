@@ -85,6 +85,7 @@ void MainWindow::tick()
   int numDots=cloud.size();
   int tstatus=getThreadStatus();
   int numTriangles=net.triangles.size();
+  int numEdges=net.edges.size();
   ThreadAction ta;
   if (!showingResult && !resultQueueEmpty())
   {
@@ -122,7 +123,7 @@ void MainWindow::tick()
     }
     lastState=canvas->state;
   }
-  if (numDots!=lastNumDots || numTriangles!=lastNumTriangles)
+  if (numDots!=lastNumDots || numTriangles!=lastNumTriangles || numEdges!=lastNumEdges)
   { // Number of dots or triangles has changed: update status bar
     if (lastNumTriangles<4 && numTriangles>4)
       octagonReady();
@@ -133,6 +134,13 @@ void MainWindow::tick()
     if (numDots && numTriangles)
     {
       dotTriangleMsg->setText(tr("Making octagon"));
+      loadAction->setEnabled(false);
+      convertAction->setEnabled(false);
+      clearAction->setEnabled(false);
+    }
+    else if (numEdges>0 && numEdges<numTriangles*3/2)
+    { // When it's finished making edges, numEdges=(numTriangles*3+numConvexHull)/2.
+      dotTriangleMsg->setText(tr("Making edges"));
       loadAction->setEnabled(false);
       convertAction->setEnabled(false);
       clearAction->setEnabled(false);

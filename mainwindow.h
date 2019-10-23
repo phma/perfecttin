@@ -65,7 +65,7 @@ public slots:
 protected:
   void closeEvent(QCloseEvent *event) override;
 private:
-  int lastNumDots,lastNumTriangles;
+  int lastNumDots,lastNumTriangles,lastNumEdges;
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
