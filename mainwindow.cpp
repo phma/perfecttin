@@ -368,6 +368,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	    saveFileName=noExt(saveFileName);
 	}
 	fileNames=baseName(saveFileName)+".ptin";
+	net.conversionTime=ta.ptinResult.conversionTime;
       }
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
 	message=tr("File incomplete");
