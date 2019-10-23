@@ -262,7 +262,7 @@ bool shouldFlip(edge *e,double tolerance,int thread)
       for (i=0;i<2;i++)
 	for (j=0;j<triab[i]->dots.size();j++)
 	{
-	  tri=tri->findt(triab[i]->dots[j]);
+	  tri=tri->findt(triab[i]->dots[j],true);
 	  tri->dots.push_back(triab[i]->dots[j]);
 	}
       for (i=1;i<6;i++)

@@ -423,7 +423,7 @@ PtinHeader readPtin(std::string inputFile)
   triangle *tri;
   xyz pnt,ctr;
   bool readingStarted=false;
-  double zError=0;
+  double zError=0,high=-INFINITY,low=INFINITY;
   vector<double> zcheck;
   zCheck.clear();
   header=readPtinHeader(ptinFile);
@@ -501,6 +501,10 @@ PtinHeader readPtin(std::string inputFile)
 	  pnt+=ctr;
 	  tri->dots.push_back(pnt);
 	  zCheck<<pnt.getz();
+	  if (pnt.getz()>high)
+	    high=pnt.getz();
+	  if (pnt.getz()<low)
+	    low=pnt.getz();
 	}
       else
 	while (true)
@@ -517,6 +521,10 @@ PtinHeader readPtin(std::string inputFile)
 	  }
 	  tri->dots.push_back(pnt);
 	  zCheck<<pnt.getz();
+	  if (pnt.getz()>high)
+	    high=pnt.getz();
+	  if (pnt.getz()<low)
+	    low=pnt.getz();
 	}
       wingEdge.unlock();
     }
@@ -525,6 +533,8 @@ PtinHeader readPtin(std::string inputFile)
     header.tolRatio=PT_EDGE_MISMATCH;
   if (header.tolRatio>0 && header.tolerance>0)
   {
+    clipHigh=2*high-low;
+    clipLow=2*low-high;
     n=ptinFile.get()&255;
     for (i=0;i<n;i++)
       zcheck.push_back(readledouble(ptinFile));
