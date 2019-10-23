@@ -168,6 +168,25 @@ string noExt(string fileName)
   return fileName;
 }
 
+string extension(string fileName)
+{
+  long long slashPos,dotPos; // npos turns into -1, which is convenient
+  string between;
+  slashPos=fileName.rfind('/');
+  dotPos=fileName.rfind('.');
+  if (dotPos>slashPos)
+  {
+    between=fileName.substr(slashPos+1,dotPos-slashPos-1);
+    if (between.find_first_not_of('.')>between.length())
+      dotPos=-1;
+  }
+  if (dotPos>slashPos)
+    fileName.erase(0,dotPos);
+  else
+    fileName="";
+  return fileName;
+}
+
 string baseName(string fileName)
 {
   long long slashPos;

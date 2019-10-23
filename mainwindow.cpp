@@ -360,9 +360,13 @@ void MainWindow::handleResult(ThreadAction ta)
 	tolerance=ta.ptinResult.tolerance;
 	stageTolerance=writtenTolerance=tolerance*ta.ptinResult.tolRatio;
 	saveFileName=noExt(ta.filename);
-	fileNames=baseName(saveFileName)+".ptin";
 	if (ta.ptinResult.tolRatio>1)
+	{
 	  conversionStopped=true;
+	  if (extension(saveFileName)=="."+to_string(ta.ptinResult.tolRatio))
+	    saveFileName=noExt(saveFileName);
+	}
+	fileNames=baseName(saveFileName)+".ptin";
       }
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
 	message=tr("File incomplete");
