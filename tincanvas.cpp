@@ -198,6 +198,8 @@ void TinCanvas::tick()
     }
     elapsed=clk.now()-timeStart;
   }
+  if (tri && !trianglesToPaint)
+    update();
   //if (elapsed>cr::milliseconds(50))
     //cout<<"tick got stuck\n";
 }
