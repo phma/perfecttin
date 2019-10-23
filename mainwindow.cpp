@@ -367,6 +367,9 @@ void MainWindow::handleResult(ThreadAction ta)
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
 	message=tr("File incomplete");
       else
+      {
+	saveFileName="";
+	fileNames="";
 	switch (ta.ptinResult.tolRatio)
 	{
 	  case PT_UNKNOWN_HEADER_FORMAT:
@@ -379,10 +382,12 @@ void MainWindow::handleResult(ThreadAction ta)
 	  default:
 	    message=tr("File corrupt");
 	}
+      }
       if (message.length())
 	msgBox->warning(this,tr("PerfectTIN"),message);
       break;
   }
+  fileMsg->setText(QString::fromStdString(fileNames));
   showingResult=false;
 }
 
