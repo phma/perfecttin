@@ -420,6 +420,7 @@ PtinHeader readPtin(std::string inputFile)
   int i,j,m,n,a,b,c;
   int edgeCheck=0;
   vector<int> convexHull;
+  vector<double> areas;
   triangle *tri;
   xyz pnt,ctr;
   bool readingStarted=false;
@@ -493,6 +494,7 @@ PtinHeader readPtin(std::string inputFile)
       //cout<<i<<' '<<tri->sarea<<endl;
       if (!(tri->sarea>0)) // so written to catch the NaN case
 	header.tolRatio=PT_BACKWARD_TRIANGLE;
+      areas.push_back(tri->sarea);
       edgeCheck+=skewsym(a,b)+skewsym(b,c)+skewsym(c,a);
       m=ptinFile.get()&255;
       if (m<255)
@@ -554,7 +556,10 @@ PtinHeader readPtin(std::string inputFile)
       header.tolRatio=PT_ZCHECK_FAIL;
   }
   if (header.tolRatio>0 && header.tolerance>0)
+  {
+    setMutexArea(pairwisesum(areas));
     net.makeEdges();
+  }
   else if (readingStarted)
     net.clear();
   return header;

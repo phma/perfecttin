@@ -25,5 +25,6 @@
 extern pointlist net;
 extern double clipLow,clipHigh;
 extern std::array<double,2> areadone;
+void setMutexArea(double area);
 double makeOctagon();
 int mtxSquare(xy pnt);

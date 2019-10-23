@@ -40,6 +40,11 @@ double clipLow,clipHigh;
 array<double,2> areadone={0,0};
 double mtxSquareSide;
 
+void setMutexArea(double area)
+{
+  mtxSquareSide=sqrt(area/2)/mtxSquareSize;
+}
+
 double makeOctagon()
 /* Creates an octagon which encloses cloud (defined in ply.cpp) and divides it
  * into six triangles. Returns the maximum error of any point in the cloud.
@@ -161,7 +166,7 @@ double makeOctagon()
     net.revtriangles[&net.triangles[i]]=i;
     mtxSquareSide+=net.triangles[i].area();
   }
-  mtxSquareSide=sqrt(mtxSquareSide/2)/mtxSquareSize;
+  setMutexArea(mtxSquareSide);
   for (i=1;i<=8;i++)
   {
     cornerPointers.push_back(&net.points[i]);
