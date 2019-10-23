@@ -434,7 +434,10 @@ PtinHeader readPtin(std::string inputFile)
     readingStarted=true;
     for (i=1;i<=header.numPoints;i++)
     {
+      wingEdge.lock();
       net.points[i]=point(readPoint(ptinFile));
+      net.revpoints[&net.points[i]]=i;
+      wingEdge.unlock();
       if (ptinFile.eof())
       {
 	header.tolRatio=PT_EOF;
