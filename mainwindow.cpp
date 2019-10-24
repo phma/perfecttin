@@ -280,6 +280,7 @@ void MainWindow::loadFile()
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
     net.clear();
+    octagonReady();
     if (cloud.size()==0)
       fileNames="";
     ta.opcode=ACT_LOAD;
