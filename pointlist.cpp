@@ -32,6 +32,7 @@ void pointlist::clear()
 {
   wingEdge.lock();
   triangles.clear();
+  revtriangles.clear();
   edges.clear();
   points.clear();
   revpoints.clear();
@@ -43,6 +44,7 @@ void pointlist::clearTin()
 {
   wingEdge.lock();
   triangles.clear();
+  revtriangles.clear();
   edges.clear();
   wingEdge.unlock();
 }
