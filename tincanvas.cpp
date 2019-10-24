@@ -150,7 +150,7 @@ void TinCanvas::tick()
   {
     dartCorners[1]=hypot(width(),height())*0.1/scale*cossin(dartAngle+DEG30);
     dartCorners[2]=xy(0,0);
-    dartCorners[1]=hypot(width(),height())*0.1/scale*cossin(dartAngle-DEG30);
+    dartCorners[3]=hypot(width(),height())*0.1/scale*cossin(dartAngle-DEG30);
   }
   for (i=0;i<4;i++)
     polygon<<worldToWindow(dartCorners[i]);
