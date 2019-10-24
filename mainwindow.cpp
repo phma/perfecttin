@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   msgBox=new QMessageBox(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,bool,double,int,bool)),
 	  this,SLOT(setSettings(double,double,bool,double,int,bool)));
-  connect(this,SIGNAL(octagonReady()),canvas,SLOT(setSize()));
+  connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
   doneBar=new QProgressBar(this);
@@ -126,7 +126,7 @@ void MainWindow::tick()
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles || numEdges!=lastNumEdges)
   { // Number of dots or triangles has changed: update status bar
     if (lastNumTriangles<4 && numTriangles>4)
-      octagonReady();
+      tinSizeChanged();
     if (numTriangles<lastNumTriangles || ((numTriangles^lastNumTriangles)&1))
       canvas->update();
     lastNumDots=numDots;
@@ -280,7 +280,7 @@ void MainWindow::loadFile()
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
     net.clear();
-    octagonReady();
+    tinSizeChanged();
     if (cloud.size()==0)
       fileNames="";
     ta.opcode=ACT_LOAD;
@@ -360,7 +360,7 @@ void MainWindow::handleResult(ThreadAction ta)
 {
   QString message;
   showingResult=true;
-  octagonReady();
+  tinSizeChanged();
   switch (ta.opcode)
   {
     case ACT_READ_PTIN:

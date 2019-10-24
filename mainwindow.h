@@ -45,7 +45,7 @@ public:
   }
   bool conversionBusy();
 signals:
-  void octagonReady();
+  void tinSizeChanged();
   void noCloudArea();
   void gotResult(ThreadAction ta);
 public slots:
