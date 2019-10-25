@@ -169,10 +169,10 @@ void MainWindow::tick()
 	ta.param0=dxfText;
 	ta.opcode=ACT_WRITE_DXF;
 	ta.filename=saveFileName+".dxf";
-	enqueueAction(ta);
+	//enqueueAction(ta);
 	ta.opcode=ACT_WRITE_TIN;
 	ta.filename=saveFileName+".tin";
-	enqueueAction(ta);
+	//enqueueAction(ta);
 	ta.param1=tolerance;
 	ta.param0=lrint(toleranceRatio);
 	ta.opcode=ACT_WRITE_PTIN;
