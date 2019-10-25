@@ -531,6 +531,7 @@ PtinHeader readPtin(std::string inputFile)
 	  if (pnt.getz()<low)
 	    low=pnt.getz();
 	}
+      tri->dots.shrink_to_fit();
       wingEdge.unlock();
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
