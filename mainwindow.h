@@ -53,6 +53,9 @@ public slots:
   void setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
   void openFile();
   void loadFile();
+  void exportDxfTxt();
+  void exportDxfBin();
+  void exportTinTxt();
   void startConversion();
   void stopConversion();
   void resumeConversion();
@@ -77,11 +80,12 @@ private:
   QFileDialog *fileDialog;
   QMessageBox *msgBox;
   ConfigurationDialog *configDialog;
-  QMenu *fileMenu,*settingsMenu,*helpMenu;
+  QMenu *fileMenu,*settingsMenu,*helpMenu,*exportMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
   QProgressBar *doneBar,*busyBar;
   QAction *openAction,*loadAction,*convertAction,*clearAction;
-  QAction *stopAction,*resumeAction,*exitAction;
+  QAction *exportAction,*stopAction,*resumeAction,*exitAction;
+  QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   TinCanvas *canvas;

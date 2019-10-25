@@ -295,6 +295,77 @@ void MainWindow::loadFile()
   }
 }
 
+void MainWindow::exportDxfTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Export TIN as DXF Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
+  fileDialog->setNameFilter(tr("*.dxf"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=outUnit;
+    ta.param0=true;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_DXF;
+    enqueueAction(ta);
+  }
+}
+
+void MainWindow::exportDxfBin()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Export TIN as DXF Binary"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
+  fileDialog->setNameFilter(tr("*.dxf"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=outUnit;
+    ta.param0=false;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_DXF;
+    enqueueAction(ta);
+  }
+}
+
+void MainWindow::exportTinTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Export TIN as Text (AquaVeo)"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
+  fileDialog->setNameFilter(tr("*.tin"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=outUnit;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_TIN;
+    enqueueAction(ta);
+  }
+}
+
 void MainWindow::startConversion()
 {
   int dialogResult;
@@ -467,6 +538,7 @@ void MainWindow::makeActions()
   convertAction->setText(tr("Convert"));
   fileMenu->addAction(convertAction);
   connect(convertAction,SIGNAL(triggered(bool)),this,SLOT(startConversion()));
+  exportMenu=fileMenu->addMenu(tr("Export"));
   clearAction=new QAction(this);
   clearAction->setIcon(QIcon::fromTheme("edit-clear"));
   clearAction->setText(tr("Clear"));
@@ -489,6 +561,19 @@ void MainWindow::makeActions()
   exitAction->setText(tr("Exit"));
   fileMenu->addAction(exitAction);
   connect(exitAction,SIGNAL(triggered(bool)),this,SLOT(close()));
+  // Export menu
+  exportDxfTxtAction=new QAction(this);
+  exportDxfTxtAction->setText(tr("DXF Text"));
+  exportMenu->addAction(exportDxfTxtAction);
+  connect(exportDxfTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfTxt()));
+  exportDxfBinAction=new QAction(this);
+  exportDxfBinAction->setText(tr("DXF Binary"));
+  exportMenu->addAction(exportDxfBinAction);
+  connect(exportDxfBinAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfBin()));
+  exportTinTxtAction=new QAction(this);
+  exportTinTxtAction->setText(tr("TIN Text"));
+  exportMenu->addAction(exportTinTxtAction);
+  connect(exportTinTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportTinTxt()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));

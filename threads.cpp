@@ -574,11 +574,11 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
-	  cerr<<"Can't write DXF in wait state\n";
+	  writeDxf(act.filename,act.param0,act.param1);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_TIN:
-	  cerr<<"Can't write TIN in wait state\n";
+	  writeTinText(act.filename,act.param1);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
