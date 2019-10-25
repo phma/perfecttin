@@ -214,12 +214,18 @@ void writeDxf(string outputFile,bool asc,double outUnit)
   writeDxfGroups(dxfFile,dxfCodes,asc);
 }
 
-void readCloud(string inputFile,double inUnit)
+int readCloud(string inputFile,double inUnit)
 {
-  int i,already=cloud.size();
+  int i,already=cloud.size(),ret=0;
   readPly(inputFile);
-  if (cloud.size()==already)
+  if (cloud.size()>already)
+    ret=RES_LOAD_PLY;
+  else
+  {
     readLas(inputFile);
+    if (cloud.size()>already)
+      ret=RES_LOAD_LAS;
+  }
   if (cloud.size()>already)
     cout<<"Read "<<cloud.size()-already<<" dots\n";
   for (i=already;i<cloud.size();i++)

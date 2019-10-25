@@ -555,7 +555,8 @@ void TinThread::operator()(int thread)
       switch (act.opcode)
       {
 	case ACT_LOAD:
-	  readCloud(act.filename,act.param1);
+	  act.result=readCloud(act.filename,act.param1);
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_READ_PTIN:

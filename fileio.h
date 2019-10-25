@@ -72,7 +72,7 @@ std::string noExt(std::string fileName);
 std::string extension(std::string fileName);
 std::string baseName(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit);
-void readCloud(std::string inputFile,double inUnit);
+int readCloud(std::string inputFile,double inUnit);
 void writePtin(std::string outputFile,int tolRatio,double tolerance);
 PtinHeader readPtinHeader(std::istream &inputFile);
 PtinHeader readPtinHeader(std::string inputFile);

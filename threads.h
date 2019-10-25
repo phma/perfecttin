@@ -54,12 +54,16 @@
 #define ACT_WRITE_PTIN 5
 #define ACT_READ_PTIN 6
 
+#define RES_LOAD_PLY 1
+#define RES_LOAD_LAS 2
+
 struct ThreadAction
 {
   int opcode;
   int param0;
   double param1;
   std::string filename;
+  int result;
   PtinHeader ptinResult;
 };
 
