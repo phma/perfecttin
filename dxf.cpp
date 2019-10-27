@@ -539,7 +539,7 @@ void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
   dxfData.push_back(sectag);
   dxfData.push_back(secname);
   paramtag.str="$ACADVER";
-  stringval.str="AC1006";
+  stringval.str="AC1006"; // ARES opens it with 1006 or 1009. Carlson opens it with 1027 but not 1006.
   dxfData.push_back(paramtag);
   dxfData.push_back(stringval);
   paramtag.str="$INSBASE";
