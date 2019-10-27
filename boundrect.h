@@ -28,8 +28,8 @@ class BoundRect
 {
 private:
   int orientation;
-  std::array<double,4> bounds;
-  // The four numbers are left, bottom, -right, and -top.
+  std::array<double,6> bounds;
+  // The six numbers are left, bottom, -right, -top, low, and -high.
 public:
   BoundRect();
   BoundRect(int ori);
@@ -53,6 +53,14 @@ public:
   double top()
   {
     return -bounds[3];
+  }
+  double low()
+  {
+    return bounds[4];
+  }
+  double high()
+  {
+    return -bounds[5];
   }
 };
 #endif

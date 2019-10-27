@@ -26,7 +26,7 @@
 BoundRect::BoundRect()
 {
   int i;
-  for (i=0;i<4;i++)
+  for (i=0;i<6;i++)
     bounds[i]=INFINITY;
   orientation=0;
 }
@@ -34,7 +34,7 @@ BoundRect::BoundRect()
 BoundRect::BoundRect(int ori)
 {
   int i;
-  for (i=0;i<4;i++)
+  for (i=0;i<6;i++)
     bounds[i]=INFINITY;
   orientation=ori;
 }
@@ -42,7 +42,7 @@ BoundRect::BoundRect(int ori)
 void BoundRect::clear()
 {
   int i;
-  for (i=0;i<4;i++)
+  for (i=0;i<6;i++)
     bounds[i]=INFINITY;
 }
 
@@ -71,12 +71,20 @@ void BoundRect::include(xy obj)
 void BoundRect::include(pointlist *obj)
 {
   int i;
-  double newbound;
+  double newbound,elev;
   for (i=0;i<4;i++)
   {
     newbound=obj->dirbound(i*DEG90-orientation);
     if (newbound<bounds[i])
       bounds[i]=newbound;
+  }
+  for (i=1;i<=obj->points.size();i++)
+  {
+    elev=obj->points[i].elev();
+    if (elev<bounds[4])
+      bounds[4]=elev;
+    if (-elev<bounds[5])
+      bounds[5]=-elev;
   }
 }
 

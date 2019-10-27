@@ -547,10 +547,10 @@ void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
   insertXyz(dxfData,10,xyz(0,0,0));
   paramtag.str="$EXTMIN";
   dxfData.push_back(paramtag);
-  insertXy(dxfData,10,xy(br.left(),br.bottom()));
+  insertXyz(dxfData,10,xyz(br.left(),br.bottom(),br.low()));
   paramtag.str="$EXTMAX";
   dxfData.push_back(paramtag);
-  insertXy(dxfData,10,xy(br.right(),br.top()));
+  insertXyz(dxfData,10,xyz(br.right(),br.top(),br.high()));
   sectag.str="ENDSEC";
   dxfData.push_back(sectag);
 }
