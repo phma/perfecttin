@@ -305,7 +305,7 @@ void MainWindow::exportDxfTxt()
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
-  fileDialog->setNameFilter(tr("*.dxf"));
+  fileDialog->setNameFilter(tr("(*.dxf)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -329,7 +329,7 @@ void MainWindow::exportDxfBin()
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
-  fileDialog->setNameFilter(tr("*.dxf"));
+  fileDialog->setNameFilter(tr("(*.dxf)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -353,7 +353,7 @@ void MainWindow::exportTinTxt()
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
-  fileDialog->setNameFilter(tr("*.tin"));
+  fileDialog->setNameFilter(tr("(*.tin)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -377,7 +377,7 @@ void MainWindow::exportCarlsonTin()
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)+".tin"));
-  fileDialog->setNameFilter(tr("*.tin"));
+  fileDialog->setNameFilter(tr("(*.tin)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -400,7 +400,7 @@ void MainWindow::startConversion()
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
-  fileDialog->setNameFilter(tr("*"));
+  fileDialog->setNameFilter(tr("(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
