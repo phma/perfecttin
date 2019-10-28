@@ -23,6 +23,7 @@
 #define FILEIO_H
 #include <string>
 #include "manysum.h"
+#include "point.h"
 
 #define PT_UNKNOWN_HEADER_FORMAT -1
 #define PT_NOT_PTIN_FILE -2
@@ -73,6 +74,8 @@ std::string extension(std::string fileName);
 std::string baseName(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit);
 int readCloud(std::string inputFile,double inUnit);
+void writePoint(std::ostream &file,xyz pnt);
+xyz readPoint(std::istream &file);
 void writePtin(std::string outputFile,int tolRatio,double tolerance);
 PtinHeader readPtinHeader(std::istream &inputFile);
 PtinHeader readPtinHeader(std::string inputFile);
