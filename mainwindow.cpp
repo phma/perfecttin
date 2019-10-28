@@ -399,18 +399,20 @@ void MainWindow::startConversion()
   fileDialog->setWindowTitle(tr("Convert to TIN"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
-  fileDialog->setNameFilter(tr("(*)"));
+  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)+".ptin"));
+  fileDialog->setNameFilter(tr("(*.ptin)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
     files=fileDialog->selectedFiles();
     saveFileName=files[0].toStdString();
+    if (extension(saveFileName)==".ptin")
+      saveFileName=noExt(saveFileName);
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
     clearLog();
     writtenTolerance=INFINITY;
-    fileNames=baseName(saveFileName)+".[dxf|tin]";
+    fileNames=baseName(saveFileName)+".ptin";
     fileMsg->setText(QString::fromStdString(fileNames));
   }
 }
