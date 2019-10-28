@@ -23,6 +23,7 @@
 #include <fstream>
 #include "octagon.h"
 #include "binio.h"
+#include "fileio.h"
 #include "carlsontin.h"
 using namespace std;
 
@@ -56,18 +57,20 @@ void writeCarlsonTin(string outputFile,double outUnit)
   ofstream tinFile(outputFile,ofstream::trunc|ofstream::binary);
   writeleshort(tinFile,0xff00);
   tinFile<<"#Carlson DTM $Revision: 20717$\n";
+  for (i=0;i<sizeof(carlsonHeaderWords)/sizeof(int);i++)
+    writeleint(tinFile,carlsonHeaderWords[i]);
+  writeleshort(tinFile,0x3e);
   for (i=1;i<=net.points.size();i++)
   {
-    //tinFile<<ldecimal(net.points[i].getx()/outUnit)<<' ';
-    //tinFile<<ldecimal(net.points[i].gety()/outUnit)<<' ';
-    //tinFile<<ldecimal(net.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
+    writeleshort(tinFile,CA_POINT);
+    writeleint(tinFile,i);
+    writePoint(tinFile,net.points[i]);
   }
-  tinFile<<"TRI "<<net.triangles.size()<<endl;
   for (i=0;i<net.triangles.size();i++)
   {
-    tinFile<<net.revpoints[net.triangles[i].a]<<' ';
-    tinFile<<net.revpoints[net.triangles[i].b]<<' ';
-    tinFile<<net.revpoints[net.triangles[i].c]<<'\n';
+    writeleshort(tinFile,CA_TRIANGLE);
+    writeleint(tinFile,net.revpoints[net.triangles[i].a]);
+    writeleint(tinFile,net.revpoints[net.triangles[i].b]);
+    writeleint(tinFile,net.revpoints[net.triangles[i].c]);
   }
-  tinFile<<"ENDT\n";
 }
