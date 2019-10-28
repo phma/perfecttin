@@ -53,6 +53,7 @@
 #define ACT_WRITE_TIN 4
 #define ACT_WRITE_PTIN 5
 #define ACT_READ_PTIN 6
+#define ACT_WRITE_CARLSON_TIN 7
 
 #define RES_LOAD_PLY 1
 #define RES_LOAD_LAS 2

@@ -366,6 +366,30 @@ void MainWindow::exportTinTxt()
   }
 }
 
+void MainWindow::exportCarlsonTin()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  cout<<"lastFileName "<<lastFileName<<endl;
+  fileDialog->setWindowTitle(tr("Export TIN as Carlson"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)+".tin"));
+  fileDialog->setNameFilter(tr("*.tin"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=outUnit;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_CARLSON_TIN;
+    enqueueAction(ta);
+  }
+}
+
 void MainWindow::startConversion()
 {
   int dialogResult;
@@ -574,6 +598,10 @@ void MainWindow::makeActions()
   exportTinTxtAction->setText(tr("TIN Text"));
   exportMenu->addAction(exportTinTxtAction);
   connect(exportTinTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportTinTxt()));
+  exportCarlsonTinAction=new QAction(this);
+  exportCarlsonTinAction->setText(tr("Carlson TIN"));
+  exportMenu->addAction(exportCarlsonTinAction);
+  connect(exportCarlsonTinAction,SIGNAL(triggered(bool)),this,SLOT(exportCarlsonTin()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));

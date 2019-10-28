@@ -39,15 +39,16 @@ const unsigned int carlsonHeaderWords[]=
  */
 {
   0x17b0800, // different in 3dface
-  0x1981bc,0x73d6795a,3,0x73d67928,0x863c32, // different in 3dface
-  0x4000,0xd06782,0,25,0,1,0x198188,0x100052,0x73d6cf5e,0xf5fd64a7, // different in 3dface
+  0x1981bc,0x73d6795a,3,0x73d67928,0x863c32cb, // different in 3dface
+  0x4000,0xd06782,0,25,0,1,0x198188,0x100052,
+  0x198248,0x73d6cf5e,0xf5fd64a7, // different in 3dface
   0xfffffffe,0x73d67928,0x73d679b3,0x198f78,0x8301,64,0x180,0x198204,
   1,0x198214,0x73d2f97c,0x198204,0x198f78,0x8301,0x198f78,
   0xd06780,0,0xd06780,0,0x198210,0x73d22e2b,0x38bcce8, // different in 3dface
-  0x19821c,0x73d2f33b,19,0x198258,0x73d3019b,0x73d99408,
-  0x73d30192,0x86312f, // different in 3dface
+  0x19821c,0x73d2f33b,19,0x198258,0x73d3019b,0x73d97408,
+  0x73d30192,0x863c312f, // different in 3dface
   0,0x172c3178, // different in 3dface
-  0x198f78,0x73d99408,0x19822c,0x1983f4,0x198974,0x73d6cf5e,0x14fd780f, // different in 3dface
+  0x198f78,0x73d97408,0x19822c,0x1983f4,0x198974,0x73d6cf5e,0x14fd780f, // different in 3dface
   0xb5ed8d09,0xb0c6f7a0
 };
 
@@ -56,7 +57,7 @@ void writeCarlsonTin(string outputFile,double outUnit)
   int i;
   ofstream tinFile(outputFile,ofstream::trunc|ofstream::binary);
   writeleshort(tinFile,0xff00);
-  tinFile<<"#Carlson DTM $Revision: 20717$\n";
+  tinFile<<"#Carlson DTM $Revision: 20717 $\n";
   for (i=0;i<sizeof(carlsonHeaderWords)/sizeof(int);i++)
     writeleint(tinFile,carlsonHeaderWords[i]);
   writeleshort(tinFile,0x3e);
@@ -72,5 +73,6 @@ void writeCarlsonTin(string outputFile,double outUnit)
     writeleint(tinFile,net.revpoints[net.triangles[i].a]);
     writeleint(tinFile,net.revpoints[net.triangles[i].b]);
     writeleint(tinFile,net.revpoints[net.triangles[i].c]);
+    tinFile.put(0);
   }
 }
