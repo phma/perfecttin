@@ -475,7 +475,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
       }
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
-	message=tr("File incomplete");
+	message=tr("File incomplete %1").arg(QString::fromStdString(ta.filename));
       else
       {
 	saveFileName="";
@@ -483,14 +483,14 @@ void MainWindow::handleResult(ThreadAction ta)
 	switch (ta.ptinResult.tolRatio)
 	{
 	  case PT_UNKNOWN_HEADER_FORMAT:
-	    message=tr("Newer version");
+	    message=tr("Newer version %1").arg(QString::fromStdString(ta.filename));
 	    break;
 	  case PT_NOT_PTIN_FILE:
 	  case PT_COUNT_MISMATCH:
-	    message=tr("Not ptin file");
+	    message=tr("Not ptin file %1").arg(QString::fromStdString(ta.filename));
 	    break;
 	  default:
-	    message=tr("File corrupt");
+	    message=tr("File corrupt %1").arg(QString::fromStdString(ta.filename));
 	}
       }
       if (message.length())
