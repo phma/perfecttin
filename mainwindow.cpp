@@ -304,7 +304,7 @@ void MainWindow::exportDxfTxt()
   fileDialog->setWindowTitle(tr("Export TIN as DXF Text"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".dxf"));
   fileDialog->setNameFilter(tr("(*.dxf)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -328,7 +328,7 @@ void MainWindow::exportDxfBin()
   fileDialog->setWindowTitle(tr("Export TIN as DXF Binary"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".dxf"));
   fileDialog->setNameFilter(tr("(*.dxf)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -352,7 +352,7 @@ void MainWindow::exportTinTxt()
   fileDialog->setWindowTitle(tr("Export TIN as Text (AquaVeo)"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)));
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".tin"));
   fileDialog->setNameFilter(tr("(*.tin)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -372,11 +372,10 @@ void MainWindow::exportCarlsonTin()
   QStringList files;
   string fileName;
   ThreadAction ta;
-  cout<<"lastFileName "<<lastFileName<<endl;
   fileDialog->setWindowTitle(tr("Export TIN as Carlson"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
-  fileDialog->selectFile(QString::fromStdString(noExt(lastFileName)+".tin"));
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".tin"));
   fileDialog->setNameFilter(tr("(*.tin)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
