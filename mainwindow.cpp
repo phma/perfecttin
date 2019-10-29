@@ -474,6 +474,10 @@ void MainWindow::handleResult(ThreadAction ta)
 	}
 	fileNames=baseName(saveFileName)+".ptin";
 	net.conversionTime=ta.ptinResult.conversionTime;
+	loadAction->setEnabled(true);
+	convertAction->setEnabled(true);
+	clearAction->setEnabled(true);
+	stopAction->setEnabled(false);
       }
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
 	message=tr("File incomplete %1").arg(QString::fromStdString(ta.filename));
