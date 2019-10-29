@@ -68,15 +68,19 @@ MainWindow::~MainWindow()
 }
 
 /* Rules for enabling actions:
- * You cannot load a file while a conversion is in progress.
+ * You cannot load or open a file while a conversion is in progress.
  * You can load a file while loading another file (it will be queued).
  * You can load a file while a conversion is stopped, but then you cannot resume.
- * You cannot clear while loading a file or converting.
+ * You can open a file while a conversion is stopped. If it is a final file,
+ * you cannot resume; if it is a checkpoint file, you can resume.
+ * You cannot clear or export while loading a file or converting.
  * You cannot start a conversion while loading a file or converting.
+ * You can start a conversion after loading a file, but not after opening one.
  * You cannot stop a conversion unless one is in progress and has
  * passed the octagon stage.
- * You cannot resume a conversion unless one has been stopped
- * and no file has been loaded and the TIN has not been cleared.
+ * You cannot resume a conversion unless one has been stopped or you have
+ * opened a checkpoint file and no file has been loaded and the TIN
+ * has not been cleared.
  */
 
 void MainWindow::tick()
@@ -95,31 +99,38 @@ void MainWindow::tick()
   if (lastState!=canvas->state)
   {
     //cout<<"Last state "<<lastState<<" Current state "<<canvas->state<<endl;
-    if (lastState==-ACT_LOAD && canvas->state==TH_WAIT)
+    if ((lastState==-ACT_LOAD || lastState==-ACT_READ_PTIN) && canvas->state==TH_WAIT)
     { // finished loading file
       clearAction->setEnabled(true);
-      convertAction->setEnabled(true);
+      exportMenu->setEnabled(true);
+      if (lastState==-ACT_LOAD)
+	convertAction->setEnabled(true);
     }
-    if (canvas->state==-ACT_LOAD)
+    if (canvas->state==-ACT_LOAD || canvas->state==-ACT_READ_PTIN)
     { // started loading file
       convertAction->setEnabled(false);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
+      exportMenu->setEnabled(false);
       conversionStopped=false;
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
+      openAction->setEnabled(true);
       loadAction->setEnabled(true);
       stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
       clearAction->setEnabled(true);
+      exportMenu->setEnabled(true);
     }
     if (canvas->state==TH_RUN)
     {
+      openAction->setEnabled(false);
       loadAction->setEnabled(false);
       stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
+      exportMenu->setEnabled(false);
     }
     lastState=canvas->state;
   }
@@ -134,6 +145,7 @@ void MainWindow::tick()
     if (numDots && numTriangles)
     {
       dotTriangleMsg->setText(tr("Making octagon"));
+      openAction->setEnabled(false);
       loadAction->setEnabled(false);
       convertAction->setEnabled(false);
       clearAction->setEnabled(false);
@@ -141,7 +153,6 @@ void MainWindow::tick()
     else if (numEdges>0 && numEdges<numTriangles*3/2)
     { // When it's finished making edges, numEdges=(numTriangles*3+numConvexHull)/2.
       dotTriangleMsg->setText(tr("Making edges"));
-      loadAction->setEnabled(false);
       convertAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
@@ -193,8 +204,10 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
+	  openAction->setEnabled(true);
 	  loadAction->setEnabled(true);
-	  convertAction->setEnabled(true);
+	  convertAction->setEnabled(false);
+	  exportMenu->setEnabled(true);
 	  clearAction->setEnabled(true);
 	  stopAction->setEnabled(false);
 	}
@@ -469,13 +482,14 @@ void MainWindow::handleResult(ThreadAction ta)
 	{
 	  conversionStopped=true;
 	  resizeBuckets(1);
+	  resumeAction->setEnabled(true);
 	  if (extension(saveFileName)=="."+to_string(ta.ptinResult.tolRatio))
 	    saveFileName=noExt(saveFileName);
 	}
 	fileNames=baseName(saveFileName)+".ptin";
 	net.conversionTime=ta.ptinResult.conversionTime;
 	loadAction->setEnabled(true);
-	convertAction->setEnabled(true);
+	convertAction->setEnabled(false);
 	clearAction->setEnabled(true);
 	stopAction->setEnabled(false);
       }
