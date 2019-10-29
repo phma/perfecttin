@@ -72,6 +72,7 @@ public:
 std::string noExt(std::string fileName);
 std::string extension(std::string fileName);
 std::string baseName(std::string fileName);
+void deleteFile(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit);
 int readCloud(std::string inputFile,double inUnit);
 void writePoint(std::ostream &file,xyz pnt);

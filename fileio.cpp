@@ -194,6 +194,11 @@ string baseName(string fileName)
   return fileName.substr(slashPos+1);
 }
 
+void deleteFile(string fileName)
+{
+  remove(fileName.c_str());
+}
+
 void writeDxf(string outputFile,bool asc,double outUnit)
 {
   vector<GroupCode> dxfCodes;

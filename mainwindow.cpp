@@ -165,14 +165,10 @@ void MainWindow::tick()
     if (actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
-	ta.param1=outUnit;
-	ta.param0=dxfText;
-	ta.opcode=ACT_WRITE_DXF;
-	ta.filename=saveFileName+".dxf";
-	//enqueueAction(ta);
-	ta.opcode=ACT_WRITE_TIN;
-	ta.filename=saveFileName+".tin";
-	//enqueueAction(ta);
+	ta.param0=lrint(toleranceRatio*4);
+	ta.opcode=ACT_DELETE_FILE;
+	ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
+	enqueueAction(ta);
 	ta.param1=tolerance;
 	ta.param0=lrint(toleranceRatio);
 	ta.opcode=ACT_WRITE_PTIN;
@@ -192,6 +188,10 @@ void MainWindow::tick()
 	}
 	else // conversion is finished
 	{
+	  ta.param0=lrint(stageTolerance*2/tolerance);
+	  ta.opcode=ACT_DELETE_FILE;
+	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
+	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
 	  loadAction->setEnabled(true);
 	  convertAction->setEnabled(true);
