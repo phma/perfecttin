@@ -43,14 +43,14 @@ const char toleranceStr[10][7]=
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
 {
   int i;
-  inUnitLabel=new QLabel(this);
+  lengthUnitLabel=new QLabel(this);
   outUnitLabel=new QLabel(this);
   toleranceLabel=new QLabel(this);
   toleranceInUnit=new QLabel(this);
   toleranceOutUnit=new QLabel(this);
   threadLabel=new QLabel(this);
   threadDefault=new QLabel(this);
-  inUnitBox=new QComboBox(this);
+  lengthUnitBox=new QComboBox(this);
   outUnitBox=new QComboBox(this);
   toleranceBox=new QComboBox(this);
   okButton=new QPushButton(tr("OK"),this);
@@ -60,10 +60,10 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   sameCheck=new QCheckBox(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
-  gridLayout->addWidget(inUnitLabel,0,0);
+  gridLayout->addWidget(lengthUnitLabel,0,0);
   gridLayout->addWidget(sameCheck,0,1);
   gridLayout->addWidget(outUnitLabel,0,2);
-  gridLayout->addWidget(inUnitBox,1,0);
+  gridLayout->addWidget(lengthUnitBox,1,0);
   gridLayout->addWidget(toleranceLabel,1,1);
   gridLayout->addWidget(outUnitBox,1,2);
   gridLayout->addWidget(toleranceInUnit,2,0);
@@ -78,20 +78,20 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   toleranceLabel->setAlignment(Qt::AlignHCenter);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
-  connect(inUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
+  connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
   connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
-  connect(inUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
+  connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
-void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf)
+void ConfigurationDialog::set(double lengthUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf)
 {
   int i;
-  inUnitBox->clear();
+  lengthUnitBox->clear();
   outUnitBox->clear();
   toleranceBox->clear();
-  inUnitLabel->setText(tr("Input unit"));
+  lengthUnitLabel->setText(tr("Input unit"));
   sameCheck->setText(tr("Same units"));
   outUnitLabel->setText(tr("Output unit"));
   toleranceLabel->setText(tr("Tolerance"));
@@ -100,14 +100,14 @@ void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double
   dxfCheck->setText(tr("Text mode DXF"));
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
-    inUnitBox->addItem(tr(unitNames[i]));
+    lengthUnitBox->addItem(tr(unitNames[i]));
     outUnitBox->addItem(tr(unitNames[i]));
   }
   sameCheck->setCheckState(Qt::Unchecked);
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
-    if (inUnit==conversionFactors[i])
-      inUnitBox->setCurrentIndex(i);
+    if (lengthUnit==conversionFactors[i])
+      lengthUnitBox->setCurrentIndex(i);
     if (outUnit==conversionFactors[i])
       outUnitBox->setCurrentIndex(i);
   }
@@ -124,7 +124,7 @@ void ConfigurationDialog::set(double inUnit,double outUnit,bool sameUnits,double
 void ConfigurationDialog::updateToleranceConversion()
 {
   double tolIn,tolOut;
-  tolIn=tolerances[toleranceBox->currentIndex()]/conversionFactors[inUnitBox->currentIndex()];
+  tolIn=tolerances[toleranceBox->currentIndex()]/conversionFactors[lengthUnitBox->currentIndex()];
   tolOut=tolerances[toleranceBox->currentIndex()]/conversionFactors[outUnitBox->currentIndex()];
   if (std::isfinite(tolIn) && std::isfinite(tolOut))
   {
@@ -137,14 +137,14 @@ void ConfigurationDialog::updateSameUnits(int index)
 {
   if (sameCheck->checkState())
   {
-    inUnitBox->setCurrentIndex(index);
+    lengthUnitBox->setCurrentIndex(index);
     outUnitBox->setCurrentIndex(index);
   }
 }
 
 void ConfigurationDialog::accept()
 {
-  settingsChanged(conversionFactors[inUnitBox->currentIndex()],
+  settingsChanged(conversionFactors[lengthUnitBox->currentIndex()],
 		  conversionFactors[outUnitBox->currentIndex()],
 		  sameCheck->checkState()>0,
 		  tolerances[toleranceBox->currentIndex()],

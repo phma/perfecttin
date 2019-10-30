@@ -39,15 +39,15 @@ public:
 signals:
   void settingsChanged(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
 public slots:
-  void set(double inUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf);
+  void set(double lengthUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf);
   void updateToleranceConversion();
   void updateSameUnits(int index);
   virtual void accept();
 private:
-  QLabel *inUnitLabel,*outUnitLabel,*toleranceLabel;
+  QLabel *lengthUnitLabel,*outUnitLabel,*toleranceLabel;
   QLabel *threadLabel,*threadDefault,*dxfTextLabel;
   QLabel *toleranceInUnit,*toleranceOutUnit;
-  QComboBox *inUnitBox,*outUnitBox,*toleranceBox;
+  QComboBox *lengthUnitBox,*outUnitBox,*toleranceBox;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
   QLineEdit *threadInput;

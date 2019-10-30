@@ -298,7 +298,7 @@ void MainWindow::loadFile()
       fileNames="";
     ta.opcode=ACT_LOAD;
     ta.filename=fileName;
-    ta.param1=inUnit;
+    ta.param1=lengthUnit;
     enqueueAction(ta);
     if (fileNames.length())
       fileNames+=';';
@@ -453,7 +453,7 @@ void MainWindow::clearCloud()
 
 void MainWindow::configure()
 {
-  configDialog->set(inUnit,outUnit,sameUnits,tolerance,numberThreads,dxfText);
+  configDialog->set(lengthUnit,outUnit,sameUnits,tolerance,numberThreads,dxfText);
   configDialog->open();
 }
 
@@ -655,7 +655,7 @@ void MainWindow::readSettings()
   move(settings.value("pos",QPoint(0,0)).toPoint());
   numberThreads=settings.value("threads",0).toInt();
   tolerance=settings.value("tolerance",0.1).toDouble();
-  inUnit=settings.value("inUnit",1).toDouble();
+  lengthUnit=settings.value("lengthUnit",1).toDouble();
   outUnit=settings.value("outUnit",1).toDouble();
   sameUnits=settings.value("sameUnits",false).toBool();
   dxfText=settings.value("dxfText",false).toBool();
@@ -668,7 +668,7 @@ void MainWindow::writeSettings()
   settings.setValue("pos",pos());
   settings.setValue("threads",numberThreads);
   settings.setValue("tolerance",tolerance);
-  settings.setValue("inUnit",inUnit);
+  settings.setValue("lengthUnit",lengthUnit);
   settings.setValue("outUnit",outUnit);
   settings.setValue("sameUnits",sameUnits);
   settings.setValue("dxfText",dxfText);
@@ -676,7 +676,7 @@ void MainWindow::writeSettings()
 
 void MainWindow::setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf)
 {
-  inUnit=iu;
+  lengthUnit=iu;
   outUnit=ou;
   sameUnits=ieqo;
   tolerance=tol;

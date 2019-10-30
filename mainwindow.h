@@ -74,7 +74,7 @@ private:
   int numberThreads;
   int lastState; // state is in TinCanvas
   bool dxfText,sameUnits,conversionStopped,showingResult;
-  double tolerance,inUnit,outUnit;
+  double tolerance,lengthUnit,outUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
   QTimer *timer;
