@@ -37,9 +37,9 @@ class ConfigurationDialog: public QDialog
 public:
   ConfigurationDialog(QWidget *parent=0);
 signals:
-  void settingsChanged(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
+  void settingsChanged(double lu,double tol,int thr);
 public slots:
-  void set(double lengthUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf);
+  void set(double lengthUnit,double tolerance,int threads);
   void updateToleranceConversion();
   void updateSameUnits(int index);
   virtual void accept();

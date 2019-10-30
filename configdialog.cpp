@@ -80,7 +80,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
-void ConfigurationDialog::set(double lengthUnit,double outUnit,bool sameUnits,double tolerance,int threads,bool dxf)
+void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads)
 {
   int i;
   lengthUnitBox->clear();
@@ -103,17 +103,13 @@ void ConfigurationDialog::set(double lengthUnit,double outUnit,bool sameUnits,do
   {
     if (lengthUnit==conversionFactors[i])
       lengthUnitBox->setCurrentIndex(i);
-    if (outUnit==conversionFactors[i])
-      outUnitBox->setCurrentIndex(i);
   }
-  sameCheck->setCheckState(sameUnits?Qt::Checked:Qt::Unchecked);
   for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
     toleranceBox->addItem(tr(toleranceStr[i]));
   for (i=0;i<sizeof(tolerances)/sizeof(tolerances[1]);i++)
     if (tolerance==tolerances[i])
       toleranceBox->setCurrentIndex(i);
   threadInput->setText(QString::number(threads));
-  dxfCheck->setCheckState(dxf?Qt::Checked:Qt::Unchecked);
 }
 
 void ConfigurationDialog::updateToleranceConversion()
@@ -140,10 +136,7 @@ void ConfigurationDialog::updateSameUnits(int index)
 void ConfigurationDialog::accept()
 {
   settingsChanged(conversionFactors[lengthUnitBox->currentIndex()],
-		  conversionFactors[outUnitBox->currentIndex()],
-		  sameCheck->checkState()>0,
 		  tolerances[toleranceBox->currentIndex()],
-		  threadInput->text().toInt(),
-		  dxfCheck->checkState()>0);
+		  threadInput->text().toInt());
   QDialog::accept();
 }

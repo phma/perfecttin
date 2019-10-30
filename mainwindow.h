@@ -50,7 +50,7 @@ signals:
   void gotResult(ThreadAction ta);
 public slots:
   void tick();
-  void setSettings(double iu,double ou,bool ieqo,double tol,int thr,bool dxf);
+  void setSettings(double lu,double tol,int thr);
   void openFile();
   void loadFile();
   void exportDxfTxt();
