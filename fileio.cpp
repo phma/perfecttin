@@ -227,7 +227,14 @@ int readCloud(string inputFile,double inUnit)
     ret=RES_LOAD_PLY;
   else
   {
-    readLas(inputFile);
+    try
+    {
+      readLas(inputFile);
+    }
+    catch (...)
+    {
+      cloud.resize(already);
+    }
     if (cloud.size()>already)
       ret=RES_LOAD_LAS;
   }

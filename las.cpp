@@ -232,6 +232,8 @@ LasPoint LasHeader::readPoint(size_t num)
     // switch(pointFormat)...
   }
   ret.location=xyz(xOffset+xScale*xInt,yOffset+yScale*yInt,zOffset+zScale*zInt);
+  if (!lasfile->good())
+    throw -1;
   return ret;
 }
 
