@@ -153,6 +153,8 @@ void LasHeader::open(std::string fileName)
     if (whichNPoints==0)
       for (i=0;i<6;i++)
 	nPoints[i]=0;
+    if (pointLength==0)
+      versionMajor=versionMinor=nPoints[0]=0;
   }
   else // file does not begin with "LASF"
     versionMajor=versionMinor=nPoints[0]=0;
