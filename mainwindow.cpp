@@ -324,7 +324,7 @@ void MainWindow::exportDxfTxt()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
-    ta.param1=outUnit;
+    ta.param1=lengthUnit;
     ta.param0=true;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
@@ -348,7 +348,7 @@ void MainWindow::exportDxfBin()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
-    ta.param1=outUnit;
+    ta.param1=lengthUnit;
     ta.param0=false;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
@@ -372,7 +372,7 @@ void MainWindow::exportTinTxt()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
-    ta.param1=outUnit;
+    ta.param1=lengthUnit;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_TIN;
     enqueueAction(ta);
@@ -395,7 +395,7 @@ void MainWindow::exportCarlsonTin()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
-    ta.param1=outUnit;
+    ta.param1=lengthUnit;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_CARLSON_TIN;
     enqueueAction(ta);
