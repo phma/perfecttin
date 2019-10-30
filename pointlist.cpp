@@ -286,6 +286,28 @@ bool pointlist::validConvexHull()
   return ret;
 }
 
+vector<int> pointlist::valencyHistogram()
+{
+  int j;
+  ptlist::iterator i;
+  edge *e;
+  point *p;
+  vector<int> ret;
+  wingEdge.lock_shared();
+  for (i=points.begin();i!=points.end();i++)
+  {
+    p=&i->second;
+    e=p->line;
+    for (j=0;j==0 || e!=p->line;j++)
+      e=e->next(p);
+    if (ret.size()<=j)
+      ret.resize(j+1);
+    ret[j]++;
+  }
+  wingEdge.unlock_shared();
+  return ret;
+}
+
 void pointlist::makeqindex()
 {
   vector<xy> plist;

@@ -56,6 +56,7 @@ public:
   void insertHullPoint(point *newpnt,point *prec);
   int closestHullPoint(xy pnt);
   bool validConvexHull();
+  std::vector<int> valencyHistogram();
   void clear();
   int size();
   void clearTin();
