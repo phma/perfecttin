@@ -44,20 +44,15 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
 {
   int i;
   lengthUnitLabel=new QLabel(this);
-  outUnitLabel=new QLabel(this);
   toleranceLabel=new QLabel(this);
   toleranceInUnit=new QLabel(this);
-  toleranceOutUnit=new QLabel(this);
   threadLabel=new QLabel(this);
   threadDefault=new QLabel(this);
   lengthUnitBox=new QComboBox(this);
-  outUnitBox=new QComboBox(this);
   toleranceBox=new QComboBox(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   threadInput=new QLineEdit(this);
-  dxfCheck=new QCheckBox(this);
-  sameCheck=new QCheckBox(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(lengthUnitLabel,1,0);
@@ -73,10 +68,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   toleranceLabel->setAlignment(Qt::AlignHCenter);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
-  connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
-  connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSameUnits(int)));
   connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
-  connect(outUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
@@ -84,21 +76,15 @@ void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads)
 {
   int i;
   lengthUnitBox->clear();
-  outUnitBox->clear();
   toleranceBox->clear();
   lengthUnitLabel->setText(tr("Input unit"));
-  sameCheck->setText(tr("Same units"));
-  outUnitLabel->setText(tr("Output unit"));
   toleranceLabel->setText(tr("Tolerance"));
   threadLabel->setText(tr("Threads:"));
   threadDefault->setText(tr("default is %n","",thread::hardware_concurrency()));
-  dxfCheck->setText(tr("Text mode DXF"));
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
     lengthUnitBox->addItem(tr(unitNames[i]));
-    outUnitBox->addItem(tr(unitNames[i]));
   }
-  sameCheck->setCheckState(Qt::Unchecked);
   for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[1]);i++)
   {
     if (lengthUnit==conversionFactors[i])
@@ -114,22 +100,11 @@ void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads)
 
 void ConfigurationDialog::updateToleranceConversion()
 {
-  double tolIn,tolOut;
+  double tolIn;
   tolIn=tolerances[toleranceBox->currentIndex()]/conversionFactors[lengthUnitBox->currentIndex()];
-  tolOut=tolerances[toleranceBox->currentIndex()]/conversionFactors[outUnitBox->currentIndex()];
-  if (std::isfinite(tolIn) && std::isfinite(tolOut))
+  if (std::isfinite(tolIn))
   {
     toleranceInUnit->setText(QString::fromStdString(ldecimal(tolIn,tolIn/1000)));
-    toleranceOutUnit->setText(QString::fromStdString(ldecimal(tolOut,tolOut/1000)));
-  }
-}
-
-void ConfigurationDialog::updateSameUnits(int index)
-{
-  if (sameCheck->checkState())
-  {
-    lengthUnitBox->setCurrentIndex(index);
-    outUnitBox->setCurrentIndex(index);
   }
 }
 
