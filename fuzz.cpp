@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
   }
   if (command=="readPtin")
     header=readPtin(file);
+  if (command=="readCloud")
+    readCloud(file,1);
   exitStatus=0;
   cout<<header.tolRatio<<"×"<<header.tolerance<<endl;
   sz=net.edges.size();
