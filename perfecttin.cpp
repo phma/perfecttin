@@ -40,6 +40,11 @@
 #include "tintext.h"
 #include "fileio.h"
 
+#define FMT_DXF_TXT 1
+#define FMT_DXF_BIN 2
+#define FMT_TIN 3
+#define FMT_CARLSON_TIN 4
+
 using namespace std;
 namespace po=boost::program_options;
 namespace cr=chrono;
@@ -51,6 +56,14 @@ const bool drawDots=false;
 const bool colorGradient=true;
 const bool colorAbsGradient=false;
 const bool doTestPattern=true;
+const char formats[][12]=
+{
+  "",
+  "dxftxt",
+  "dxfbin",
+  "tin",
+  "carlsontin"
+};
 
 void drawNet(PostScript &ps)
 {
@@ -153,6 +166,15 @@ void parseUnits(string units)
   outUnit=parseUnit(outUnitStr);
 }
 
+int parseFormat(string format)
+{
+  int i,ret=-1;
+  for (i=0;i<sizeof(formats)/sizeof(formats[0]);i++)
+    if (format==formats[i])
+      ret=i;
+  return ret;
+}
+
 int main(int argc, char *argv[])
 {
   PostScript ps;
@@ -163,6 +185,8 @@ int main(int argc, char *argv[])
   double tolerance,rmsadj;
   bool done=false;
   bool asciiFormat=false;
+  int format;
+  string formatStr;
   triangle *tri;
   string inputFile,outputFile;
   string unitStr;
@@ -179,9 +203,9 @@ int main(int argc, char *argv[])
     ("units,u",po::value<string>(&unitStr)->default_value("m"),"Units")
     ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
     ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
-    ("ascii,a",po::bool_switch(&asciiFormat),"Output DXF in ASCII")
     ("asteraceous",po::value<int>(&asterPoints),"Process an asteraceous test pattern")
-    ("output,o",po::value<string>(&outputFile),"Output file");
+    ("output,o",po::value<string>(&outputFile),"Output file")
+    ("format,f",po::value<string>(&formatStr),"Output format");
   hidden.add_options()
     ("input",po::value<string>(&inputFile),"Input file");
   p.add("input",1);
@@ -218,6 +242,21 @@ int main(int argc, char *argv[])
   {
     cerr<<"Units are m (meter), ft (international foot),\nusft (US survey foot) or inft (Indian survey foot).\n";
     cerr<<"Specify input and output units with a comma, e.g. ft,inft .\n";
+    validCmd=false;
+  }
+  format=parseFormat(formatStr);
+  if (format<0)
+  {
+    cerr<<"Formats are ";
+    for (i=1;i<sizeof(formats)/sizeof(formats[0]);i++)
+    {
+      if (i>1)
+	cerr<<", ";
+      if (i==sizeof(formats)/sizeof(formats[0])-1)
+	cerr<<"and ";
+      cerr<<formats[i];
+    }
+    cerr<<".\n";
     validCmd=false;
   }
   if (validCmd)
