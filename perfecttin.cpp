@@ -188,7 +188,8 @@ int main(int argc, char *argv[])
   int format;
   string formatStr;
   triangle *tri;
-  string inputFile,outputFile;
+  string outputFile;
+  vector<string> inputFiles;
   string unitStr;
   ThreadAction ta;
   bool validArgs,validCmd=true;
@@ -207,8 +208,8 @@ int main(int argc, char *argv[])
     ("output,o",po::value<string>(&outputFile),"Output file")
     ("format,f",po::value<string>(&formatStr),"Output format");
   hidden.add_options()
-    ("input",po::value<string>(&inputFile),"Input file");
-  p.add("input",1);
+    ("input",po::value<vector<string> >(&inputFiles),"Input file");
+  p.add("input",-1);
   cmdline_options.add(generic).add(hidden);
   cout<<"PerfectTIN version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat, GPLv3+\n";
 #ifdef LibPLYXX_FOUND
@@ -224,11 +225,11 @@ int main(int argc, char *argv[])
     cerr<<e.what()<<endl;
     validCmd=false;
   }
-  if (!outputFile.length() && noExt(inputFile).length())
-    outputFile=noExt(inputFile);
+  if (!outputFile.length() && inputFiles.size()==1 && noExt(inputFiles[0]).length())
+    outputFile=noExt(inputFiles[0]);
   if (!outputFile.length())
   {
-    if (inputFile.length())
+    if (inputFiles.size())
       cerr<<"Please specify output file with -o\n";
     else
     {
@@ -261,8 +262,8 @@ int main(int argc, char *argv[])
   }
   if (validCmd)
   {
-    if (inputFile.length())
-      readCloud(inputFile,inUnit);
+    if (inputFiles.size())
+      readCloud(inputFiles[0],inUnit);
     else if (doTestPattern && asterPoints>0)
     {
       setsurface(CIRPAR);
@@ -270,8 +271,8 @@ int main(int argc, char *argv[])
     }
     if (cloud.size()==0)
     {
-      if (inputFile.length())
-	cerr<<"No point cloud found in "<<inputFile<<endl;
+      if (inputFiles.size())
+	cerr<<"No point cloud found in "<<inputFiles[0]<<endl;
       done=true;
     }
     areadone[0]=makeOctagon();
