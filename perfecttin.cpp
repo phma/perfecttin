@@ -265,7 +265,8 @@ int main(int argc, char *argv[])
   if (validCmd)
   {
     if (inputFiles.size())
-      readCloud(inputFiles[0],inUnit);
+      for (i=0;i<inputFiles.size();i++)
+	readCloud(inputFiles[i],inUnit);
     else if (doTestPattern && asterPoints>0)
     {
       setsurface(CIRPAR);
