@@ -159,22 +159,22 @@ void TinCanvas::tick()
   // Paint some triangles in the TIN in colors depending on their gradient.
   for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
   {
-    wingEdge.lock_shared();
+    net.wingEdge.lock_shared();
     if (++triangleNum>=net.triangles.size())
       triangleNum=0;
     if (triangleNum<net.triangles.size())
       tri=&net.triangles[triangleNum];
     else
       tri=nullptr;
-    wingEdge.unlock_shared();
+    net.wingEdge.unlock_shared();
     if (tri && tri->a)
     {
-      wingEdge.lock_shared();
+      net.wingEdge.lock_shared();
       gradient=tri->gradient(tri->centroid());
       A=*tri->a;
       B=*tri->b;
       C=*tri->c;
-      wingEdge.unlock_shared();
+      net.wingEdge.unlock_shared();
       r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
       g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
       b=0.5-gradient.north()*0.483 -gradient.east()*0.1294;

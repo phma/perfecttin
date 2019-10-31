@@ -33,7 +33,7 @@
 
 using namespace std;
 
-vector<pointlist> tempPointlist;
+map<int,pointlist> tempPointlist;
 /* Small pointlists, 5 points and 4 triangles, used for deciding whether to
  * flip an edge. One per worker thread.
  */
@@ -47,17 +47,19 @@ void logCrit(double crit)
 
 void initTempPointlist(int nthreads)
 {
-  tempPointlist.resize(nthreads);
+  int i;
+  for (i=0;i<nthreads;i++)
+    tempPointlist[i];
 }
 
 void flip(edge *e)
 {
   vector<xyz> allDots;
   int i;
-  wingEdge.lock();
+  net.wingEdge.lock();
   e->flip(&net);
   //assert(net.checkTinConsistency());
-  wingEdge.unlock();
+  net.wingEdge.unlock();
   allDots.resize(e->tria->dots.size()+e->trib->dots.size());
   if (e->tria->dots.size())
     memmove(&allDots[0],&e->tria->dots[0],e->tria->dots.size()*sizeof(xyz));
@@ -85,7 +87,7 @@ point *bend(edge *e)
 {
   edge *anext=e,*bnext=e;
   int abear,ebear,bbear;
-  wingEdge.lock();
+  net.wingEdge.lock();
   do
     anext=anext->next(e->a);
   while (anext->isinterior());
@@ -144,7 +146,7 @@ point *bend(edge *e)
   }
   e->setNeighbors();
   //assert(net.checkTinConsistency());
-  wingEdge.unlock();
+  net.wingEdge.unlock();
   flip(e);
   return pnt;
 }

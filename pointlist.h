@@ -27,6 +27,7 @@
 #include <vector>
 #include <array>
 #include <set>
+#include "threads.h"
 #include "point.h"
 #include "tin.h"
 #include "triangle.h"
@@ -51,6 +52,7 @@ public:
   qindex qinx;
   std::vector<point*> convexHull;
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
+  std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1);
   void insertHullPoint(point *newpnt,point *prec);

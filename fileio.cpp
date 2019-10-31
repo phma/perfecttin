@@ -291,11 +291,11 @@ void writeTriangle(ostream &file,triangle *tri)
   int aInx,bInx,cInx;
   int i;
   xyz ctr;
-  wingEdge.lock_shared();
+  net.wingEdge.lock_shared();
   aInx=net.revpoints[tri->a];
   bInx=net.revpoints[tri->b];
   cInx=net.revpoints[tri->c];
-  wingEdge.unlock_shared();
+  net.wingEdge.unlock_shared();
   ctr=((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3;
   writeleint(file,aInx);
   writeleint(file,bInx);
@@ -346,23 +346,23 @@ void writePtin(string outputFile,int tolRatio,double tolerance)
   writeleint(checkFile,net.triangles.size());
   for (i=1;i<=net.points.size();i++)
   {
-    wingEdge.lock_shared();
+    net.wingEdge.lock_shared();
     pnt=net.points[i];
-    wingEdge.unlock_shared();
+    net.wingEdge.unlock_shared();
     writePoint(checkFile,pnt);
   }
   for (i=0;i<net.convexHull.size();i++)
   {
-    wingEdge.lock_shared();
+    net.wingEdge.lock_shared();
     n=net.revpoints[net.convexHull[i]];
-    wingEdge.unlock_shared();
+    net.wingEdge.unlock_shared();
     writeleint(checkFile,n);
   }
   for (i=0;i<net.triangles.size();i++)
   {
-    wingEdge.lock_shared();
+    net.wingEdge.lock_shared();
     tri=&net.triangles[i];
-    wingEdge.unlock_shared();
+    net.wingEdge.unlock_shared();
     writeTriangle(checkFile,tri);
   }
   for (i=0;i<64;i++)
@@ -453,10 +453,10 @@ PtinHeader readPtin(std::string inputFile)
     readingStarted=true;
     for (i=1;i<=header.numPoints;i++)
     {
-      wingEdge.lock();
+      net.wingEdge.lock();
       net.points[i]=point(readPoint(ptinFile));
       net.revpoints[&net.points[i]]=i;
-      wingEdge.unlock();
+      net.wingEdge.unlock();
       if (ptinFile.eof())
       {
 	header.tolRatio=PT_EOF;
@@ -488,7 +488,7 @@ PtinHeader readPtin(std::string inputFile)
   if (header.tolRatio>0 && header.tolerance>0)
     for (i=0;i<header.numTriangles && header.tolRatio>0;i++)
     {
-      wingEdge.lock();
+      net.wingEdge.lock();
       n=net.addtriangle();
       //cout<<n<<' ';
       tri=&net.triangles[n];
@@ -550,7 +550,7 @@ PtinHeader readPtin(std::string inputFile)
 	    low=pnt.getz();
 	}
       tri->dots.shrink_to_fit();
-      wingEdge.unlock();
+      net.wingEdge.unlock();
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
   if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)

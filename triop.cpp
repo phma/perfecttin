@@ -42,7 +42,7 @@ point *split(triangle *tri)
   edge *newe0,*newe1,*newe2;
   vector<xyz> remainder; // the dots that remain in tri
   int i;
-  wingEdge.lock();
+  net.wingEdge.lock();
   point newPoint(((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3);
   int newPointNum=net.points.size()+1;
   net.addpoint(newPointNum,newPoint);
@@ -98,7 +98,7 @@ point *split(triangle *tri)
   newe1->setNeighbors();
   newe2->setNeighbors();
   //assert(net.checkTinConsistency());
-  wingEdge.unlock();
+  net.wingEdge.unlock();
   for (i=0;i<tri->dots.size();i++)
     if (newt0->in(tri->dots[i]))
       newt0->dots.push_back(tri->dots[i]);
@@ -120,10 +120,10 @@ bool lockTriangles(int thread,vector<triangle *> triPtr)
 {
   vector<int> triangles;
   int i;
-  wingEdge.lock_shared();
+  net.wingEdge.lock_shared();
   for (i=0;i<triPtr.size();i++)
     triangles.push_back(net.revtriangles[triPtr[i]]);
-  wingEdge.unlock_shared();
+  net.wingEdge.unlock_shared();
   return lockTriangles(thread,triangles);
 }
 
