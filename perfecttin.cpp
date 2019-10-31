@@ -225,6 +225,8 @@ int main(int argc, char *argv[])
     cerr<<e.what()<<endl;
     validCmd=false;
   }
+  if (outputFile.length() && extension(outputFile)==".ptin")
+    outputFile=noExt(outputFile);
   if (!outputFile.length() && inputFiles.size()==1 && noExt(inputFiles[0]).length())
     outputFile=noExt(inputFiles[0]);
   if (!outputFile.length())
