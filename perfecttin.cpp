@@ -38,6 +38,7 @@
 #include "dxf.h"
 #include "threads.h"
 #include "tintext.h"
+#include "carlsontin.h"
 #include "fileio.h"
 
 #define FMT_DXF_TXT 1
@@ -337,14 +338,6 @@ int main(int argc, char *argv[])
 	    done=true;
 	  else
 	  {
-	    ta.param1=outUnit;
-	    ta.param0=asciiFormat;
-	    ta.opcode=ACT_WRITE_DXF;
-	    ta.filename=outputFile+".dxf";
-	    enqueueAction(ta);
-	    ta.opcode=ACT_WRITE_TIN;
-	    ta.filename=outputFile+".tin";
-	    enqueueAction(ta);
 	    ta.param1=tolerance;
 	    ta.param0=lrint(stageTolerance/tolerance);
 	    ta.opcode=ACT_WRITE_PTIN;
@@ -368,10 +361,21 @@ int main(int argc, char *argv[])
       ps.close();
     }
     if (outputFile.length() && areadone[0]==1)
-    {
-      writeDxf(outputFile+".dxf",asciiFormat,outUnit);
-      writeTinText(outputFile+".tin",outUnit);
-    }
+      switch (format)
+      {
+	case FMT_CARLSON_TIN:
+	  writeCarlsonTin(outputFile+".tin",outUnit);
+	  break;
+	case FMT_DXF_BIN:
+	  writeDxf(outputFile+".dxf",false,outUnit);
+	  break;
+	case FMT_DXF_TXT:
+	  writeDxf(outputFile+".dxf",true,outUnit);
+	  break;
+	case FMT_TIN:
+	  writeTinText(outputFile+".tin",outUnit);
+	  break;
+      }
     joinThreads();
   }
   return 0;
