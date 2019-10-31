@@ -339,6 +339,10 @@ int main(int argc, char *argv[])
 	  else
 	  {
 	    ta.param1=tolerance;
+	    ta.param0=lrint(4*stageTolerance/tolerance);
+	    ta.opcode=ACT_DELETE_FILE;
+	    ta.filename=outputFile+"."+to_string(ta.param0)+".ptin";
+	    enqueueAction(ta);
 	    ta.param0=lrint(stageTolerance/tolerance);
 	    ta.opcode=ACT_WRITE_PTIN;
 	    if (ta.param0==1)
@@ -361,6 +365,7 @@ int main(int argc, char *argv[])
       ps.close();
     }
     if (outputFile.length() && areadone[0]==1)
+    {
       switch (format)
       {
 	case FMT_CARLSON_TIN:
@@ -376,6 +381,8 @@ int main(int argc, char *argv[])
 	  writeTinText(outputFile+".tin",outUnit);
 	  break;
       }
+      deleteFile(outputFile+".2.ptin");
+    }
     joinThreads();
   }
   return 0;
