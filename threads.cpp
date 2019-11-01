@@ -135,20 +135,17 @@ array<double,2> areaDone(double tolerance)
     //cout<<allBuckets.size()<<" buckets \n";
   }
   markBucketClean(bucket);
-  net.wingEdge.lock_shared();
   for (i=bucket;i<net.triangles.size();i+=allBuckets.size())
   {
-    allTri.push_back(net.triangles[i].sarea);
-    if (net.triangles[i].inTolerance(tolerance))
-      doneTri.push_back(net.triangles[i].sarea);
-    else
-      tri=&net.triangles[i];
-    if (net.triangles[i].inTolerance(M_SQRT2*tolerance))
-      doneq2Tri.push_back(net.triangles[i].sarea);
-    else
-      tri=&net.triangles[i];
+    net.wingEdge.lock_shared();
+    tri=&net.triangles[i];
+    net.wingEdge.unlock_shared();
+    allTri.push_back(tri->sarea);
+    if (tri->inTolerance(tolerance))
+      doneTri.push_back(tri->sarea);
+    if (tri->inTolerance(M_SQRT2*tolerance))
+      doneq2Tri.push_back(tri->sarea);
   }
-  net.wingEdge.unlock_shared();
   allBuckets[bucket]=pairwisesum(allTri);
   doneBuckets[bucket]=pairwisesum(doneTri);
   doneq2Buckets[bucket]=pairwisesum(doneq2Tri);
