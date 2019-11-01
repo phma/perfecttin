@@ -182,17 +182,20 @@ int main(int argc, char *argv[])
   int i,e,t,d;
   int nthreads=thread::hardware_concurrency();
   int asterPoints=0;
+  int ptinFilesOpened=0,pointCloudsLoaded=0;
   time_t now,then;
   double tolerance,rmsadj;
   bool done=false;
   bool asciiFormat=false;
   int format;
+  size_t already;
   string formatStr;
   triangle *tri;
   string outputFile;
   vector<string> inputFiles;
   string unitStr;
   ThreadAction ta;
+  PtinHeader ptinHeader;
   bool validArgs,validCmd=true;
   po::options_description generic("Options");
   po::options_description hidden("Hidden options");
@@ -267,13 +270,36 @@ int main(int argc, char *argv[])
   {
     if (inputFiles.size())
       for (i=0;i<inputFiles.size();i++)
-	readCloud(inputFiles[i],inUnit);
+      {
+	ptinHeader=readPtin(inputFiles[i]);
+	if (ptinHeader.tolRatio>0 && ptinHeader.tolerance>0)
+	{
+	  ptinFilesOpened++;
+	}
+	else
+	{
+	  already=cloud.size();
+	  readCloud(inputFiles[i],inUnit);
+	  if (already!=cloud.size())
+	    pointCloudsLoaded++;
+	}
+      }
     else if (doTestPattern && asterPoints>0)
     {
       setsurface(CIRPAR);
       aster(asterPoints);
     }
-    if (cloud.size()==0)
+    if (ptinFilesOpened>1)
+    {
+      cerr<<"Can't open more than one PerfectTIN file at once\n";
+      done=true;
+    }
+    if (ptinFilesOpened && pointCloudsLoaded)
+    {
+      cerr<<"Can't open a PerfectTIN file and load a point cloud\n";
+      done=true;
+    }
+    if (ptinFilesOpened==0 && cloud.size()==0)
     {
       if (inputFiles.size())
 	cerr<<"No point cloud found in "<<inputFiles[0]<<endl;
