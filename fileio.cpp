@@ -242,6 +242,7 @@ int readCloud(string inputFile,double inUnit)
     cout<<"Read "<<cloud.size()-already<<" dots\n";
   for (i=already;i<cloud.size();i++)
     cloud[i]*=inUnit;
+  return ret;
 }
 
 void writePoint(ostream &file,xyz pnt)
