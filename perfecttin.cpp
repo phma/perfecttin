@@ -275,6 +275,13 @@ int main(int argc, char *argv[])
 	if (ptinHeader.tolRatio>0 && ptinHeader.tolerance>0)
 	{
 	  ptinFilesOpened++;
+	  net.conversionTime=ptinHeader.conversionTime;
+	  tolerance=ptinHeader.tolerance;
+	  stageTolerance=tolerance*ptinHeader.tolRatio;
+	  resizeBuckets(1);
+	  if (ptinHeader.tolRatio>1 &&
+	      extension(noExt(inputFiles[i]))=="."+to_string(ptinHeader.tolRatio))
+	    outputFile=noExt(noExt(inputFiles[i]));
 	}
 	else
 	{
@@ -305,15 +312,18 @@ int main(int argc, char *argv[])
 	cerr<<"No point cloud found in "<<inputFiles[0]<<endl;
       done=true;
     }
-    areadone[0]=makeOctagon();
-    if (!std::isfinite(areadone[0]))
+    if (!ptinFilesOpened && !done)
     {
-      cerr<<"Point cloud covers no area or has infinite or NaN points\n";
-      done=true;
+      areadone[0]=makeOctagon();
+      if (!std::isfinite(areadone[0]))
+      {
+	cerr<<"Point cloud covers no area or has infinite or NaN points\n";
+	done=true;
+      }
+      stageTolerance=tolerance;
+      while (stageTolerance<areadone[0])
+	stageTolerance*=2;
     }
-    stageTolerance=tolerance;
-    while (stageTolerance<areadone[0])
-      stageTolerance*=2;
     if (!done)
     {
       ps.open("perfecttin.ps");
