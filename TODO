@@ -1,8 +1,8 @@
 Before 0.3.0:
-•Save a checkpoint file at each stage of the conversion
-•Read checkpoint files
-•Resume a conversion from a checkpoint file
-•Replace saving TIN and DXF files at each stage with export actions
+•Save a checkpoint file at each stage of the conversion ✓
+•Read checkpoint files ✓
+•Resume a conversion from a checkpoint file ✓
+•Replace saving TIN and DXF files at each stage with export actions ✓
 
 Before 0.4.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop
