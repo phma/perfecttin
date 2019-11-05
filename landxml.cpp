@@ -49,6 +49,9 @@ void writeLandXml(string outputFile,double outUnit)
   xmlFile<<"<Application name=\"PerfectTIN\" desc=\"LandXML export\" ";
   xmlFile<<"version=\""<<VERSION<<"\">\n";
   xmlFile<<"<Author createdBy=\"Pierre Abbat\" createdByEmail=\"phma@bezitopo.org\" /></Application>\n";
+  xmlFile<<"<Units><Metric areaUnit=\"squareMeter\" linearUnit=\"meter\" ";
+  xmlFile<<"volumeUnit=\"cubicMeter\" temperatureUnit=\"kelvin\" ";
+  xmlFile<<"pressureUnit=\"HPA\" /></Units>\n";
   xmlFile<<"<Surfaces><Surface name=\""<<noExt(baseName(outputFile))<<"\">\n";
   xmlFile<<"<Definition surfType=\"TIN\"><Pnts>\n";
   for (i=1;i<=net.points.size();i++)
