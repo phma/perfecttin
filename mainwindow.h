@@ -57,6 +57,7 @@ public slots:
   void exportDxfBin();
   void exportTinTxt();
   void exportCarlsonTin();
+  void exportLandXml();
   void startConversion();
   void stopConversion();
   void resumeConversion();
@@ -86,7 +87,8 @@ private:
   QProgressBar *doneBar,*busyBar;
   QAction *openAction,*loadAction,*convertAction,*clearAction;
   QAction *exportAction,*stopAction,*resumeAction,*exitAction;
-  QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction,*exportCarlsonTinAction;
+  QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
+  QAction *exportCarlsonTinAction,*exportLandXmlAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   TinCanvas *canvas;

@@ -55,6 +55,7 @@
 #define ACT_READ_PTIN 6
 #define ACT_WRITE_CARLSON_TIN 7
 #define ACT_DELETE_FILE 8
+#define ACT_WRITE_LANDXML 9
 
 #define RES_LOAD_PLY 1
 #define RES_LOAD_LAS 2

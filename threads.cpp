@@ -30,6 +30,7 @@
 #include "relprime.h"
 #include "manysum.h"
 #include "carlsontin.h"
+#include "landxml.h"
 using namespace std;
 #ifdef __MINGW64__
 using namespace mingw_stdthread;
@@ -538,6 +539,10 @@ void TinThread::operator()(int thread)
 	  writeCarlsonTin(act.filename,act.param1);
 	  unsleep(thread);
 	  break;
+	case ACT_WRITE_LANDXML:
+	  writeLandXml(act.filename,act.param1);
+	  unsleep(thread);
+	  break;
 	case ACT_WRITE_PTIN:
 	  writePtin(act.filename,act.param0,act.param1);
 	  unsleep(thread);
@@ -588,6 +593,10 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_WRITE_CARLSON_TIN:
 	  writeCarlsonTin(act.filename,act.param1);
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_LANDXML:
+	  writeLandXml(act.filename,act.param1);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:

@@ -402,6 +402,29 @@ void MainWindow::exportCarlsonTin()
   }
 }
 
+void MainWindow::exportLandXml()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Export TIN as LandXML"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".xml"));
+  fileDialog->setNameFilter(tr("(*.xml)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_LANDXML;
+    enqueueAction(ta);
+  }
+}
+
 void MainWindow::startConversion()
 {
   int dialogResult;
@@ -621,6 +644,10 @@ void MainWindow::makeActions()
   exportCarlsonTinAction->setText(tr("Carlson TIN"));
   exportMenu->addAction(exportCarlsonTinAction);
   connect(exportCarlsonTinAction,SIGNAL(triggered(bool)),this,SLOT(exportCarlsonTin()));
+  exportLandXmlAction=new QAction(this);
+  exportLandXmlAction->setText(tr("LandXML"));
+  exportMenu->addAction(exportLandXmlAction);
+  connect(exportLandXmlAction,SIGNAL(triggered(bool)),this,SLOT(exportLandXml()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));

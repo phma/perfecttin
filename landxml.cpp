@@ -33,10 +33,10 @@ void writeLandXml(string outputFile,double outUnit)
   int i;
   ofstream xmlFile(outputFile,ofstream::trunc);
   xmlFile<<"<Surfaces><Surface name=\""<<noExt(baseName(outputFile))<<"\">\n";
-  xmlFile<<"<Definition surfType=\"TIN\"><Pnts>\n"
+  xmlFile<<"<Definition surfType=\"TIN\"><Pnts>\n";
   for (i=1;i<=net.points.size();i++)
   {
-    xmlFile<<"<P id=\""<<i<<"\">"
+    xmlFile<<"<P id=\""<<i<<"\">";
     xmlFile<<ldecimal(net.points[i].getx())<<' ';
     xmlFile<<ldecimal(net.points[i].gety())<<' ';
     xmlFile<<ldecimal(net.points[i].getz())<<"</P>\n";
