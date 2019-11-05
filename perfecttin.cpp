@@ -39,12 +39,14 @@
 #include "threads.h"
 #include "tintext.h"
 #include "carlsontin.h"
+#include "landxml.h"
 #include "fileio.h"
 
 #define FMT_DXF_TXT 1
 #define FMT_DXF_BIN 2
 #define FMT_TIN 3
 #define FMT_CARLSON_TIN 4
+#define FMT_LANDXML 5
 
 using namespace std;
 namespace po=boost::program_options;
@@ -63,7 +65,8 @@ const char formats[][12]=
   "dxftxt",
   "dxfbin",
   "tin",
-  "carlsontin"
+  "carlsontin",
+  "landxml"
 };
 
 void drawNet(PostScript &ps)
@@ -404,6 +407,9 @@ int main(int argc, char *argv[])
     {
       switch (format)
       {
+	case FMT_LANDXML:
+	  writeLandXml(outputFile+".xml",outUnit);
+	  break;
 	case FMT_CARLSON_TIN:
 	  writeCarlsonTin(outputFile+".tin",outUnit);
 	  break;
