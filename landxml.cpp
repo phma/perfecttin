@@ -21,6 +21,9 @@
  */
 
 #include <fstream>
+#include <ctime>
+#include <iomanip>
+#include "config.h"
 #include "octagon.h"
 #include "ldecimal.h"
 using namespace std;
@@ -32,6 +35,20 @@ void writeLandXml(string outputFile,double outUnit)
 {
   int i;
   ofstream xmlFile(outputFile,ofstream::trunc);
+  tm *convtm;
+  xmlFile<<"<?xml version=\"1.0\" ?>\n";
+  convtm=gmtime(&net.conversionTime);
+  /* The LandXML header has no field for time zone, so the time is output in UTC.
+   * It is the time at which conversion to TIN started.
+   */
+  xmlFile<<"<LandXML xmlns=\"http://www.landxml.org/schema/LandXML-1.2\" ";
+  xmlFile<<"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+  xmlFile<<"xsi:schemaLocation=\"http://www.landxml.org/schema/LandXML-1.2 http://www.landxml.org/schema/LandXML-1.2/LandXML-1.2.xsd\" ";
+  xmlFile<<"version=\"1.2\" date=\""<<put_time(convtm,"%F")<<'"';
+  xmlFile<<" time=\""<<put_time(convtm,"%T")<<"\">\n";
+  xmlFile<<"<Application name=\"PerfectTIN\" desc=\"LandXML export\" ";
+  xmlFile<<"version=\""<<VERSION<<"\">\n";
+  xmlFile<<"<Author createdBy=\"Pierre Abbat\" createdByEmail=\"phma@bezitopo.org\" /></Application>\n";
   xmlFile<<"<Surfaces><Surface name=\""<<noExt(baseName(outputFile))<<"\">\n";
   xmlFile<<"<Definition surfType=\"TIN\"><Pnts>\n";
   for (i=1;i<=net.points.size();i++)
@@ -50,4 +67,5 @@ void writeLandXml(string outputFile,double outUnit)
     xmlFile<<net.revpoints[net.triangles[i].c]<<"</F>\n";
   }
   xmlFile<<"</Faces></Definition></Surface></Surfaces>\n";
+  xmlFile<<"</LandXML>\n";
 }
