@@ -206,7 +206,7 @@ void writeDxf(string outputFile,bool asc,double outUnit)
   BoundRect br;
   br.include(&net);
   ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
-  dxfHeader(dxfCodes,br);
+  //dxfHeader(dxfCodes,br);
   tableSection(dxfCodes);
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
