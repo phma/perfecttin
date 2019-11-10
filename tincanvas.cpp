@@ -88,7 +88,7 @@ void TinCanvas::tick()
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
   double r,g,b;
-  triangle *tri;
+  triangle *tri=nullptr;
   xy gradient,A,B,C;
   xy dartCorners[4];
   QPolygonF polygon;
