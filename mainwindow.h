@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "threads.h"
 #include <QMainWindow>
 #include <QTimer>
 #include <QtWidgets>
@@ -27,7 +28,6 @@
 #include <array>
 #include "configdialog.h"
 #include "tincanvas.h"
-#include "threads.h"
 
 class MainWindow: public QMainWindow
 {
