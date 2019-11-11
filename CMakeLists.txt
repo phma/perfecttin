@@ -90,6 +90,7 @@ endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${LibPLYXX_LIBRARY})
 target_link_libraries(fuzzptin ${LibPLYXX_LIBRARY})
 endif (${LibPLYXX_FOUND})
+set_target_properties(perfecttin-gui PROPERTIES WIN32_EXECUTABLE TRUE)
 
 include(CheckIncludeFiles)
 check_include_files(time.h HAVE_TIME_H)
