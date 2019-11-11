@@ -32,23 +32,17 @@
 #include "carlsontin.h"
 #include "landxml.h"
 using namespace std;
-#ifdef __MINGW64__
-using namespace mingw_stdthread;
-namespace th=mingw_stdthread;
-#else
-namespace th=std;
-#endif
 namespace cr=std::chrono;
 
-map<int,th::mutex> triMutex; // Lock this while locking or unlocking triangles.
-th::shared_mutex holderMutex; // for triangleHolders
-th::mutex adjLog;
-th::mutex actMutex;
-th::mutex bucketMutex;
-th::mutex startMutex;
+map<int,mutex> triMutex; // Lock this while locking or unlocking triangles.
+shared_mutex holderMutex; // for triangleHolders
+mutex adjLog;
+mutex actMutex;
+mutex bucketMutex;
+mutex startMutex;
 
 int threadCommand;
-vector<th::thread> threads;
+vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<double> sleepTime;
 vector<int> triangleHolders; // one per triangle
@@ -198,8 +192,8 @@ void startThreads(int n)
     triMutex[i];
   for (i=0;i<n;i++)
   {
-    threads.push_back(th::thread(TinThread(),i));
-    th::this_thread::sleep_for(chrono::milliseconds(10));
+    threads.push_back(thread(TinThread(),i));
+    this_thread::sleep_for(chrono::milliseconds(10));
   }
 }
 
@@ -269,7 +263,7 @@ void sleep(int thread)
   if (sleepTime[thread]>1000)
     sleepTime[thread]=1000;
   threadStatus[thread]|=256;
-  th::this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
+  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
 }
 
@@ -278,7 +272,7 @@ void sleepDead(int thread)
 {
   sleepTime[thread]=sleepTime[thread]*(1+1./net.triangles.size())+0.1;
   threadStatus[thread]|=256;
-  th::this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
+  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
 }
 
@@ -451,7 +445,7 @@ void waitForThreads(int newStatus)
     for (i=n=0;i<threadStatus.size();i++)
       if ((threadStatus[i]&255)!=threadCommand)
 	n++;
-    th::this_thread::sleep_for(chrono::milliseconds(n));
+    this_thread::sleep_for(chrono::milliseconds(n));
   } while (n);
 }
 
@@ -465,7 +459,7 @@ void waitForQueueEmpty()
     for (i=0;i<threadStatus.size();i++)
       if (threadStatus[i]<256)
 	n++;
-    th::this_thread::sleep_for(chrono::milliseconds(n));
+    this_thread::sleep_for(chrono::milliseconds(n));
   } while (n);
 }
 

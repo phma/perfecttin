@@ -70,13 +70,8 @@ struct ThreadAction
   PtinHeader ptinResult;
 };
 
-#ifdef __MINGW64__
-extern mingw_stdthread::shared_mutex wingEdge;
-extern mingw_stdthread::mutex adjLog;
-#else
 extern std::shared_mutex wingEdge;
 extern std::mutex adjLog;
-#endif
 extern double stageTolerance;
 extern int opcount,trianglesToPaint;
 extern int currentAction;
