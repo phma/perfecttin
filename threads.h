@@ -70,7 +70,6 @@ struct ThreadAction
   PtinHeader ptinResult;
 };
 
-extern std::shared_mutex wingEdge;
 extern std::mutex adjLog;
 extern double stageTolerance;
 extern int opcount,trianglesToPaint;
