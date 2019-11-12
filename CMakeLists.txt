@@ -1,5 +1,5 @@
 project(perfecttin)
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.8.0)
 # Copyright 2019 Pierre Abbat.
 # This file is part of PerfectTIN.
 # 
@@ -21,7 +21,7 @@ include(CheckTypeSize)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17) # appeared in CMake 3.8
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/perfecttin)
