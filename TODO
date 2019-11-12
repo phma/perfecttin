@@ -6,3 +6,7 @@ Before 0.3.0:
 
 Before 0.4.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop
+
+Whenever:
+•Add a magnification window
+•Switch to a list of triangles and edges to be checked when most of them are in tolerance
