@@ -579,7 +579,6 @@ PtinHeader readPtin(std::string inputFile)
   {
     setMutexArea(pairwisesum(areas));
     net.makeEdges();
-    cout<<"Max valency "<<net.valencyHistogram().size()<<endl;
   }
   else if (readingStarted)
     net.clear();
