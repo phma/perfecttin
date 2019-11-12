@@ -143,7 +143,7 @@
         <translation>Export TIN as Carlson</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="411"/>
+        <location filename="mainwindow.cpp" line="434"/>
         <source>Convert to TIN</source>
         <translation>Convert to TIN</translation>
     </message>
@@ -164,54 +164,64 @@
         <translation>TIN files (*.tin)</translation>
     </message>
     <message>
+        <location filename="mainwindow.cpp" line="411"/>
+        <source>Export TIN as LandXML</source>
+        <translation>Export TIN as LandXML</translation>
+    </message>
+    <message>
         <location filename="mainwindow.cpp" line="415"/>
+        <source>(*.xml)</source>
+        <translation>XML files (*.xml)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="438"/>
         <source>(*.ptin)</source>
         <translation>PerfectTIN files (*.ptin)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="462"/>
-        <location filename="mainwindow.cpp" line="516"/>
-        <location filename="mainwindow.cpp" line="525"/>
-        <location filename="mainwindow.cpp" line="531"/>
-        <location filename="mainwindow.cpp" line="538"/>
-        <location filename="mainwindow.cpp" line="547"/>
+        <location filename="mainwindow.cpp" line="485"/>
+        <location filename="mainwindow.cpp" line="539"/>
+        <location filename="mainwindow.cpp" line="548"/>
+        <location filename="mainwindow.cpp" line="554"/>
+        <location filename="mainwindow.cpp" line="561"/>
+        <location filename="mainwindow.cpp" line="570"/>
         <source>PerfectTIN</source>
         <translation>PerfectTIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="462"/>
+        <location filename="mainwindow.cpp" line="485"/>
         <source>Point cloud no area</source>
         <translation>Point cloud covers no area or has infinite or NaN points</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="497"/>
+        <location filename="mainwindow.cpp" line="520"/>
         <source>File incomplete %1</source>
         <translation>File %1 was not completely written</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="505"/>
+        <location filename="mainwindow.cpp" line="528"/>
         <source>Newer version %1</source>
         <translation>File %1 was written by a newer version of PerfectTIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="509"/>
+        <location filename="mainwindow.cpp" line="532"/>
         <source>Not ptin file %1</source>
         <translation>%1 is not a PerfectTIN file</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="512"/>
+        <location filename="mainwindow.cpp" line="535"/>
         <source>File corrupt %1</source>
         <translation>File %1 is corrupt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="527"/>
+        <location filename="mainwindow.cpp" line="550"/>
         <source>
 PLY file code © Simon Rajotte, MIT license</source>
         <translation>
 PLY file code © Simon Rajotte, MIT license</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="532"/>
+        <location filename="mainwindow.cpp" line="555"/>
         <source>%1
 Version %2
 Copyright %3 Pierre Abbat
@@ -222,102 +232,107 @@ Copyright %3 Pierre Abbat
 License GPL 3 or later%4</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="549"/>
+        <location filename="mainwindow.cpp" line="572"/>
         <source>A conversion is in progress.</source>
         <translation>A conversion is in progress.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="550"/>
+        <location filename="mainwindow.cpp" line="573"/>
         <source>Do you want to abort it and exit?</source>
         <translation>Do you want to abort it and exit?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="565"/>
+        <location filename="mainwindow.cpp" line="588"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="566"/>
+        <location filename="mainwindow.cpp" line="589"/>
         <source>&amp;Settings</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="567"/>
+        <location filename="mainwindow.cpp" line="590"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="571"/>
+        <location filename="mainwindow.cpp" line="594"/>
         <source>Open</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="576"/>
+        <location filename="mainwindow.cpp" line="599"/>
         <source>Load</source>
         <translation>Load</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="581"/>
+        <location filename="mainwindow.cpp" line="604"/>
         <source>Convert</source>
         <translation>Convert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="584"/>
+        <location filename="mainwindow.cpp" line="607"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="587"/>
+        <location filename="mainwindow.cpp" line="610"/>
         <source>Clear</source>
         <translation>Clear</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="592"/>
+        <location filename="mainwindow.cpp" line="615"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="598"/>
+        <location filename="mainwindow.cpp" line="621"/>
         <source>Resume</source>
         <translation>Resume</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="604"/>
+        <location filename="mainwindow.cpp" line="627"/>
         <source>Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="609"/>
+        <location filename="mainwindow.cpp" line="632"/>
         <source>DXF Text</source>
         <translation>DXF Text</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="613"/>
+        <location filename="mainwindow.cpp" line="636"/>
         <source>DXF Binary</source>
         <translation>DXF Binary</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="617"/>
+        <location filename="mainwindow.cpp" line="640"/>
         <source>TIN Text</source>
         <translation>TIN Text</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="621"/>
+        <location filename="mainwindow.cpp" line="644"/>
         <source>Carlson TIN</source>
         <translation>Carlson TIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="627"/>
+        <location filename="mainwindow.cpp" line="648"/>
+        <source>LandXML</source>
+        <translation>LandXML</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="654"/>
         <source>Configure</source>
         <translation>Configure</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="632"/>
+        <location filename="mainwindow.cpp" line="659"/>
         <source>About PerfectTIN</source>
         <translation>About PerfectTIN</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="636"/>
+        <location filename="mainwindow.cpp" line="663"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
     </message>
