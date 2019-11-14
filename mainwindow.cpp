@@ -176,6 +176,8 @@ void MainWindow::tick()
     if (actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
+	ta.opcode=ACT_QINDEX;
+	enqueueAction(ta);
 	ta.param0=lrint(toleranceRatio*4);
 	ta.opcode=ACT_DELETE_FILE;
 	ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";

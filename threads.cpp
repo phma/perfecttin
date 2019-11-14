@@ -545,6 +545,10 @@ void TinThread::operator()(int thread)
 	  deleteFile(act.filename);
 	  unsleep(thread);
 	  break;
+	case ACT_QINDEX:
+	  net.makeqindex();
+	  unsleep(thread);
+	  break;
 	default:
 	  sleep(thread);
       }
@@ -599,6 +603,10 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_DELETE_FILE:
 	  deleteFile(act.filename);
+	  unsleep(thread);
+	  break;
+	case ACT_QINDEX:
+	  net.makeqindex();
 	  unsleep(thread);
 	  break;
 	default:
