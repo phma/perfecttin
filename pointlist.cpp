@@ -266,6 +266,29 @@ int pointlist::closestHullPoint(xy pnt)
   return ret;
 }
 
+double pointlist::distanceToHull(xy pnt)
+/* pnt should be outside the hull. This is used to compute how big a scale
+ * can be drawn in the corner of the window.
+ */
+{
+  int n=closestHullPoint(pnt);
+  int sz=convexHull.size();
+  xy a,b,c;
+  double ret=NAN;
+  if (sz)
+  {
+    a=(xy)*convexHull[(n+sz-1)%sz];
+    b=(xy)*convexHull[n];
+    c=(xy)*convexHull[(n+1)%sz];
+    ret=dist(b,pnt);
+    if (isinsector(dir(b,pnt)-dir(b,a),0xf00ff00f) && pldist(pnt,b,a)<ret)
+      ret=pldist(pnt,b,a);
+    if (isinsector(dir(b,pnt)-dir(b,c),0xf00ff00f) && pldist(pnt,c,b)<ret)
+      ret=pldist(pnt,c,b);
+  }
+  return ret;
+}
+
 bool pointlist::validConvexHull()
 /* Deflection angles around the convex hull must be positive (else it isn't convex)
  * and no more than 45° (because it starts as an equiangular octagon).

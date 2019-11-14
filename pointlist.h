@@ -57,6 +57,7 @@ public:
   int addtriangle(int n=1);
   void insertHullPoint(point *newpnt,point *prec);
   int closestHullPoint(xy pnt);
+  double distanceToHull(xy pnt);
   bool validConvexHull();
   std::vector<int> valencyHistogram();
   void clear();
