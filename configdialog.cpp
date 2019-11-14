@@ -77,7 +77,7 @@ void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads)
   int i;
   lengthUnitBox->clear();
   toleranceBox->clear();
-  lengthUnitLabel->setText(tr("Input unit"));
+  lengthUnitLabel->setText(tr("Length unit"));
   toleranceLabel->setText(tr("Tolerance"));
   threadLabel->setText(tr("Threads:"));
   threadDefault->setText(tr("default is %n","",thread::hardware_concurrency()));
