@@ -513,6 +513,8 @@ void MainWindow::handleResult(ThreadAction ta)
 	}
 	fileNames=baseName(saveFileName)+".ptin";
 	net.conversionTime=ta.ptinResult.conversionTime;
+	ta.opcode=ACT_QINDEX;
+	enqueueAction(ta);
 	loadAction->setEnabled(true);
 	convertAction->setEnabled(false);
 	clearAction->setEnabled(true);

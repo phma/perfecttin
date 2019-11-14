@@ -141,6 +141,7 @@ double makeOctagon()
   //cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
   //cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
   tri=&net.triangles[0];
+  net.makeqindex();
   sz=cloud.size();
   if (sz)
   {
