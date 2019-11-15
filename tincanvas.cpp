@@ -240,6 +240,16 @@ void TinCanvas::setSize()
    */
 }
 
+void TinCanvas::setScalePos()
+// Set the position of the scale at the lower left or right corner.
+{
+  xy scalePos;
+  double maxScaleSize;
+  scalePos=windowToWorld(QPointF(width(),height()));
+  maxScaleSize=net.distanceToHull(scalePos);
+  cout<<maxScaleSize<<" corner to convex hull\n";
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i;

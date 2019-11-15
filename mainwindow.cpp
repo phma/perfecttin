@@ -139,7 +139,10 @@ void MainWindow::tick()
     if (lastNumTriangles<4 && numTriangles>4)
       tinSizeChanged();
     if (numTriangles<lastNumTriangles || ((numTriangles^lastNumTriangles)&1))
+    {
       canvas->update();
+      canvas->setScalePos();
+    }
     lastNumDots=numDots;
     lastNumTriangles=numTriangles;
     if (numDots && numTriangles)
