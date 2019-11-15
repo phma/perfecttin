@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
     nthreads=2;
   generic.add_options()
     ("units,u",po::value<string>(&unitStr)->default_value("m"),"Units")
-    ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1),"Vertical tolerance")
+    ("tolerance,t",po::value<double>(&tolerance)->default_value(0.1,"0.1"),"Vertical tolerance")
     ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
     ("asteraceous",po::value<int>(&asterPoints),"Process an asteraceous test pattern")
     ("output,o",po::value<string>(&outputFile),"Output file")
