@@ -234,6 +234,7 @@ void TinCanvas::setSize()
     painter.drawPixmap(rect1,frameTemp,rect0);
     update();
   }
+  setScalePos();
   trianglesToPaint=3*net.triangles.size();
   /* It takes three coats of paint to color the framebuffer well
    * after it has been cleared to white.
@@ -243,11 +244,18 @@ void TinCanvas::setSize()
 void TinCanvas::setScalePos()
 // Set the position of the scale at the lower left or right corner.
 {
-  xy scalePos;
+  xy leftScalePos,rightScalePos;
   double maxScaleSize;
-  scalePos=windowToWorld(QPointF(width(),height()));
-  maxScaleSize=net.distanceToHull(scalePos);
-  cout<<maxScaleSize<<" corner to convex hull\n";
+  bool right=false;
+  leftScalePos=windowToWorld(QPointF(width()*0.01,height()*0.99));
+  rightScalePos=windowToWorld(QPointF(width()*0.99,height()*0.99));
+  maxScaleSize=net.distanceToHull(leftScalePos);
+  if (net.distanceToHull(rightScalePos)>maxScaleSize)
+  {
+    maxScaleSize=net.distanceToHull(rightScalePos);
+    right=true;
+  }
+  cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull\n";
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
