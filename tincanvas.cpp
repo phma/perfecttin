@@ -91,6 +91,7 @@ void TinCanvas::tick()
   triangle *tri=nullptr;
   xy gradient,A,B,C;
   xy dartCorners[4];
+  xy leftTickmark,rightTickmark,tickmark;
   QPolygonF polygon;
   QPolygon swath;
   cr::nanoseconds elapsed=cr::milliseconds(0);
@@ -157,7 +158,15 @@ void TinCanvas::tick()
   painter.setBrush(Qt::white);
   painter.drawPolygon(polygon);
   painter.setPen(Qt::black);
-  painter.drawLine(worldToWindow(leftScaleEnd),worldToWindow(rightScaleEnd));
+  tickmark=turn90(rightScaleEnd-leftScaleEnd)/10;
+  leftTickmark=leftScaleEnd+tickmark;
+  rightTickmark=rightScaleEnd+tickmark;
+  polygon=QPolygonF();
+  polygon<<worldToWindow(leftTickmark);
+  polygon<<worldToWindow(leftScaleEnd);
+  polygon<<worldToWindow(rightScaleEnd);
+  polygon<<worldToWindow(rightTickmark);
+  painter.drawPolyline(polygon);
   painter.setPen(Qt::NoPen);
   // Paint some triangles in the TIN in colors depending on their gradient.
   for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
