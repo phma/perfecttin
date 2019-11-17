@@ -50,6 +50,7 @@ private:
   double scale;
   double lengthUnit;
   xy ballPos;
+  xy leftScaleEnd,rightScaleEnd;
   int penPos;
   int triangleNum;
   int lastOpcount;

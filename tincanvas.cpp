@@ -156,6 +156,9 @@ void TinCanvas::tick()
     polygon<<worldToWindow(dartCorners[i]);
   painter.setBrush(Qt::white);
   painter.drawPolygon(polygon);
+  painter.setPen(Qt::black);
+  painter.drawLine(worldToWindow(leftScaleEnd),worldToWindow(rightScaleEnd));
+  painter.setPen(Qt::NoPen);
   // Paint some triangles in the TIN in colors depending on their gradient.
   for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
   {
@@ -244,7 +247,7 @@ void TinCanvas::setSize()
 void TinCanvas::setScalePos()
 // Set the position of the scale at the lower left or right corner.
 {
-  xy leftScalePos,rightScalePos;
+  xy leftScalePos,rightScalePos,disp;
   double maxScaleSize,scaleSize;
   bool right=false;
   leftScalePos=windowToWorld(QPointF(width()*0.01,height()*0.99));
@@ -266,6 +269,20 @@ void TinCanvas::setScalePos()
     scaleSize/=5;
   else
     scaleSize/=10;
+  if (right)
+  {
+    rightScaleEnd=rightScalePos;
+    disp=leftScalePos-rightScalePos;
+    disp/=disp.length();
+    leftScaleEnd=rightScaleEnd+scaleSize*disp;
+  }
+  else
+  {
+    leftScaleEnd=leftScalePos;
+    disp=rightScalePos-leftScalePos;
+    disp/=disp.length();
+    rightScaleEnd=leftScaleEnd+scaleSize*disp;
+  }
   cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull "<<scaleSize<<" scale\n";
 }
 
