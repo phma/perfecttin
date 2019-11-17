@@ -37,6 +37,7 @@ signals:
 public slots:
   void sizeToFit();
   void setSize();
+  void setLengthUnit(double unit);
   void setScalePos();
   void tick();
 protected:
@@ -47,6 +48,7 @@ private:
   Lissajous lis;
   xy windowCenter,worldCenter;
   double scale;
+  double lengthUnit;
   xy ballPos;
   int penPos;
   int triangleNum;

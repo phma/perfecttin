@@ -46,6 +46,7 @@ public:
   bool conversionBusy();
 signals:
   void tinSizeChanged();
+  void lengthUnitChanged(double unit);
   void noCloudArea();
   void gotResult(ThreadAction ta);
 public slots:

@@ -258,6 +258,12 @@ void TinCanvas::setScalePos()
   cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull\n";
 }
 
+void TinCanvas::setLengthUnit(double unit)
+{
+  lengthUnit=unit;
+  setScalePos();
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i;

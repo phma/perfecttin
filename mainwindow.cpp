@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(configDialog,SIGNAL(settingsChanged(double,double,int)),
 	  this,SLOT(setSettings(double,double,int)));
   connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
+  connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
   doneBar=new QProgressBar(this);
@@ -690,6 +691,7 @@ void MainWindow::readSettings()
   numberThreads=settings.value("threads",0).toInt();
   tolerance=settings.value("tolerance",0.1).toDouble();
   lengthUnit=settings.value("lengthUnit",1).toDouble();
+  lengthUnitChanged(lengthUnit);
 }
 
 void MainWindow::writeSettings()
@@ -708,6 +710,7 @@ void MainWindow::setSettings(double iu,double tol,int thr)
   tolerance=tol;
   numberThreads=thr;
   writeSettings();
+  lengthUnitChanged(lengthUnit);
 }
 
 bool MainWindow::conversionBusy()
