@@ -245,7 +245,7 @@ void TinCanvas::setScalePos()
 // Set the position of the scale at the lower left or right corner.
 {
   xy leftScalePos,rightScalePos;
-  double maxScaleSize;
+  double maxScaleSize,scaleSize;
   bool right=false;
   leftScalePos=windowToWorld(QPointF(width()*0.01,height()*0.99));
   rightScalePos=windowToWorld(QPointF(width()*0.99,height()*0.99));
@@ -255,7 +255,18 @@ void TinCanvas::setScalePos()
     maxScaleSize=net.distanceToHull(rightScalePos);
     right=true;
   }
-  cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull\n";
+  scaleSize=lengthUnit;
+  while (scaleSize>maxScaleSize)
+    scaleSize/=10;
+  while (scaleSize<maxScaleSize)
+    scaleSize*=10;
+  if (scaleSize/2<maxScaleSize)
+    scaleSize/=2;
+  else if (scaleSize/5<maxScaleSize)
+    scaleSize/=5;
+  else
+    scaleSize/=10;
+  cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull "<<scaleSize<<" scale\n";
 }
 
 void TinCanvas::setLengthUnit(double unit)
