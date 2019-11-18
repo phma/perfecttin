@@ -19,6 +19,8 @@ cmake_minimum_required(VERSION 3.8.0)
 include(TestBigEndian)
 include(CheckTypeSize)
 
+add_subdirectory(doc)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17) # appeared in CMake 3.8
