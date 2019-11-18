@@ -1,0 +1,20 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<info>
+<title>PerfectTIN Manual</title>
+<author><personname>
+<firstname>Pierre</firstname>
+<surname>Abbat</surname>
+</personname></author>
+<pubdate>2019</pubdate>
+</info>
+
+<section id="intro">
+<title>Introduction</title>
+<para>PerfectTIN is a program for converting a point cloud to a TIN.</para>
+</section>
+
+<section id="body">
+<title>Making a TIN</title>
+<para>Before loading the point cloud, set the length unit with Settings|Configure.</para>
+</section>
+</article>
