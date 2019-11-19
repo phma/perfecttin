@@ -94,6 +94,8 @@ void TinCanvas::tick()
   xy leftTickmark,rightTickmark,tickmark;
   QPolygonF polygon;
   QPolygon swath;
+  QPointF circleCenter;
+  QRectF circleBox;
   cr::nanoseconds elapsed=cr::milliseconds(0);
   cr::time_point<cr::steady_clock> timeStart=clk.now();
   xy oldBallPos=ballPos;
@@ -157,16 +159,25 @@ void TinCanvas::tick()
     polygon<<worldToWindow(dartCorners[i]);
   painter.setBrush(Qt::white);
   painter.drawPolygon(polygon);
-  painter.setPen(Qt::black);
-  tickmark=turn90(rightScaleEnd-leftScaleEnd)/10;
-  leftTickmark=leftScaleEnd+tickmark;
-  rightTickmark=rightScaleEnd+tickmark;
-  polygon=QPolygonF();
-  polygon<<worldToWindow(leftTickmark);
-  polygon<<worldToWindow(leftScaleEnd);
-  polygon<<worldToWindow(rightScaleEnd);
-  polygon<<worldToWindow(rightTickmark);
-  painter.drawPolyline(polygon);
+  // Paint a circle white as a background for the scale.
+  if (maxScaleSize>0)
+  {
+    circleCenter=worldToWindow(scaleEnd);
+    circleBox=QRectF(circleCenter.x()-maxScaleSize*scale,circleCenter.y()-maxScaleSize*scale,
+		    maxScaleSize*scale*2,maxScaleSize*scale*2);
+    painter.drawEllipse(circleBox);
+    // Draw the scale.
+    painter.setPen(Qt::black);
+    tickmark=turn90(rightScaleEnd-leftScaleEnd)/10;
+    leftTickmark=leftScaleEnd+tickmark;
+    rightTickmark=rightScaleEnd+tickmark;
+    polygon=QPolygonF();
+    polygon<<worldToWindow(leftTickmark);
+    polygon<<worldToWindow(leftScaleEnd);
+    polygon<<worldToWindow(rightScaleEnd);
+    polygon<<worldToWindow(rightTickmark);
+    painter.drawPolyline(polygon);
+  }
   painter.setPen(Qt::NoPen);
   // Paint some triangles in the TIN in colors depending on their gradient.
   for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
@@ -257,7 +268,7 @@ void TinCanvas::setScalePos()
 // Set the position of the scale at the lower left or right corner.
 {
   xy leftScalePos,rightScalePos,disp;
-  double maxScaleSize,scaleSize;
+  double scaleSize;
   bool right=false;
   leftScalePos=windowToWorld(QPointF(width()*0.01,height()*0.99));
   rightScalePos=windowToWorld(QPointF(width()*0.99,height()*0.99));
@@ -280,14 +291,14 @@ void TinCanvas::setScalePos()
     scaleSize/=10;
   if (right)
   {
-    rightScaleEnd=rightScalePos;
+    scaleEnd=rightScaleEnd=rightScalePos;
     disp=leftScalePos-rightScalePos;
     disp/=disp.length();
     leftScaleEnd=rightScaleEnd+scaleSize*disp;
   }
   else
   {
-    leftScaleEnd=leftScalePos;
+    scaleEnd=leftScaleEnd=leftScalePos;
     disp=rightScalePos-leftScalePos;
     disp/=disp.length();
     rightScaleEnd=leftScaleEnd+scaleSize*disp;

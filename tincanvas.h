@@ -49,8 +49,9 @@ private:
   xy windowCenter,worldCenter;
   double scale;
   double lengthUnit;
+  double maxScaleSize;
   xy ballPos;
-  xy leftScaleEnd,rightScaleEnd;
+  xy leftScaleEnd,rightScaleEnd,scaleEnd;
   int penPos;
   int triangleNum;
   int lastOpcount;
