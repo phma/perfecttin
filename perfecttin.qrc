@@ -18,5 +18,11 @@ along with PerfectTIN. If not, see <http://www.gnu.org/licenses/>.
 -->
 <qresource>
   <file>perfecttin.png</file>
+  <!-- These icons are on buttons that choose measuring units. 
+       The measuring units are drawn to a scale of 1 px = 4 mm. -->
+  <file>meter.png</file>
+  <file>international-foot.png</file>
+  <file>us-foot.png</file>
+  <file>indian-foot.png</file>
 </qresource>
 </RCC>
