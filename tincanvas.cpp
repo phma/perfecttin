@@ -95,7 +95,8 @@ void TinCanvas::tick()
   QPolygonF polygon;
   QPolygon swath;
   QPointF circleCenter;
-  QRectF circleBox;
+  QRectF circleBox,textBox;
+  string scaleText;
   cr::nanoseconds elapsed=cr::milliseconds(0);
   cr::time_point<cr::steady_clock> timeStart=clk.now();
   xy oldBallPos=ballPos;
@@ -177,6 +178,10 @@ void TinCanvas::tick()
     polygon<<worldToWindow(rightScaleEnd);
     polygon<<worldToWindow(rightTickmark);
     painter.drawPolyline(polygon);
+    // Write the length of the scale.
+    textBox=QRectF(worldToWindow(leftScaleEnd+2*tickmark),worldToWindow(rightScaleEnd));
+    scaleText=ldecimal(scaleSize/lengthUnit,scaleSize/lengthUnit/10)+((lengthUnit==1)?" m":" ft");
+    painter.drawText(textBox,Qt::AlignCenter,QString::fromStdString(scaleText));
   }
   painter.setPen(Qt::NoPen);
   // Paint some triangles in the TIN in colors depending on their gradient.
@@ -268,7 +273,6 @@ void TinCanvas::setScalePos()
 // Set the position of the scale at the lower left or right corner.
 {
   xy leftScalePos,rightScalePos,disp;
-  double scaleSize;
   bool right=false;
   leftScalePos=windowToWorld(QPointF(width()*0.01,height()*0.99));
   rightScalePos=windowToWorld(QPointF(width()*0.99,height()*0.99));

@@ -49,7 +49,7 @@ private:
   xy windowCenter,worldCenter;
   double scale;
   double lengthUnit;
-  double maxScaleSize;
+  double maxScaleSize,scaleSize;
   xy ballPos;
   xy leftScaleEnd,rightScaleEnd,scaleEnd;
   int penPos;
