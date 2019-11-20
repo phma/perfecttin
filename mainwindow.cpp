@@ -55,6 +55,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
+  toolbar=new QToolBar(this);
+  addToolBar(Qt::TopToolBarArea,toolbar);
   readSettings();
   canvas->show();
   show();

@@ -82,6 +82,7 @@ private:
   QTimer *timer;
   QFileDialog *fileDialog;
   QMessageBox *msgBox;
+  QToolBar *toolbar;
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu,*exportMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
