@@ -27,6 +27,7 @@
 #include <string>
 #include <array>
 #include "configdialog.h"
+#include "unitbutton.h"
 #include "tincanvas.h"
 
 class MainWindow: public QMainWindow
@@ -93,5 +94,6 @@ private:
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
+  UnitButton *unitButtons[4];
   TinCanvas *canvas;
 };

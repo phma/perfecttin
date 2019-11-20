@@ -28,6 +28,11 @@
 #include "octagon.h"
 using namespace std;
 
+const char unitIconNames[4][28]=
+{
+  ":/meter.png",":/international-foot.png",":/us-foot.png",":/indian-foot.png"
+};
+
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
 {
   setWindowTitle(QApplication::translate("main", "PerfectTIN"));
@@ -52,11 +57,12 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   lpfBusyFraction=0;
   conversionStopped=false;
   showingResult=false;
+  toolbar=new QToolBar(this);
+  addToolBar(Qt::TopToolBarArea,toolbar);
+  toolbar->setIconSize(QSize(40,40));
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
-  toolbar=new QToolBar(this);
-  addToolBar(Qt::TopToolBarArea,toolbar);
   readSettings();
   canvas->show();
   show();
@@ -595,6 +601,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::makeActions()
 {
+  int i;
   fileMenu=menuBar()->addMenu(tr("&File"));
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
@@ -673,6 +680,15 @@ void MainWindow::makeActions()
   aboutQtAction->setText(tr("About Qt"));
   helpMenu->addAction(aboutQtAction);
   connect(aboutQtAction,SIGNAL(triggered(bool)),this,SLOT(aboutQt()));
+  // Toolbar
+  for (i=0;i<4;i++)
+  {
+    unitButtons[i]=new UnitButton(this,conversionFactors[i]);
+    unitButtons[i]->setText(configDialog->tr(unitNames[i]));
+    unitButtons[i]->setIcon(QIcon(unitIconNames[i]));
+    connect(this,SIGNAL(lengthUnitChanged(double)),unitButtons[i],SLOT(setUnit(double)));
+    toolbar->addAction(unitButtons[i]);
+  }
 }
 
 void MainWindow::makeStatusBar()

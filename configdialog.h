@@ -31,6 +31,9 @@
 #include <QLineEdit>
 #include <QGridLayout>
 
+extern const double conversionFactors[4];
+extern const char unitNames[4][12];
+
 class ConfigurationDialog: public QDialog
 {
   Q_OBJECT
