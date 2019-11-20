@@ -33,3 +33,8 @@ void UnitButton::setUnit(double unit)
 {
   setChecked(unit==factor);
 }
+
+void UnitButton::selfTriggered(bool dummy)
+{
+  unitChanged(factor);
+}

@@ -687,6 +687,8 @@ void MainWindow::makeActions()
     unitButtons[i]->setText(configDialog->tr(unitNames[i]));
     unitButtons[i]->setIcon(QIcon(unitIconNames[i]));
     connect(this,SIGNAL(lengthUnitChanged(double)),unitButtons[i],SLOT(setUnit(double)));
+    connect(unitButtons[i],SIGNAL(triggered(bool)),unitButtons[i],SLOT(selfTriggered(bool)));
+    connect(unitButtons[i],SIGNAL(unitChanged(double)),this,SLOT(setUnit(double)));
     toolbar->addAction(unitButtons[i]);
   }
 }
@@ -722,12 +724,18 @@ void MainWindow::writeSettings()
   settings.setValue("lengthUnit",lengthUnit);
 }
 
-void MainWindow::setSettings(double iu,double tol,int thr)
+void MainWindow::setSettings(double lu,double tol,int thr)
 {
-  lengthUnit=iu;
+  lengthUnit=lu;
   tolerance=tol;
   numberThreads=thr;
   writeSettings();
+  lengthUnitChanged(lengthUnit);
+}
+
+void MainWindow::setUnit(double lu)
+{
+  lengthUnit=lu;
   lengthUnitChanged(lengthUnit);
 }
 

@@ -53,6 +53,7 @@ signals:
 public slots:
   void tick();
   void setSettings(double lu,double tol,int thr);
+  void setUnit(double lu);
   void openFile();
   void loadFile();
   void exportDxfTxt();

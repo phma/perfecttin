@@ -30,7 +30,9 @@ public:
   UnitButton(QObject *parent=nullptr,double fac=1);
 public slots:
   void setUnit(double unit);
+  void selfTriggered(bool dummy);
 signals:
+  void unitChanged(double unit);
 protected:
 private:
   double factor;
