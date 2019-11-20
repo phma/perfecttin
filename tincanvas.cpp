@@ -307,7 +307,7 @@ void TinCanvas::setScalePos()
     disp/=disp.length();
     rightScaleEnd=leftScaleEnd+scaleSize*disp;
   }
-  cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull "<<scaleSize<<" scale\n";
+  //cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull "<<scaleSize<<" scale\n";
 }
 
 void TinCanvas::setLengthUnit(double unit)
