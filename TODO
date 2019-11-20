@@ -10,5 +10,5 @@ Before 0.4.0:
 Whenever:
 •Add a magnification window
 •Switch to a list of triangles and edges to be checked when most of them are in tolerance
-•Draw a scale on the window
+•Draw a scale on the window ✓
 •Search directory for unfinished conversions and resume one
