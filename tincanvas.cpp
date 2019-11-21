@@ -307,6 +307,8 @@ void TinCanvas::setScalePos()
     disp/=disp.length();
     rightScaleEnd=leftScaleEnd+scaleSize*disp;
   }
+  if (trianglesToPaint==0)
+    trianglesToPaint++; // repaint if not busy painting triangles
   //cout<<(right?"right ":"left ")<<maxScaleSize<<" corner to convex hull "<<scaleSize<<" scale\n";
 }
 
