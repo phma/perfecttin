@@ -255,7 +255,7 @@ void pointlist::insertHullPoint(point *newpnt,point *prec)
 
 int pointlist::closestHullPoint(xy pnt)
 {
-  int i,ret;
+  int i,ret=-1;
   double d,closeDist=INFINITY;
   for (i=0;i<convexHull.size();i++)
     if ((d=dist((xy)*convexHull[i],pnt))<closeDist)
