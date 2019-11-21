@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   showingResult=false;
   toolbar=new QToolBar(this);
   addToolBar(Qt::TopToolBarArea,toolbar);
-  toolbar->setIconSize(QSize(40,40));
+  toolbar->setIconSize(QSize(32,32));
   makeActions();
   makeStatusBar();
   setCentralWidget(canvas);
