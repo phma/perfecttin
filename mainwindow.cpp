@@ -684,7 +684,7 @@ void MainWindow::makeActions()
   for (i=0;i<4;i++)
   {
     unitButtons[i]=new UnitButton(this,conversionFactors[i]);
-    unitButtons[i]->setText(configDialog->tr(unitNames[i]));
+    unitButtons[i]->setText(configDialog->tr(unitNames[i])); // lupdate warns but it works
     unitButtons[i]->setIcon(QIcon(unitIconNames[i]));
     connect(this,SIGNAL(lengthUnitChanged(double)),unitButtons[i],SLOT(setUnit(double)));
     connect(unitButtons[i],SIGNAL(triggered(bool)),unitButtons[i],SLOT(selfTriggered(bool)));
