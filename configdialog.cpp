@@ -65,7 +65,6 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(threadDefault,3,2);
   gridLayout->addWidget(okButton,4,0);
   gridLayout->addWidget(cancelButton,4,1);
-  toleranceLabel->setAlignment(Qt::AlignHCenter);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
