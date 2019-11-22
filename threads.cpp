@@ -107,6 +107,11 @@ void resizeBuckets(int n)
   bucketMutex.unlock();
 }
 
+int nBuckets()
+{
+  return allBuckets.size();
+}
+
 array<double,2> areaDone(double tolerance)
 {
   vector<double> allTri,doneTri,doneq2Tri;

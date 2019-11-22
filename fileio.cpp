@@ -447,6 +447,8 @@ PtinHeader readPtin(std::string inputFile)
   vector<double> zcheck;
   zCheck.clear();
   header=readPtinHeader(ptinFile);
+  if (nBuckets()==0)
+    resizeBuckets(1);
   if (header.tolRatio>0 && header.tolerance>0)
   {
     net.clear();
@@ -552,6 +554,7 @@ PtinHeader readPtin(std::string inputFile)
 	}
       tri->dots.shrink_to_fit();
       net.wingEdge.unlock();
+      markBucketDirty(i); // keep painting triangles
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
   if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)

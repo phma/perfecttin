@@ -82,6 +82,7 @@ void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
 bool allBucketsClean();
 void resizeBuckets(int n);
+int nBuckets();
 std::array<double,2> areaDone(double tolerance);
 double busyFraction();
 bool livelock(double areadone,double rmsadj);
