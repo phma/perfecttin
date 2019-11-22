@@ -8,6 +8,8 @@ Before compiling PerfectTIN, if you want it to read PLY files, clone the libplyx
 
 The GUI program needs Qt5; the command-line program needs Boost.
 
+PerfectTIN compiles on Ubuntu Bionic, DragonFly 5.5, and Windows 10. It does not compile on RHEL 7 because the CMake is too old. It probably compiles on RHEL 8 or recent Fedora, but I haven't tried it.
+
 If building on MinGW, clone the repo https://github.com/meganz/mingw-std-threads and put it beside this one.
 
 To compile, if you're not developing the program:
@@ -22,4 +24,4 @@ If you are developing the program:
 3. cmake <directory where the source code is>
 4. make
 
-PLY and DXF files have no units in them. LAS files may have the unit indicated in the variable-length record, but PerfectTIN ignores it. LandXML files have units in them, but as LandXML does not support the Indian survey foot, PerfectTIN exports LandXML in meters. You can specify the units on the command line with the -u option or in the GUI with Settings|Configure.
+PLY and DXF files have no units in them. LAS files may have the unit indicated in the variable-length record, but PerfectTIN ignores it. LandXML files have units in them, but as LandXML does not support the Indian survey foot, PerfectTIN exports LandXML in meters if the unit is the Indian survey foot. You can specify the units on the command line with the -u option or in the GUI with Settings|Configure.
