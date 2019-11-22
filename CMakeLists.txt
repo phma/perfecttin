@@ -106,13 +106,21 @@ endif (${Boost_FOUND})
 install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
 
+if (WIN32)
+include(windeployqt)
+windeployqt(perfecttin-gui ${INSTALL_BIN_PATH})
+if (${Boost_FOUND})
+windeployqt(perfecttin ${INSTALL_BIN_PATH})
+endif (${Boost_FOUND})
+endif (WIN32)
+
 test_big_endian(BIGENDIAN)
 check_type_size("int" INT)
 check_type_size("int *" INT_POINTER)
 
 set(PERFECTTIN_MAJOR_VERSION 0)
 set(PERFECTTIN_MINOR_VERSION 3)
-set(PERFECTTIN_PATCH_VERSION 2)
+set(PERFECTTIN_PATCH_VERSION 2+)
 set(PERFECTTIN_VERSION ${PERFECTTIN_MAJOR_VERSION}.${PERFECTTIN_MINOR_VERSION}.${PERFECTTIN_PATCH_VERSION})
 set(COPY_YEAR 2019)
 
