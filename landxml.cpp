@@ -29,13 +29,15 @@
 using namespace std;
 
 void writeLandXml(string outputFile,double outUnit)
-/* outUnit is ignored. LandXML has a Units tag, but does not support the
- * Indian survey foot.
- */
 {
   int i;
   ofstream xmlFile(outputFile,ofstream::trunc);
   tm *convtm;
+  if (outUnit==0.3047996)
+  {
+    cerr<<"Indian survey foot is not supported in LandXML. Writing in meters.\n";
+    outUnit=1;
+  }
   xmlFile<<"<?xml version=\"1.0\" ?>\n";
   convtm=gmtime(&net.conversionTime);
   /* The LandXML header has no field for time zone, so the time is output in UTC.
@@ -49,17 +51,30 @@ void writeLandXml(string outputFile,double outUnit)
   xmlFile<<"<Application name=\"PerfectTIN\" desc=\"LandXML export\" ";
   xmlFile<<"version=\""<<VERSION<<"\">\n";
   xmlFile<<"<Author createdBy=\"Pierre Abbat\" createdByEmail=\"phma@bezitopo.org\" /></Application>\n";
-  xmlFile<<"<Units><Metric areaUnit=\"squareMeter\" linearUnit=\"meter\" ";
-  xmlFile<<"volumeUnit=\"cubicMeter\" temperatureUnit=\"kelvin\" ";
-  xmlFile<<"pressureUnit=\"HPA\" /></Units>\n";
+  if (outUnit==1)
+  {
+    xmlFile<<"<Units><Metric areaUnit=\"squareMeter\" linearUnit=\"meter\" ";
+    xmlFile<<"volumeUnit=\"cubicMeter\" temperatureUnit=\"kelvin\" ";
+    xmlFile<<"pressureUnit=\"HPA\" /></Units>\n";
+  }
+  else
+  {
+    xmlFile<<"<Units><Imperial areaUnit=\"squareFoot\" linearUnit=\"";
+    if (outUnit==0.3048)
+      xmlFile<<"foot\" ";
+    else
+      xmlFile<<"USSurveyFoot\" ";
+    xmlFile<<"volumeUnit=\"cubicFeet\" temperatureUnit=\"kelvin\" ";
+    xmlFile<<"pressureUnit=\"inHG\" /></Units>\n";
+  }
   xmlFile<<"<Surfaces><Surface name=\""<<noExt(baseName(outputFile))<<"\">\n";
   xmlFile<<"<Definition surfType=\"TIN\"><Pnts>\n";
   for (i=1;i<=net.points.size();i++)
   {
     xmlFile<<"<P id=\""<<i<<"\">";
-    xmlFile<<ldecimal(net.points[i].getx())<<' ';
-    xmlFile<<ldecimal(net.points[i].gety())<<' ';
-    xmlFile<<ldecimal(net.points[i].getz())<<"</P>\n";
+    xmlFile<<ldecimal(net.points[i].getx()/outUnit)<<' ';
+    xmlFile<<ldecimal(net.points[i].gety()/outUnit)<<' ';
+    xmlFile<<ldecimal(net.points[i].getz()/outUnit)<<"</P>\n";
   }
   xmlFile<<"</Pnts><Faces>\n";
   for (i=0;i<net.triangles.size();i++)
