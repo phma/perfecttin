@@ -529,6 +529,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	enqueueAction(ta);
 	loadAction->setEnabled(true);
 	convertAction->setEnabled(false);
+	exportMenu->setEnabled(true);
 	clearAction->setEnabled(true);
 	stopAction->setEnabled(false);
       }
