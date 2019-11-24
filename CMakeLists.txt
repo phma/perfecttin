@@ -109,10 +109,10 @@ install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
 
 if (WIN32)
-include(windeployqt)
-windeployqt(perfecttin-gui ${INSTALL_BIN_PATH})
+#include(windeployqt)
+#windeployqt(perfecttin-gui bin)
 if (${Boost_FOUND})
-windeployqt(perfecttin ${INSTALL_BIN_PATH})
+#windeployqt(perfecttin bin)
 endif (${Boost_FOUND})
 endif (WIN32)
 
