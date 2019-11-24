@@ -5,6 +5,9 @@ Before 0.3.0:
 •Replace saving TIN and DXF files at each stage with export actions ✓
 
 Before 0.4.0:
+•Get rid of spikes that the program hallucinates in areas with no dots
+
+Before 0.5.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop
 
 Whenever:
@@ -12,3 +15,4 @@ Whenever:
 •Switch to a list of triangles and edges to be checked when most of them are in tolerance
 •Draw a scale on the window ✓
 •Search directory for unfinished conversions and resume one
+•Allow the TIN to follow the highest points or the lowest points instead of the average
