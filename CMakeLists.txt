@@ -109,11 +109,8 @@ install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
 
 if (WIN32)
-#include(windeployqt)
-#windeployqt(perfecttin-gui bin)
-if (${Boost_FOUND})
-#windeployqt(perfecttin bin)
-endif (${Boost_FOUND})
+include(windeployqt)
+windeployqt(perfecttin-gui bin)
 endif (WIN32)
 
 test_big_endian(BIGENDIAN)
