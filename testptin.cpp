@@ -81,6 +81,484 @@ void testsizeof()
    */
 }
 
+void testintegertrig()
+{
+  double sinerror,coserror,ciserror,totsinerror,totcoserror,totciserror;
+  int i;
+  char bs=8;
+  for (totsinerror=totcoserror=totciserror=i=0;i<128;i++)
+  {
+    sinerror=sin(i<<24)+sin((i+64)<<24);
+    coserror=cos(i<<24)+cos((i+64)<<24);
+    ciserror=hypot(cos(i<<24),sin(i<<24))-1;
+    if (sinerror>0.04 || coserror>0.04 || ciserror>0.04)
+    {
+      printf("sin(%8x)=%a sin(%8x)=%a\n",i<<24,sin(i<<24),(i+64)<<24,sin((i+64)<<24));
+      printf("cos(%8x)=%a cos(%8x)=%a\n",i<<24,cos(i<<24),(i+64)<<24,cos((i+64)<<24));
+      printf("abs(cis(%8x))=%a\n",i<<24,hypot(cos(i<<24),sin(i<<24)));
+    }
+    totsinerror+=sinerror*sinerror;
+    totcoserror+=coserror*coserror;
+    totciserror+=ciserror*ciserror;
+  }
+  printf("total sine error=%e\n",totsinerror);
+  printf("total cosine error=%e\n",totcoserror);
+  printf("total cis error=%e\n",totciserror);
+  tassert(totsinerror+totcoserror+totciserror<2e-29);
+  //On Linux, the total error is 2e-38 and the M_PIl makes a big difference.
+  //On DragonFly BSD, the total error is 1.7e-29 and M_PIl is absent.
+  tassert(bintodeg(0)==0);
+  tassert(fabs(bintodeg(0x15555555)-60)<0.0000001);
+  tassert(fabs(bintomin(0x08000000)==1350));
+  tassert(fabs(bintosec(0x12345678)-184320)<0.001);
+  tassert(fabs(bintogon(0x1999999a)-80)<0.0000001);
+  tassert(fabs(bintorad(0x4f1bbcdd)-3.88322208)<0.00000001);
+  for (i=-2147400000;i<2147400000;i+=rng.usrandom()+18000)
+  {
+    cout<<setw(11)<<i<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs;
+    cout.flush();
+    tassert(degtobin(bintodeg(i))==i);
+    tassert(mintobin(bintomin(i))==i);
+    tassert(sectobin(bintosec(i))==i);
+    tassert(gontobin(bintogon(i))==i);
+    tassert(radtobin(bintorad(i))==i);
+  }
+  tassert(sectobin(1295999.9999)==-2147483648);
+  tassert(sectobin(1296000.0001)==-2147483648);
+  tassert(sectobin(-1295999.9999)==-2147483648);
+  tassert(sectobin(-1296000.0001)==-2147483648);
+  cout<<"           "<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs;
+}
+
+void test1in(xy p,xy a,xy b,xy c,double windnum)
+{
+  double wind;
+  wind=in3(p,a,b,c);
+  if (wind!=windnum && (windnum!=IN_AT_CORNER || wind<=-1 || wind==0 || wind>=1))
+    cout<<"Triangle ("<<a.east()<<','<<a.north()<<"),("<<
+      b.east()<<','<<b.north()<<"),("<<
+      c.east()<<','<<c.north()<<"): ("<<
+      p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
+      ", should be "<<windnum<<endl;
+  tassert(wind==windnum || windnum==IN_AT_CORNER);
+  wind=in3(p,c,b,a);
+  if (windnum<10 && windnum>-10)
+    windnum=-windnum;
+  if (wind!=windnum && (windnum!=IN_AT_CORNER || wind<=-1 || wind==0 || wind>=1))
+    cout<<"Triangle ("<<c.east()<<','<<c.north()<<"),("<<
+      b.east()<<','<<b.north()<<"),("<<
+      a.east()<<','<<a.north()<<"): ("<<
+      p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
+      ", should be "<<windnum<<endl;
+  tassert(wind==windnum || windnum==IN_AT_CORNER);
+}
+
+void testin()
+{
+  xy a(0,0),b(4,0),c(0,3),d(4/3.,1),e(4,3),f(5,0),g(7,-1),h(8,-3),
+     i(3,-5),j(0,-6),k(-2,-2),l(-4,0),m(-4,-3),n(-4,6),o(-3,7),p(0,8),q(2,1.5);
+  test1in(d,a,b,c,1);
+  test1in(e,a,b,c,0);
+  test1in(f,a,b,c,0);
+  test1in(g,a,b,c,0);
+  test1in(h,a,b,c,0);
+  test1in(i,a,b,c,0);
+  test1in(j,a,b,c,0);
+  test1in(k,a,b,c,0);
+  test1in(l,a,b,c,0);
+  test1in(m,a,b,c,0);
+  test1in(n,a,b,c,0);
+  test1in(o,a,b,c,0);
+  test1in(p,a,b,c,0);
+  test1in(q,a,b,c,0.5);
+  test1in(a,a,b,c,0.25);
+  test1in(b,a,b,c,IN_AT_CORNER);
+  test1in(c,a,b,c,IN_AT_CORNER);
+  test1in(b,c,h,n,0);
+}
+
+void testarea3()
+{
+  int i,j,itype;
+  xy a(0,0),b(4,0),c(0,3),d(4,4),e;
+  tassert(area3(c,a,b)==6);
+}
+
+void testrandom()
+{
+  int hist[256],i;
+  int done=0,max,min,maxstep=0;
+  manysum xsum,ysum,zsum;
+  double distsq;
+  memset(hist,0,sizeof(hist));
+  while (!done)
+  {
+    hist[rng.ucrandom()]++;
+    for (max=i=0,min=16777777;i<256;i++)
+    {
+      if (hist[i]>max)
+	max=hist[i];
+      if (hist[i]<min)
+	min=hist[i];
+    }
+    if (max>16777215)
+      done=-1;
+    if (max-min>1.1*pow(max,1/3.) && max-min<0.9*pow(max,2/3.))
+      done=1;
+    if (max-maxstep>=16384)
+    {
+      maxstep=max;
+      //cout<<max<<' '<<min<<endl;
+    }
+  }
+  tassert(done==1);
+  cout<<"Random test: max "<<max<<" min "<<min<<endl;
+  cout<<i<<' '<<distsq/(i+1)<<endl;
+  tassert(done==1);
+}
+
+void knowndet(matrix &mat)
+/* Sets mat to a triangular matrix with ones on the diagonal, which is known
+ * to have determinant 1, then permutes the rows and columns so that Gaussian
+ * elimination will mess up the entries.
+ *
+ * The number of rows should be 40 at most. More than that, and it will not
+ * be shuffled well.
+ */
+{
+  int i,j,ran,rr,rc,cc,flipcount,size,giveup;
+  mat.setidentity();
+  size=mat.getrows();
+  for (i=0;i<size;i++)
+    for (j=0;j<i;j++)
+      mat[i][j]=(rng.ucrandom()*2-255)/BYTERMS;
+  for (flipcount=giveup=0;(flipcount<2*size || (flipcount&1)) && giveup<10000;giveup++)
+  { // If flipcount were odd, the determinant would be -1 instead of 1.
+    ran=rng.usrandom();
+    rr=ran%size;
+    ran/=size;
+    rc=ran%size;
+    ran/=size;
+    cc=ran%size;
+    if (rr!=rc)
+    {
+      flipcount++;
+      mat.swaprows(rr,rc);
+    }
+    if (rc!=cc)
+    {
+      flipcount++;
+      mat.swapcolumns(rc,cc);
+    }
+  }
+}
+
+void dumpknowndet(matrix &mat)
+{
+  int i,j,byte;
+  for (i=0;i<mat.getrows();i++)
+    for (j=0;j<mat.getcolumns();j++)
+    {
+      if (mat[i][j]==0)
+	cout<<"z0";
+      else if (mat[i][j]==1)
+	cout<<"z1";
+      else
+      {
+	byte=rint(mat[i][j]*BYTERMS/2+127.5);
+	cout<<hexdig[byte>>4]<<hexdig[byte&15];
+      }
+    }
+  cout<<endl;
+}
+
+void loadknowndet(matrix &mat,string dump)
+{
+  int i,j,byte;
+  string item;
+  for (i=0;i<mat.getrows();i++)
+    for (j=0;j<mat.getcolumns();j++)
+    {
+      item=dump.substr(0,2);
+      dump.erase(0,2);
+      if (item[0]=='z')
+	mat[i][j]=item[1]-'0';
+      else
+      {
+	byte=stoi(item,0,16);
+	mat[i][j]=(byte*2-255)/BYTERMS;
+      }
+    }
+  cout<<endl;
+}
+
+void testmatrix()
+{
+  int i,j,chk2,chk3,chk4;
+  matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
+  matrix t1(37,41),t2(41,43),t3(43,37),p1,p2,p3;
+  matrix t1t,t2t,t3t,p1t,p2t,p3t;
+  matrix hil(8,8),lih(8,8),hilprod;
+  matrix kd(7,7);
+  matrix r0,c0,p11;
+  matrix rs1(3,4),rs2,rs3,rs4;
+  vector<double> rv,cv;
+  double tr1,tr2,tr3,de1,de2,de3,tr1t,tr2t,tr3t;
+  double toler=1.2e-12;
+  double kde;
+  double lo,hi;
+  manysum lihsum;
+  m1[2][0]=5;
+  m1[1][3]=7;
+  tassert(m1[2][0]==5);
+  m2[2][0]=9;
+  m2[1][4]=6;
+  tassert(m2[2][0]==9);
+  for (i=0;i<4;i++)
+    for (j=0;j<3;j++)
+    {
+      m2[i][j]=rng.ucrandom();
+      m3[i][j]=rng.ucrandom();
+    }
+  for (chk2=chk3=i=0;i<4;i++)
+    for (j=0;j<3;j++)
+    {
+      chk2=(50*chk2+(int)m2[i][j])%83;
+      chk3=(50*chk3+(int)m3[i][j])%83;
+    }
+  m4=m2+m3;
+  for (chk4=i=0;i<4;i++)
+    for (j=0;j<3;j++)
+      chk4=(50*chk4+(int)m4[i][j])%83;
+  tassert(chk4==(chk2+chk3)%83);
+  m4=m2-m3;
+  for (chk4=i=0;i<4;i++)
+    for (j=0;j<3;j++)
+      chk4=(50*chk4+(int)m4[i][j]+332)%83;
+  tassert(chk4==(chk2-chk3+83)%83);
+  lo=INFINITY;
+  hi=0;
+  for (i=0;i<1;i++)
+  {
+    t1.randomize_c();
+    t2.randomize_c();
+    t3.randomize_c();
+    t1t=t1.transpose();
+    t2t=t2.transpose();
+    t3t=t3.transpose();
+    p1=t1*t2*t3;
+    p2=t2*t3*t1;
+    p3=t3*t1*t2;
+    p1t=t3t*t2t*t1t;
+    p2t=t1t*t3t*t2t;
+    p3t=t2t*t1t*t3t;
+    tr1=p1.trace();
+    tr2=p2.trace();
+    tr3=p3.trace();
+    tr1t=p1t.trace();
+    tr2t=p2t.trace();
+    tr3t=p3t.trace();
+    de1=p1.determinant();
+    de2=p2.determinant();
+    de3=p3.determinant();
+    cout<<"trace1 "<<ldecimal(tr1)
+	<<" trace2 "<<ldecimal(tr2)
+	<<" trace3 "<<ldecimal(tr3)<<endl;
+    tassert(fabs(tr1-tr2)<toler && fabs(tr2-tr3)<toler && fabs(tr3-tr1)<toler);
+    tassert(fabs(tr1-tr1t)<toler && fabs(tr2-tr2t)<toler && fabs(tr3-tr3t)<toler);
+    tassert(tr1!=0);
+    cout<<"det1 "<<de1
+	<<" det2 "<<de2
+	<<" det3 "<<de3<<endl;
+    tassert(fabs(de1)>1e80 && fabs(de2)<1e60 && fabs(de3)<1e52);
+    // de2 and de3 would actually be 0 with exact arithmetic.
+    if (fabs(de2)>hi)
+      hi=fabs(de2);
+    if (fabs(de2)<lo)
+      lo=fabs(de2);
+  }
+  cout<<"Lowest det2 "<<lo<<" Highest det2 "<<hi<<endl;
+  for (i=0;i<8;i++)
+    for (j=0;j<8;j++)
+      hil[i][j]=1./(i+j+1);
+  lih=invert(hil);
+  for (i=0;i<8;i++)
+    for (j=0;j<i;j++)
+      lihsum+=fabs(lih[i][j]-lih[j][i]);
+  cout<<"Total asymmetry of inverse of Hilbert matrix is "<<lihsum.total()<<endl;
+  hilprod=hil*lih;
+  lihsum.clear();
+  for (i=0;i<8;i++)
+    for (j=0;j<8;j++)
+      lihsum+=fabs(hilprod[i][j]-(i==j));
+  cout<<"Total error of Hilbert matrix * inverse is "<<lihsum.total()<<endl;
+  tassert(lihsum.total()<2e-5 && lihsum.total()>1e-15);
+  for (i=0;i<1;i++)
+  {
+    knowndet(kd);
+    //loadknowndet(kd,"z0z0z0z1c9dd28z0z1z03c46c35cz0z0z0z0z1z0z0aa74z169f635e3z0z0z0z003z0z1z0z0z0z0fcz146z160z000f50091");
+    //loadknowndet(kd,"a6z1fc7ce056d6d1z0z0z0z0z1b49ez0z0z1z02f53z1z0z0z0z0z0z0e2z0z097z1230488z0z19b25484e1ez0z0z0z0z0z1");
+    kd.dump();
+    dumpknowndet(kd);
+    kde=kd.determinant();
+    cout<<"Determinant of shuffled matrix is "<<ldecimal(kde)<<" diff "<<kde-1<<endl;
+    tassert(fabs(kde-1)<4e-12);
+  }
+  for (i=0;i<11;i++)
+  {
+    rv.push_back((i*i*i)%11);
+    cv.push_back((i*3+7)%11);
+  }
+  r0=rowvector(rv);
+  c0=columnvector(cv);
+  p1=r0*c0;
+  p11=c0*r0;
+  tassert(p1.trace()==253);
+  tassert(p11.trace()==253);
+  tassert(p1.determinant()==253);
+  tassert(p11.determinant()==0);
+  for (i=0;i<3;i++)
+    for (j=0;j<4;j++)
+      rs1[i][j]=(j+1.)/(i+1)-(i^j);
+  rs2=rs1;
+  rs2.resize(4,3);
+  rs3=rs1*rs2;
+  rs4=rs2*rs1;
+  for (i=0;i<3;i++)
+    for (j=0;j<3;j++)
+      tassert(rs1[i][j]==rs2[i][j]);
+  cout<<"det rs3="<<ldecimal(rs3.determinant())<<endl;
+  tassert(fabs(rs3.determinant()*9-100)<1e-12);
+  tassert(rs4.determinant()==0);
+  rs4[3][3]=1;
+  tassert(fabs(rs4.determinant()*9-100)<1e-12);
+}
+
+void testrelprime()
+{
+  tassert(relprime(987)==610);
+  tassert(relprime(610)==377);
+  tassert(relprime(377)==233);
+  tassert(relprime(233)==144);
+  tassert(relprime(144)==89);
+  tassert(relprime(89)==55);
+  tassert(relprime(55)==34);
+  tassert(relprime(100000)==61803);
+  tassert(relprime(100)==61);
+  tassert(relprime(0)==1);
+  tassert(relprime(1)==1);
+  tassert(relprime(2)==1);
+  tassert(relprime(3)==2);
+  tassert(relprime(4)==3);
+  tassert(relprime(5)==3);
+  tassert(relprime(6)==5);
+}
+
+void testmanysum()
+{
+  manysum ms,negms;
+  int i,j,h;
+  double x,naiveforwardsum,forwardsum,pairforwardsum,naivebackwardsum,backwardsum,pairbackwardsum;
+  vector<double> summands;
+  double odd[32];
+  long double oddl[32];
+  int pairtime=0;
+  //QTime starttime;
+  cout<<"manysum"<<endl;
+  for (i=0;i<32;i++)
+    oddl[i]=odd[i]=2*i+1;
+  for (i=0;i<32;i++)
+  {
+    tassert(pairwisesum(odd,i)==i*i);
+    tassert(pairwisesum(oddl,i)==i*i);
+  }
+  ms.clear();
+  summands.clear();
+  tassert(pairwisesum(summands)==0);
+  for (naiveforwardsum=i=0;i>-7;i--)
+  {
+    x=pow(1000,i);
+    for (j=0;j<(slowmanysum?1000000:100000);j++)
+    {
+      naiveforwardsum+=x;
+      ms+=x;
+      negms-=x;
+      summands.push_back(x);
+    }
+  }
+  ms.prune();
+  forwardsum=ms.total();
+  tassert(forwardsum==-negms.total());
+  //starttime.start();
+  pairforwardsum=pairwisesum(summands);
+  //pairtime+=starttime.elapsed();
+  ms.clear();
+  summands.clear();
+  for (naivebackwardsum=0,i=-6;i<1;i++)
+  {
+    x=pow(1000,i);
+    for (j=0;j<(slowmanysum?1000000:100000);j++)
+    {
+      naivebackwardsum+=x;
+      ms+=x;
+      summands.push_back(x);
+    }
+  }
+  ms.prune();
+  backwardsum=ms.total();
+  //starttime.start();
+  pairbackwardsum=pairwisesum(summands);
+  //pairtime+=starttime.elapsed();
+  cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
+  cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
+  tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  tassert(fabs((pairforwardsum-pairbackwardsum)/(pairforwardsum+pairbackwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-pairforwardsum)/(forwardsum+pairforwardsum))<DBL_EPSILON);
+  tassert(fabs((backwardsum-pairbackwardsum)/(backwardsum+pairbackwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
+  tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
+  tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
+  ms.clear();
+  summands.clear();
+  h=slowmanysum?1:16;
+  for (naiveforwardsum=i=0;i>-0x360000;i-=h)
+  {
+    x=exp(i/65536.);
+    naiveforwardsum+=x;
+    ms+=x;
+    summands.push_back(x);
+  }
+  ms.prune();
+  forwardsum=ms.total();
+  //starttime.start();
+  pairforwardsum=pairwisesum(summands);
+  //pairtime+=starttime.elapsed();
+  ms.clear();
+  summands.clear();
+  for (naivebackwardsum=0,i=-0x35ffff&-h;i<1;i+=h)
+  {
+    x=exp(i/65536.);
+    naivebackwardsum+=x;
+    ms+=x;
+    summands.push_back(x);
+  }
+  ms.prune();
+  backwardsum=ms.total();
+  //starttime.start();
+  pairbackwardsum=pairwisesum(summands);
+  //pairtime+=starttime.elapsed();
+  cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
+  cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
+  tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  tassert(fabs((pairforwardsum-pairbackwardsum)/(pairforwardsum+pairbackwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-pairforwardsum)/(forwardsum+pairforwardsum))<DBL_EPSILON);
+  tassert(fabs((backwardsum-pairbackwardsum)/(backwardsum+pairbackwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
+  tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
+  tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
+  //cout<<"Time in pairwisesum: "<<pairtime<<endl;
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -110,6 +588,18 @@ int main(int argc, char *argv[])
     args.push_back(argv[i]);
   if (shoulddo("sizeof"))
     testsizeof();
+  if (shoulddo("random"))
+    testrandom(); // may take >7 s; time is random
+  if (shoulddo("in"))
+    testin();
+  if (shoulddo("area3"))
+    testarea3();
+  if (shoulddo("matrix"))
+    testmatrix();
+  if (shoulddo("relprime"))
+    testrelprime();
+  if (shoulddo("manysum"))
+    testmanysum(); // >2 s
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
