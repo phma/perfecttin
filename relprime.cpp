@@ -71,7 +71,7 @@ unsigned relprime(unsigned n,int thread)
     phin=n*quadirr[thread];
     ret=lrint(phin);
     twice=2*ret-(ret>phin);
-    while (gcd(ret,n)!=1 || ret>n)
+    while (gcd(ret,n)!=1 || (ret>n && n>0))
       ret=twice-ret+(ret<=phin);
     primeMutex.lock();
     relprimes[inx]=ret;
