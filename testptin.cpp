@@ -559,6 +559,63 @@ void testmanysum()
   //cout<<"Time in pairwisesum: "<<pairtime<<endl;
 }
 
+void testldecimal()
+{
+  double d;
+  bool looptests=false;
+  cout<<ldecimal(1/3.)<<endl;
+  cout<<ldecimal(M_PI)<<endl;
+  cout<<ldecimal(-64664./65536,1./131072)<<endl;
+  /* This is a number from the Alaska geoid file, -0.9867, which was output
+   * as -.98669 when converting to GSF.
+   */
+  if (looptests)
+  {
+    for (d=M_SQRT_3-20*DBL_EPSILON;d<=M_SQRT_3+20*DBL_EPSILON;d+=DBL_EPSILON)
+      cout<<ldecimal(d)<<endl;
+    for (d=1.25-20*DBL_EPSILON;d<=1.25+20*DBL_EPSILON;d+=DBL_EPSILON)
+      cout<<ldecimal(d)<<endl;
+    for (d=95367431640625;d>1e-14;d/=5)
+      cout<<ldecimal(d)<<endl;
+    for (d=123400000000000;d>3e-15;d/=10)
+      cout<<ldecimal(d)<<endl;
+    for (d=DBL_EPSILON;d<=1;d*=2)
+      cout<<ldecimal(M_SQRT_3,d)<<endl;
+  }
+  cout<<ldecimal(0)<<' '<<ldecimal(INFINITY)<<' '<<ldecimal(NAN)<<' '<<ldecimal(-5.67)<<endl;
+  cout<<ldecimal(3628800)<<' '<<ldecimal(1296000)<<' '<<ldecimal(0.000016387064)<<endl;
+  tassert(ldecimal(0)=="0");
+  tassert(ldecimal(1)=="1");
+  tassert(ldecimal(-1)=="-1");
+  tassert(isalpha(ldecimal(INFINITY)[0]));
+  tassert(isalpha(ldecimal(NAN)[1])); // on MSVC is negative, skip the minus sign
+  tassert(ldecimal(1.7320508)=="1.7320508");
+  tassert(ldecimal(1.7320508,0.0005)=="1.732");
+  tassert(ldecimal(-0.00064516)=="-.00064516");
+  tassert(ldecimal(3628800)=="3628800");
+  tassert(ldecimal(1296000)=="1296e3");
+  tassert(ldecimal(0.000016387064)=="1.6387064e-5");
+  tassert(ldecimal(-64664./65536,1./131072)=="-.9867");
+}
+
+void testleastsquares()
+{
+  matrix a(3,2);
+  vector<double> b,x;
+  b.push_back(4);
+  b.push_back(1);
+  b.push_back(3);
+  a[0][0]=1;
+  a[0][1]=3; // http://ltcconline.net/greenl/courses/203/MatrixOnVectors/leastSquares.htm
+  a[1][0]=2;
+  a[1][1]=4;
+  a[2][0]=1;
+  a[2][1]=6;
+  x=linearLeastSquares(a,b);
+  cout<<"Least squares ("<<ldecimal(x[0])<<','<<ldecimal(x[1])<<")\n";
+  tassert(dist(xy(x[0],x[1]),xy(-29/77.,51/77.))<1e-9);
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -600,6 +657,10 @@ int main(int argc, char *argv[])
     testrelprime();
   if (shoulddo("manysum"))
     testmanysum(); // >2 s
+  if (shoulddo("ldecimal"))
+    testldecimal();
+  if (shoulddo("leastsquares"))
+    testleastsquares();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
