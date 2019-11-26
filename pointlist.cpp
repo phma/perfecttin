@@ -277,7 +277,7 @@ double pointlist::distanceToHull(xy pnt)
   int sz=convexHull.size();
   xy a,b,c;
   double ret=NAN;
-  if (sz)
+  if (sz && n>=0)
   {
     a=(xy)*convexHull[(n+sz-1)%sz];
     b=(xy)*convexHull[n];
