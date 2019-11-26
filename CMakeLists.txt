@@ -79,13 +79,21 @@ add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
                relprime.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+add_executable(testptin adjelev.cpp angle.cpp binio.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp dxf.cpp
+               edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
+               leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
+               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
+               relprime.cpp testptin.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_compile_definitions(perfecttin PUBLIC _USE_MATH_DEFINES)
 endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::Core)
 target_link_libraries(fuzzptin ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(testptin ${CMAKE_THREAD_LIBS_INIT})
 target_compile_definitions(fuzzptin PUBLIC _USE_MATH_DEFINES)
+target_compile_definitions(testptin PUBLIC _USE_MATH_DEFINES)
 target_compile_definitions(perfecttin-gui PUBLIC _USE_MATH_DEFINES)
 if (${LibPLYXX_FOUND})
 if (${Boost_FOUND})
@@ -93,6 +101,7 @@ target_link_libraries(perfecttin ${LibPLYXX_LIBRARY})
 endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${LibPLYXX_LIBRARY})
 target_link_libraries(fuzzptin ${LibPLYXX_LIBRARY})
+target_link_libraries(testptin ${LibPLYXX_LIBRARY})
 endif (${LibPLYXX_FOUND})
 set_target_properties(perfecttin-gui PROPERTIES WIN32_EXECUTABLE TRUE)
 
