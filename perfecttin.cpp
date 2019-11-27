@@ -373,7 +373,6 @@ int main(int argc, char *argv[])
 	{
 	  waitForThreads(TH_PAUSE);
 	  net.makeqindex();
-	  adjustLooseCorners(stageTolerance);
 	  stageTolerance/=2;
 	  if (stageTolerance<tolerance)
 	    done=true;

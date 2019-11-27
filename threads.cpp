@@ -25,6 +25,7 @@
 #include "threads.h"
 #include "edgeop.h"
 #include "triop.h"
+#include "adjelev.h"
 #include "octagon.h"
 #include "random.h"
 #include "tintext.h"
@@ -545,6 +546,7 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
+	  adjustLooseCorners(act.param0*act.param1);
 	  writePtin(act.filename,act.param0,act.param1);
 	  unsleep(thread);
 	  break;
