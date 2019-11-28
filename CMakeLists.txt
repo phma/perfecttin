@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.8.0)
 # This file is part of PerfectTIN.
 #
 # PerfectTIN is free software: you can redistribute it and/or modify
-# modify it under the terms of the GNU Lesser General Public License as
+# it under the terms of the GNU Lesser General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
 #
