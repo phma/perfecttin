@@ -20,6 +20,25 @@
       <imagedata fileref="window1.png" format="PNG"/>
     </imageobject>
   </mediaobject>
+  <para>At the top of the window is the menu. Under it is the toolbar, with four buttons denoting measuring units. The currently selected unit is the US survey foot.</para>
+  <para>The largest part of the window is the canvas. In the middle of the canvas is the TIN, with each triangle colored by slope. A blue-and-yellow ball runs around the canvas, indicating that PerfectTIN is working. The ball spins to indicate how fast it makes changes to the TIN. In one of the bottom corners is a scale bar.</para>
+  <para>At the bottom of the window is the status bar. It indicates, from left to right:</para>
+  <itemizedlist>
+    <listitem>
+      <para>the files loaded or the file being made;</para>
+    </listitem>
+    <listitem>
+      <para>the number of dots or triangles;</para>
+    </listitem>
+    <listitem>
+      <para>the tolerance in meters (.025×8 means that PerfectTIN is currently using a tolerance of 200 mm while working toward a tolerance of 25 mm);</para>
+    </listitem>
+    <listitem>
+      <para>the percentage of area that is within tolerance;</para>
+    </listitem>
+    <listitem>
+      <para>the percentage of time it's busy, averaged over all worker threads.</para>
+    </listitem>
 </section>
 
 <section id="units">
