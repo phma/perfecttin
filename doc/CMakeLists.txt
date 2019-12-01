@@ -1,8 +1,7 @@
 find_program(PANDOC pandoc)
 
 if (PANDOC)
-execute_process(COMMAND ${PANDOC} "--resource-path=/" INPUT_FILE /dev/null RESULT_VARIABLE pandoc_exit)
-message(WARNING "pandoc exited with " ${pandoc_exit})
+execute_process(COMMAND ${PANDOC} "--resource-path=/" INPUT_FILE /dev/null ERROR_FILE /dev/null RESULT_VARIABLE pandoc_exit)
 endif ()
 
 if (PANDOC AND NOT pandoc_exit)
