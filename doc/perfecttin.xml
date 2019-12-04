@@ -52,20 +52,39 @@
 <para>To make a TIN, do the following:</para>
 <orderedlist>
   <listitem>
-    <para>Set the unit with the toolbar button</para>
+    <para>Set the unit with the toolbar button.</para>
   </listitem>
   <listitem>
-    <para>Load the point cloud file with <menuchoice><guimenu>File</guimenu><guimenuitem>Load</guimenuitem></menuchoice></para>
+    <para>Load the point cloud file with <menuchoice><guimenu>File</guimenu><guimenuitem>Load</guimenuitem></menuchoice>.</para>
   </listitem>
   <listitem>
-    <para>If the point cloud is in more than one file, load the other files</para>
+    <para>If the point cloud is in more than one file, load the other files.</para>
   </listitem>
   <listitem>
-    <para>Set the vertical tolerance with <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure</guimenuitem></menuchoice></para>
+    <para>Set the vertical tolerance with <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure</guimenuitem></menuchoice>.</para>
   </listitem>
   <listitem>
-    <para>Start the conversion with <menuchoice><guimenu>File</guimenu><guimenuitem>Convert</guimenuitem></menuchoice></para>
+    <para>Start the conversion with <menuchoice><guimenu>File</guimenu><guimenuitem>Convert</guimenuitem></menuchoice>.</para>
   </listitem>
 </orderedlist>
 </section>
 </article>
+
+<section id="resume">
+  <title>Resuming an interrupted conversion</title>
+  <para>If converting a point cloud to TIN has been interrupted, for example by a power failure, you can resume it. Let's say that you were converting <filename>foo.las</filename> to <filename>foo.ptin</filename> and the computer crashed in the middle of the process.</para>
+  <orderedlist>
+    <listitem>
+      <para>Start PerfectTIN.</para>
+    </listitem>
+    <listitem>
+      <para>Do <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>, and look for two files with names like <filename>foo.16.ptin</filename> and <filename>foo.8.ptin</filename>. Open the one with the smaller number.</para>
+    </listitem>
+    <listitem>
+      <para>If PerfectTIN says that the file was not completely written, open the one with the larger number. This means that the computer crashed while it was writing the file.</para>
+    </listitem>
+    <listitem>
+      <para>Do <menuchoice><guimenu>File</guimenu><guimenuitem>Resume</guimenuitem></menuchoice>. The conversion will resume and hopefully run to completion.</para>
+    </listitem>
+  </orderedlist>
+</section>
