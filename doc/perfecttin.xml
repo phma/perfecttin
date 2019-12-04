@@ -90,3 +90,10 @@
     </listitem>
   </orderedlist>
 </section>
+
+<section id="export">
+  <title>Exporting a TIN</title>
+  <para>PerfectTIN files are not readable by other programs. They are also big; they contain the point cloud as well as the TIN, so that PerfectTIN can resume converting a point cloud if it's interrupted. So you'll want to export the TIN in another format.</para>
+  <para>Do <menuchoice><guimenu>File</guimenu><guisubmenu>Export</guisubmenu><guimenuitem><emphasis>format</emphasis></guimenuitem></menuchoice>, and enter the filename you want to export it as.</para>
+  <para>PerfectTIN can export in DXF, TIN text (AquaVeo), Carlson TIN, and LandXML formats. The DXF format is the least efficient because each point of the TIN is written eight times on average: it belongs to six triangles, each of which is written as a 3DFACE element, in which one corner is written twice. The other formats consist of a list of points followed by a list of triangles, with each triangle being three point numbers. They take less space than DXF.</para>
+</section>
