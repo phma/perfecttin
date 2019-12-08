@@ -107,7 +107,7 @@ CoordCheck& CoordCheck::operator<<(double val)
   {
     for (i=0;i<52;i++)
       stage4[i][(count>>52)&8191]=pairwisesum(stage3[i],8192);
-    lastStageSum=pairwisesum(stage2[52],8192);
+    lastStageSum=pairwisesum(stage3[52],8192);
     for (i=52;i<64;i++)
       if ((count>>i)&1)
 	stage4[i][(count>>52)&8191]=-lastStageSum;
