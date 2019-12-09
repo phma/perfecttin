@@ -23,4 +23,4 @@
  */
 #include <string>
 
-void writeTinText(std::string outputFile,double outUnit);
+void writeTinText(std::string outputFile,double outUnit,int flags);

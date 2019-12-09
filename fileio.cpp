@@ -201,7 +201,7 @@ void deleteFile(string fileName)
   remove(fileName.c_str());
 }
 
-void writeDxf(string outputFile,bool asc,double outUnit)
+void writeDxf(string outputFile,bool asc,double outUnit,int flags)
 {
   vector<GroupCode> dxfCodes;
   int i;

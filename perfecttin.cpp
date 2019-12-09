@@ -57,6 +57,7 @@ namespace cr=chrono;
 xy magnifyCenter(2301525.560,1432062.436);
 double magnifySize=5;
 double inUnit=1,outUnit=1;
+bool exportEmpty=false;
 const bool drawDots=false;
 const bool colorGradient=true;
 const bool colorAbsGradient=false;
@@ -409,19 +410,19 @@ int main(int argc, char *argv[])
       switch (format)
       {
 	case FMT_LANDXML:
-	  writeLandXml(outputFile+".xml",outUnit);
+	  writeLandXml(outputFile+".xml",outUnit,exportEmpty);
 	  break;
 	case FMT_CARLSON_TIN:
-	  writeCarlsonTin(outputFile+".tin",outUnit);
+	  writeCarlsonTin(outputFile+".tin",outUnit,exportEmpty);
 	  break;
 	case FMT_DXF_BIN:
-	  writeDxf(outputFile+".dxf",false,outUnit);
+	  writeDxf(outputFile+".dxf",false,outUnit,exportEmpty);
 	  break;
 	case FMT_DXF_TXT:
-	  writeDxf(outputFile+".dxf",true,outUnit);
+	  writeDxf(outputFile+".dxf",true,outUnit,exportEmpty);
 	  break;
 	case FMT_TIN:
-	  writeTinText(outputFile+".tin",outUnit);
+	  writeTinText(outputFile+".tin",outUnit,exportEmpty);
 	  break;
       }
       deleteFile(outputFile+".2.ptin");

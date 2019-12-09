@@ -23,4 +23,4 @@
  */
 #include <string>
 
-void writeCarlsonTin(std::string outputFile,double outUnit);
+void writeCarlsonTin(std::string outputFile,double outUnit,int flags);

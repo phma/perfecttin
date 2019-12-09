@@ -54,7 +54,7 @@ const unsigned int carlsonHeaderWords[]=
   0xb5ed8d09,0xb0c6f7a0
 };
 
-void writeCarlsonTin(string outputFile,double outUnit)
+void writeCarlsonTin(string outputFile,double outUnit,int flags)
 {
   int i;
   ofstream tinFile(outputFile,ofstream::trunc|ofstream::binary);

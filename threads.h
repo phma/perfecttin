@@ -67,9 +67,11 @@ struct ThreadAction
 {
   int opcode;
   int param0;
-  double param1;
+  double param1; // measuring unit or tolerance
   std::string filename;
   int flags;
+  /* Bit 0: write empty triangles when exporting TIN
+   */
   int result;
   PtinHeader ptinResult;
 };

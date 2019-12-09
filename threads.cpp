@@ -530,19 +530,19 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
-	  writeDxf(act.filename,act.param0,act.param1);
+	  writeDxf(act.filename,act.param0,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_TIN:
-	  writeTinText(act.filename,act.param1);
+	  writeTinText(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_CARLSON_TIN:
-	  writeCarlsonTin(act.filename,act.param1);
+	  writeCarlsonTin(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_LANDXML:
-	  writeLandXml(act.filename,act.param1);
+	  writeLandXml(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
@@ -591,19 +591,19 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
-	  writeDxf(act.filename,act.param0,act.param1);
+	  writeDxf(act.filename,act.param0,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_TIN:
-	  writeTinText(act.filename,act.param1);
+	  writeTinText(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_CARLSON_TIN:
-	  writeCarlsonTin(act.filename,act.param1);
+	  writeCarlsonTin(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_LANDXML:
-	  writeLandXml(act.filename,act.param1);
+	  writeLandXml(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:

@@ -23,4 +23,4 @@
  */
 #include <string>
 
-void writeLandXml(std::string outputFile,double outUnit);
+void writeLandXml(std::string outputFile,double outUnit,int flags);

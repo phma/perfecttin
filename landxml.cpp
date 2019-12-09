@@ -30,7 +30,7 @@
 #include "ldecimal.h"
 using namespace std;
 
-void writeLandXml(string outputFile,double outUnit)
+void writeLandXml(string outputFile,double outUnit,int flags)
 {
   int i;
   ofstream xmlFile(outputFile,ofstream::trunc);

@@ -28,7 +28,7 @@
 #include "ldecimal.h"
 using namespace std;
 
-void writeTinText(string outputFile,double outUnit)
+void writeTinText(string outputFile,double outUnit,int flags)
 {
   int i;
   ofstream tinFile(outputFile,ofstream::trunc);

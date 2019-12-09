@@ -342,6 +342,7 @@ void MainWindow::exportDxfTxt()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=true;
+    ta.flags=exportEmpty;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
@@ -366,6 +367,7 @@ void MainWindow::exportDxfBin()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=false;
+    ta.flags=exportEmpty;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
@@ -390,6 +392,7 @@ void MainWindow::exportTinTxt()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.filename=fileName;
+    ta.flags=exportEmpty;
     ta.opcode=ACT_WRITE_TIN;
     enqueueAction(ta);
   }
@@ -413,6 +416,7 @@ void MainWindow::exportCarlsonTin()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.filename=fileName;
+    ta.flags=exportEmpty;
     ta.opcode=ACT_WRITE_CARLSON_TIN;
     enqueueAction(ta);
   }
@@ -436,6 +440,7 @@ void MainWindow::exportLandXml()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.filename=fileName;
+    ta.flags=exportEmpty;
     ta.opcode=ACT_WRITE_LANDXML;
     enqueueAction(ta);
   }
