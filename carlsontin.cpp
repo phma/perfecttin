@@ -71,10 +71,13 @@ void writeCarlsonTin(string outputFile,double outUnit,int flags)
   }
   for (i=0;i<net.triangles.size();i++)
   {
-    writeleshort(tinFile,CA_TRIANGLE);
-    writeleint(tinFile,net.revpoints[net.triangles[i].a]);
-    writeleint(tinFile,net.revpoints[net.triangles[i].b]);
-    writeleint(tinFile,net.revpoints[net.triangles[i].c]);
-    tinFile.put(0);
+    if (net.triangles[i].dots.size() || (flags&1))
+    {
+      writeleshort(tinFile,CA_TRIANGLE);
+      writeleint(tinFile,net.revpoints[net.triangles[i].a]);
+      writeleint(tinFile,net.revpoints[net.triangles[i].b]);
+      writeleint(tinFile,net.revpoints[net.triangles[i].c]);
+      tinFile.put(0);
+    }
   }
 }
