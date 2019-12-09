@@ -46,8 +46,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   configDialog=new ConfigurationDialog(this);
   fileDialog=new QFileDialog(this);
   msgBox=new QMessageBox(this);
-  connect(configDialog,SIGNAL(settingsChanged(double,double,int)),
-	  this,SLOT(setSettings(double,double,int)));
+  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool)),
+	  this,SLOT(setSettings(double,double,int,bool)));
   connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
@@ -492,7 +492,7 @@ void MainWindow::clearCloud()
 
 void MainWindow::configure()
 {
-  configDialog->set(lengthUnit,tolerance,numberThreads);
+  configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty);
   configDialog->open();
 }
 
@@ -714,6 +714,7 @@ void MainWindow::readSettings()
   numberThreads=settings.value("threads",0).toInt();
   tolerance=settings.value("tolerance",0.1).toDouble();
   lengthUnit=settings.value("lengthUnit",1).toDouble();
+  exportEmpty=settings.value("exportEmpty",false).toBool();
   lengthUnitChanged(lengthUnit);
 }
 
@@ -725,13 +726,15 @@ void MainWindow::writeSettings()
   settings.setValue("threads",numberThreads);
   settings.setValue("tolerance",tolerance);
   settings.setValue("lengthUnit",lengthUnit);
+  settings.setValue("exportEmpty",exportEmpty);
 }
 
-void MainWindow::setSettings(double lu,double tol,int thr)
+void MainWindow::setSettings(double lu,double tol,int thr,bool ee)
 {
   lengthUnit=lu;
   tolerance=tol;
   numberThreads=thr;
+  exportEmpty=ee;
   writeSettings();
   lengthUnitChanged(lengthUnit);
 }

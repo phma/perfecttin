@@ -54,7 +54,7 @@ signals:
   void gotResult(ThreadAction ta);
 public slots:
   void tick();
-  void setSettings(double lu,double tol,int thr);
+  void setSettings(double lu,double tol,int thr,bool ee);
   void setUnit(double lu);
   void openFile();
   void loadFile();
@@ -79,7 +79,7 @@ private:
   double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
-  bool conversionStopped,showingResult;
+  bool conversionStopped,showingResult,exportEmpty;
   double tolerance,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;

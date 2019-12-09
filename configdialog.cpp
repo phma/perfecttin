@@ -55,6 +55,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   threadInput=new QLineEdit(this);
+  exportEmptyCheck=new QCheckBox(tr("Export empty"),this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(lengthUnitLabel,1,0);
@@ -65,15 +66,16 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(threadLabel,3,0);
   gridLayout->addWidget(threadInput,3,1);
   gridLayout->addWidget(threadDefault,3,2);
-  gridLayout->addWidget(okButton,4,0);
-  gridLayout->addWidget(cancelButton,4,1);
+  gridLayout->addWidget(exportEmptyCheck,4,1);
+  gridLayout->addWidget(okButton,5,0);
+  gridLayout->addWidget(cancelButton,5,1);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
-void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads)
+void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,bool exportEmpty)
 {
   int i;
   lengthUnitBox->clear();
@@ -97,6 +99,7 @@ void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads)
     if (tolerance==tolerances[i])
       toleranceBox->setCurrentIndex(i);
   threadInput->setText(QString::number(threads));
+  exportEmptyCheck->setCheckState(exportEmpty?Qt::Checked:Qt::Unchecked);
 }
 
 void ConfigurationDialog::updateToleranceConversion()
@@ -113,6 +116,7 @@ void ConfigurationDialog::accept()
 {
   settingsChanged(conversionFactors[lengthUnitBox->currentIndex()],
 		  tolerances[toleranceBox->currentIndex()],
-		  threadInput->text().toInt());
+		  threadInput->text().toInt(),
+		  exportEmptyCheck->checkState()>0);
   QDialog::accept();
 }

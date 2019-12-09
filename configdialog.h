@@ -42,9 +42,9 @@ class ConfigurationDialog: public QDialog
 public:
   ConfigurationDialog(QWidget *parent=0);
 signals:
-  void settingsChanged(double lu,double tol,int thr);
+  void settingsChanged(double lu,double tol,int thr,bool ee);
 public slots:
-  void set(double lengthUnit,double tolerance,int threads);
+  void set(double lengthUnit,double tolerance,int threads,bool exportEmpty);
   void updateToleranceConversion();
   virtual void accept();
 private:
@@ -55,6 +55,7 @@ private:
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
   QLineEdit *threadInput;
+  QCheckBox *exportEmptyCheck;
 };
 #endif
 
