@@ -69,6 +69,7 @@ struct ThreadAction
   int param0;
   double param1;
   std::string filename;
+  int flags;
   int result;
   PtinHeader ptinResult;
 };
