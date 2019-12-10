@@ -80,12 +80,13 @@ void writeLandXml(string outputFile,double outUnit,int flags)
   }
   xmlFile<<"</Pnts><Faces>\n";
   for (i=0;i<net.triangles.size();i++)
-  {
-    xmlFile<<"<F>";
-    xmlFile<<net.revpoints[net.triangles[i].a]<<' ';
-    xmlFile<<net.revpoints[net.triangles[i].b]<<' ';
-    xmlFile<<net.revpoints[net.triangles[i].c]<<"</F>\n";
-  }
+    if ((flags&1) || net.triangles[i].dots.size())
+    {
+      xmlFile<<"<F>";
+      xmlFile<<net.revpoints[net.triangles[i].a]<<' ';
+      xmlFile<<net.revpoints[net.triangles[i].b]<<' ';
+      xmlFile<<net.revpoints[net.triangles[i].c]<<"</F>\n";
+    }
   xmlFile<<"</Faces></Definition></Surface></Surfaces>\n";
   xmlFile<<"</LandXML>\n";
 }
