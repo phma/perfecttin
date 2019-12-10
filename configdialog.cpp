@@ -67,8 +67,8 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(threadInput,3,1);
   gridLayout->addWidget(threadDefault,3,2);
   gridLayout->addWidget(exportEmptyCheck,4,1);
-  gridLayout->addWidget(okButton,5,0);
-  gridLayout->addWidget(cancelButton,5,1);
+  gridLayout->addWidget(okButton,5,1);
+  gridLayout->addWidget(cancelButton,5,2);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
