@@ -31,6 +31,7 @@ using namespace std;
 void writeTinText(string outputFile,double outUnit,int flags)
 {
   int i;
+  int nTrianglesToWrite=0;
   ofstream tinFile(outputFile,ofstream::trunc);
   tinFile<<"TIN\nBEGT\nVERT "<<net.points.size()<<endl;
   for (i=1;i<=net.points.size();i++)
@@ -39,12 +40,15 @@ void writeTinText(string outputFile,double outUnit,int flags)
     tinFile<<ldecimal(net.points[i].gety()/outUnit)<<' ';
     tinFile<<ldecimal(net.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
   }
-  tinFile<<"TRI "<<net.triangles.size()<<endl;
   for (i=0;i<net.triangles.size();i++)
-  {
-    tinFile<<net.revpoints[net.triangles[i].a]<<' ';
-    tinFile<<net.revpoints[net.triangles[i].b]<<' ';
-    tinFile<<net.revpoints[net.triangles[i].c]<<'\n';
-  }
+    nTrianglesToWrite+=((flags&1) || net.triangles[i].dots.size());
+  tinFile<<"TRI "<<nTrianglesToWrite<<endl;
+  for (i=0;i<net.triangles.size();i++)
+    if ((flags&1) || net.triangles[i].dots.size())
+    {
+      tinFile<<net.revpoints[net.triangles[i].a]<<' ';
+      tinFile<<net.revpoints[net.triangles[i].b]<<' ';
+      tinFile<<net.revpoints[net.triangles[i].c]<<'\n';
+    }
   tinFile<<"ENDT\n";
 }
