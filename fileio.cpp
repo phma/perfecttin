@@ -213,7 +213,9 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())
-      insertTriangle(dxfCodes,net.triangles[i],outUnit);
+      if (net.triangles[i].dots.size() || (flags&1))
+	insertTriangle(dxfCodes,net.triangles[i],outUnit);
+      else;
     else
       cerr<<"Invalid triangle "<<i<<endl;
   closeEntitySection(dxfCodes);
