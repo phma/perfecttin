@@ -110,7 +110,7 @@ void MainWindow::tick()
   if (lastState!=canvas->state)
   {
     //cout<<"Last state "<<lastState<<" Current state "<<canvas->state<<endl;
-    if ((lastState==-ACT_LOAD || lastState==-ACT_READ_PTIN) && canvas->state==TH_WAIT)
+    if ((lastState==-ACT_LOAD || lastState==-ACT_READ_PTIN || lastState==-ACT_QINDEX) && canvas->state==TH_WAIT)
     { // finished loading file
       clearAction->setEnabled(true);
       exportMenu->setEnabled(true);
@@ -519,6 +519,7 @@ void MainWindow::handleResult(ThreadAction ta)
     case ACT_READ_PTIN:
       if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)
       {
+	//cout<<"Finished reading ptin\n";
 	tolerance=ta.ptinResult.tolerance;
 	stageTolerance=writtenTolerance=tolerance*ta.ptinResult.tolRatio;
 	saveFileName=noExt(ta.filename);
