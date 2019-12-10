@@ -216,7 +216,8 @@ int main(int argc, char *argv[])
     ("threads,j",po::value<int>(&nthreads)->default_value(nthreads),"Number of worker threads")
     ("asteraceous",po::value<int>(&asterPoints),"Process an asteraceous test pattern")
     ("output,o",po::value<string>(&outputFile),"Output file")
-    ("format,f",po::value<string>(&formatStr),"Output format");
+    ("format,f",po::value<string>(&formatStr),"Output format")
+    ("export-empty,e","Export empty triangles");
   hidden.add_options()
     ("input",po::value<vector<string> >(&inputFiles),"Input file");
   p.add("input",-1);
@@ -229,6 +230,8 @@ int main(int argc, char *argv[])
   {
     po::store(po::command_line_parser(argc,argv).options(cmdline_options).positional(p).run(),vm);
     po::notify(vm);
+    if (vm.count("export-empty"))
+      exportEmpty=true;
   }
   catch (exception &e)
   {
