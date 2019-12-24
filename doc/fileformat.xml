@@ -61,28 +61,51 @@
 </programlisting>
 </section>
 
-<section id="maketin">
-<title>Making a TIN</title>
-<para>To make a TIN, do the following:</para>
-<orderedlist>
-  <listitem>
-    <para>Set the unit with the toolbar button.</para>
-  </listitem>
-  <listitem>
-    <para>Load the point cloud file with <menuchoice><guimenu>File</guimenu><guimenuitem>Load</guimenuitem></menuchoice>.</para>
-  </listitem>
-  <listitem>
-    <para>If the point cloud is in more than one file, load the other files.</para>
-  </listitem>
-  <listitem>
-    <para>Set the vertical tolerance with <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure</guimenuitem></menuchoice>.</para>
-  </listitem>
-  <listitem>
-    <para>Start the conversion with <menuchoice><guimenu>File</guimenu><guimenuitem>Convert</guimenuitem></menuchoice>.</para>
-  </listitem>
-</orderedlist>
+<section id="header">
+<title>Header</title>
+<para>The header is as follows:</para>
+<table pgwide="1">
+  <title>Header</title>
+  <thead>
+    <row>
+      <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
+    </row>
+  </thead>
+  <row>
+    <entry>uint16</entry><entry>0006</entry><entry>6</entry><entry morerows="3">The first four perfect numbers identify a PerfectTIN file</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>001c</entry><entry>28</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>01f0</entry><entry>496</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>1fc0</entry><entry>8128</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000020</entry><entry>32</entry><entry>Header format and length</entry>
+  </row>
+  <row>
+    <entry>uint64</entry><entry>000000005db51af8</entry><entry>2019-10-27 04:20:08</entry><entry>Time conversion started</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000001</entry><entry>1</entry><entry>Tolerance ratio; normally 1, which means conversion finished</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3f9999999999999a</entry><entry>0.025</entry><entry>Tolerance</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000008</entry><entry>8</entry><entry>Number of points</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000008</entry><entry>8</entry><entry>Number of points on the outside</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000006</entry><entry>6</entry><entry>Number of triangles</entry>
+  </row>
+</table>
 </section>
-</article>
 
 <section id="resume">
   <title>Resuming an interrupted conversion</title>
@@ -109,3 +132,4 @@
   <para>Do <menuchoice><guimenu>File</guimenu><guisubmenu>Export</guisubmenu><guimenuitem><emphasis>format</emphasis></guimenuitem></menuchoice>, and enter the filename you want to export it as.</para>
   <para>PerfectTIN can export in DXF, TIN text (AquaVeo), Carlson TIN, and LandXML formats. The DXF format is the least efficient because each point of the TIN is written eight times on average: it belongs to six triangles, each of which is written as a 3DFACE element, in which one corner is written twice. The other formats consist of a list of points followed by a list of triangles, with each triangle being three point numbers. They take less space than DXF.</para>
 </section>
+</article>
