@@ -66,6 +66,7 @@
 <para>The header is as follows:</para>
 <table pgwide="1">
   <title>Header</title>
+  <tgroup align="left" cols="4" colsep="1" rowsep="1">
   <thead>
     <row>
       <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
@@ -104,6 +105,7 @@
   <row>
     <entry>uint32</entry><entry>00000006</entry><entry>6</entry><entry>Number of triangles</entry>
   </row>
+</tgroup>
 </table>
 </section>
 
