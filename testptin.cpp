@@ -39,6 +39,7 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "octagon.h"
+#include "edgeop.h"
 #include "qindex.h"
 #include "random.h"
 #include "ps.h"
@@ -641,6 +642,8 @@ void testflip()
   setsurface(CIRPAR);
   aster(1500);
   makeOctagon();
+  drawNet(ps);
+  flip(&net.edges[3]);
   drawNet(ps);
   ps.close();
 }
