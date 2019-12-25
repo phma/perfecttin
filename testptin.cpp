@@ -38,6 +38,7 @@
 #include "dxf.h"
 #include "angle.h"
 #include "pointlist.h"
+#include "octagon.h"
 #include "qindex.h"
 #include "random.h"
 #include "ps.h"
@@ -79,6 +80,21 @@ void testsizeof()
    * qindex	56	25-75
    * Total		561-611 bytes.
    */
+}
+
+void drawNet(PostScript &ps)
+{
+  BoundRect br;
+  int i,j;
+  double slope,r,g,b;
+  xy gradient;
+  ps.startpage();
+  br.include(&net);
+  ps.setscale(br);
+  ps.setcolor(0,0,1);
+  for (i=0;i<net.edges.size();i++)
+    ps.line(net.edges[i],i,false,false);
+  ps.endpage();
 }
 
 void testintegertrig()
@@ -616,6 +632,19 @@ void testleastsquares()
   tassert(dist(xy(x[0],x[1]),xy(-29/77.,51/77.))<1e-9);
 }
 
+void testflip()
+{
+  PostScript ps;
+  ps.open("flip.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  aster(1500);
+  makeOctagon();
+  drawNet(ps);
+  ps.close();
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -661,6 +690,8 @@ int main(int argc, char *argv[])
     testldecimal();
   if (shoulddo("leastsquares"))
     testleastsquares();
+  if (shoulddo("flip"))
+    testflip();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
