@@ -40,6 +40,7 @@
 #include "pointlist.h"
 #include "octagon.h"
 #include "edgeop.h"
+#include "triop.h"
 #include "qindex.h"
 #include "random.h"
 #include "ps.h"
@@ -655,6 +656,34 @@ void testflip()
   tassert(labs(net.triangles[2].dots.size()-720)<15);
   tassert(labs(net.triangles[3].dots.size()-74)<15);
   tassert(fabs(lengthBefore/lengthAfter-M_SQRT2)<0.02);
+  tassert(net.checkTinConsistency());
+  ps.close();
+}
+
+void testsplit()
+{
+  int dots3before,dots3after,dots6,dots7;
+  PostScript ps;
+  ps.open("split.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  aster(1500);
+  makeOctagon();
+  drawNet(ps);
+  dots3before=net.triangles[3].dots.size();
+  cout<<"Before: "<<dots3before<<" dots in 3\n";
+  tassert(labs(dots3before-397)<15);
+  split(&net.triangles[3]);
+  drawNet(ps);
+  dots3after=net.triangles[3].dots.size();
+  dots6=net.triangles[6].dots.size();
+  dots7=net.triangles[7].dots.size();
+  cout<<"After: "<<dots3after<<" dots in 3 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7\n";
+  tassert(labs(dots3after-115)<15);
+  tassert(labs(dots6-142)<15);
+  tassert(labs(dots7-140)<15);
+  tassert(net.checkTinConsistency());
   ps.close();
 }
 
@@ -705,6 +734,8 @@ int main(int argc, char *argv[])
     testleastsquares();
   if (shoulddo("flip"))
     testflip();
+  if (shoulddo("split"))
+    testsplit();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
