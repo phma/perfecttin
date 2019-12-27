@@ -235,4 +235,49 @@
 </table>
 </section>
 
+<section id="triangles">
+<title>Triangles</title>
+<para>The (usually) longest section is the triangles, with the points of the point cloud (called "dots" to distinguish them from the points which are corners of triangles):</para>
+<table pgwide="1">
+  <title>Triangle with few dots</title>
+  <tgroup align="left" cols="4" colsep="1" rowsep="1">
+  <thead>
+    <row>
+      <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
+    </row>
+  </thead>
+  <row>
+    <entry>uint32</entry><entry>00000001</entry><entry>1</entry><entry>Corner A</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000003</entry><entry>3</entry><entry>Corner B</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000004</entry><entry>4</entry><entry>Corner C</entry>
+  </row>
+  <row>
+    <entry>uint8</entry><entry>02</entry><entry>2</entry><entry>Number of dots</entry>
+  </row>
+  <row>
+    <entry>float</entry><entry>bf13710a</entry><entry>-0.57594359</entry><entry morerows="2">Coordinates x,y,z of dot</entry>
+  </row>
+  <row>
+    <entry>float</entry><entry>bf24ee89</entry><entry>-0.64426476</entry>
+  </row>
+  <row>
+    <entry>float</entry><entry>3e19999a</entry><entry>-0.15</entry>
+  </row>
+  <row>
+    <entry>float</entry><entry>4003d275</entry><entry>2.0597203</entry><entry morerows="2">Coordinates x,y,z of dot</entry>
+  </row>
+  <row>
+    <entry>float</entry><entry>be0f14d6</entry><entry>-0.13972792</entry>
+  </row>
+  <row>
+    <entry>float</entry><entry>3e570a3d</entry><entry>-0.21</entry>
+  </row>
+</tgroup>
+</table>
+</section>
+
 </article>
