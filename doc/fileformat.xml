@@ -109,29 +109,139 @@
 </table>
 </section>
 
-<section id="resume">
-  <title>Resuming an interrupted conversion</title>
-  <para>If converting a point cloud to TIN has been interrupted, for example by a power failure, you can resume it. Let's say that you were converting <filename>foo.las</filename> to <filename>foo.ptin</filename> and the computer crashed in the middle of the process.</para>
-  <orderedlist>
-    <listitem>
-      <para>Start PerfectTIN.</para>
-    </listitem>
-    <listitem>
-      <para>Do <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>, and look for two files with names like <filename>foo.16.ptin</filename> and <filename>foo.8.ptin</filename>. Open the one with the smaller number.</para>
-    </listitem>
-    <listitem>
-      <para>If PerfectTIN says that the file was not completely written, open the one with the larger number. This means that the computer crashed while it was writing the file.</para>
-    </listitem>
-    <listitem>
-      <para>Do <menuchoice><guimenu>File</guimenu><guimenuitem>Resume</guimenuitem></menuchoice>. The conversion will resume and hopefully run to completion.</para>
-    </listitem>
-  </orderedlist>
+<section id="points">
+<title>Points</title>
+<para>The next section is the points:</para>
+<table pgwide="1">
+  <title>Points</title>
+  <tgroup align="left" cols="4" colsep="1" rowsep="1">
+  <thead>
+    <row>
+      <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
+    </row>
+  </thead>
+  <row>
+    <entry>double</entry><entry>40129e0fc9a5314f</entry><entry>4.65435710020786</entry><entry morerows="2">Coordinates x,y,z of point 1</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3ffb6e6c1d8de078</entry><entry>1.7144585756741701</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>4001a80c47a63240</entry><entry>2.2070546720117648</entry><entry morerows="2">Coordinates x,y,z of point 2</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>40124c75046f618f</entry><entry>4.5746651356679555</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c0001dc1ca83b4ea</entry><entry>-2.0145297833865827</entry><entry morerows="2">Coordinates x,y,z of point 3</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>40139cc3379cb68d</entry><entry>4.903088444652565</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c012cb80fbe8e00c</entry><entry>-4.698734222496579</entry><entry morerows="2">Coordinates x,y,z of point 4</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>4004d9ddda387ec5</entry><entry>2.6063801811686482</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c01400bc3f2cdf1a</entry><entry>-5.000718104470957</entry><entry morerows="2">Coordinates x,y,z of point 5</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>bff467d4bc2dff9d</entry><entry>-1.2753493643540204</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c0008fba0af36f47</entry><entry>-2.0701790671863907</entry><entry morerows="2">Coordinates x,y,z of point 6</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c012cd218bb6502c</entry><entry>-4.700323279383195</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3ff95bdf2a3dccfd</entry><entry>1.5849296236090702</entry><entry morerows="2">Coordinates x,y,z of point 7</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c013f04f25384e39</entry><entry>-4.984676915704363</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>40114278544eb1a4</entry><entry>4.314912144950004</entry><entry morerows="2">Coordinates x,y,z of point 8</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>c00530bd9e70e921</entry><entry>-2.6487991693694686</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+</tgroup>
+</table>
 </section>
 
-<section id="export">
-  <title>Exporting a TIN</title>
-  <para>PerfectTIN files are not readable by other programs. They are also big; they contain the point cloud as well as the TIN, so that PerfectTIN can resume converting a point cloud if it's interrupted. So you'll want to export the TIN in another format.</para>
-  <para>Do <menuchoice><guimenu>File</guimenu><guisubmenu>Export</guisubmenu><guimenuitem><emphasis>format</emphasis></guimenuitem></menuchoice>, and enter the filename you want to export it as.</para>
-  <para>PerfectTIN can export in DXF, TIN text (AquaVeo), Carlson TIN, and LandXML formats. The DXF format is the least efficient because each point of the TIN is written eight times on average: it belongs to six triangles, each of which is written as a 3DFACE element, in which one corner is written twice. The other formats consist of a list of points followed by a list of triangles, with each triangle being three point numbers. They take less space than DXF.</para>
+<section id="header">
+<title>Header</title>
+<para>The header is as follows:</para>
+<table pgwide="1">
+  <title>Header</title>
+  <tgroup align="left" cols="4" colsep="1" rowsep="1">
+  <thead>
+    <row>
+      <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
+    </row>
+  </thead>
+  <row>
+    <entry>uint16</entry><entry>0006</entry><entry>6</entry><entry morerows="3">The first four perfect numbers identify a PerfectTIN file</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>001c</entry><entry>28</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>01f0</entry><entry>496</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>1fc0</entry><entry>8128</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000020</entry><entry>32</entry><entry>Header format and length</entry>
+  </row>
+  <row>
+    <entry>uint64</entry><entry>000000005db51af8</entry><entry>2019-10-27 04:20:08</entry><entry>Time conversion started</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000001</entry><entry>1</entry><entry>Tolerance ratio; normally 1, which means conversion finished</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3f9999999999999a</entry><entry>0.025</entry><entry>Tolerance</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000008</entry><entry>8</entry><entry>Number of points</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000008</entry><entry>8</entry><entry>Number of points on the outside</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000006</entry><entry>6</entry><entry>Number of triangles</entry>
+  </row>
+</tgroup>
+</table>
 </section>
+
 </article>
