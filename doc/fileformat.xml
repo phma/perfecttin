@@ -265,7 +265,7 @@
     <entry>float</entry><entry>bf24ee89</entry><entry>-0.64426476</entry>
   </row>
   <row>
-    <entry>float</entry><entry>3e19999a</entry><entry>-0.15</entry>
+    <entry>float</entry><entry>3e19999a</entry><entry>0.15</entry>
   </row>
   <row>
     <entry>float</entry><entry>4003d275</entry><entry>2.0597203</entry><entry morerows="2">Coordinates x,y,z of dot</entry>
@@ -274,7 +274,7 @@
     <entry>float</entry><entry>be0f14d6</entry><entry>-0.13972792</entry>
   </row>
   <row>
-    <entry>float</entry><entry>3e570a3d</entry><entry>-0.21</entry>
+    <entry>float</entry><entry>3e570a3d</entry><entry>0.21</entry>
   </row>
 </tgroup>
 </table>
