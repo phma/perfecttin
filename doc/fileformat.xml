@@ -17,7 +17,7 @@
 
 <section id="overview">
   <title>Overview</title>
-  <para>The file consists of five sections: header, points, convex hull, triangles (with dots), and checksums. All numbers in the file are little-endian.</para>
+  <para>The file consists of five sections: header, points, convex hull, triangles (with dots), and checksums. All numbers in the file are little-endian. All coordinates are in meters.</para>
 </section>
 
 <section id="Example">
