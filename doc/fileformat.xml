@@ -327,4 +327,38 @@
 </table>
 </section>
 
+<section id="checksums">
+<title>Checksums</title>
+<para>The triangle section is followed by the checksums, which are computed on the z-coordinates of the dots:</para>
+<table pgwide="1">
+  <title>Checksums</title>
+  <tgroup align="left" cols="4" colsep="1" rowsep="1">
+  <thead>
+    <row>
+      <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
+    </row>
+  </thead>
+  <row>
+    <entry>uint8</entry><entry>05</entry><entry>5</entry><entry>Number of checksums</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3f847ae147ae1480</entry><entry>0.01</entry><entry>z0-z1+z2-z3+...</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3fc0a3d70a3d70a6</entry><entry>0.13</entry><entry>z0+z1-z2-z3+...</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3fe8000000000000</entry><entry>0.75</entry><entry>z0+...+z3-z4-...z7+...</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3fc851eb851eb850</entry><entry>0.19</entry><entry>z0+...z7-z8-...z12</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3ffb0a3d70a3d70a</entry><entry>1.69</entry><entry>z0+...z12</entry>
+  </row>
+</tgroup>
+</table>
+<para>The z-coordinates are absolute, not relative to the centroid, and are held in memory as doubles. (In this file, which was generated with a small number of dots for fuzzing, all z-coordinates of points, and therefore of centroids, are 0.) The number of checksums is the base-2 logarithm of the number of dots, rounded up, plus 1, unless this would make the last two checksums equal (which can happen at sea level), in which case the last is omitted.</para>
+</section>
+
 </article>
