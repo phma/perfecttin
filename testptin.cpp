@@ -660,6 +660,32 @@ void testflip()
   ps.close();
 }
 
+void testbend()
+{
+  double lengthBefore,lengthAfter;
+  PostScript ps;
+  ps.open("bend.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  aster(1500);
+  makeOctagon();
+  drawNet(ps);
+  lengthBefore=net.edges[3].length();
+  cout<<"length "<<lengthBefore<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
+  tassert(labs(net.triangles[2].dots.size()-397)<15);
+  tassert(labs(net.triangles[3].dots.size()-397)<15);
+  bend(&net.edges[10]);
+  drawNet(ps);
+  lengthAfter=net.edges[3].length();
+  cout<<"length "<<lengthAfter<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
+  //tassert(labs(net.triangles[2].dots.size()-720)<15);
+  //tassert(labs(net.triangles[3].dots.size()-74)<15);
+  //tassert(fabs(lengthBefore/lengthAfter-M_SQRT2)<0.02);
+  tassert(net.checkTinConsistency());
+  ps.close();
+}
+
 void testsplit()
 {
   int dots3before,dots3after,dots6,dots7;
@@ -734,6 +760,8 @@ int main(int argc, char *argv[])
     testleastsquares();
   if (shoulddo("flip"))
     testflip();
+  if (shoulddo("bend"))
+    testbend();
   if (shoulddo("split"))
     testsplit();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
