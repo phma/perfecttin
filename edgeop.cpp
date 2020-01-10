@@ -302,7 +302,7 @@ bool shouldFlip(edge *e,double tolerance,int thread)
 	    tempPointlist[thread].edges[5].length()+
 	    tempPointlist[thread].edges[6].length()+
 	    tempPointlist[thread].edges[7].length());
-      ret=crit1+crit2+crit3+crit4>0;
+      ret=crit1+crit2+crit3+2*crit4>0;
     }
     logCrit(crit1);
     logCrit(crit2);
