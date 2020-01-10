@@ -63,10 +63,11 @@ void flip(edge *e)
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
   allDots.resize(e->tria->dots.size()+e->trib->dots.size());
+  // memmove overwrites the vtable pointer with the same vtable pointer. Not a problem.
   if (e->tria->dots.size())
-    memmove(&allDots[0],&e->tria->dots[0],e->tria->dots.size()*sizeof(xyz));
+    memmove((void *)&allDots[0],(void *)&e->tria->dots[0],e->tria->dots.size()*sizeof(xyz));
   if (e->trib->dots.size())
-    memmove(&allDots[e->tria->dots.size()],&e->trib->dots[0],e->trib->dots.size()*sizeof(xyz));
+    memmove((void *)&allDots[e->tria->dots.size()],(void *)&e->trib->dots[0],e->trib->dots.size()*sizeof(xyz));
   e->tria->dots.clear();
   e->trib->dots.clear();
   for (i=0;i<allDots.size();i++)
