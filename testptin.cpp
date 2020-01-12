@@ -3,7 +3,7 @@
 /* testptin.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -655,14 +655,14 @@ void testflip()
   drawNet(ps);
   lengthBefore=net.edges[3].length();
   cout<<"length "<<lengthBefore<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
-  tassert(labs(net.triangles[2].dots.size()-402)<15);
-  tassert(labs(net.triangles[3].dots.size()-402)<15);
+  tassert(abs((int)net.triangles[2].dots.size()-402)<15);
+  tassert(abs((int)net.triangles[3].dots.size()-402)<15);
   flip(&net.edges[3]);
   drawNet(ps);
   lengthAfter=net.edges[3].length();
   cout<<"length "<<lengthAfter<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
-  tassert(labs(net.triangles[2].dots.size()-729)<15);
-  tassert(labs(net.triangles[3].dots.size()-75)<15);
+  tassert(abs((int)net.triangles[2].dots.size()-729)<15);
+  tassert(abs((int)net.triangles[3].dots.size()-75)<15);
   tassert(fabs(lengthBefore/lengthAfter-M_SQRT2)<0.02);
   tassert(net.checkTinConsistency());
   ps.close();
@@ -679,12 +679,12 @@ void testbend()
   makeOctagon();
   drawNet(ps);
   cout<<"length 3 "<<net.edges[3].length()<<" length 4 "<<net.edges[4].length()<<' '<<net.triangles[3].dots.size()<<" dots in 3\n";
-  tassert(labs(net.triangles[3].dots.size()-402)<15);
+  tassert(abs((int)net.triangles[3].dots.size()-402)<15);
   bend(&net.edges[10]);
   drawNet(ps);
   cout<<"length 10 "<<net.edges[10].length()<<' '<<net.triangles[3].dots.size()<<" dots in 3 "<<net.triangles[6].dots.size()<<" dots in 6\n";
-  tassert(labs(net.triangles[3].dots.size()-184)<15);
-  tassert(labs(net.triangles[6].dots.size()-218)<15);
+  tassert(abs((int)net.triangles[3].dots.size()-184)<15);
+  tassert(abs((int)net.triangles[6].dots.size()-218)<15);
   tassert(fabs(net.edges[10].length()/(net.edges[3].length()+net.edges[4].length())-0.5307)<0.002);
   tassert(net.checkTinConsistency());
   ps.close();
@@ -703,16 +703,16 @@ void testsplit()
   drawNet(ps);
   dots3before=net.triangles[3].dots.size();
   cout<<"Before: "<<dots3before<<" dots in 3\n";
-  tassert(labs(dots3before-402)<15);
+  tassert(abs(dots3before-402)<15);
   split(&net.triangles[3]);
   drawNet(ps);
   dots3after=net.triangles[3].dots.size();
   dots6=net.triangles[6].dots.size();
   dots7=net.triangles[7].dots.size();
   cout<<"After: "<<dots3after<<" dots in 3 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7\n";
-  tassert(labs(dots3after-116)<15);
-  tassert(labs(dots6-143)<15);
-  tassert(labs(dots7-143)<15);
+  tassert(abs(dots3after-116)<15);
+  tassert(abs(dots6-143)<15);
+  tassert(abs(dots7-143)<15);
   tassert(net.checkTinConsistency());
   ps.close();
 }
