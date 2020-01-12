@@ -1,6 +1,6 @@
 project(perfecttin)
 cmake_minimum_required(VERSION 3.8.0)
-# Copyright 2019 Pierre Abbat.
+# Copyright 2019,2020 Pierre Abbat.
 # This file is part of PerfectTIN.
 #
 # PerfectTIN is free software: you can redistribute it and/or modify
@@ -131,7 +131,7 @@ set(PERFECTTIN_MAJOR_VERSION 0)
 set(PERFECTTIN_MINOR_VERSION 3)
 set(PERFECTTIN_PATCH_VERSION 4)
 set(PERFECTTIN_VERSION ${PERFECTTIN_MAJOR_VERSION}.${PERFECTTIN_MINOR_VERSION}.${PERFECTTIN_PATCH_VERSION})
-set(COPY_YEAR 2019)
+set(COPY_YEAR 2020)
 
 include_directories(${PROJECT_BINARY_DIR})
 if (${Boost_FOUND})
