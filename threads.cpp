@@ -3,7 +3,7 @@
 /* threads.cpp - multithreading                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -383,6 +383,18 @@ bool lockTriangles(int thread,vector<int> triangles)
   for (j=lockSet.begin();j!=lockSet.end();j++)
     triMutex[*j].unlock();
   return ret;
+}
+
+void lockNewTriangles(int thread,int n)
+{
+  int i;
+  holderMutex.lock();
+  for (i=0;i<n;i++)
+  {
+    heldTriangles[thread].push_back(triangleHolders.size());
+    triangleHolders.push_back(thread);
+  }
+  holderMutex.unlock();
 }
 
 void unlockTriangles(int thread)

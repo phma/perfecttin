@@ -3,7 +3,7 @@
 /* threads.h - multithreading                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -103,6 +103,7 @@ void unsleep(int thread);
 double maxSleepTime();
 void randomizeSleep();
 bool lockTriangles(int thread,std::vector<int> triangles);
+void lockNewTriangles(int thread,int n);
 void unlockTriangles(int thread);
 void clearTriangleLocks();
 void setThreadCommand(int newStatus);
