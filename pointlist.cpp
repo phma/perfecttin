@@ -3,7 +3,7 @@
 /* pointlist.cpp - list of points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -231,7 +231,7 @@ void pointlist::addpoint(int numb,point pnt,bool overwrite)
  revpoints[&(points[a])]=a;
  }
 
-int pointlist::addtriangle(int n)
+int pointlist::addtriangle(int n,int thread)
 {
   int i;
   int newTriNum=triangles.size();

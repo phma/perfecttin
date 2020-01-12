@@ -3,7 +3,7 @@
 /* pointlist.h - list of points                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -56,7 +56,7 @@ public:
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
   void addpoint(int numb,point pnt,bool overwrite=false);
-  int addtriangle(int n=1);
+  int addtriangle(int n=1,int thread=-1);
   void insertHullPoint(point *newpnt,point *prec);
   int closestHullPoint(xy pnt);
   double distanceToHull(xy pnt);
