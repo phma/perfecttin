@@ -112,11 +112,17 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
+# Define NO_INSTALL when compiling for fuzzing. This avoids the error
+# "The install of the perfecttin target requires changing an RPATH", which
+# occurs when using the AFL compiler wrapper with the Ninja generator.
+# There is no need to install a binary built for fuzzing.
+if (NOT DEFINED NO_INSTALL)
 if (${Boost_FOUND})
 install(TARGETS perfecttin DESTINATION bin)
 endif (${Boost_FOUND})
 install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
+endif ()
 
 if (WIN32)
 include(windeployqt)
