@@ -22,8 +22,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <vector>
+#include <array>
 
 point *split(triangle *tri);
+std::array<point *,3> quarter(triangle *tri);
 bool lockTriangles(int thread,std::vector<triangle *> triPtr);
 bool shouldSplit(triangle *tri,double tolerance); // called from edgeop
 int triop(triangle *tri,double tolerance,int thread);

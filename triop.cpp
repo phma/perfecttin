@@ -118,6 +118,19 @@ point *split(triangle *tri)
   return pnt;
 }
 
+array<point *,3> quarter(triangle *tri)
+/* Adds the midpoints of the three sides as new points and breaks tri into quarters
+ * and the three adjacent triangles into halves.
+ */
+{
+  array<point *,3> pnts;
+  point midA(((xyz)*tri->b+(xyz)*tri->c)/2);
+  point midB(((xyz)*tri->c+(xyz)*tri->a)/2);
+  point midC(((xyz)*tri->a+(xyz)*tri->b)/2);
+  int newPointNum=net.points.size()+1;
+  return pnts;
+}
+
 bool lockTriangles(int thread,vector<triangle *> triPtr)
 {
   vector<int> triangles;
