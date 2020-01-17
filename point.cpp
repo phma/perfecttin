@@ -528,6 +528,25 @@ void point::insertEdge(edge *edg)
   }
 }
 
+void point::removeEdge(edge *edg)
+/* Removes edg from the circular linked list of edges around this point.
+ */
+{
+  int i;
+  edge *oldline;
+  for (i=0,oldline=line;line && (!i || oldline!=line);i++)
+  {
+    if (line->next(this)==edg)
+    {
+      if (line==edg)
+	line=nullptr;
+      else
+	line->setnext(this,edg->next(this));
+      break;
+    }
+  }
+}
+
 edge *point::edg(triangle *tri)
 {
   int i;

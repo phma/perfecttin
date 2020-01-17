@@ -150,5 +150,6 @@ public:
   std::vector<edge *> incidentEdges();
   edge *isNeighbor(point *pnt);
   void insertEdge(edge *edg);
+  void removeEdge(edge *edg);
 };
 #endif
