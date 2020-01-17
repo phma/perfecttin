@@ -284,6 +284,28 @@ bool triangle::iscorner(point *v)
   return (a==v)||(b==v)||(c==v);
 }
 
+point *triangle::otherCorner(point *v0,point *v1)
+{
+  int bm=0;
+  if (v0==a || v1==a)
+    bm+=1;
+  if (v0==b || v1==b)
+    bm+=2;
+  if (v0==c || v1==c)
+    bm+=4;
+  switch (bm)
+  {
+    case 3:
+      return c;
+    case 5:
+      return b;
+    case 6:
+      return a;
+    default:
+      return nullptr;
+  }
+}
+
 void triangle::flatten()
 {
   sarea=area();

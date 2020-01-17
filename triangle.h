@@ -91,6 +91,7 @@ public:
   bool in(xy pnt);
   bool inCircle(xy pnt,double radius);
   bool iscorner(point *v);
+  point *otherCorner(point *v0,point *v1);
   triangle *nexttoward(xy pnt);
   triangle *findt(xy pnt,bool clip=false);
   double area();
