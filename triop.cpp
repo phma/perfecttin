@@ -124,10 +124,21 @@ array<point *,3> quarter(triangle *tri)
  */
 {
   array<point *,3> pnts;
+  array<edge *,9> eds;
+  point *A=tri->a,*B=tri->b,*C=tri->c;
+  point *oppA,*oppB,*oppC;
   point midA(((xyz)*tri->b+(xyz)*tri->c)/2);
   point midB(((xyz)*tri->c+(xyz)*tri->a)/2);
   point midC(((xyz)*tri->a+(xyz)*tri->b)/2);
   int newPointNum=net.points.size()+1;
+  int newTriNum=net.addtriangle(6);
+  int newEdgeNum=net.edges.size();
+  net.addpoint(newPointNum,midA);
+  net.addpoint(newPointNum,midB);
+  net.addpoint(newPointNum,midC);
+  pnts[0]=&net.points[newPointNum];
+  pnts[1]=&net.points[newPointNum+1];
+  pnts[2]=&net.points[newPointNum+2];
   return pnts;
 }
 
