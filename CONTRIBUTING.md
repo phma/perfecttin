@@ -17,3 +17,6 @@ When writing code to read a file, fuzz it, so that the program is highly unlikel
 ## Licensing and copyright
 PerfectTIN is licensed under the LGPL. Make sure that new contributions are LGPL-compatible. If they are code, put the licensing text at the top of the file; for artwork, put it in the `.qrc` file.
 If your employer or university could claim copyright over your contribution, be sure that they are fine with the code being released under the LGPL.
+
+2020
+
