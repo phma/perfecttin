@@ -123,13 +123,16 @@ array<point *,3> quarter(triangle *tri)
  * and the three adjacent triangles into halves.
  */
 {
+  int i;
   array<point *,3> pnts;
   array<edge *,9> eds;
+  array<triangle *,6> tris;
   point *A=tri->a,*B=tri->b,*C=tri->c;
   point *oppA,*oppB,*oppC;
-  point midA(((xyz)*tri->b+(xyz)*tri->c)/2);
-  point midB(((xyz)*tri->c+(xyz)*tri->a)/2);
-  point midC(((xyz)*tri->a+(xyz)*tri->b)/2);
+  edge *sidea,*sideb,*sidec;
+  point midA(((xyz)*B+(xyz)*C)/2);
+  point midB(((xyz)*C+(xyz)*A)/2);
+  point midC(((xyz)*A+(xyz)*B)/2);
   int newPointNum=net.points.size()+1;
   int newTriNum=net.addtriangle(6);
   int newEdgeNum=net.edges.size();
@@ -139,6 +142,34 @@ array<point *,3> quarter(triangle *tri)
   pnts[0]=&net.points[newPointNum];
   pnts[1]=&net.points[newPointNum+1];
   pnts[2]=&net.points[newPointNum+2];
+  for (i=0;i<9;i++)
+    eds[i]=&net.edges[newEdgeNum+i];
+  for (i=0;i<6;i++)
+    tris[i]=&net.triangles[newTriNum+i];
+  sidea=C->edg(tri);
+  sideb=A->edg(tri);
+  sidec=B->edg(tri);
+  oppA=tri->aneigh->otherCorner(B,C);
+  oppB=tri->bneigh->otherCorner(C,A);
+  oppC=tri->cneigh->otherCorner(A,B);
+  A->removeEdge(sideb);
+  A->removeEdge(sidec);
+  B->removeEdge(sidec);
+  B->removeEdge(sidea);
+  C->removeEdge(sidea);
+  C->removeEdge(sideb);
+  sidea->a=pnts[1];
+  sidea->b=pnts[2];
+  sideb->a=pnts[2];
+  sideb->b=pnts[0];
+  sidec->a=pnts[0];
+  sidec->b=pnts[1];
+  pnts[0]->insertEdge(sideb);
+  pnts[0]->insertEdge(sidec);
+  pnts[1]->insertEdge(sidec);
+  pnts[1]->insertEdge(sidea);
+  pnts[2]->insertEdge(sidea);
+  pnts[2]->insertEdge(sideb);
   return pnts;
 }
 
