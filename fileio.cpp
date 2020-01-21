@@ -532,10 +532,14 @@ PtinHeader readPtin(std::string inputFile)
 	  if (tri->in(pnt))
 	    tri->dots.push_back(pnt);
 	  else
-	  {
+	    /* Because dots are stored in float, roundoff error can push a dot
+	     * near an edge into an adjacent triangle. This will not affect the
+	     * PT_DOT_OUTSIDE check, but could result in the dot being shuttled
+	     * into a faraway triangle as refinement of the TIN continues.
+	     * If this happens, the statusbar will say "Making octagon" until
+	     * the dots are placed into their proper triangles.
+	     */
 	    cloud.push_back(pnt);
-	    cout<<"Dot outside triangle "<<i<<" (few dots)\n";
-	  }
 	  zCheck<<pnt.getz();
 	  if (pnt.getz()>high)
 	    high=pnt.getz();
@@ -557,11 +561,8 @@ PtinHeader readPtin(std::string inputFile)
 	  }
 	  if (tri->in(pnt))
 	    tri->dots.push_back(pnt);
-	  else
-	  {
+	  else // See above.
 	    cloud.push_back(pnt);
-	    cout<<"Dot outside triangle "<<i<<" (many dots)\n";
-	  }
 	  zCheck<<pnt.getz();
 	  if (pnt.getz()>high)
 	    high=pnt.getz();
@@ -605,7 +606,7 @@ PtinHeader readPtin(std::string inputFile)
       tri=tri->findt(cloud[i]);
       if (!tri)
       {
-	cerr<<"No triangle found for dot\n";
+	cerr<<"Can't happen: No triangle found for dot\n";
       }
       tri->dots.push_back(cloud[i]);
     }
