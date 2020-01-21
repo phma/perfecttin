@@ -3,7 +3,7 @@
 /* fileio.cpp - file I/O                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -529,7 +529,13 @@ PtinHeader readPtin(std::string inputFile)
 	  if (xy(pnt).length()>tri->peri/3)
 	    header.tolRatio=PT_DOT_OUTSIDE;
 	  pnt+=ctr;
-	  tri->dots.push_back(pnt);
+	  if (tri->in(pnt))
+	    tri->dots.push_back(pnt);
+	  else
+	  {
+	    cloud.push_back(pnt);
+	    cout<<"Dot outside triangle "<<i<<" (few dots)\n";
+	  }
 	  zCheck<<pnt.getz();
 	  if (pnt.getz()>high)
 	    high=pnt.getz();
@@ -549,7 +555,13 @@ PtinHeader readPtin(std::string inputFile)
 	      header.tolRatio=PT_EOF;
 	    break;
 	  }
-	  tri->dots.push_back(pnt);
+	  if (tri->in(pnt))
+	    tri->dots.push_back(pnt);
+	  else
+	  {
+	    cloud.push_back(pnt);
+	    cout<<"Dot outside triangle "<<i<<" (many dots)\n";
+	  }
 	  zCheck<<pnt.getz();
 	  if (pnt.getz()>high)
 	    high=pnt.getz();
@@ -588,6 +600,16 @@ PtinHeader readPtin(std::string inputFile)
   {
     setMutexArea(pairwisesum(areas));
     net.makeEdges();
+    for (i=0;i<cloud.size();i++)
+    {
+      tri=tri->findt(cloud[i]);
+      if (!tri)
+      {
+	cerr<<"No triangle found for dot\n";
+      }
+      tri->dots.push_back(cloud[i]);
+    }
+    cloud.clear();
   }
   else if (readingStarted)
     net.clear();
