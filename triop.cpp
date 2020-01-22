@@ -130,6 +130,7 @@ array<point *,3> quarter(triangle *tri)
   point *A=tri->a,*B=tri->b,*C=tri->c;
   point *oppA,*oppB,*oppC;
   edge *sidea,*sideb,*sidec;
+  triangle *neigha,*neighb,*neighc;
   point midA(((xyz)*B+(xyz)*C)/2);
   point midB(((xyz)*C+(xyz)*A)/2);
   point midC(((xyz)*A+(xyz)*B)/2);
@@ -149,9 +150,12 @@ array<point *,3> quarter(triangle *tri)
   sidea=C->edg(tri);
   sideb=A->edg(tri);
   sidec=B->edg(tri);
-  oppA=tri->aneigh->otherCorner(B,C);
-  oppB=tri->bneigh->otherCorner(C,A);
-  oppC=tri->cneigh->otherCorner(A,B);
+  neigha=tri->aneigh;
+  neighb=tri->bneigh;
+  neighc=tri->cneigh;
+  oppA=neigha->otherCorner(B,C);
+  oppB=neighb->otherCorner(C,A);
+  oppC=neighc->otherCorner(A,B);
   A->removeEdge(sideb);
   A->removeEdge(sidec);
   B->removeEdge(sidec);
@@ -170,6 +174,69 @@ array<point *,3> quarter(triangle *tri)
   pnts[1]->insertEdge(sidea);
   pnts[2]->insertEdge(sidea);
   pnts[2]->insertEdge(sideb);
+  eds[0]->a=A;
+  eds[0]->b=pnts[2];
+  eds[1]->a=pnts[2];
+  eds[1]->b=B;
+  eds[2]->a=B;
+  eds[2]->b=pnts[0];
+  eds[3]->a=pnts[0];
+  eds[3]->b=C;
+  eds[4]->a=C;
+  eds[4]->b=pnts[1];
+  eds[5]->a=pnts[1];
+  eds[5]->b=A;
+  eds[6]->a=pnts[0];
+  eds[6]->b=oppA;
+  eds[7]->a=pnts[1];
+  eds[7]->b=oppB;
+  eds[8]->a=pnts[2];
+  eds[8]->b=oppC;
+  tri->a=pnts[0];
+  tri->b=pnts[1];
+  tri->c=pnts[2];
+  tris[0]->a=A;
+  tris[0]->b=pnts[2];
+  tris[0]->c=pnts[1];
+  tris[1]->a=pnts[2];
+  tris[1]->b=B;
+  tris[1]->c=pnts[0];
+  tris[2]->a=pnts[1];
+  tris[2]->b=pnts[0];
+  tris[2]->c=C;
+  tris[3]->a=oppA;
+  tris[3]->b=pnts[0];
+  tris[3]->c=B;
+  tris[4]->a=C;
+  tris[4]->b=oppB;
+  tris[4]->c=pnts[1];
+  tris[5]->a=pnts[2];
+  tris[5]->b=A;
+  tris[5]->c=oppC;
+  if (neigha->a==B)
+    neigha->a=pnts[0];
+  if (neigha->b==B)
+    neigha->b=pnts[0];
+  if (neigha->c==B)
+    neigha->c=pnts[0];
+  if (neighb->a==C)
+    neighb->a=pnts[1];
+  if (neighb->b==C)
+    neighb->b=pnts[1];
+  if (neighb->c==C)
+    neighb->c=pnts[1];
+  if (neighc->a==A)
+    neighc->a=pnts[2];
+  if (neighc->b==A)
+    neighc->b=pnts[2];
+  if (neighc->c==A)
+    neighc->c=pnts[2];
+  for (i=0;i<9;i++)
+  {
+    eds[i]->a->insertEdge(eds[i]);
+    eds[i]->b->insertEdge(eds[i]);
+    eds[i]->setNeighbors();
+  }
   return pnts;
 }
 
