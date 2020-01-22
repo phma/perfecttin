@@ -156,7 +156,12 @@ void MainWindow::tick()
     }
     lastNumDots=numDots;
     lastNumTriangles=numTriangles;
-    if (numDots && numTriangles)
+    if (numDots && numTriangles && numTriangles<8)
+    /* Reading a .ptin file can make numDots small (like 3) as it puts dots that
+     * were pushed over an edge by roundoff error into cloud, while numTriangles
+     * is in the thousands. This is not making octagon. While making octagon,
+     * the number of triangles is 6, and the number of dots is large (millions).
+     */
     {
       dotTriangleMsg->setText(tr("Making octagon"));
       openAction->setEnabled(false);

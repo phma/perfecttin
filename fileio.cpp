@@ -536,8 +536,6 @@ PtinHeader readPtin(std::string inputFile)
 	     * near an edge into an adjacent triangle. This will not affect the
 	     * PT_DOT_OUTSIDE check, but could result in the dot being shuttled
 	     * into a faraway triangle as refinement of the TIN continues.
-	     * If this happens, the statusbar will say "Making octagon" until
-	     * the dots are placed into their proper triangles.
 	     */
 	    cloud.push_back(pnt);
 	  zCheck<<pnt.getz();
