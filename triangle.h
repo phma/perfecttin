@@ -79,6 +79,7 @@ public:
   bool ptValid();
   void setneighbor(triangle *neigh);
   void setnoneighbor(edge *neigh);
+  void setEdgeTriPointers();
   double areaCoord(xy pnt,point *v);
   double elevation(xy pnt);
   void flatten();

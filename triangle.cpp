@@ -341,6 +341,37 @@ void triangle::setnoneighbor(edge *neigh)
     bneigh=nullptr;
 }
 
+void triangle::setEdgeTriPointers()
+// Sets the edge pointers of the three sides to point to this triangle.
+{
+  int i;
+  edge *line,*oldline;
+  line=oldline=a->line;
+  for (i=0;line!=oldline || i==0;i++,line=line->next(a))
+    if (line->otherend(a)==b)
+      break;
+  if (line->a==a && line->b==b)
+    line->trib=this;
+  if (line->a==b && line->b==a)
+    line->tria=this;
+  line=oldline=b->line;
+  for (i=0;line!=oldline || i==0;i++,line=line->next(b))
+    if (line->otherend(b)==c)
+      break;
+  if (line->a==b && line->b==c)
+    line->trib=this;
+  if (line->a==c && line->b==b)
+    line->tria=this;
+  line=oldline=c->line;
+  for (i=0;line!=oldline || i==0;i++,line=line->next(c))
+    if (line->otherend(c)==a)
+      break;
+  if (line->a==c && line->b==a)
+    line->trib=this;
+  if (line->a==a && line->b==c)
+    line->tria=this;
+}
+
 triangle *triangle::nexttoward(xy pnt)
 // If the point is in the triangle, return the same triangle.
 // Else return which triangle to look in next.
