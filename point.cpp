@@ -534,7 +534,7 @@ void point::removeEdge(edge *edg)
 {
   int i;
   edge *oldline;
-  for (i=0,oldline=line;line && (!i || oldline!=line);i++)
+  for (i=0,oldline=line;line && (!i || oldline!=line);i++,line=line->next(this))
   {
     if (line->next(this)==edg)
     {
