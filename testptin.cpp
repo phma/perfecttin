@@ -717,6 +717,34 @@ void testsplit()
   ps.close();
 }
 
+void testquarter()
+{
+  int dots3before,dots3after,dots6,dots7;
+  PostScript ps;
+  ps.open("quarter.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  aster(1500);
+  makeOctagon();
+  drawNet(ps);
+  flip(&net.edges[3]); // This makes triangle 2 interior, a prerequisite for quartering.
+  dots3before=net.triangles[3].dots.size();
+  //cout<<"Before: "<<dots3before<<" dots in 3\n";
+  //tassert(abs(dots3before-402)<15);
+  quarter(&net.triangles[2]);
+  drawNet(ps);
+  dots3after=net.triangles[3].dots.size();
+  dots6=net.triangles[6].dots.size();
+  dots7=net.triangles[7].dots.size();
+  //cout<<"After: "<<dots3after<<" dots in 3 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7\n";
+  //tassert(abs(dots3after-116)<15);
+  //tassert(abs(dots6-143)<15);
+  //tassert(abs(dots7-143)<15);
+  //tassert(net.checkTinConsistency());
+  ps.close();
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -768,6 +796,8 @@ int main(int argc, char *argv[])
     testbend();
   if (shoulddo("split"))
     testsplit();
+  if (shoulddo("quarter"))
+    testquarter();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
