@@ -235,8 +235,12 @@ array<point *,3> quarter(triangle *tri)
   {
     eds[i]->a->insertEdge(eds[i]);
     eds[i]->b->insertEdge(eds[i]);
-    eds[i]->setNeighbors();
   }
+  for (i=0;i<6;i++)
+    tris[i]->setEdgeTriPointers();
+  tri->setEdgeTriPointers();
+  for (i=0;i<9;i++)
+    eds[i]->setNeighbors();
   return pnts;
 }
 
