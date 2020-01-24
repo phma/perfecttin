@@ -727,8 +727,8 @@ void testquarter()
   setsurface(CIRPAR);
   aster(1500);
   makeOctagon();
-  drawNet(ps);
   flip(&net.edges[3]); // This makes triangle 2 interior, a prerequisite for quartering.
+  drawNet(ps);
   dots3before=net.triangles[3].dots.size();
   //cout<<"Before: "<<dots3before<<" dots in 3\n";
   //tassert(abs(dots3before-402)<15);
