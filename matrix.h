@@ -3,7 +3,7 @@
 /* matrix.h - matrices                                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -72,7 +72,7 @@ public:
   matrix operator-(matrix& b);
   matrix operator*(matrix& b);
   double trace();
-  matrix transpose();
+  matrix transpose() const;
   matrix transmult();
   void swaprows(unsigned r0,unsigned r1);
   void swapcolumns(unsigned c0,unsigned c1);
@@ -83,6 +83,6 @@ public:
 };
 
 matrix invert(matrix m);
-matrix rowvector(const std::vector<double> v);
-matrix columnvector(const std::vector<double> v);
+matrix rowvector(const std::vector<double> &v);
+matrix columnvector(const std::vector<double> &v);
 #endif

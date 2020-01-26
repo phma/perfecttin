@@ -3,7 +3,7 @@
 /* leastsquares.cpp - least-squares adjustment        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 
 using namespace std;
 
-vector<double> linearLeastSquares(matrix m,vector<double> v)
+vector<double> linearLeastSquares(const matrix &m,const vector<double> &v)
 /* m should be a matrix(a,b) where a>b. If a<b, mtm is singular.
  * There are b things which can be adjusted to best fit a data.
  */

@@ -3,7 +3,7 @@
 /* matrix.cpp - matrices                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -197,7 +197,7 @@ double matrix::trace()
   return ret.total();
 }
 
-matrix matrix::transpose()
+matrix matrix::transpose() const
 {
   matrix ret(columns,rows);
   int i,j;
@@ -455,14 +455,14 @@ matrix::operator vector<double>() const
   return ret;
 }
 
-matrix rowvector(const vector<double> v)
+matrix rowvector(const vector<double> &v)
 {
   matrix ret(1,v.size());
   memcpy(ret[0],&v[0],sizeof(double)*v.size());
   return ret;
 }
 
-matrix columnvector(const vector<double> v)
+matrix columnvector(const vector<double> &v)
 {
   matrix ret(v.size(),1);
   if (v.size())

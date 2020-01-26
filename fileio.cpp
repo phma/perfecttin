@@ -44,6 +44,11 @@ PtinHeader::PtinHeader()
   tolerance=NAN;
 }
 
+CoordCheck::CoordCheck()
+{
+  clear();
+}
+
 void CoordCheck::clear()
 {
   count=0;

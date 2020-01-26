@@ -3,7 +3,7 @@
 /* leastsquares.h - least-squares adjustment          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -26,4 +26,4 @@
 #include "matrix.h"
 #include "point.h"
 
-std::vector<double> linearLeastSquares(matrix m,std::vector<double> v);
+std::vector<double> linearLeastSquares(const matrix &m,const std::vector<double> &v);

@@ -3,7 +3,7 @@
 /* fileio.h - file I/O                                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -62,6 +62,7 @@ private:
   double stage0[14][8192],stage1[27][8192],stage2[40][8192],
          stage3[53][8192],stage4[64][4096];
 public:
+  CoordCheck();
   void clear();
   CoordCheck& operator<<(double val);
   double operator[](int n);

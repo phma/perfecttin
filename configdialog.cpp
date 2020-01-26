@@ -3,7 +3,7 @@
 /* configdialog.cpp - configuration dialog            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -44,7 +44,6 @@ const char toleranceStr[10][7]=
 
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
 {
-  int i;
   lengthUnitLabel=new QLabel(this);
   toleranceLabel=new QLabel(this);
   toleranceInUnit=new QLabel(this);
