@@ -30,6 +30,8 @@
 
 using namespace std;
 
+const bool loudTinConsistency=false;
+
 void pointlist::clear()
 {
   wingEdge.lock();
@@ -71,7 +73,8 @@ bool pointlist::checkTinConsistency()
     if (ed==nullptr || (ed->a!=&p->second && ed->b!=&p->second))
     {
       ret=false;
-      //cerr<<"Point "<<p->first<<" line pointer is wrong.\n";
+      if (loudTinConsistency)
+	cerr<<"Point "<<p->first<<" line pointer is wrong.\n";
     }
     edgebearings.clear();
     do
@@ -84,7 +87,8 @@ bool pointlist::checkTinConsistency()
     if (edgebearings.size()>=edges.size())
     {
       ret=false;
-      //cerr<<"Point "<<p->first<<" next pointers do not return to line pointer.\n";
+      if (loudTinConsistency)
+	cerr<<"Point "<<p->first<<" next pointers do not return to line pointer.\n";
     }
     for (totturn=i=0;i<edgebearings.size();i++)
     {
@@ -93,13 +97,15 @@ bool pointlist::checkTinConsistency()
       if (turn1==0)
       {
 	ret=false;
-	//cerr<<"Point "<<p->first<<" has two equal bearings.\n";
+	if (loudTinConsistency)
+	  cerr<<"Point "<<p->first<<" has two equal bearings.\n";
       }
     }
     if (totturn!=(long long)DEG360) // DEG360 is construed as positive when cast to long long
     {
       ret=false;
-      //cerr<<"Point "<<p->first<<" bearings do not wind once counterclockwise.\n";
+      if (loudTinConsistency)
+	cerr<<"Point "<<p->first<<" bearings do not wind once counterclockwise.\n";
     }
   }
   for (i=0;i<edges.size();i++)
@@ -109,7 +115,8 @@ bool pointlist::checkTinConsistency()
     if ((edges[i].tria!=nullptr)+(edges[i].trib!=nullptr)!=1+edges[i].isinterior())
     {
       ret=false;
-      //cerr<<"Edge "<<i<<" has wrong number of adjacent triangles.\n";
+      if (loudTinConsistency)
+	cerr<<"Edge "<<i<<" has wrong number of adjacent triangles.\n";
     }
     if (edges[i].tria)
     {
@@ -129,12 +136,14 @@ bool pointlist::checkTinConsistency()
       if (n!=2)
       {
         ret=false;
-        //cerr<<"Edge "<<i<<" triangle a does not have edge as a side.\n";
+        if (loudTinConsistency)
+	  cerr<<"Edge "<<i<<" triangle a does not have edge as a side.\n";
       }
       if (a>=0)
       {
         ret=false;
-        //cerr<<"Edge "<<i<<" triangle a is on the wrong side.\n";
+        if (loudTinConsistency)
+	  cerr<<"Edge "<<i<<" triangle a is on the wrong side.\n";
       }
     }
     if (edges[i].trib)
@@ -155,12 +164,14 @@ bool pointlist::checkTinConsistency()
       if (n!=2)
       {
         ret=false;
-        //cerr<<"Edge "<<i<<" triangle b does not have edge as a side.\n";
+        if (loudTinConsistency)
+	  cerr<<"Edge "<<i<<" triangle b does not have edge as a side.\n";
       }
       if (a<=0)
       {
         ret=false;
-        //cerr<<"Edge "<<i<<" triangle b is on the wrong side.\n";
+        if (loudTinConsistency)
+	  cerr<<"Edge "<<i<<" triangle b is on the wrong side.\n";
       }
     }
   }
@@ -174,7 +185,8 @@ bool pointlist::checkTinConsistency()
           !triangles[i].aneigh->iscorner(triangles[i].c))
       {
         ret=false;
-        //cerr<<"Triangle "<<i<<" neighbor a is wrong.\n";
+        if (loudTinConsistency)
+	  cerr<<"Triangle "<<i<<" neighbor a is wrong.\n";
       }
     }
     if (triangles[i].bneigh)
@@ -185,7 +197,8 @@ bool pointlist::checkTinConsistency()
           !triangles[i].bneigh->iscorner(triangles[i].c))
       {
         ret=false;
-        //cerr<<"Triangle "<<i<<" neighbor b is wrong.\n";
+        if (loudTinConsistency)
+	  cerr<<"Triangle "<<i<<" neighbor b is wrong.\n";
       }
     }
     if (triangles[i].cneigh)
@@ -196,14 +209,16 @@ bool pointlist::checkTinConsistency()
            triangles[i].cneigh->iscorner(triangles[i].c))
       {
         ret=false;
-        //cerr<<"Triangle "<<i<<" neighbor c is wrong.\n";
+        if (loudTinConsistency)
+	  cerr<<"Triangle "<<i<<" neighbor c is wrong.\n";
       }
     }
   }
   if (nInteriorEdges*2!=nNeighborTriangles)
   {
     ret=false;
-    //cerr<<"Interior edges and neighbor triangles don't match.\n";
+    if (loudTinConsistency)
+      cerr<<"Interior edges and neighbor triangles don't match.\n";
   }
   return ret;
 }
