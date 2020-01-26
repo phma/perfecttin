@@ -741,7 +741,7 @@ void testquarter()
   //tassert(abs(dots3after-116)<15);
   //tassert(abs(dots6-143)<15);
   //tassert(abs(dots7-143)<15);
-  //tassert(net.checkTinConsistency());
+  tassert(net.checkTinConsistency());
   ps.close();
 }
 

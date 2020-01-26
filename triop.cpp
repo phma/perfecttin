@@ -236,11 +236,20 @@ array<point *,3> quarter(triangle *tri)
     eds[i]->a->insertEdge(eds[i]);
     eds[i]->b->insertEdge(eds[i]);
   }
+  tri->setEdgeTriPointers();
+  neigha->setEdgeTriPointers();
+  neighb->setEdgeTriPointers();
+  neighc->setEdgeTriPointers();
   for (i=0;i<6;i++)
     tris[i]->setEdgeTriPointers();
   tri->setEdgeTriPointers();
   for (i=0;i<9;i++)
     eds[i]->setNeighbors();
+  for (i=6;i<9;i++) // This sets the neighbor pointers of the triangles adjacent
+    eds[i]->nextb->setNeighbors(); // to the part of the TIN affected.
+  sidea->setNeighbors();
+  sideb->setNeighbors();
+  sidec->setNeighbors();
   return pnts;
 }
 
