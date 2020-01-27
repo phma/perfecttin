@@ -215,7 +215,6 @@ void testrandom()
   int hist[256],i;
   int done=0,max,min,maxstep=0;
   manysum xsum,ysum,zsum;
-  double distsq;
   memset(hist,0,sizeof(hist));
   while (!done)
   {
@@ -239,7 +238,6 @@ void testrandom()
   }
   tassert(done==1);
   cout<<"Random test: max "<<max<<" min "<<min<<endl;
-  cout<<i<<' '<<distsq/(i+1)<<endl;
   tassert(done==1);
 }
 
