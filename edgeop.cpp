@@ -59,7 +59,7 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
  * but tri2 and tri3 may.
  */
 {
-  int i;
+  int i,j,x,p2;
   size_t sz;
   vector<xyz> remainder; // the dots that remain in tri0
   // memmove overwrites the vtable pointer with the same vtable pointer. Not a problem.
@@ -84,15 +84,24 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
     memmove((void *)&tri0->dots[sz],(void *)&tri3->dots[0],tri3->dots.size()*sizeof(xyz));
     tri3->dots.clear();
   }
+  for (p2=1;p2<=tri0->dots.size();p2*=2);
+  if (p2>tri0->dots.size())
+    p2/=2;
+  x=0x55555555&(p2-1);
   for (i=0;i<tri0->dots.size();i++)
-    if (tri1->in(tri0->dots[i]))
-      tri1->dots.push_back(tri0->dots[i]);
-    else if (tri2 && tri2->in(tri0->dots[i]))
-      tri2->dots.push_back(tri0->dots[i]);
-    else if (tri3 && tri3->in(tri0->dots[i]))
-      tri3->dots.push_back(tri0->dots[i]);
+  {
+    if (i==p2)
+      x=0;
+    j=i^x;
+    if (tri1->in(tri0->dots[j]))
+      tri1->dots.push_back(tri0->dots[j]);
+    else if (tri2 && tri2->in(tri0->dots[j]))
+      tri2->dots.push_back(tri0->dots[j]);
+    else if (tri3 && tri3->in(tri0->dots[j]))
+      tri3->dots.push_back(tri0->dots[j]);
     else
-      remainder.push_back(tri0->dots[i]);
+      remainder.push_back(tri0->dots[j]);
+  }
   remainder.shrink_to_fit();
   tri1->dots.shrink_to_fit();
   if (tri2)
