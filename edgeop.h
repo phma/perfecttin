@@ -3,7 +3,7 @@
 /* edgeop.h - edge operation                          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -26,4 +26,5 @@
 void initTempPointlist(int nthreads);
 void flip(edge *e);
 point *bend(edge *e);
+void dealDots(triangle *tri0,triangle *tri1,triangle *tri2=nullptr,triangle *tri3=nullptr);
 int edgeop(edge *e,double tolerance,int thread);

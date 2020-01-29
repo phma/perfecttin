@@ -42,7 +42,6 @@ point *split(triangle *tri)
   edge *sidea,*sideb,*sidec;
   triangle *newt0,*newt1;
   edge *newe0,*newe1,*newe2;
-  vector<xyz> remainder; // the dots that remain in tri
   int i;
   net.wingEdge.lock();
   point newPoint(((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3);
@@ -101,17 +100,7 @@ point *split(triangle *tri)
   newe2->setNeighbors();
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
-  for (i=0;i<tri->dots.size();i++)
-    if (newt0->in(tri->dots[i]))
-      newt0->dots.push_back(tri->dots[i]);
-    else if (newt1->in(tri->dots[i]))
-      newt1->dots.push_back(tri->dots[i]);
-    else
-      remainder.push_back(tri->dots[i]);
-    swap(tri->dots,remainder);
-  tri->dots.shrink_to_fit();
-  newt0->dots.shrink_to_fit();
-  newt1->dots.shrink_to_fit();
+  dealDots(tri,newt0,newt1);
   tri->flatten();
   newt0->flatten();
   newt1->flatten();

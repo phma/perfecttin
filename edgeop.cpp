@@ -60,23 +60,28 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
  */
 {
   int i;
+  size_t sz;
   vector<xyz> remainder; // the dots that remain in tri0
+  // memmove overwrites the vtable pointer with the same vtable pointer. Not a problem.
   if (tri1->dots.size())
   {
+    sz=tri0->dots.size();
     tri0->dots.resize(tri0->dots.size()+tri1->dots.size());
-    memmove((void *)&tri0->dots[0],(void *)&tri1->dots[0],tri1->dots.size()*sizeof(xyz));
+    memmove((void *)&tri0->dots[sz],(void *)&tri1->dots[0],tri1->dots.size()*sizeof(xyz));
     tri1->dots.clear();
   }
   if (tri2 && tri2->dots.size())
   {
+    sz=tri0->dots.size();
     tri0->dots.resize(tri0->dots.size()+tri2->dots.size());
-    memmove((void *)&tri0->dots[0],(void *)&tri2->dots[0],tri2->dots.size()*sizeof(xyz));
+    memmove((void *)&tri0->dots[sz],(void *)&tri2->dots[0],tri2->dots.size()*sizeof(xyz));
     tri2->dots.clear();
   }
   if (tri3 && tri3->dots.size())
   {
+    sz=tri0->dots.size();
     tri0->dots.resize(tri0->dots.size()+tri3->dots.size());
-    memmove((void *)&tri0->dots[0],(void *)&tri3->dots[0],tri3->dots.size()*sizeof(xyz));
+    memmove((void *)&tri0->dots[sz],(void *)&tri3->dots[0],tri3->dots.size()*sizeof(xyz));
     tri3->dots.clear();
   }
   for (i=0;i<tri0->dots.size();i++)
@@ -99,27 +104,12 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
 
 void flip(edge *e)
 {
-  vector<xyz> allDots;
   int i;
   net.wingEdge.lock();
   e->flip(&net);
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
-  allDots.resize(e->tria->dots.size()+e->trib->dots.size());
-  // memmove overwrites the vtable pointer with the same vtable pointer. Not a problem.
-  if (e->tria->dots.size())
-    memmove((void *)&allDots[0],(void *)&e->tria->dots[0],e->tria->dots.size()*sizeof(xyz));
-  if (e->trib->dots.size())
-    memmove((void *)&allDots[e->tria->dots.size()],(void *)&e->trib->dots[0],e->trib->dots.size()*sizeof(xyz));
-  e->tria->dots.clear();
-  e->trib->dots.clear();
-  for (i=0;i<allDots.size();i++)
-    if (e->tria->in(allDots[i]))
-      e->tria->dots.push_back(allDots[i]);
-    else
-      e->trib->dots.push_back(allDots[i]);
-  e->tria->dots.shrink_to_fit();
-  e->trib->dots.shrink_to_fit();
+  dealDots(e->trib,e->tria);
   e->tria->flatten();
   e->trib->flatten();
   e->tria->unsetError();
