@@ -54,6 +54,49 @@ void initTempPointlist(int nthreads)
     tempPointlist[i];
 }
 
+void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
+/* Places dots in their proper triangle. tri0 and tri1 may not be null,
+ * but tri2 and tri3 may.
+ */
+{
+  int i;
+  vector<xyz> remainder; // the dots that remain in tri0
+  if (tri1->dots.size())
+  {
+    tri0->dots.resize(tri0->dots.size()+tri1->dots.size());
+    memmove((void *)&tri0->dots[0],(void *)&tri1->dots[0],tri1->dots.size()*sizeof(xyz));
+    tri1->dots.clear();
+  }
+  if (tri2 && tri2->dots.size())
+  {
+    tri0->dots.resize(tri0->dots.size()+tri2->dots.size());
+    memmove((void *)&tri0->dots[0],(void *)&tri2->dots[0],tri2->dots.size()*sizeof(xyz));
+    tri2->dots.clear();
+  }
+  if (tri3 && tri3->dots.size())
+  {
+    tri0->dots.resize(tri0->dots.size()+tri3->dots.size());
+    memmove((void *)&tri0->dots[0],(void *)&tri3->dots[0],tri3->dots.size()*sizeof(xyz));
+    tri3->dots.clear();
+  }
+  for (i=0;i<tri0->dots.size();i++)
+    if (tri1->in(tri0->dots[i]))
+      tri1->dots.push_back(tri0->dots[i]);
+    else if (tri2 && tri2->in(tri0->dots[i]))
+      tri2->dots.push_back(tri0->dots[i]);
+    else if (tri3 && tri3->in(tri0->dots[i]))
+      tri3->dots.push_back(tri0->dots[i]);
+    else
+      remainder.push_back(tri0->dots[i]);
+  remainder.shrink_to_fit();
+  tri1->dots.shrink_to_fit();
+  if (tri2)
+    tri2->dots.shrink_to_fit();
+  if (tri3)
+    tri3->dots.shrink_to_fit();
+  swap(tri0->dots,remainder);
+}
+
 void flip(edge *e)
 {
   vector<xyz> allDots;
