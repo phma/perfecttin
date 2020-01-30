@@ -239,6 +239,10 @@ array<point *,3> quarter(triangle *tri)
   sidea->setNeighbors();
   sideb->setNeighbors();
   sidec->setNeighbors();
+  dealDots(tri,tris[0],tris[1],tris[2]);
+  dealDots(neigha,tris[3]);
+  dealDots(neighb,tris[4]);
+  dealDots(neighc,tris[5]);
   return pnts;
 }
 
