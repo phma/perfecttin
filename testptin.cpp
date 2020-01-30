@@ -754,9 +754,14 @@ void testquarter()
   cout<<"After: "<<dots4after<<" dots in 4 "<<dots10<<" dots in 10\n";
   cout<<"Before: "<<dots1before<<" dots in 1\n";
   cout<<"After: "<<dots1after<<" dots in 1 "<<dots11<<" dots in 11\n";
-  //tassert(abs(dots3after-116)<15);
-  //tassert(abs(dots6-143)<15);
-  //tassert(abs(dots7-143)<15);
+  tassert(abs(dots2before-729)<15);
+  tassert(abs(dots2after-186)<15);
+  tassert(abs(dots6-181)<15);
+  tassert(abs(dots7-181)<15);
+  tassert(abs(dots8-181)<15);
+  tassert(abs(dots3before-75)<15);
+  tassert(fabs(dots3after-37.5)<15);
+  tassert(fabs(dots9-37.5)<15);
   tassert(net.checkTinConsistency());
   ps.close();
 }
