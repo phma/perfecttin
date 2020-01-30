@@ -717,7 +717,9 @@ void testsplit()
 
 void testquarter()
 {
-  int dots3before,dots3after,dots6,dots7;
+  int dots1before,dots1after,dots2before,dots2after;
+  int dots3before,dots3after,dots4before,dots4after;
+  int dots6,dots7,dots8,dots9,dots10,dots11;
   PostScript ps;
   ps.open("quarter.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -727,15 +729,31 @@ void testquarter()
   makeOctagon();
   flip(&net.edges[3]); // This makes triangle 2 interior, a prerequisite for quartering.
   drawNet(ps);
+  dots1before=net.triangles[1].dots.size();
+  dots2before=net.triangles[2].dots.size();
   dots3before=net.triangles[3].dots.size();
-  //cout<<"Before: "<<dots3before<<" dots in 3\n";
+  dots4before=net.triangles[4].dots.size();
   //tassert(abs(dots3before-402)<15);
   quarter(&net.triangles[2]);
   drawNet(ps);
+  dots1after=net.triangles[1].dots.size();
+  dots2after=net.triangles[2].dots.size();
   dots3after=net.triangles[3].dots.size();
+  dots4after=net.triangles[4].dots.size();
   dots6=net.triangles[6].dots.size();
   dots7=net.triangles[7].dots.size();
-  //cout<<"After: "<<dots3after<<" dots in 3 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7\n";
+  dots8=net.triangles[8].dots.size();
+  dots9=net.triangles[9].dots.size();
+  dots10=net.triangles[10].dots.size();
+  dots11=net.triangles[11].dots.size();
+  cout<<"Before: "<<dots2before<<" dots in 2\n";
+  cout<<"After: "<<dots2after<<" dots in 2 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7 "<<dots8<<" dots in 8\n";
+  cout<<"Before: "<<dots3before<<" dots in 3\n";
+  cout<<"After: "<<dots3after<<" dots in 3 "<<dots9<<" dots in 9\n";
+  cout<<"Before: "<<dots4before<<" dots in 4\n";
+  cout<<"After: "<<dots4after<<" dots in 4 "<<dots10<<" dots in 10\n";
+  cout<<"Before: "<<dots1before<<" dots in 1\n";
+  cout<<"After: "<<dots1after<<" dots in 1 "<<dots11<<" dots in 11\n";
   //tassert(abs(dots3after-116)<15);
   //tassert(abs(dots6-143)<15);
   //tassert(abs(dots7-143)<15);
