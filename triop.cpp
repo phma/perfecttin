@@ -3,7 +3,7 @@
 /* triop.cpp - triangle operation                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -268,6 +268,16 @@ bool shouldSplit(triangle *tri,double tolerance)
   if (!tri->inTolerance(tolerance))
     tri->setError(tolerance);
   return !tri->inTolerance(tolerance);
+}
+
+bool shouldQuarter(triangle *tri,double tolerance)
+{
+  int i,qbits=7;
+  if (tri->sarea<sqr(tolerance)*M_SQRT_3/4)
+    qbits=0;
+  for (i=0;qbits && i<tri->dots.size();i++)
+    qbits&=tri->quadrant(tri->dots[i]);
+  return qbits>0 && qbits<7;
 }
 
 int triop(triangle *tri,double tolerance,int thread)
