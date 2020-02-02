@@ -3,7 +3,7 @@
 /* triangle.cpp - triangles                             */
 /*                                                      */
 /********************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -246,6 +246,18 @@ void triangle::setgradmat()
 bool triangle::in(xy pnt)
 {
   return area3(pnt,*b,*c)>=0 && area3(*a,pnt,*c)>=0 && area3(*a,*b,pnt)>=0;
+}
+
+int triangle::quadrant(xy pnt)
+/* 0: pnt is in the middle
+ * 1: pnt is near A
+ * 2: pnt is near B
+ * 4: pnt is near C
+ * 3,5,6: pnt is outside
+ * 7: impossible, unless triangle is backward
+ */
+{
+  return (area3(pnt,*b,*c)>sarea/2)+(area3(*a,pnt,*c)>sarea/2)*2+(area3(*a,*b,pnt)>sarea/2)*4;
 }
 
 xy triangle::centroid()

@@ -3,7 +3,7 @@
 /* triangle.h - triangles                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -90,6 +90,7 @@ public:
   xy gradient(xy pnt);
   triangleHit hitTest(xy pnt);
   bool in(xy pnt);
+  int quadrant(xy pnt);
   bool inCircle(xy pnt,double radius);
   bool iscorner(point *v);
   point *otherCorner(point *v0,point *v1);
