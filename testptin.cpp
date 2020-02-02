@@ -643,6 +643,8 @@ void testleastsquares()
 void testflip()
 {
   double lengthBefore,lengthAfter;
+  double areaBefore,areaAfter;
+  int i;
   PostScript ps;
   ps.open("flip.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -651,6 +653,8 @@ void testflip()
   aster(1500);
   makeOctagon();
   drawNet(ps);
+  for (areaBefore=i=0;i<net.triangles.size();i++)
+    areaBefore+=net.triangles[i].sarea;
   lengthBefore=net.edges[3].length();
   cout<<"length "<<lengthBefore<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
   tassert(abs((int)net.triangles[2].dots.size()-402)<15);
@@ -658,16 +662,25 @@ void testflip()
   flip(&net.edges[3]);
   drawNet(ps);
   lengthAfter=net.edges[3].length();
+  for (areaAfter=i=0;i<net.triangles.size();i++)
+  {
+    tassert(net.triangles[i].sarea>1);
+    areaAfter+=net.triangles[i].sarea;
+  }
   cout<<"length "<<lengthAfter<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
+  cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after\n";
   tassert(abs((int)net.triangles[2].dots.size()-729)<15);
   tassert(abs((int)net.triangles[3].dots.size()-75)<15);
   tassert(fabs(lengthBefore/lengthAfter-M_SQRT2)<0.02);
+  tassert(fabs(areaAfter-areaBefore)<1e-6);
   tassert(net.checkTinConsistency());
   ps.close();
 }
 
 void testbend()
 {
+  double areaBefore,areaAfter;
+  int i;
   PostScript ps;
   ps.open("bend.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -678,18 +691,30 @@ void testbend()
   drawNet(ps);
   cout<<"length 3 "<<net.edges[3].length()<<" length 4 "<<net.edges[4].length()<<' '<<net.triangles[3].dots.size()<<" dots in 3\n";
   tassert(abs((int)net.triangles[3].dots.size()-402)<15);
+  for (areaBefore=i=0;i<net.triangles.size();i++)
+    areaBefore+=net.triangles[i].sarea;
   bend(&net.edges[10]);
   drawNet(ps);
+  for (areaAfter=i=0;i<net.triangles.size();i++)
+  {
+    tassert(net.triangles[i].sarea>1);
+    areaAfter+=net.triangles[i].sarea;
+  }
   cout<<"length 10 "<<net.edges[10].length()<<' '<<net.triangles[3].dots.size()<<" dots in 3 "<<net.triangles[6].dots.size()<<" dots in 6\n";
+  cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after, ";
+  cout<<(areaAfter-areaBefore)/areaBefore*100<<"% increase\n";
   tassert(abs((int)net.triangles[3].dots.size()-184)<15);
   tassert(abs((int)net.triangles[6].dots.size()-218)<15);
   tassert(fabs(net.edges[10].length()/(net.edges[3].length()+net.edges[4].length())-0.5307)<0.002);
+  tassert(fabs(areaAfter-areaBefore-117)<10);
   tassert(net.checkTinConsistency());
   ps.close();
 }
 
 void testsplit()
 {
+  double areaBefore,areaAfter;
+  int i;
   int dots3before,dots3after,dots6,dots7;
   PostScript ps;
   ps.open("split.ps");
@@ -699,24 +724,35 @@ void testsplit()
   aster(1500);
   makeOctagon();
   drawNet(ps);
+  for (areaBefore=i=0;i<net.triangles.size();i++)
+    areaBefore+=net.triangles[i].sarea;
   dots3before=net.triangles[3].dots.size();
   cout<<"Before: "<<dots3before<<" dots in 3\n";
   tassert(abs(dots3before-402)<15);
   split(&net.triangles[3]);
   drawNet(ps);
+  for (areaAfter=i=0;i<net.triangles.size();i++)
+  {
+    tassert(net.triangles[i].sarea>1);
+    areaAfter+=net.triangles[i].sarea;
+  }
   dots3after=net.triangles[3].dots.size();
   dots6=net.triangles[6].dots.size();
   dots7=net.triangles[7].dots.size();
   cout<<"After: "<<dots3after<<" dots in 3 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7\n";
+  cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after\n";
   tassert(abs(dots3after-116)<15);
   tassert(abs(dots6-143)<15);
   tassert(abs(dots7-143)<15);
+  tassert(fabs(areaAfter-areaBefore)<1e-6);
   tassert(net.checkTinConsistency());
   ps.close();
 }
 
 void testquarter()
 {
+  double areaBefore,areaAfter;
+  int i;
   int dots1before,dots1after,dots2before,dots2after;
   int dots3before,dots3after,dots4before,dots4after;
   int dots6,dots7,dots8,dots9,dots10,dots11;
@@ -729,6 +765,8 @@ void testquarter()
   makeOctagon();
   flip(&net.edges[3]); // This makes triangle 2 interior, a prerequisite for quartering.
   drawNet(ps);
+  for (areaBefore=i=0;i<net.triangles.size();i++)
+    areaBefore+=net.triangles[i].sarea;
   dots1before=net.triangles[1].dots.size();
   dots2before=net.triangles[2].dots.size();
   dots3before=net.triangles[3].dots.size();
@@ -736,6 +774,11 @@ void testquarter()
   //tassert(abs(dots3before-402)<15);
   quarter(&net.triangles[2]);
   drawNet(ps);
+  for (areaAfter=i=0;i<net.triangles.size();i++)
+  {
+    tassert(net.triangles[i].sarea>1);
+    areaAfter+=net.triangles[i].sarea;
+  }
   dots1after=net.triangles[1].dots.size();
   dots2after=net.triangles[2].dots.size();
   dots3after=net.triangles[3].dots.size();
@@ -754,6 +797,7 @@ void testquarter()
   cout<<"After: "<<dots4after<<" dots in 4 "<<dots10<<" dots in 10\n";
   cout<<"Before: "<<dots1before<<" dots in 1\n";
   cout<<"After: "<<dots1after<<" dots in 1 "<<dots11<<" dots in 11\n";
+  cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after\n";
   tassert(abs(dots2before-729)<15);
   tassert(abs(dots2after-186)<15);
   tassert(abs(dots6-181)<15);
@@ -762,6 +806,7 @@ void testquarter()
   tassert(abs(dots3before-75)<15);
   tassert(fabs(dots3after-37.5)<15);
   tassert(fabs(dots9-37.5)<15);
+  tassert(fabs(areaAfter-areaBefore)<1e-6);
   tassert(net.checkTinConsistency());
   ps.close();
 }
