@@ -4,7 +4,7 @@ I wrote this to enable surveyors to certify that a surface is tested for accurac
 
 The .ptin file output by PerfectTIN contains the TIN and the point cloud, and is always in meters. If the conversion is interrupted, there will be a .ptin file (usually two) with an extra number in its name. Choose the one with the smaller number, unless PerfectTIN complains that it was not finished being written. You can then resume the conversion from where it left off.
 
-Before compiling PerfectTIN, if you want it to read PLY files, clone the libplyxx repo from github.com/phma and compile and install it. This is Simon Rajotte's code; I just made it installable.
+Before compiling PerfectTIN, if you want it to read PLY files, clone the plytapus repo from github.com/phma and compile and install it. This is Simon Rajotte's code; I just made it installable.
 
 The GUI program needs Qt5; the command-line program needs Boost.
 

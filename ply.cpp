@@ -3,7 +3,7 @@
 /* ply.cpp - polygon files                            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -23,15 +23,15 @@
  */
 
 #include "config.h"
-#ifdef LibPLYXX_FOUND
-#include <libplyxx.h>
+#ifdef Plytapus_FOUND
+#include <plytapus.h>
 #endif
 #include "ply.h"
 #include "cloud.h"
 
 using namespace std;
-#ifdef LibPLYXX_FOUND
-using namespace libply;
+#ifdef Plytapus_FOUND
+using namespace plytapus;
 
 void receivePoint(ElementBuffer &buf)
 {

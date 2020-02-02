@@ -3,7 +3,7 @@
 /* mainwindow.cpp - main window                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -303,7 +303,7 @@ void MainWindow::loadFile()
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->selectFile("");
-#ifdef LibPLYXX_FOUND
+#ifdef Plytapus_FOUND
   fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
 #else
   fileDialog->setNameFilter(tr("(*.las);;(*)"));
@@ -576,7 +576,7 @@ void MainWindow::handleResult(ThreadAction ta)
 void MainWindow::aboutProgram()
 {
   QString progName=tr("PerfectTIN");
-#ifdef LibPLYXX_FOUND
+#ifdef Plytapus_FOUND
   QString rajotte=tr("\nPLY file code © Simon Rajotte, MIT license");
 #else
   QString rajotte("");

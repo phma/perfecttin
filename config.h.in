@@ -1,4 +1,4 @@
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  * 
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #cmakedefine HAVE_WINDOWS_H
 #cmakedefine HAVE_SYS_TIME_H
 #cmakedefine HAVE_SYS_RESOURCE_H
-#cmakedefine LibPLYXX_FOUND
+#cmakedefine Plytapus_FOUND
 #define VERSION "@PERFECTTIN_VERSION@"
 #define COPY_YEAR @COPY_YEAR@
 #define SHARE_DIR "@SHARE_DIR@"

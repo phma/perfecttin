@@ -3,7 +3,7 @@
 /* perfecttin.cpp - main program                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
   p.add("input",-1);
   cmdline_options.add(generic).add(hidden);
   cout<<"PerfectTIN version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat, GPLv3+\n";
-#ifdef LibPLYXX_FOUND
+#ifdef Plytapus_FOUND
   cout<<"PLY file code © Simon Rajotte, MIT license\n";
 #endif
   try
