@@ -243,6 +243,12 @@ array<point *,3> quarter(triangle *tri)
   dealDots(neigha,tris[3]);
   dealDots(neighb,tris[4]);
   dealDots(neighc,tris[5]);
+  for (i=0;i<6;i++)
+    tris[i]->flatten();
+  tri->flatten();
+  neigha->flatten();
+  neighb->flatten();
+  neighc->flatten();
   return pnts;
 }
 
