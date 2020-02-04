@@ -772,7 +772,7 @@ void testquarter()
   dots3before=net.triangles[3].dots.size();
   dots4before=net.triangles[4].dots.size();
   //tassert(abs(dots3before-402)<15);
-  quarter(&net.triangles[2]);
+  quarter(&net.triangles[2],-1);
   drawNet(ps);
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {

@@ -107,7 +107,7 @@ point *split(triangle *tri)
   return pnt;
 }
 
-array<point *,3> quarter(triangle *tri)
+array<point *,3> quarter(triangle *tri,int thread)
 /* Adds the midpoints of the three sides as new points and breaks tri into quarters
  * and the three adjacent triangles into halves.
  */
@@ -123,8 +123,12 @@ array<point *,3> quarter(triangle *tri)
   point midA(((xyz)*B+(xyz)*C)/2);
   point midB(((xyz)*C+(xyz)*A)/2);
   point midC(((xyz)*A+(xyz)*B)/2);
+  net.wingEdge.lock();
   int newPointNum=net.points.size()+1;
-  int newTriNum=net.addtriangle(6);
+  int newTriNum=net.addtriangle(6,thread);
+  /* The new triangles must be created locked, because they are adjacent
+   * in pairs, else another thread might try to flip the edge between them.
+   */
   int newEdgeNum=net.edges.size();
   net.addpoint(newPointNum,midA);
   net.addpoint(newPointNum,midB);
@@ -239,6 +243,7 @@ array<point *,3> quarter(triangle *tri)
   sidea->setNeighbors();
   sideb->setNeighbors();
   sidec->setNeighbors();
+  net.wingEdge.unlock();
   dealDots(tri,tris[0],tris[1],tris[2]);
   dealDots(neigha,tris[3]);
   dealDots(neighb,tris[4]);
