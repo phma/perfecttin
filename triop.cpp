@@ -291,8 +291,9 @@ int triop(triangle *tri,double tolerance,int thread)
  */
 {
   vector<point *> corners;
+  array<point *,3> midpoints;
   edge *sidea,*sideb,*sidec;
-  bool spl;
+  bool spl,qtr;
   bool gotLock1,gotLock2=true;
   vector<triangle *> triNeigh;
   triNeigh.push_back(tri);
@@ -306,7 +307,22 @@ int triop(triangle *tri,double tolerance,int thread)
     sideb=tri->a->edg(tri);
     sidec=tri->b->edg(tri);
   }
-  if (gotLock1 && (spl=shouldSplit(tri,tolerance)))
+  if (gotLock1 && (qtr=shouldQuarter(tri,tolerance)))
+  {
+    triNeigh=triangleNeighbors(corners);
+    gotLock2=lockTriangles(thread,triNeigh);
+    if (gotLock2)
+    {
+      midpoints=quarter(tri,thread);
+      corners.push_back(midpoints[0]);
+      corners.push_back(midpoints[1]);
+      corners.push_back(midpoints[2]);
+      triNeigh=triangleNeighbors(corners);
+      tri->unsetError();
+      logAdjustment(adjustElev(triNeigh,corners));
+    }
+  }
+  if (gotLock1 && !qtr && (spl=shouldSplit(tri,tolerance)))
   {
     triNeigh=triangleNeighbors(corners);
     gotLock2=lockTriangles(thread,triNeigh);
