@@ -26,6 +26,7 @@
 #include "ldecimal.h"
 #include "cloud.h"
 #include "adjelev.h"
+#include "neighbor.h"
 #include "fileio.h"
 #include "octagon.h"
 using namespace std;
@@ -517,6 +518,7 @@ void MainWindow::handleResult(ThreadAction ta)
  */
 {
   QString message;
+  vector<point *> cornersToDump;
   showingResult=true;
   tinSizeChanged();
   switch (ta.opcode)
@@ -540,6 +542,10 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
+	cornersToDump.push_back(net.triangles[0].a);
+	cornersToDump.push_back(net.triangles[0].b);
+	cornersToDump.push_back(net.triangles[0].c);
+	dumpTriangles("tri0dump",triangleNeighbors(cornersToDump));
 	loadAction->setEnabled(true);
 	convertAction->setEnabled(false);
 	exportMenu->setEnabled(true);

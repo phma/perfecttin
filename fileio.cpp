@@ -637,19 +637,19 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
   }
   for (j=corners.begin();j!=corners.end();j++)
   {
-    cout<<net.revpoints[*j]<<' ';
-    cout<<ldecimal((*j)->getx())<<' ';
-    cout<<ldecimal((*j)->gety())<<' ';
-    cout<<ldecimal((*j)->getz())<<'\n';
+    dumpFile<<net.revpoints[*j]<<' ';
+    dumpFile<<ldecimal((*j)->getx())<<' ';
+    dumpFile<<ldecimal((*j)->gety())<<' ';
+    dumpFile<<ldecimal((*j)->getz())<<'\n';
   }
   for (i=0;i<tris.size();i++)
   {
     tri=tris[i];
-    cout<<net.revpoints[tri->a]<<' '<<net.revpoints[tri->b]<<' '<<net.revpoints[tri->c]<<'\n';
+    dumpFile<<net.revpoints[tri->a]<<' '<<net.revpoints[tri->b]<<' '<<net.revpoints[tri->c]<<'\n';
     for (k=0;k<tri->dots.size();k++)
     {
       dot=tri->dots[k];
-      cout<<"  "<<ldecimal(dot.getx())<<' '<<ldecimal(dot.gety())<<' '<<ldecimal(dot.getz())<<'\n';
+      dumpFile<<"  "<<ldecimal(dot.getx())<<' '<<ldecimal(dot.gety())<<' '<<ldecimal(dot.getz())<<'\n';
     }
   }
 }
