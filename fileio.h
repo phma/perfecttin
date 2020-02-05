@@ -84,4 +84,5 @@ void writePtin(std::string outputFile,int tolRatio,double tolerance);
 PtinHeader readPtinHeader(std::istream &inputFile);
 PtinHeader readPtinHeader(std::string inputFile);
 PtinHeader readPtin(std::string inputFile);
+void dumpTriangles(std::string outputFile,std::vector<triangle *> tris);
 #endif

@@ -28,6 +28,7 @@
 #include "boundrect.h"
 #include "octagon.h"
 #include "ply.h"
+#include "ldecimal.h"
 #include "las.h"
 #include "threads.h"
 #include "binio.h"
@@ -618,4 +619,37 @@ PtinHeader readPtin(std::string inputFile)
   else if (readingStarted)
     net.clear();
   return header;
+}
+
+void dumpTriangles(string outputFile,vector<triangle *> tris)
+{
+  triangle *tri;
+  xyz dot;
+  ofstream dumpFile(outputFile);
+  int i,k;
+  set<point *> corners;
+  set<point *>::iterator j;
+  for (i=0;i<tris.size();i++)
+  {
+    corners.insert(tris[i]->a);
+    corners.insert(tris[i]->b);
+    corners.insert(tris[i]->c);
+  }
+  for (j=corners.begin();j!=corners.end();j++)
+  {
+    cout<<net.revpoints[*j]<<' ';
+    cout<<ldecimal((*j)->getx())<<' ';
+    cout<<ldecimal((*j)->gety())<<' ';
+    cout<<ldecimal((*j)->getz())<<'\n';
+  }
+  for (i=0;i<tris.size();i++)
+  {
+    tri=tris[i];
+    cout<<net.revpoints[tri->a]<<' '<<net.revpoints[tri->b]<<' '<<net.revpoints[tri->c]<<'\n';
+    for (k=0;k<tri->dots.size();k++)
+    {
+      dot=tri->dots[k];
+      cout<<"  "<<ldecimal(dot.getx())<<' '<<ldecimal(dot.gety())<<' '<<ldecimal(dot.getz())<<'\n';
+    }
+  }
 }
