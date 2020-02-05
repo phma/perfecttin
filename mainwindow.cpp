@@ -512,13 +512,34 @@ void MainWindow::msgNoCloudArea()
   msgBox->warning(this,tr("PerfectTIN"),tr("Point cloud no area"));
 }
 
+void dumpSteepestTriangle()
+{
+  int i,iSteep;
+  double gSteep=0;
+  vector<point *> cornersToDump;
+  xy grad;
+  for (i=0;i<net.triangles.size();i++)
+  {
+    grad=net.triangles[i].gradient(net.triangles[i].centroid());
+    if (grad.length()>gSteep)
+    {
+      gSteep=grad.length();
+      iSteep=i;
+    }
+  }
+  cornersToDump.push_back(net.triangles[iSteep].a);
+  cornersToDump.push_back(net.triangles[iSteep].b);
+  cornersToDump.push_back(net.triangles[iSteep].c);
+  dumpTriangles("steepdump",triangleNeighbors(cornersToDump));
+  cout<<"Steepest triangle has slope "<<gSteep<<endl;
+}
+
 void MainWindow::handleResult(ThreadAction ta)
 /* Receives the result of reading a file. If an error happened, pops up a message.
  * The file was read by a worker thread, which put the result in a queue.
  */
 {
   QString message;
-  vector<point *> cornersToDump;
   showingResult=true;
   tinSizeChanged();
   switch (ta.opcode)
@@ -542,10 +563,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	cornersToDump.push_back(net.triangles[0].a);
-	cornersToDump.push_back(net.triangles[0].b);
-	cornersToDump.push_back(net.triangles[0].c);
-	dumpTriangles("tri0dump",triangleNeighbors(cornersToDump));
+	dumpSteepestTriangle();
 	loadAction->setEnabled(true);
 	convertAction->setEnabled(false);
 	exportMenu->setEnabled(true);
