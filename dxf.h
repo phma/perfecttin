@@ -3,7 +3,7 @@
 /* dxf.h - Drawing Exchange Format                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -56,8 +56,6 @@ public:
   GroupCode(int tag0);
   GroupCode(const GroupCode &b);
   GroupCode& operator=(const GroupCode &b);
-  GroupCode(GroupCode&&)=default;
-  GroupCode& operator=(GroupCode&&)=default;
   ~GroupCode();
   int tag; // short in binary file
   union
