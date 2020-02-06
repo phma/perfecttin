@@ -282,6 +282,8 @@ bool shouldQuarter(triangle *tri,double tolerance)
     qbits=0;
   if (tri->aneigh==nullptr || tri->bneigh==nullptr || tri->cneigh==nullptr)
     qbits=0;
+  if (qbits && tri->dots.size()+tri->aneigh->dots.size()+tri->bneigh->dots.size()+tri->cneigh->dots.size()<10)
+    qbits=0;
   for (i=0;qbits && i<tri->dots.size();i++)
     qbits&=tri->quadrant(tri->dots[i]);
   return qbits>0 && qbits<7;
