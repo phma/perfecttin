@@ -54,8 +54,9 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 {
   int i,j,k,ndots;
   matrix a;
+  edge *ed;
   adjustRecord ret{true,0};
-  vector<double> b,x,xsq;
+  vector<double> b,x,xsq,nextCornerElev;
   double oldelev;
   for (ndots=i=0;i<tri.size();i++)
   {
@@ -90,6 +91,10 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     else
     {
       oldelev=pnt[k]->elev();
+      nextCornerElev.clear();
+      for (ed=pnt[k]->line,j=0;ed!=pnt[k]->line || j==0;ed=ed->next(pnt[k]),j++)
+      nextCornerElev.push_back(ed->otherend(pnt[k])->elev());
+      pnt[k]->raise(pairwisesum(nextCornerElev)/nextCornerElev.size()-pnt[k]->elev());
       ret.validMatrix=false;
     }
     xsq.push_back(sqr(pnt[k]->elev()-oldelev));
