@@ -625,6 +625,7 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
 {
   triangle *tri;
   xyz dot;
+  xy grad;
   ofstream dumpFile(outputFile);
   int i,k;
   set<point *> corners;
@@ -645,7 +646,9 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
   for (i=0;i<tris.size();i++)
   {
     tri=tris[i];
-    dumpFile<<net.revpoints[tri->a]<<' '<<net.revpoints[tri->b]<<' '<<net.revpoints[tri->c]<<'\n';
+    grad=tri->gradient(tri->centroid());
+    dumpFile<<net.revpoints[tri->a]<<' '<<net.revpoints[tri->b]<<' '<<net.revpoints[tri->c];
+    dumpFile<<" Area "<<tri->sarea<<" Slope "<<grad.length()<<" Acic "<<tri->acicularity()<<endl;
     for (k=0;k<tri->dots.size();k++)
     {
       dot=tri->dots[k];
