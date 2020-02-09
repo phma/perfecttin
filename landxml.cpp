@@ -74,8 +74,8 @@ void writeLandXml(string outputFile,double outUnit,int flags)
   for (i=1;i<=net.points.size();i++)
   {
     xmlFile<<"<P id=\""<<i<<"\">";
-    xmlFile<<ldecimal(net.points[i].getx()/outUnit)<<' ';
     xmlFile<<ldecimal(net.points[i].gety()/outUnit)<<' ';
+    xmlFile<<ldecimal(net.points[i].getx()/outUnit)<<' ';
     xmlFile<<ldecimal(net.points[i].getz()/outUnit)<<"</P>\n";
   }
   xmlFile<<"</Pnts><Faces>\n";
