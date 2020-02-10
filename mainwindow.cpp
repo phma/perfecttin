@@ -201,7 +201,7 @@ void MainWindow::tick()
 	ta.param0=lrint(toleranceRatio*4);
 	ta.opcode=ACT_DELETE_FILE;
 	ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
-	enqueueAction(ta);
+	//enqueueAction(ta);
 	ta.param1=tolerance;
 	ta.param0=lrint(toleranceRatio);
 	ta.opcode=ACT_WRITE_PTIN;
@@ -224,7 +224,7 @@ void MainWindow::tick()
 	  ta.param0=lrint(stageTolerance*2/tolerance);
 	  ta.opcode=ACT_DELETE_FILE;
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
-	  enqueueAction(ta);
+	  //enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
 	  openAction->setEnabled(true);
 	  loadAction->setEnabled(true);
