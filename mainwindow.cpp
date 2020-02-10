@@ -563,7 +563,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	//dumpSteepestTriangle();
+	dumpSteepestTriangle();
 	loadAction->setEnabled(true);
 	convertAction->setEnabled(false);
 	exportMenu->setEnabled(true);
