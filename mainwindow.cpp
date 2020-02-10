@@ -236,6 +236,7 @@ void MainWindow::tick()
 	currentAction=0;
 	canvas->update();
       }
+    else;
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   { // Conversion is running: check whether stage is complete
