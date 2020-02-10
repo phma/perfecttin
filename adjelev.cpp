@@ -54,6 +54,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 {
   int i,j,k,ndots;
   matrix a;
+  double localLow=INFINITY,localHigh=-INFINITY,localClipLow,localClipHigh;
   edge *ed;
   adjustRecord ret{true,0};
   vector<double> b,x,xsq,nextCornerElev;
@@ -72,9 +73,26 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
       for (k=0;k<pnt.size();k++)
 	a[ndots][k]=tri[i]->areaCoord(tri[i]->dots[j],pnt[k]);
       b.push_back(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j]));
+      if (tri[i]->dots[j].elev()>localHigh)
+	localHigh=tri[i]->dots[j].elev();
+      if (tri[i]->dots[j].elev()<localLow)
+	localLow=tri[i]->dots[j].elev();
     }
+  for (k=0;k<pnt.size();k++)
+  {
+    if (pnt[k]->elev()>localHigh)
+      localHigh=pnt[k]->elev();
+    if (pnt[k]->elev()<localLow)
+      localLow=pnt[k]->elev();
+  }
   x=linearLeastSquares(a,b);
   assert(x.size()==pnt.size());
+  localClipHigh=2*localHigh-localLow;
+  localClipLow=2*localLow-localHigh;
+  if (localClipHigh>clipHigh)
+    localClipHigh=clipHigh;
+  if (localClipLow<clipLow)
+    localClipLow=clipLow;
   for (k=0;k<pnt.size();k++)
   {
     if (std::isfinite(x[k]))
@@ -83,10 +101,10 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 	//cout<<"Big adjustment!\n";
       oldelev=pnt[k]->elev();
       pnt[k]->raise(x[k]);
-      if (pnt[k]->elev()>clipHigh)
-	pnt[k]->raise(clipHigh-pnt[k]->elev());
-      if (pnt[k]->elev()<clipLow)
-	pnt[k]->raise(clipLow-pnt[k]->elev());
+      if (pnt[k]->elev()>localClipHigh)
+	pnt[k]->raise(localClipHigh-pnt[k]->elev());
+      if (pnt[k]->elev()<localClipLow)
+	pnt[k]->raise(localClipLow-pnt[k]->elev());
     }
     else
     {
