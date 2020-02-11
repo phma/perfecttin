@@ -246,6 +246,8 @@ bool shouldFlip(edge *e,double tolerance,int thread)
   if (isSpiky && wouldbeSpiky)
     cout<<"spiky triangle\n";
   inTol=e->tria->inTolerance(tolerance)&&e->trib->inTolerance(tolerance);
+  if (e->tria->dots.size()+e->trib->dots.size()<1)
+    inTol=false; // Try not to have acicular triangles in holes
   if (!inTol)
   {
     for (i=0;i<4;i++)
