@@ -75,6 +75,28 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   timer->start(50);
 }
 
+void dumpSteepestTriangle()
+{
+  int i,iSteep;
+  double gSteep=0;
+  vector<point *> cornersToDump;
+  xy grad;
+  for (i=0;i<net.triangles.size();i++)
+  {
+    grad=net.triangles[i].gradient(net.triangles[i].centroid());
+    if (grad.length()>gSteep)
+    {
+      gSteep=grad.length();
+      iSteep=i;
+    }
+  }
+  cornersToDump.push_back(net.triangles[iSteep].a);
+  cornersToDump.push_back(net.triangles[iSteep].b);
+  cornersToDump.push_back(net.triangles[iSteep].c);
+  dumpTriangles("steepdump",triangleNeighbors(cornersToDump));
+  cout<<"Steepest triangle has slope "<<gSteep<<endl;
+}
+
 MainWindow::~MainWindow()
 {
 }
@@ -226,6 +248,7 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  //enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
+	  dumpSteepestTriangle();
 	  openAction->setEnabled(true);
 	  loadAction->setEnabled(true);
 	  convertAction->setEnabled(false);
@@ -511,28 +534,6 @@ void MainWindow::configure()
 void MainWindow::msgNoCloudArea()
 {
   msgBox->warning(this,tr("PerfectTIN"),tr("Point cloud no area"));
-}
-
-void dumpSteepestTriangle()
-{
-  int i,iSteep;
-  double gSteep=0;
-  vector<point *> cornersToDump;
-  xy grad;
-  for (i=0;i<net.triangles.size();i++)
-  {
-    grad=net.triangles[i].gradient(net.triangles[i].centroid());
-    if (grad.length()>gSteep)
-    {
-      gSteep=grad.length();
-      iSteep=i;
-    }
-  }
-  cornersToDump.push_back(net.triangles[iSteep].a);
-  cornersToDump.push_back(net.triangles[iSteep].b);
-  cornersToDump.push_back(net.triangles[iSteep].c);
-  dumpTriangles("steepdump",triangleNeighbors(cornersToDump));
-  cout<<"Steepest triangle has slope "<<gSteep<<endl;
 }
 
 void MainWindow::handleResult(ThreadAction ta)
