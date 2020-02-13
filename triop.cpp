@@ -268,17 +268,16 @@ bool lockTriangles(int thread,vector<triangle *> triPtr)
   return lockTriangles(thread,triangles);
 }
 
-bool shouldSplit(triangle *tri,double tolerance)
+bool shouldSplit(triangle *tri,double tolerance,double minArea)
 {
-  if (!tri->inTolerance(tolerance))
+  if (!tri->inTolerance(tolerance,minArea))
     tri->setError(tolerance);
-  return !tri->inTolerance(tolerance);
+  return !tri->inTolerance(tolerance,minArea);
 }
 
-bool shouldQuarter(triangle *tri,double tolerance)
+bool shouldQuarter(triangle *tri,double tolerance,double minArea)
 {
   int i,qbits=7;
-  double minArea=sqr(tolerance)*M_SQRT_3/4;
   if (tri->sarea<minArea)
     qbits=0;
   if (tri->aneigh==nullptr || tri->bneigh==nullptr || tri->cneigh==nullptr)
@@ -292,7 +291,7 @@ bool shouldQuarter(triangle *tri,double tolerance)
   return qbits>0 && qbits<7;
 }
 
-int triop(triangle *tri,double tolerance,int thread)
+int triop(triangle *tri,double tolerance,double minArea,int thread)
 /* Returns true if it got a lock. If all three edgeop calls didn't get a lock,
  * it still returns true.
  */
@@ -314,7 +313,7 @@ int triop(triangle *tri,double tolerance,int thread)
     sideb=tri->a->edg(tri);
     sidec=tri->b->edg(tri);
   }
-  if (gotLock1 && (qtr=shouldQuarter(tri,tolerance)))
+  if (gotLock1 && (qtr=shouldQuarter(tri,tolerance,minArea)))
   {
     triNeigh=triangleNeighbors(corners);
     gotLock2=lockTriangles(thread,triNeigh);
@@ -329,7 +328,7 @@ int triop(triangle *tri,double tolerance,int thread)
       logAdjustment(adjustElev(triNeigh,corners));
     }
   }
-  if (gotLock1 && !qtr && (spl=shouldSplit(tri,tolerance)))
+  if (gotLock1 && !qtr && (spl=shouldSplit(tri,tolerance,minArea)))
   {
     triNeigh=triangleNeighbors(corners);
     gotLock2=lockTriangles(thread,triNeigh);
@@ -339,9 +338,9 @@ int triop(triangle *tri,double tolerance,int thread)
       triNeigh=triangleNeighbors(corners);
       tri->unsetError();
       logAdjustment(adjustElev(triNeigh,corners));
-      edgeop(sidea,tolerance,thread);
-      edgeop(sideb,tolerance,thread);
-      edgeop(sidec,tolerance,thread);
+      edgeop(sidea,tolerance,minArea,thread);
+      edgeop(sideb,tolerance,minArea,thread);
+      edgeop(sidec,tolerance,minArea,thread);
     }
   }
   unlockTriangles(thread);

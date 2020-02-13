@@ -27,5 +27,5 @@
 point *split(triangle *tri);
 std::array<point *,3> quarter(triangle *tri,int thread);
 bool lockTriangles(int thread,std::vector<triangle *> triPtr);
-bool shouldSplit(triangle *tri,double tolerance); // called from edgeop
-int triop(triangle *tri,double tolerance,int thread);
+bool shouldSplit(triangle *tri,double tolerance,double minArea); // called from edgeop
+int triop(triangle *tri,double tolerance,double minArea,int thread);

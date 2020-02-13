@@ -122,7 +122,7 @@ double triangle::elevation(xy pnt)
   return q*b->z+p*a->z+r*c->z;
 }
 
-bool triangle::inTolerance(double tolerance)
+bool triangle::inTolerance(double tolerance,double minArea)
 /* Returns true if the triangle
  * •is smaller than an equilateral triangle whose side is tolerance,
  * •has too few dots to be split, or

@@ -23,6 +23,7 @@
  */
 #include <queue>
 #include "threads.h"
+#include "angle.h"
 #include "edgeop.h"
 #include "triop.h"
 #include "adjelev.h"
@@ -122,6 +123,7 @@ array<double,2> areaDone(double tolerance)
   int i;
   triangle *tri;
   double allSum;
+  double minArea=sqr(tolerance)*M_SQRT_3/4;
   array<double,2> ret;
   cr::nanoseconds elapsed;
   cr::time_point<cr::steady_clock> timeStart=clk.now();
@@ -144,9 +146,9 @@ array<double,2> areaDone(double tolerance)
     tri=&net.triangles[i];
     net.wingEdge.unlock_shared();
     allTri.push_back(tri->sarea);
-    if (tri->inTolerance(tolerance))
+    if (tri->inTolerance(tolerance,minArea))
       doneTri.push_back(tri->sarea);
-    if (tri->inTolerance(M_SQRT2*tolerance))
+    if (tri->inTolerance(M_SQRT2*tolerance,minArea*2))
       doneq2Tri.push_back(tri->sarea);
   }
   allBuckets[bucket]=pairwisesum(allTri);
@@ -488,6 +490,7 @@ void TinThread::operator()(int thread)
   int e=0,t=0,d=0;
   int triResult,edgeResult;
   edge *edg;
+  double minArea;
   triangle *tri;
   ThreadAction act;
   startMutex.lock();
@@ -503,6 +506,7 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
+      minArea=sqr(stageTolerance)*M_SQRT_3/4;
       if (net.edges.size() && net.triangles.size())
       {
 	net.wingEdge.lock_shared();
@@ -511,8 +515,8 @@ void TinThread::operator()(int thread)
 	t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
 	tri=&net.triangles[t];
 	net.wingEdge.unlock_shared();
-	edgeResult=edgeop(edg,stageTolerance,thread);
-	triResult=triop(tri,stageTolerance,thread);
+	edgeResult=edgeop(edg,stageTolerance,minArea,thread);
+	triResult=triop(tri,stageTolerance,minArea,thread);
       }
       else
 	triResult=edgeResult=2;

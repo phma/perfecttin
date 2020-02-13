@@ -83,7 +83,7 @@ public:
   double areaCoord(xy pnt,point *v);
   double elevation(xy pnt);
   void flatten();
-  bool inTolerance(double tolerance);
+  bool inTolerance(double tolerance,double minArea);
   void setError(double tolerance);
   void unsetError();
   xyz gradient3(xy pnt);

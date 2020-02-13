@@ -204,7 +204,7 @@ bool spikyTriangle(xy a,xy b,xy c)
   return dist(a,c)>412529.6*fabs(pldist(b,c,a));
 }
 
-bool shouldFlip(edge *e,double tolerance,int thread)
+bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 /* Decides whether to flip an interior edge. If it is flippable (that is,
  * the two triangles form a convex quadrilateral), it decides based on
  * a combination of four criteria:
@@ -245,7 +245,7 @@ bool shouldFlip(edge *e,double tolerance,int thread)
 			     tempPointlist[thread].points[4]);
   if (isSpiky && wouldbeSpiky)
     cout<<"spiky triangle\n";
-  inTol=e->tria->inTolerance(tolerance)&&e->trib->inTolerance(tolerance);
+  inTol=e->tria->inTolerance(tolerance,minArea)&&e->trib->inTolerance(tolerance,minArea);
   if (e->tria->dots.size()+e->trib->dots.size()<1)
     inTol=false; // Try not to have acicular triangles in holes
   if (!inTol)
@@ -360,15 +360,15 @@ bool shouldFlip(edge *e,double tolerance,int thread)
   return ret;
 }
 
-bool shouldBend(edge *e,double tolerance)
+bool shouldBend(edge *e,double tolerance,double minArea)
 {
   if (e->tria)
-    return shouldSplit(e->tria,tolerance);
+    return shouldSplit(e->tria,tolerance,minArea);
   else
-    return shouldSplit(e->trib,tolerance);
+    return shouldSplit(e->trib,tolerance,minArea);
 }
 
-int edgeop(edge *e,double tolerance,int thread)
+int edgeop(edge *e,double tolerance,double minArea,int thread)
 {
   bool did=false;
   bool gotLock1,gotLock2=true;
@@ -388,7 +388,7 @@ int edgeop(edge *e,double tolerance,int thread)
   }
   gotLock1=lockTriangles(thread,triAdj);
   if (gotLock1 && e->isinterior())
-    if (e->isFlippable() && shouldFlip(e,tolerance,thread))
+    if (e->isFlippable() && shouldFlip(e,tolerance,minArea,thread))
     {
       triNeigh=triangleNeighbors(corners);
       gotLock2=lockTriangles(thread,triNeigh);
@@ -400,7 +400,7 @@ int edgeop(edge *e,double tolerance,int thread)
     }
     else;
   else
-    if (gotLock1 && shouldBend(e,tolerance))
+    if (gotLock1 && shouldBend(e,tolerance,minArea))
     {
       triNeigh=triangleNeighbors(corners);
       gotLock2=lockTriangles(thread,triNeigh);
