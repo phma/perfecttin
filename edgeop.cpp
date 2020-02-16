@@ -303,6 +303,10 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 		    tempPointlist[thread].points[5]);
     crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
 	  (areas[0]+areas[1]+areas[2]+areas[3]);
+    if (areas[0]+areas[1]<minArea || areas[2]+areas[3]<minArea)
+      crit3+=0.7;
+    if (areas[1]+areas[2]<minArea || areas[3]+areas[0]<minArea)
+      crit3-=0.7; // Don't flip if it would result in too small triangle
     triab[0]=e->tria;
     triab[1]=e->trib;
     if (validTemp)
