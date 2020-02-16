@@ -124,13 +124,13 @@ double triangle::elevation(xy pnt)
 
 bool triangle::inTolerance(double tolerance,double minArea)
 /* Returns true if the triangle
- * •is smaller than an equilateral triangle whose side is tolerance,
+ * •would become smaller than minArea if split,
  * •has too few dots to be split, or
  * •has all dots within tolerance (without actually checking them all).
  */
 {
   return dots.size()<9 ||
-         sarea<sqr(tolerance)*M_SQRT_3/4 ||
+         sarea<3*minArea ||
          ((fabs(aElev-a->elev())+fabs(bElev-b->elev()))+
 	  (fabs(cElev-c->elev())+vError))<tolerance;
 }
