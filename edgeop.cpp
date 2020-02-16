@@ -33,18 +33,19 @@
 #include "threads.h"
 #include "adjelev.h"
 
+#define CRITLOGSIZE 24
 using namespace std;
 
 map<int,pointlist> tempPointlist;
 /* Small pointlists, 5 points and 4 triangles, used for deciding whether to
  * flip an edge. One per worker thread.
  */
-double critLog[16];
+double critLog[CRITLOGSIZE];
 
 void logCrit(double crit)
 {
-  memmove(critLog,critLog+1,15*sizeof(double));
-  critLog[15]=crit;
+  memmove(critLog,critLog+1,(CRITLOGSIZE-1)*sizeof(double));
+  critLog[CRITLOGSIZE-1]=crit;
 }
 
 void initTempPointlist(int nthreads)
@@ -357,6 +358,8 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
     logCrit(crit3);
     logCrit(crit4);
   }
+  logCrit(isSpiky);
+  logCrit(wouldbeSpiky);
   if (isSpiky && !wouldbeSpiky)
     ret=true;
   if (wouldbeSpiky && !isSpiky)
