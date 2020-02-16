@@ -116,14 +116,14 @@ array<point *,3> quarter(triangle *tri,int thread)
   array<point *,3> pnts;
   array<edge *,9> eds;
   array<triangle *,6> tris;
-  point *A=tri->a,*B=tri->b,*C=tri->c;
   point *oppA,*oppB,*oppC;
   edge *sidea,*sideb,*sidec;
   triangle *neigha,*neighb,*neighc;
+  net.wingEdge.lock();
+  point *A=tri->a,*B=tri->b,*C=tri->c;
   point midA(((xyz)*B+(xyz)*C)/2);
   point midB(((xyz)*C+(xyz)*A)/2);
   point midC(((xyz)*A+(xyz)*B)/2);
-  net.wingEdge.lock();
   int newPointNum=net.points.size()+1;
   int newTriNum=net.addtriangle(6,thread);
   /* The new triangles must be created locked, because they are adjacent
