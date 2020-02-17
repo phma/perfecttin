@@ -638,6 +638,19 @@ void testleastsquares()
   x=linearLeastSquares(a,b);
   cout<<"Least squares ("<<ldecimal(x[0])<<','<<ldecimal(x[1])<<")\n";
   tassert(dist(xy(x[0],x[1]),xy(-29/77.,51/77.))<1e-9);
+  a.resize(2,3);
+  b.clear();
+  b.push_back(1);
+  b.push_back(0);
+  a[0][0]=1;
+  a[0][1]=1; // https://www.math.usm.edu/lambers/mat419/lecture15.pdf
+  a[0][2]=1;
+  a[1][0]=-1;
+  a[1][1]=-1;
+  a[1][2]=1;
+  x=minimumNorm(a,b);
+  cout<<"Minimum norm ("<<ldecimal(x[0])<<','<<ldecimal(x[1])<<','<<ldecimal(x[2])<<")\n";
+  tassert(dist(xyz(x[0],x[1],x[2]),xyz(0.25,0.25,0.5))<1e-9);
 }
 
 void testflip()

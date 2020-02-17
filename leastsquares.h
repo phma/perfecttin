@@ -27,3 +27,4 @@
 #include "point.h"
 
 std::vector<double> linearLeastSquares(const matrix &m,const std::vector<double> &v);
+std::vector<double> minimumNorm(matrix m,std::vector<double> v);
