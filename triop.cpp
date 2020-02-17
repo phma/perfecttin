@@ -34,6 +34,17 @@
 
 using namespace std;
 
+void checkIntElev(vector<point *> corners)
+/* Check whether any of the elevations is an integer.
+ * Some elevations have been integers like 0 or 256.
+ */
+{
+  int i;
+  for (i=0;i<corners.size();i++)
+    if (frac(corners[i]->elev())==0)
+      cout<<"Point "<<net.revpoints[corners[i]]<<" elevation "<<corners[i]->elev()<<endl;
+}
+
 point *split(triangle *tri)
 /* Inserts a new point in the triangle, then moves the dots that are in the
  * two new triangles to them.
@@ -326,6 +337,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
       triNeigh=triangleNeighbors(corners);
       tri->unsetError();
       logAdjustment(adjustElev(triNeigh,corners));
+      checkIntElev(corners);
     }
   }
   if (gotLock1 && !qtr && (spl=shouldSplit(tri,tolerance,minArea)))
@@ -338,6 +350,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
       triNeigh=triangleNeighbors(corners);
       tri->unsetError();
       logAdjustment(adjustElev(triNeigh,corners));
+      checkIntElev(corners);
       edgeop(sidea,tolerance,minArea,thread);
       edgeop(sideb,tolerance,minArea,thread);
       edgeop(sidec,tolerance,minArea,thread);
