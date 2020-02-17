@@ -36,6 +36,17 @@ using namespace std;
 
 vector<adjustRecord> adjustmentLog;
 
+void checkIntElev(vector<point *> corners)
+/* Check whether any of the elevations is an integer.
+ * Some elevations have been integers like 0 or 256.
+ */
+{
+  int i;
+  for (i=0;i<corners.size();i++)
+    if (frac(corners[i]->elev())==0)
+      cout<<"Point "<<net.revpoints[corners[i]]<<" elevation "<<corners[i]->elev()<<endl;
+}
+
 adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 /* Adjusts the points by least squares to fit all the dots in the triangles.
  * The triangles should be all those that have at least one corner in
@@ -123,6 +134,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
       markBucketDirty(net.revtriangles[tri[i]]);
   //if (singular)
     //cout<<"Matrix in least squares is singular"<<endl;
+  checkIntElev(pnt);
   return ret;
 }
 
