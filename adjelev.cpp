@@ -106,7 +106,11 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     localClipLow=clipLow;
   for (k=0;k<pnt.size();k++)
   {
-    if (std::isfinite(x[k]))
+    if (std::isfinite(x[k]) && fabs(x[k])<16384)
+    /* Ground elevation is in the range [-11000,8850]. Roundoff error in a
+     * singular matrix produces numbers around 1e18. Any number too big
+     * means that the matrix is singular, even if the number is finite.
+     */
     {
       //if (fabs(x[k])>2000)
 	//cout<<"Big adjustment!\n";
