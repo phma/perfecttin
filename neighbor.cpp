@@ -3,7 +3,7 @@
 /* neighbor.cpp - triangle neighbors of points        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -44,6 +44,26 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
       tmpRet.insert(ed->tri(corners[i]));
     if (ed!=ed0)
       cerr<<"Winged edge corruption\n";
+  }
+  for (k=tmpRet.begin();k!=tmpRet.end();k++)
+    if (*k!=nullptr)
+      ret.push_back(*k);
+  net.wingEdge.unlock_shared();
+  return ret;
+}
+
+vector<edge *> edgeNeighbors(vector<triangle *> triangles)
+{
+  vector<edge *> ret;
+  set<edge *> tmpRet;
+  int i;
+  set<edge *>::iterator k;
+  net.wingEdge.lock_shared();
+  for (i=0;i<triangles.size();i++)
+  {
+    tmpRet.insert(triangles[i]->a->edg(triangles[i]));
+    tmpRet.insert(triangles[i]->b->edg(triangles[i]));
+    tmpRet.insert(triangles[i]->c->edg(triangles[i]));
   }
   for (k=tmpRet.begin();k!=tmpRet.end();k++)
     if (*k!=nullptr)

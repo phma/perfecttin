@@ -3,7 +3,7 @@
 /* neighbor.h - triangle neighbors of points          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -25,3 +25,4 @@
 #include "triangle.h"
 
 std::vector<triangle *> triangleNeighbors(std::vector<point *> corners);
+std::vector<edge *> edgeNeighbors(std::vector<triangle *> triangles);
