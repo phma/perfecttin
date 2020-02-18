@@ -66,10 +66,13 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   int i,j,k,ndots;
   matrix a;
   double localLow=INFINITY,localHigh=-INFINITY,localClipLow,localClipHigh;
+  double pointLow=INFINITY,point2Low=INFINITY,pointHigh=-INFINITY,point2High=-INFINITY;
   edge *ed;
   adjustRecord ret{true,0};
   vector<double> b,x,xsq,nextCornerElev;
+  vector<point *> nearPoints; // includes points held still
   double oldelev;
+  nearPoints=pointNeighbors(tri);
   for (ndots=i=0;i<tri.size();i++)
   {
     ndots+=tri[i]->dots.size();
@@ -78,6 +81,12 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
       markBucketDirty(net.revtriangles[tri[i]]);
   }
   a.resize(ndots,pnt.size());
+  /* Clip the adjusted elevations to the interval from the lowest dot to the
+   * highest dot, and from the second lowest point to the second highest point,
+   * including neighboring points not being adjusted, expanded by 3. The reason
+   * it's the second highest/lowest point is that, if there's already a spike,
+   * we want to clip it.
+   */
   for (ndots=i=0;i<tri.size();i++)
     for (j=0;j<tri[i]->dots.size();j++,ndots++)
     {
@@ -89,13 +98,27 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
       if (tri[i]->dots[j].elev()<localLow)
 	localLow=tri[i]->dots[j].elev();
     }
-  for (k=0;k<pnt.size();k++)
+  for (i=0;i<nearPoints.size();i++)
   {
-    if (pnt[k]->elev()>localHigh)
-      localHigh=pnt[k]->elev();
-    if (pnt[k]->elev()<localLow)
-      localLow=pnt[k]->elev();
+    if (nearPoints[i]->elev()>pointHigh)
+    {
+      point2High=pointHigh;
+      pointHigh=nearPoints[i]->elev();
+    }
+    else if (nearPoints[i]->elev()>point2High)
+      point2High=nearPoints[i]->elev();
+    if (nearPoints[i]->elev()<pointLow)
+    {
+      point2Low=pointLow;
+      pointLow=nearPoints[i]->elev();
+    }
+    else if (nearPoints[i]->elev()<point2Low)
+      point2Low=nearPoints[i]->elev();
   }
+  if (point2High>localHigh)
+    localHigh=point2High;
+  if (point2Low<localLow)
+    localLow=point2Low;
   x=linearLeastSquares(a,b);
   assert(x.size()==pnt.size());
   localClipHigh=2*localHigh-localLow;
