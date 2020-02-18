@@ -652,6 +652,7 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
   }
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
+  ps.startpage();
   ps.setscale(br);
   ps.setcolor(0,0,1);
   for (i=0;i<edges.size();i++)
