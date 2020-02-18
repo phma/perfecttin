@@ -25,6 +25,7 @@
 #include <cmath>
 #include <cstring>
 #include "dxf.h"
+#include "neighbor.h"
 #include "boundrect.h"
 #include "octagon.h"
 #include "ply.h"
@@ -627,9 +628,14 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
   xyz dot;
   xy grad;
   ofstream dumpFile(outputFile);
+  PostScript ps;
+  BoundRect br;
+  ps.open(outputFile+".ps");
   int i,k;
+  vector<edge *> edges;
   set<point *> corners;
   set<point *>::iterator j;
+  edges=edgeNeighbors(tris);
   for (i=0;i<tris.size();i++)
   {
     corners.insert(tris[i]->a);
@@ -642,7 +648,15 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
     dumpFile<<ldecimal((*j)->getx())<<' ';
     dumpFile<<ldecimal((*j)->gety())<<' ';
     dumpFile<<ldecimal((*j)->getz())<<'\n';
+    br.include(**j);
   }
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  ps.setscale(br);
+  ps.setcolor(0,0,1);
+  for (i=0;i<edges.size();i++)
+    ps.line2p(*edges[i]->a,*edges[i]->b);
+  ps.setcolor(1,0,0);
   for (i=0;i<tris.size();i++)
   {
     tri=tris[i];
@@ -653,6 +667,7 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
     {
       dot=tri->dots[k];
       dumpFile<<"  "<<ldecimal(dot.getx())<<' '<<ldecimal(dot.gety())<<' '<<ldecimal(dot.getz())<<'\n';
+      ps.dot(dot);
     }
   }
 }
