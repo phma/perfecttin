@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* neighbor.cpp - triangle neighbors of points        */
+/* neighbor.cpp - triangle neighbors of points etc.   */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019,2020 Pierre Abbat.
@@ -64,6 +64,26 @@ vector<edge *> edgeNeighbors(vector<triangle *> triangles)
     tmpRet.insert(triangles[i]->a->edg(triangles[i]));
     tmpRet.insert(triangles[i]->b->edg(triangles[i]));
     tmpRet.insert(triangles[i]->c->edg(triangles[i]));
+  }
+  for (k=tmpRet.begin();k!=tmpRet.end();k++)
+    if (*k!=nullptr)
+      ret.push_back(*k);
+  net.wingEdge.unlock_shared();
+  return ret;
+}
+
+vector<point *> pointNeighbors(vector<triangle *> triangles)
+{
+  vector<point *> ret;
+  set<point *> tmpRet;
+  int i;
+  set<point *>::iterator k;
+  net.wingEdge.lock_shared();
+  for (i=0;i<triangles.size();i++)
+  {
+    tmpRet.insert(triangles[i]->a);
+    tmpRet.insert(triangles[i]->b);
+    tmpRet.insert(triangles[i]->c);
   }
   for (k=tmpRet.begin();k!=tmpRet.end();k++)
     if (*k!=nullptr)

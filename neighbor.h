@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* neighbor.h - triangle neighbors of points          */
+/* neighbor.h - triangle neighbors of points etc.     */
 /*                                                    */
 /******************************************************/
 /* Copyright 2019,2020 Pierre Abbat.
@@ -26,3 +26,4 @@
 
 std::vector<triangle *> triangleNeighbors(std::vector<point *> corners);
 std::vector<edge *> edgeNeighbors(std::vector<triangle *> triangles);
+std::vector<point *> pointNeighbors(std::vector<triangle *> triangles);
