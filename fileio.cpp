@@ -631,24 +631,18 @@ void dumpTriangles(string outputFile,vector<triangle *> tris)
   PostScript ps;
   BoundRect br;
   ps.open(outputFile+".ps");
-  int i,k;
+  int i,j,k;
   vector<edge *> edges;
-  set<point *> corners;
-  set<point *>::iterator j;
+  vector<point *> corners;
   edges=edgeNeighbors(tris);
-  for (i=0;i<tris.size();i++)
+  corners=pointNeighbors(tris);
+  for (j=0;j<corners.size();j++)
   {
-    corners.insert(tris[i]->a);
-    corners.insert(tris[i]->b);
-    corners.insert(tris[i]->c);
-  }
-  for (j=corners.begin();j!=corners.end();j++)
-  {
-    dumpFile<<net.revpoints[*j]<<' ';
-    dumpFile<<ldecimal((*j)->getx())<<' ';
-    dumpFile<<ldecimal((*j)->gety())<<' ';
-    dumpFile<<ldecimal((*j)->getz())<<'\n';
-    br.include(**j);
+    dumpFile<<net.revpoints[corners[j]]<<' ';
+    dumpFile<<ldecimal(corners[j]->getx())<<' ';
+    dumpFile<<ldecimal(corners[j]->gety())<<' ';
+    dumpFile<<ldecimal(corners[j]->getz())<<'\n';
+    br.include(*corners[j]);
   }
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
