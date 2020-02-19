@@ -123,7 +123,7 @@ array<double,2> areaDone(double tolerance)
   int i;
   triangle *tri;
   double allSum;
-  double minArea=sqr(tolerance)*M_SQRT_3/4;
+  double minArea=sqr(tolerance)*M_SQRT_3*4;
   array<double,2> ret;
   cr::nanoseconds elapsed;
   cr::time_point<cr::steady_clock> timeStart=clk.now();
@@ -506,7 +506,7 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
-      minArea=sqr(stageTolerance)*M_SQRT_3/4;
+      minArea=sqr(stageTolerance)*M_SQRT_3*4;
       if (net.edges.size() && net.triangles.size())
       {
 	net.wingEdge.lock_shared();
