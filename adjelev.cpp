@@ -119,7 +119,10 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     localHigh=point2High;
   if (point2Low<localLow)
     localLow=point2Low;
-  x=linearLeastSquares(a,b);
+  if (ndots<pnt.size())
+    x=minimumNorm(a,b);
+  else
+    x=linearLeastSquares(a,b);
   assert(x.size()==pnt.size());
   localClipHigh=2*localHigh-localLow;
   localClipLow=2*localLow-localHigh;
