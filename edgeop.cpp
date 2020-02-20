@@ -236,11 +236,12 @@ bool spikyTriangle(xy a,xy b,xy c)
 bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 /* Decides whether to flip an interior edge. If it is flippable (that is,
  * the two triangles form a convex quadrilateral), it decides based on
- * a combination of four criteria:
+ * a combination of five criteria:
  * 1. They would fit the dots better after flipping than before.
  * 2. The number of dots on each side would be better balanced after flipping.
  * 3. The area on each side would be better balanced after flipping.
  * 4. The edge would be shorter after flipping.
+ * 5. The triangles' circumcircles would not contain each other's other point. (Delaunay)
  */
 {
   int i,j;
@@ -248,7 +249,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   triangle *tri;
   bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
   double elev13,elev24,elev5;
-  double crit1=-999,crit2=0,crit3=0,crit4=0;
+  double crit1=0,crit2=0,crit3=0,crit4=0,crit5=0;
   double areas[4];
   int ndots[4];
   vector<triangle *> alltris;
@@ -277,6 +278,8 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   inTol=e->tria->inTolerance(tolerance,minArea)&&e->trib->inTolerance(tolerance,minArea);
   if (e->tria->dots.size()+e->trib->dots.size()<1)
     inTol=false; // Try not to have acicular triangles in holes
+  if (!e->delaunay())
+    inTol=false;
   if (!inTol)
   {
     for (i=0;i<4;i++)
@@ -379,12 +382,21 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	    tempPointlist[thread].edges[5].length()+
 	    tempPointlist[thread].edges[6].length()+
 	    tempPointlist[thread].edges[7].length());
-      ret=crit1+0*crit2+crit3+3*crit4>0;
+      crit5=(tempPointlist[thread].edges[4].length()*
+	    tempPointlist[thread].edges[6].length()-
+	    tempPointlist[thread].edges[5].length()*
+	    tempPointlist[thread].edges[7].length())/
+	    (tempPointlist[thread].edges[4].length()*
+	    tempPointlist[thread].edges[6].length()+
+	    tempPointlist[thread].edges[5].length()*
+	    tempPointlist[thread].edges[7].length());
+      ret=crit1+0*crit2+0*crit3+crit5>0;
     }
     logCrit(crit1);
     logCrit(crit2);
     logCrit(crit3);
     logCrit(crit4);
+    logCrit(crit5);
   }
   logCrit(isSpiky);
   logCrit(wouldbeSpiky);
