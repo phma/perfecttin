@@ -259,8 +259,12 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   tempPointlist[thread].addpoint(2,*e->nexta->otherend(e->a));
   tempPointlist[thread].addpoint(3,*e->b);
   tempPointlist[thread].addpoint(4,*e->nextb->otherend(e->b));
+  elev5=(tempPointlist[thread].points[1].elev()+
+	 tempPointlist[thread].points[2].elev()+
+	 tempPointlist[thread].points[3].elev()+
+	 tempPointlist[thread].points[4].elev())/4;
   tempPointlist[thread].addpoint(5,point(intersection(*e->a,*e->b,
-			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),0));
+			  *e->nextb->otherend(e->b),*e->nexta->otherend(e->a)),elev5));
   isSpiky=spikyTriangle(tempPointlist[thread].points[1],
 			tempPointlist[thread].points[2],
 			tempPointlist[thread].points[3]) ||
