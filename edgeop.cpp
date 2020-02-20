@@ -41,6 +41,9 @@ map<int,pointlist> tempPointlist;
  * flip an edge. One per worker thread.
  */
 double critLog[CRITLOGSIZE];
+set<edge *> edgesFlippedSet; // Records all edges flipped since the last
+vector<edge *> edgesFlippedVector; // triangle operation.
+shared_mutex edgesFlippedMutex;
 
 void logCrit(double crit)
 {
@@ -53,6 +56,30 @@ void initTempPointlist(int nthreads)
   int i;
   for (i=0;i<nthreads;i++)
     tempPointlist[i];
+}
+
+void recordFlip(edge *e)
+{
+  edgesFlippedMutex.lock();
+  edgesFlippedSet.insert(e);
+  edgesFlippedVector.push_back(e);
+  edgesFlippedMutex.unlock();
+}
+
+void recordTriop()
+{
+  edgesFlippedMutex.lock();
+  edgesFlippedSet.clear();
+  edgesFlippedVector.clear();
+  edgesFlippedMutex.unlock();
+}
+
+bool runFlips(edge *e)
+{
+  edgesFlippedMutex.lock_shared();
+  bool ret=edgesFlippedVector.size()>3*edgesFlippedSet.size() && edgesFlippedSet.count(e);
+  edgesFlippedMutex.unlock_shared();
+  return ret;
 }
 
 void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
@@ -119,6 +146,7 @@ void flip(edge *e)
   e->flip(&net);
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
+  recordFlip(e);
   dealDots(e->trib,e->tria);
   e->tria->flatten();
   e->trib->flatten();
@@ -363,6 +391,8 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   if (isSpiky && !wouldbeSpiky)
     ret=true;
   if (wouldbeSpiky && !isSpiky)
+    ret=false;
+  if (runFlips(e))
     ret=false;
   return ret;
 }
