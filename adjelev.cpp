@@ -67,6 +67,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   matrix a;
   double localLow=INFINITY,localHigh=-INFINITY,localClipLow,localClipHigh;
   double pointLow=INFINITY,point2Low=INFINITY,pointHigh=-INFINITY,point2High=-INFINITY;
+  double pointClipLow,pointClipHigh;
   edge *ed;
   adjustRecord ret{true,0};
   vector<double> b,x,xsq,nextCornerElev;
@@ -115,10 +116,8 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     else if (nearPoints[i]->elev()<point2Low)
       point2Low=nearPoints[i]->elev();
   }
-  if (point2High>localHigh)
-    localHigh=point2High;
-  if (point2Low<localLow)
-    localLow=point2Low;
+  pointClipHigh=1.125*point2High-0.125*point2Low;
+  pointClipLow=1.125*point2Low-0.125*point2High;
   if (ndots<pnt.size())
     x=minimumNorm(a,b);
   else
@@ -130,6 +129,10 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     localClipHigh=clipHigh;
   if (localClipLow<clipLow)
     localClipLow=clipLow;
+  if (localClipHigh>pointClipHigh && nearPoints.size()>pnt.size())
+    localClipHigh=pointClipHigh;
+  if (localClipLow<pointClipLow && nearPoints.size()>pnt.size())
+    localClipLow=pointClipLow;
   for (k=0;k<pnt.size();k++)
   {
     if (std::isfinite(x[k]) && fabs(x[k])<16384)
