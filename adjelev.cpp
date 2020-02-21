@@ -167,7 +167,6 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
       markBucketDirty(net.revtriangles[tri[i]]);
   //if (singular)
     //cout<<"Matrix in least squares is singular"<<endl;
-  checkIntElev(pnt);
   return ret;
 }
 
