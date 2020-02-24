@@ -3,7 +3,7 @@
 /* octagon.h - bound the points with an octagon       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -28,5 +28,6 @@ extern pointlist net;
 extern double clipLow,clipHigh;
 extern std::array<double,2> areadone;
 void setMutexArea(double area);
+double estimatedDensity();
 double makeOctagon();
 int mtxSquare(xy pnt);

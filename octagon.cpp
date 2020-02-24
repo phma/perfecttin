@@ -3,7 +3,7 @@
 /* octagon.cpp - bound the points with an octagon     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -45,6 +45,18 @@ double mtxSquareSide;
 void setMutexArea(double area)
 {
   mtxSquareSide=sqrt(area/2)/mtxSquareSize;
+}
+
+double estimatedDensity()
+{
+  int i,totalDots;
+  vector<double> areas;
+  for (totalDots=i=0;i<net.triangles.size();i++)
+  {
+    totalDots+=net.triangles[i].dots.size();
+    areas.push_back(net.triangles[i].area());
+  }
+  return totalDots/pairwisesum(areas);
 }
 
 double makeOctagon()
@@ -169,7 +181,7 @@ double makeOctagon()
     net.revtriangles[&net.triangles[i]]=i;
     mtxSquareSide+=net.triangles[i].area();
   }
-  cout<<"Estimated density "<<sz/mtxSquareSide<<"/m²\n";
+  cout<<"Estimated density "<<estimatedDensity()<<"/m²\n";
   setMutexArea(mtxSquareSide);
   for (i=1;i<=8;i++)
   {
