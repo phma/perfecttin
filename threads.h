@@ -68,6 +68,7 @@ struct ThreadAction
   int opcode;
   int param0;
   double param1; // measuring unit or tolerance
+  double param2; // density
   std::string filename;
   int flags;
   /* Bit 0: write empty triangles when exporting TIN

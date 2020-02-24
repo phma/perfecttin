@@ -81,7 +81,7 @@ void writeDxf(std::string outputFile,bool asc,double outUnit,int flags);
 int readCloud(std::string inputFile,double inUnit);
 void writePoint(std::ostream &file,xyz pnt);
 xyz readPoint(std::istream &file);
-void writePtin(std::string outputFile,int tolRatio,double tolerance);
+void writePtin(std::string outputFile,int tolRatio,double tolerance,double density);
 PtinHeader readPtinHeader(std::istream &inputFile);
 PtinHeader readPtinHeader(std::string inputFile);
 PtinHeader readPtin(std::string inputFile);
