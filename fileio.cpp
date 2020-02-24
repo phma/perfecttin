@@ -403,6 +403,7 @@ PtinHeader readPtinHeader(istream &inputFile)
 	ret.conversionTime=readlelong(inputFile);
 	ret.tolRatio=readleint(inputFile);
 	ret.tolerance=readledouble(inputFile);
+	ret.density=1/sqr(ret.tolerance);
 	ret.numPoints=readleint(inputFile);
 	ret.numConvexHull=readleint(inputFile);
 	ret.numTriangles=readleint(inputFile);

@@ -49,6 +49,7 @@ struct PtinHeader
   PtinHeader();
   time_t conversionTime;
   double tolerance; // NaN means file wasn't finished being written
+  double density;
   int tolRatio; // negative means an error
   int numPoints;
   int numConvexHull;
