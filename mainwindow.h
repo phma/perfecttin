@@ -3,7 +3,7 @@
 /* mainwindow.h - main window                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -80,7 +80,7 @@ private:
   int numberThreads;
   int lastState; // state is in TinCanvas
   bool conversionStopped,showingResult,exportEmpty;
-  double tolerance,lengthUnit;
+  double tolerance,density,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
   QTimer *timer;
