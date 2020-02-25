@@ -240,6 +240,7 @@ void MainWindow::tick()
 	if (stageTolerance>tolerance)
 	{
 	  stageTolerance/=2;
+	  minArea/=4;
 	  setThreadCommand(TH_RUN);
 	}
 	else // conversion is finished
@@ -292,6 +293,7 @@ void MainWindow::tick()
       stageTolerance=tolerance;
       while (stageTolerance*2<tolerance*toleranceRatio)
 	stageTolerance*=2;
+      minArea=sqr(stageTolerance/tolerance)/density;
       setThreadCommand(TH_RUN);
       stopAction->setEnabled(true);
     }

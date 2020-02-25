@@ -333,6 +333,7 @@ int main(int argc, char *argv[])
       stageTolerance=tolerance;
       while (stageTolerance<areadone[0])
 	stageTolerance*=2;
+      minArea=sqr(stageTolerance/tolerance)/density;
     }
     if (!done)
     {
@@ -379,6 +380,7 @@ int main(int argc, char *argv[])
 	  waitForThreads(TH_PAUSE);
 	  net.makeqindex();
 	  stageTolerance/=2;
+	  minArea/=4;
 	  if (stageTolerance<tolerance)
 	    done=true;
 	  else

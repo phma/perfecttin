@@ -52,6 +52,7 @@ vector<double> sleepTime;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
+double minArea;
 queue<ThreadAction> actQueue,resQueue;
 int currentAction;
 int mtxSquareSize;
@@ -457,6 +458,11 @@ int getThreadStatus()
   return (threadCommand<<20)|((minStatus^maxStatus)<<10)|(minStatus&0x3ff);
 }
 
+void setMinArea(double area)
+{
+  minArea=area;
+}
+
 void waitForThreads(int newStatus)
 // Waits until all threads are in the commanded status.
 {
@@ -490,7 +496,6 @@ void TinThread::operator()(int thread)
   int e=0,t=0,d=0;
   int triResult,edgeResult;
   edge *edg;
-  double minArea;
   triangle *tri;
   ThreadAction act;
   startMutex.lock();
@@ -506,7 +511,6 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
-      minArea=sqr(stageTolerance)*M_SQRT_3*4;
       if (net.edges.size() && net.triangles.size())
       {
 	net.wingEdge.lock_shared();
