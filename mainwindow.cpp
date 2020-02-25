@@ -287,6 +287,7 @@ void MainWindow::tick()
     else
     {
       toleranceRatio=-toleranceRatio;
+      density=estimatedDensity();
       stageTolerance=tolerance;
       while (stageTolerance*2<tolerance*toleranceRatio)
 	stageTolerance*=2;
