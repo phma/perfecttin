@@ -28,6 +28,7 @@
 #include "adjelev.h"
 #include "neighbor.h"
 #include "fileio.h"
+#include "angle.h"
 #include "octagon.h"
 using namespace std;
 
@@ -214,7 +215,7 @@ void MainWindow::tick()
   busyBar->setValue(lrint(lpfBusyFraction*16777216));
   if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
   { // Stage has completed: write files and go to next stage
-    areadone=areaDone(stageTolerance);
+    areadone=areaDone(stageTolerance,sqr(stageTolerance/tolerance)/density);
     if (actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
@@ -263,7 +264,7 @@ void MainWindow::tick()
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   { // Conversion is running: check whether stage is complete
-    areadone=areaDone(stageTolerance);
+    areadone=areaDone(stageTolerance,sqr(stageTolerance/tolerance)/density);
     doneBar->setValue(lrint(areadone[0]*16777216));
     rmsadj=rmsAdjustment();
     if (livelock(areadone[0],rmsadj))

@@ -116,14 +116,14 @@ int nBuckets()
   return allBuckets.size();
 }
 
-array<double,2> areaDone(double tolerance)
+array<double,2> areaDone(double tolerance,double minArea)
 {
   vector<double> allTri,doneTri,doneq2Tri;
   static int overtimeCount=0,bucket=0;
   int i;
   triangle *tri;
   double allSum;
-  double minArea=sqr(tolerance)*M_SQRT_3*4;
+  //double minArea=sqr(tolerance)*M_SQRT_3*4;
   array<double,2> ret;
   cr::nanoseconds elapsed;
   cr::time_point<cr::steady_clock> timeStart=clk.now();

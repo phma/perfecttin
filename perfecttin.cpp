@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
   int asterPoints=0;
   int ptinFilesOpened=0,pointCloudsLoaded=0;
   time_t now,then;
-  double tolerance,rmsadj;
+  double tolerance,rmsadj,density;
   bool done=false;
   bool asciiFormat=false;
   int format;
@@ -329,6 +329,7 @@ int main(int argc, char *argv[])
 	cerr<<"Point cloud covers no area or has infinite or NaN points\n";
 	done=true;
       }
+      density=estimatedDensity();
       stageTolerance=tolerance;
       while (stageTolerance<areadone[0])
 	stageTolerance*=2;
@@ -360,7 +361,7 @@ int main(int argc, char *argv[])
       now=time(nullptr);
       if (now!=then)
       {
-	areadone=areaDone(stageTolerance);
+	areadone=areaDone(stageTolerance,sqr(stageTolerance/tolerance)/density);
 	rmsadj=rmsAdjustment();
 	cout<<"Toler "<<stageTolerance;
 	cout<<"  "<<ldecimal(areadone[0]*100,areadone[0]*(1-areadone[0])*10)<<"% done  ";
