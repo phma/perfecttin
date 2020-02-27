@@ -325,7 +325,7 @@ void writeTriangle(ostream &file,triangle *tri)
     writelefloat(file,NAN);
 }
 
-const int ptinHeaderFormat=0x00000020;
+const int ptinHeaderFormat=0x00000028;
 /* ptinHeaderFormat counts all bytes after the header format itself and before
  * the start of points. The low two bytes are the count of bytes; the high
  * two bytes are used to disambiguate between header formats that have
@@ -353,6 +353,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   writelelong(checkFile,net.conversionTime);
   writeleint(checkFile,tolRatio);
   writeledouble(checkFile,NAN); // will be filled in later with tolerance
+  writeledouble(checkFile,NAN); // will be filled in later with density
   writeleint(checkFile,net.points.size());
   writeleint(checkFile,net.convexHull.size());
   writeleint(checkFile,net.triangles.size());
@@ -387,6 +388,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   checkFile.flush();
   checkFile.seekp(24,ios::beg);
   writeledouble(checkFile,tolerance);
+  writeledouble(checkFile,density);
 }
 
 PtinHeader readPtinHeader(istream &inputFile)
