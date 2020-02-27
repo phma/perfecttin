@@ -286,7 +286,9 @@ int main(int argc, char *argv[])
 	  ptinFilesOpened++;
 	  net.conversionTime=ptinHeader.conversionTime;
 	  tolerance=ptinHeader.tolerance;
+	  density=ta.ptinResult.density;
 	  stageTolerance=tolerance*ptinHeader.tolRatio;
+	  minArea=sqr(stageTolerance/tolerance)/density;
 	  resizeBuckets(1);
 	  if (ptinHeader.tolRatio>1 &&
 	      extension(noExt(inputFiles[i]))=="."+to_string(ptinHeader.tolRatio))

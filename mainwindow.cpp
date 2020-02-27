@@ -555,7 +555,9 @@ void MainWindow::handleResult(ThreadAction ta)
       {
 	//cout<<"Finished reading ptin\n";
 	tolerance=ta.ptinResult.tolerance;
+	density=ta.ptinResult.density;
 	stageTolerance=writtenTolerance=tolerance*ta.ptinResult.tolRatio;
+	minArea=sqr(stageTolerance/tolerance)/density;
 	saveFileName=noExt(ta.filename);
 	if (ta.ptinResult.tolRatio>1)
 	{
