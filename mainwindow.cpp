@@ -227,6 +227,7 @@ void MainWindow::tick()
 	//enqueueAction(ta);
 	ta.param1=tolerance;
 	ta.param0=lrint(toleranceRatio);
+	ta.param2=density;
 	ta.opcode=ACT_WRITE_PTIN;
 	if (ta.param0==1)
 	  ta.filename=saveFileName+".ptin";

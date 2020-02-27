@@ -388,6 +388,7 @@ int main(int argc, char *argv[])
 	  else
 	  {
 	    ta.param1=tolerance;
+	    ta.param2=density;
 	    ta.param0=lrint(4*stageTolerance/tolerance);
 	    ta.opcode=ACT_DELETE_FILE;
 	    ta.filename=outputFile+"."+to_string(ta.param0)+".ptin";
