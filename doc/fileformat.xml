@@ -7,7 +7,7 @@
 </personname>
 <personblurb>NC PLS</personblurb>
 </author>
-<pubdate>2019</pubdate>
+<pubdate>2020</pubdate>
 </info>
 
 <section id="intro">
@@ -24,40 +24,41 @@
   <title>Example</title>
   <para>Here is a small PerfectTIN file:</para>
   <programlisting>
-0000  06 00 1c 00 f0 01 c0 1f  20 00 00 00 f8 1a b5 5d
+0000  06 00 1c 00 f0 01 c0 1f  28 00 00 00 f8 1a b5 5d
 0010  00 00 00 00 01 00 00 00  9a 99 99 99 99 99 99 3f
-0020  08 00 00 00 08 00 00 00  06 00 00 00 4f 31 a5 c9
-0030  0f 9e 12 40 78 e0 8d 1d  6c 6e fb 3f 00 00 00 00
-0040  00 00 00 00 40 32 a6 47  0c a8 01 40 8f 61 6f 04
-0050  75 4c 12 40 00 00 00 00  00 00 00 00 ea b4 83 ca
-0060  c1 1d 00 c0 8d b6 9c 37  c3 9c 13 40 00 00 00 00
-0070  00 00 00 00 0c e0 e8 fb  80 cb 12 c0 c5 7e 38 da
-0080  dd d9 04 40 00 00 00 00  00 00 00 00 1a df 2c 3f
-0090  bc 00 14 c0 9d ff 2d bc  d4 67 f4 bf 00 00 00 00
-00a0  00 00 00 00 47 6f f3 0a  ba 8f 00 c0 2c 50 b6 8b
-00b0  21 cd 12 c0 00 00 00 00  00 00 00 00 fd cc 3d 2a
-00c0  df 5b f9 3f 39 4e 38 25  4f f0 13 c0 00 00 00 00
-00d0  00 00 00 00 a4 b1 4e 54  78 42 11 40 21 e9 70 9e
-00e0  bd 30 05 c0 00 00 00 00  00 00 00 00 01 00 00 00
-00f0  02 00 00 00 03 00 00 00  04 00 00 00 05 00 00 00
-0100  06 00 00 00 07 00 00 00  08 00 00 00 01 00 00 00
-0110  02 00 00 00 03 00 00 00  00 01 00 00 00 03 00 00
-0120  00 04 00 00 00 02 0a 71  13 bf 89 ee 24 bf 9a 99
-0130  19 3e 75 d2 03 40 d6 14  0f be 3d 0a 57 3e 01 00
-0140  00 00 04 00 00 00 05 00  00 00 04 c7 7b d0 be 76
-0150  4a 25 bf ec 51 b8 3d e1  4a b0 bf ca f0 41 3f 00
-0160  00 80 3e 7d f3 e8 3f 05  57 0f 3f cd cc 4c 3d 4e
-0170  45 6a 40 ea 6b 79 3e ae  47 e1 3d 01 00 00 00 05
-0180  00 00 00 06 00 00 00 05  89 9d c1 3f d2 cf b5 3f
-0190  0a d7 23 3c 61 ce f8 3f  92 a8 83 bd 29 5c 8f 3d
-01a0  e5 18 13 3e 46 56 85 bf  b8 1e 05 3e 9c d5 c7 bd
-01b0  7f d5 17 3f 8f c2 f5 3c  e2 c8 02 c0 d4 3b 7a 3e
-01c0  5c 8f 42 3e 01 00 00 00  06 00 00 00 07 00 00 00
-01d0  02 a5 a7 ac 3f 9c 0f d4  3f 7b 14 2e 3e 5f e3 bf
-01e0  be 87 31 14 bf 1f 85 6b  3e 01 00 00 00 07 00 00
-01f0  00 08 00 00 00 00 05 80  14 ae 47 e1 7a 84 3f a6
-0200  70 3d 0a d7 a3 c0 3f 00  00 00 00 00 00 e8 3f 50
-0210  b8 1e 85 eb 51 c8 3f 0a  d7 a3 70 3d 0a fb 3f   
+0020  83 c8 c9 cd 30 5f d4 3f  08 00 00 00 08 00 00 00
+0030  06 00 00 00 4f 31 a5 c9  0f 9e 12 40 78 e0 8d 1d
+0040  6c 6e fb 3f 00 00 00 00  00 00 00 00 40 32 a6 47
+0050  0c a8 01 40 8f 61 6f 04  75 4c 12 40 00 00 00 00
+0060  00 00 00 00 ea b4 83 ca  c1 1d 00 c0 8d b6 9c 37
+0070  c3 9c 13 40 00 00 00 00  00 00 00 00 0c e0 e8 fb
+0080  80 cb 12 c0 c5 7e 38 da  dd d9 04 40 00 00 00 00
+0090  00 00 00 00 1a df 2c 3f  bc 00 14 c0 9d ff 2d bc
+00a0  d4 67 f4 bf 00 00 00 00  00 00 00 00 47 6f f3 0a
+00b0  ba 8f 00 c0 2c 50 b6 8b  21 cd 12 c0 00 00 00 00
+00c0  00 00 00 00 fd cc 3d 2a  df 5b f9 3f 39 4e 38 25
+00d0  4f f0 13 c0 00 00 00 00  00 00 00 00 a4 b1 4e 54
+00e0  78 42 11 40 21 e9 70 9e  bd 30 05 c0 00 00 00 00
+00f0  00 00 00 00 01 00 00 00  02 00 00 00 03 00 00 00
+0100  04 00 00 00 05 00 00 00  06 00 00 00 07 00 00 00
+0110  08 00 00 00 01 00 00 00  02 00 00 00 03 00 00 00
+0120  00 01 00 00 00 03 00 00  00 04 00 00 00 02 0a 71
+0130  13 bf 89 ee 24 bf 9a 99  19 3e 75 d2 03 40 d6 14
+0140  0f be 3d 0a 57 3e 01 00  00 00 04 00 00 00 05 00
+0150  00 00 04 c7 7b d0 be 76  4a 25 bf ec 51 b8 3d e1
+0160  4a b0 bf ca f0 41 3f 00  00 80 3e 7d f3 e8 3f 05
+0170  57 0f 3f cd cc 4c 3d 4e  45 6a 40 ea 6b 79 3e ae
+0180  47 e1 3d 01 00 00 00 05  00 00 00 06 00 00 00 05
+0190  89 9d c1 3f d2 cf b5 3f  0a d7 23 3c 61 ce f8 3f
+01a0  92 a8 83 bd 29 5c 8f 3d  e5 18 13 3e 46 56 85 bf
+01b0  b8 1e 05 3e 9c d5 c7 bd  7f d5 17 3f 8f c2 f5 3c
+01c0  e2 c8 02 c0 d4 3b 7a 3e  5c 8f 42 3e 01 00 00 00
+01d0  06 00 00 00 07 00 00 00  02 a5 a7 ac 3f 9c 0f d4
+01e0  3f 7b 14 2e 3e 5f e3 bf  be 87 31 14 bf 1f 85 6b
+01f0  3e 01 00 00 00 07 00 00  00 08 00 00 00 00 05 80
+0200  14 ae 47 e1 7a 84 3f a6  70 3d 0a d7 a3 c0 3f 00
+0210  00 00 00 00 00 e8 3f 50  b8 1e 85 eb 51 c8 3f 0a
+0220  d7 a3 70 3d 0a fb 3f   
 </programlisting>
 </section>
 
@@ -85,7 +86,7 @@
     <entry>uint16</entry><entry>1fc0</entry><entry>8128</entry>
   </row>
   <row>
-    <entry>uint32</entry><entry>00000020</entry><entry>32</entry><entry>Header format and length</entry>
+    <entry>uint32</entry><entry>00000028</entry><entry>40</entry><entry>Header format and length</entry>
   </row>
   <row>
     <entry>uint64</entry><entry>000000005db51af8</entry><entry>2019-10-27 04:20:08</entry><entry>Time conversion started</entry>
@@ -95,6 +96,9 @@
   </row>
   <row>
     <entry>double</entry><entry>3f9999999999999a</entry><entry>0.025</entry><entry>Tolerance</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3fd45f306dc9c883</entry><entry>0.3183098861837907</entry><entry>Density</entry>
   </row>
   <row>
     <entry>uint32</entry><entry>00000008</entry><entry>8</entry><entry>Number of points</entry>
