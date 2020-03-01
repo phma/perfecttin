@@ -357,6 +357,7 @@ void MainWindow::loadFile()
     tinSizeChanged();
     if (cloud.size()==0)
       fileNames="";
+    density=0;
     ta.opcode=ACT_LOAD;
     ta.filename=fileName;
     ta.param1=lengthUnit;
@@ -538,6 +539,7 @@ void MainWindow::clearCloud()
   cloud.clear();
   fileNames=lastFileName="";
   fileMsg->setText("");
+  density=0;
 }
 
 void MainWindow::configure()
