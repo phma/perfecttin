@@ -181,7 +181,6 @@ double makeOctagon()
     net.revtriangles[&net.triangles[i]]=i;
     mtxSquareSide+=net.triangles[i].area();
   }
-  cout<<"Estimated density "<<estimatedDensity()<<"/m²\n";
   setMutexArea(mtxSquareSide);
   for (i=1;i<=8;i++)
   {
