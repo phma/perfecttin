@@ -76,7 +76,7 @@ protected:
   void closeEvent(QCloseEvent *event) override;
 private:
   int lastNumDots,lastNumTriangles,lastNumEdges;
-  double lastTolerance,lastStageTolerance,writtenTolerance,rmsadj;
+  double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
   bool conversionStopped,showingResult,exportEmpty;
@@ -89,7 +89,7 @@ private:
   QToolBar *toolbar;
   ConfigurationDialog *configDialog;
   QMenu *fileMenu,*settingsMenu,*helpMenu,*exportMenu;
-  QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg;
+  QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg,*densityMsg;
   QProgressBar *doneBar,*busyBar;
   QAction *openAction,*loadAction,*convertAction,*clearAction;
   QAction *exportAction,*stopAction,*resumeAction,*exitAction;

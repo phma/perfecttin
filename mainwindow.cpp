@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   fileMsg=new QLabel(this);
   dotTriangleMsg=new QLabel(this);
   toleranceMsg=new QLabel(this);
+  densityMsg=new QLabel(this);
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
   fileDialog=new QFileDialog(this);
@@ -59,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   doneBar->setRange(0,16777216);
   busyBar->setRange(0,16777216);
   lpfBusyFraction=0;
+  density=0;
   conversionStopped=false;
   showingResult=false;
   toolbar=new QToolBar(this);
@@ -210,6 +212,14 @@ void MainWindow::tick()
     lastTolerance=tolerance;
     lastStageTolerance=stageTolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
+  }
+  if (density!=lastDensity)
+  { // Density has changed: update status bar
+    lastDensity=density;
+    if (density>0)
+      densityMsg->setText(QString::fromStdString(ldecimal(density,density/256)+"/m²"));
+    else
+      densityMsg->clear();
   }
   lpfBusyFraction=(16*lpfBusyFraction+busyFraction())/17;
   busyBar->setValue(lrint(lpfBusyFraction*16777216));
@@ -745,6 +755,7 @@ void MainWindow::makeStatusBar()
   statusBar()->addWidget(fileMsg);
   statusBar()->addWidget(dotTriangleMsg);
   statusBar()->addWidget(toleranceMsg);
+  statusBar()->addWidget(densityMsg);
   statusBar()->addWidget(doneBar);
   statusBar()->addWidget(busyBar);
   statusBar()->show();
