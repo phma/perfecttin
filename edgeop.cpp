@@ -236,12 +236,9 @@ bool spikyTriangle(xy a,xy b,xy c)
 bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 /* Decides whether to flip an interior edge. If it is flippable (that is,
  * the two triangles form a convex quadrilateral), it decides based on
- * a combination of five criteria:
+ * a combination of two criteria:
  * 1. They would fit the dots better after flipping than before.
- * 2. The number of dots on each side would be better balanced after flipping.
- * 3. The area on each side would be better balanced after flipping.
- * 4. The edge would be shorter after flipping.
- * 5. The triangles' circumcircles would not contain each other's other point. (Delaunay)
+ * 2. The triangles' circumcircles would not contain each other's other point. (Delaunay)
  */
 {
   int i,j;
@@ -249,7 +246,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   triangle *tri;
   bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
   double elev13,elev24,elev5;
-  double crit1=0,crit2=0,crit3=0,crit4=0,crit5=0;
+  double crit1=0,crit2=0;
   double areas[4];
   int ndots[4];
   vector<triangle *> alltris;
@@ -337,12 +334,6 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
       areas[i]=area3(tempPointlist[thread].points[(i+1)%4+1],
 		    tempPointlist[thread].points[(i)%4+1],
 		    tempPointlist[thread].points[5]);
-    crit3=(fabs(areas[0]+areas[1]-areas[2]-areas[3])-fabs(areas[0]-areas[1]-areas[2]+areas[3]))/
-	  (areas[0]+areas[1]+areas[2]+areas[3]);
-    if (areas[0]+areas[1]<minArea || areas[2]+areas[3]<minArea)
-      crit3+=0.7;
-    if (areas[1]+areas[2]<minArea || areas[3]+areas[0]<minArea)
-      crit3-=0.7; // Don't flip if it would result in too small triangle
     triab[0]=e->tria;
     triab[1]=e->trib;
     if (validTemp)
@@ -376,17 +367,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	crit1=(fabs(elev13-elev5)-fabs(elev24-elev5))/(fabs(elev13-elev5)+fabs(elev24-elev5));
       for (i=0;i<4;i++)
 	ndots[i]=tempPointlist[thread].edges[i].tria->dots.size();
-      crit2=(abs(ndots[0]+ndots[1]-ndots[2]-ndots[3])-abs(ndots[0]-ndots[1]-ndots[2]+ndots[3]))/
-	    (ndots[0]+ndots[1]+ndots[2]+ndots[3]+1.);
-      crit4=(tempPointlist[thread].edges[4].length()-
-	    tempPointlist[thread].edges[5].length()+
-	    tempPointlist[thread].edges[6].length()-
-	    tempPointlist[thread].edges[7].length())/
-	    (tempPointlist[thread].edges[4].length()+
-	    tempPointlist[thread].edges[5].length()+
-	    tempPointlist[thread].edges[6].length()+
-	    tempPointlist[thread].edges[7].length());
-      crit5=(tempPointlist[thread].edges[4].length()*
+      crit2=(tempPointlist[thread].edges[4].length()*
 	    tempPointlist[thread].edges[6].length()-
 	    tempPointlist[thread].edges[5].length()*
 	    tempPointlist[thread].edges[7].length())/
@@ -394,13 +375,10 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	    tempPointlist[thread].edges[6].length()+
 	    tempPointlist[thread].edges[5].length()*
 	    tempPointlist[thread].edges[7].length());
-      ret=crit1+0*crit2+0*crit3+crit5>0;
+      ret=crit1+crit2>0;
     }
     logCrit(crit1);
     logCrit(crit2);
-    logCrit(crit3);
-    logCrit(crit4);
-    logCrit(crit5);
   }
   logCrit(isSpiky);
   logCrit(wouldbeSpiky);
