@@ -261,7 +261,6 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
-	  dumpSteepestTriangle();
 	  openAction->setEnabled(true);
 	  loadAction->setEnabled(true);
 	  convertAction->setEnabled(false);
@@ -584,7 +583,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	dumpSteepestTriangle();
 	loadAction->setEnabled(true);
 	convertAction->setEnabled(false);
 	exportMenu->setEnabled(true);
