@@ -100,11 +100,11 @@ point *split(triangle *tri)
   newe2->setNeighbors();
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
-  recordTriop();
-  dealDots(tri,newt0,newt1);
   tri->flatten();
   newt0->flatten();
   newt1->flatten();
+  recordTriop();
+  dealDots(tri,newt0,newt1);
   return pnt;
 }
 
@@ -246,16 +246,16 @@ array<point *,3> quarter(triangle *tri,int thread)
   sidec->setNeighbors();
   net.wingEdge.unlock();
   recordTriop();
-  dealDots(tri,tris[0],tris[1],tris[2]);
-  dealDots(neigha,tris[3]);
-  dealDots(neighb,tris[4]);
-  dealDots(neighc,tris[5]);
   for (i=0;i<6;i++)
     tris[i]->flatten();
   tri->flatten();
   neigha->flatten();
   neighb->flatten();
   neighc->flatten();
+  dealDots(tri,tris[0],tris[1],tris[2]);
+  dealDots(neigha,tris[3]);
+  dealDots(neighb,tris[4]);
+  dealDots(neighc,tris[5]);
   return pnts;
 }
 

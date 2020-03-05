@@ -147,11 +147,11 @@ void flip(edge *e)
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
   recordFlip(e);
-  dealDots(e->trib,e->tria);
   e->tria->flatten();
   e->trib->flatten();
   e->tria->unsetError();
   e->trib->unsetError();
+  dealDots(e->trib,e->tria);
 }
 
 point *bend(edge *e)
