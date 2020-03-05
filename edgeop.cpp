@@ -177,7 +177,7 @@ point *bend(edge *e)
     bbear+=DEG180;
   abear=ebear+(abear-ebear)/2;
   bbear=ebear+(bbear-ebear)/2;
-  point newPoint(intersection(*e->a,abear,*e->b,bbear),0);
+  point newPoint(intersection(*e->a,abear,*e->b,bbear),(e->a->elev()+e->b->elev())/2);
   int newPointNum=net.points.size()+1;
   net.addpoint(newPointNum,newPoint);
   point *pnt=&net.points[newPointNum];
