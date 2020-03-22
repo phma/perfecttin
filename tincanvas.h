@@ -3,7 +3,7 @@
 /* tincanvas.h - canvas for drawing TIN               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -27,6 +27,8 @@
 #include "lissajous.h"
 #include "point.h"
 
+#define SPLASH_TIME 60
+
 class TinCanvas: public QWidget
 {
   Q_OBJECT
@@ -36,12 +38,15 @@ public:
   xy windowToWorld(QPointF pnt);
   int state;
 signals:
+  void splashScreenStarted();
+  void splashScreenFinished();
 public slots:
   void sizeToFit();
   void setSize();
   void setLengthUnit(double unit);
   void setScalePos();
-  void tick();
+  void tick(); // 50 ms
+  void startSplashScreen();
 protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
@@ -58,5 +63,6 @@ private:
   int triangleNum;
   int lastOpcount;
   int ballAngle,dartAngle;
+  int splashScreenTime; // in ticks
 };
 #endif

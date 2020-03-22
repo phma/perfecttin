@@ -76,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
   connect(timer,SIGNAL(timeout()),canvas,SLOT(tick()));
   timer->start(50);
+  canvas->startSplashScreen();
 }
 
 void dumpSteepestTriangle()

@@ -3,7 +3,7 @@
 /* tincanvas.cpp - canvas for drawing TIN             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setMinimumSize(40,30);
-  triangleNum=0;
+  triangleNum=splashScreenTime=0;
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
@@ -113,6 +113,14 @@ void TinCanvas::tick()
     state=0;
   if ((state==TH_WAIT || state==TH_PAUSE) && currentAction)
     state=-currentAction;
+  if (splashScreenTime)
+  {
+    if (0==--splashScreenTime)
+    {
+      cout<<"Splash screen finished\n";
+      splashScreenFinished();
+    }
+  }
   // Compute the new position of the ball, and update a swath containing the ball's motion.
   ballAngle+=lrint(8388608*sqrt((unsigned)(thisOpcount-lastOpcount)));
   lastOpcount=thisOpcount;
@@ -232,6 +240,16 @@ void TinCanvas::tick()
     update();
   //if (elapsed>cr::milliseconds(50))
     //cout<<"tick got stuck\n";
+}
+
+void TinCanvas::startSplashScreen()
+{
+  if (splashScreenTime==0 && net.points.size()==0)
+  {
+    splashScreenTime=SPLASH_TIME;
+    cout<<"Starting splash screen\n";
+    splashScreenStarted();
+  }
 }
 
 void TinCanvas::setSize()
