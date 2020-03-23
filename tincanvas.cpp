@@ -110,7 +110,10 @@ void TinCanvas::tick()
   if ((tstatus&0x3ffbfeff)%1048577==0)
     state=(tstatus&0x3ffbfeff)/1048577;
   else
+  {
     state=0;
+    //cout<<"tstatus "<<((tstatus>>20)&1023)<<':'<<((tstatus>>10)&1023)<<':'<<(tstatus&1023)<<endl;
+  }
   if ((state==TH_WAIT || state==TH_PAUSE) && currentAction)
     state=-currentAction;
   if (splashScreenTime)

@@ -563,6 +563,9 @@ void MainWindow::handleResult(ThreadAction ta)
   tinSizeChanged();
   switch (ta.opcode)
   {
+    case ACT_LOAD:
+      convertAction->setEnabled(true);
+      break;
     case ACT_READ_PTIN:
       if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)
       {
