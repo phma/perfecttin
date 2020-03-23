@@ -120,6 +120,7 @@ void TinCanvas::tick()
   {
     if (0==--splashScreenTime)
     {
+      net.clear();
       cout<<"Splash screen finished\n";
       splashScreenFinished();
     }
@@ -247,11 +248,16 @@ void TinCanvas::tick()
 
 void TinCanvas::startSplashScreen()
 {
+  int i,j;
   if (splashScreenTime==0 && net.points.size()==0)
   {
     splashScreenTime=SPLASH_TIME;
     cout<<"Starting splash screen\n";
+    for (i=1;i>-2;i--)
+      for (j=abs(i)-3;j<4-abs(i);j+=2)
+	net.addpoint((j-7*i+11)/2,point(j,i*M_SQRT_3,0));
     splashScreenStarted();
+    sizeToFit();
   }
 }
 
