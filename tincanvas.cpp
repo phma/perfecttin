@@ -289,6 +289,7 @@ void TinCanvas::startSplashScreen()
       net.points[i+4].insertEdge(&net.edges[j]);
       j++;
     }
+    net.maketriangles();
     net.wingEdge.unlock();
     splashScreenStarted();
     sizeToFit();
