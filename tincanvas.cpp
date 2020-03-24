@@ -253,9 +253,43 @@ void TinCanvas::startSplashScreen()
   {
     splashScreenTime=SPLASH_TIME;
     cout<<"Starting splash screen\n";
+    net.wingEdge.lock();
     for (i=1;i>-2;i--)
       for (j=abs(i)-3;j<4-abs(i);j+=2)
 	net.addpoint((j-7*i+11)/2,point(j,i*M_SQRT_3,0));
+    for (i=1,j=0;i<10;i++)
+      if ((i*i+1)%10)
+      {
+	net.edges[j].a=&net.points[i];
+	net.edges[j].b=&net.points[i+1];
+	net.points[i].insertEdge(&net.edges[j]);
+	net.points[i+1].insertEdge(&net.edges[j]);
+	j++;
+      }
+    for (i=1;i<4;i++)
+    {
+      net.edges[j].a=&net.points[i];
+      net.edges[j].b=&net.points[i+3];
+      net.points[i].insertEdge(&net.edges[j]);
+      net.points[i+3].insertEdge(&net.edges[j]);
+      j++;
+      net.edges[j].a=&net.points[i];
+      net.edges[j].b=&net.points[i+4];
+      net.points[i].insertEdge(&net.edges[j]);
+      net.points[i+4].insertEdge(&net.edges[j]);
+      j++;
+      net.edges[j].a=&net.points[i+7];
+      net.edges[j].b=&net.points[i+3];
+      net.points[i+7].insertEdge(&net.edges[j]);
+      net.points[i+3].insertEdge(&net.edges[j]);
+      j++;
+      net.edges[j].a=&net.points[i+7];
+      net.edges[j].b=&net.points[i+4];
+      net.points[i+7].insertEdge(&net.edges[j]);
+      net.points[i+4].insertEdge(&net.edges[j]);
+      j++;
+    }
+    net.wingEdge.unlock();
     splashScreenStarted();
     sizeToFit();
   }
