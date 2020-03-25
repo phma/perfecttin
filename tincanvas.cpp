@@ -26,6 +26,7 @@
 #include "tincanvas.h"
 #include "boundrect.h"
 #include "octagon.h"
+#include "relprime.h"
 #include "angle.h"
 #include "threads.h"
 #include "ldecimal.h"
@@ -89,7 +90,7 @@ void TinCanvas::tick()
   int i,sz;
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
-  double r,g,b;
+  double r,g,b,splashElev;
   triangle *tri=nullptr;
   xy gradient,A,B,C;
   xy dartCorners[4];
@@ -118,6 +119,14 @@ void TinCanvas::tick()
     state=-currentAction;
   if (splashScreenTime)
   {
+    for (i=0;i<10;i++)
+    {
+      splashElev=sin(splashScreenTime*quadirr[i])*splashScreenTime/SPLASH_TIME;
+      net.points[i+1].raise(splashElev-net.points[i+1].elev());
+    }
+    for (i=0;i<10;i++)
+      net.triangles[i].flatten();
+    trianglesToPaint+=27;
     if (0==--splashScreenTime)
     {
       net.clear();
