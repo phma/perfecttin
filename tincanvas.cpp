@@ -264,6 +264,13 @@ void TinCanvas::tick()
     painter.setPen(pen);
     for (i=0;i<net.edges.size();i++)
       painter.drawLine(worldToWindow(*net.edges[i].a),worldToWindow(*net.edges[i].b));
+    painter.setPen(Qt::NoPen);
+    brush.setColor(Qt::blue);
+    painter.setBrush(brush);
+    for (i=1;i<=10;i++)
+    {
+      painter.drawEllipse(worldToWindow(net.points[i]),scale/8,scale/8);
+    }
   }
   if (tri && !trianglesToPaint)
     update();
