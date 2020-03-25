@@ -105,6 +105,7 @@ void TinCanvas::tick()
   xy oldBallPos=ballPos;
   QPainter painter(&frameBuffer);
   QBrush brush;
+  QPen pen;
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.setPen(Qt::NoPen);
   brush.setStyle(Qt::SolidPattern);
@@ -254,6 +255,15 @@ void TinCanvas::tick()
       painter.drawConvexPolygon(polygon);
     }
     elapsed=clk.now()-timeStart;
+  }
+  if (splashScreenTime>0 && splashScreenTime<=SPLASH_TIME/2)
+  {
+    pen.setColor(Qt::black);
+    pen.setWidthF(scale/20);
+    pen.setCapStyle(Qt::FlatCap);
+    painter.setPen(pen);
+    for (i=0;i<net.edges.size();i++)
+      painter.drawLine(worldToWindow(*net.edges[i].a),worldToWindow(*net.edges[i].b));
   }
   if (tri && !trianglesToPaint)
     update();
