@@ -229,6 +229,12 @@ void TinCanvas::tick()
       r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
       g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
       b=0.5-gradient.north()*0.483 -gradient.east()*0.1294;
+      if (splashScreenTime)
+      {
+	r+=0.5-0.5*splashScreenTime/SPLASH_TIME;
+	g+=0.5-0.5*splashScreenTime/SPLASH_TIME;
+	b+=0.5-0.5*splashScreenTime/SPLASH_TIME;
+      }
       if (r>1)
 	r=1;
       if (r<0)
