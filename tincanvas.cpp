@@ -124,7 +124,7 @@ void TinCanvas::tick()
   {
     for (i=0;i<10;i++)
     {
-      splashElev=sin(splashScreenTime*quadirr[i])*splashScreenTime/SPLASH_TIME;
+      splashElev=sin(splashScreenTime*quadirr[i]/2)*splashScreenTime/SPLASH_TIME;
       net.points[i+1].raise(splashElev-net.points[i+1].elev());
     }
     for (i=0;i<10;i++)
