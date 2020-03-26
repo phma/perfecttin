@@ -83,6 +83,8 @@ void TinCanvas::sizeToFit()
     else
       scale=yscale;
   }
+  if (splashScreenTime)
+    scale=scale*2/3;
 }
 
 void TinCanvas::tick()
