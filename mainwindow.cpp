@@ -55,6 +55,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
+  connect(canvas,SIGNAL(splashScreenStarted()),this,SLOT(disableMenuSplash()));
+  connect(canvas,SIGNAL(splashScreenFinished()),this,SLOT(enableMenuSplash()));
   doneBar=new QProgressBar(this);
   busyBar=new QProgressBar(this);
   doneBar->setRange(0,16777216);
@@ -368,6 +370,29 @@ void MainWindow::loadFile()
     lastFileName=fileName;
     fileMsg->setText(QString::fromStdString(fileNames));
   }
+}
+
+void MainWindow::disableMenuSplash()
+/* Disable menu during splash screen, so that the user can't mess up
+ * the TIN that the splash screen shows.
+ */
+{
+  openAction->setEnabled(false);
+  loadAction->setEnabled(false);
+  convertAction->setEnabled(false);
+  exportMenu->setEnabled(false);
+  clearAction->setEnabled(false);
+  stopAction->setEnabled(false);
+}
+
+void MainWindow::enableMenuSplash()
+{
+  openAction->setEnabled(true);
+  loadAction->setEnabled(true);
+  convertAction->setEnabled(false);
+  exportMenu->setEnabled(false);
+  clearAction->setEnabled(false);
+  stopAction->setEnabled(false);
 }
 
 void MainWindow::exportDxfTxt()

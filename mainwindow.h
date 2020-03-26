@@ -58,6 +58,8 @@ public slots:
   void setUnit(double lu);
   void openFile();
   void loadFile();
+  void disableMenuSplash();
+  void enableMenuSplash();
   void exportDxfTxt();
   void exportDxfBin();
   void exportTinTxt();
