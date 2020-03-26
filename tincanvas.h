@@ -57,13 +57,13 @@ private:
   double scale;
   double lengthUnit;
   double maxScaleSize,scaleSize;
-  triangle *lasttri;
   xy ballPos;
   xy leftScaleEnd,rightScaleEnd,scaleEnd;
   int penPos;
   int triangleNum;
   int lastOpcount;
   int ballAngle,dartAngle;
+  int lastntri;
   int splashScreenTime; // in ticks
 };
 #endif
