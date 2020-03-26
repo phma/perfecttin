@@ -131,7 +131,6 @@ void TinCanvas::tick()
     if (0==--splashScreenTime)
     {
       net.clear();
-      cout<<"Splash screen finished\n";
       splashScreenFinished();
     }
   }
@@ -287,7 +286,6 @@ void TinCanvas::startSplashScreen()
   if (splashScreenTime==0 && net.points.size()==0)
   {
     splashScreenTime=SPLASH_TIME;
-    cout<<"Starting splash screen\n";
     net.wingEdge.lock();
     for (i=1;i>-2;i--)
       for (j=abs(i)-3;j<4-abs(i);j+=2)
