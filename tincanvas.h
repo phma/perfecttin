@@ -57,6 +57,7 @@ private:
   double scale;
   double lengthUnit;
   double maxScaleSize,scaleSize;
+  triangle *lasttri;
   xy ballPos;
   xy leftScaleEnd,rightScaleEnd,scaleEnd;
   int penPos;

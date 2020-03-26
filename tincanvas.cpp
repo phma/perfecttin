@@ -272,10 +272,13 @@ void TinCanvas::tick()
       painter.drawEllipse(worldToWindow(net.points[i]),scale/8,scale/8);
     }
   }
-  if (tri && !trianglesToPaint)
+  if (lasttri && !tri)
+    frameBuffer.fill();
+  if ((tri || lasttri) && !trianglesToPaint)
     update();
   //if (elapsed>cr::milliseconds(50))
     //cout<<"tick got stuck\n";
+  lasttri=tri;
 }
 
 void TinCanvas::startSplashScreen()
