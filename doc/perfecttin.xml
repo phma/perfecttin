@@ -36,6 +36,9 @@
       <para>the tolerance in meters (.025×8 means that PerfectTIN is currently using a tolerance of 200 mm while working toward a tolerance of 25 mm);</para>
     </listitem>
     <listitem>
+      <para>the estimated density of the point cloud;</para>
+    </listitem>
+    <listitem>
       <para>the percentage of area that is within tolerance;</para>
     </listitem>
     <listitem>
