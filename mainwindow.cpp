@@ -564,6 +564,8 @@ void MainWindow::clearCloud()
   cloud.clear();
   fileNames=lastFileName="";
   fileMsg->setText("");
+  loadAction->setEnabled(true);
+  openAction->setEnabled(true);
   density=0;
 }
 
@@ -636,6 +638,8 @@ void MainWindow::handleResult(ThreadAction ta)
 	  default:
 	    message=tr("File corrupt %1").arg(QString::fromStdString(ta.filename));
 	}
+	loadAction->setEnabled(true);
+	openAction->setEnabled(true);
       }
       if (message.length())
 	msgBox->warning(this,tr("PerfectTIN"),message);
