@@ -632,10 +632,10 @@ PtinHeader readPtin(std::string inputFile)
       }
       tri->dots.push_back(cloud[i]);
     }
-    cloud.clear();
   }
   else if (readingStarted)
     net.clear();
+  cloud.clear();
   return header;
 }
 
