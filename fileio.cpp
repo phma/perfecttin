@@ -462,7 +462,7 @@ PtinHeader readPtin(std::string inputFile)
   int i,j,m,n,a,b,c;
   int edgeCheck=0;
   vector<int> convexHull;
-  vector<double> areas;
+  vector<double> areas,sqrOffsets;
   triangle *tri;
   xyz pnt,ctr;
   bool readingStarted=false;
@@ -547,6 +547,7 @@ PtinHeader readPtin(std::string inputFile)
 	  pnt=readPoint4(ptinFile);
 	  if (xy(pnt).length()>tri->peri/3)
 	    header.tolRatio=PT_DOT_OUTSIDE;
+	  sqrOffsets.push_back(sqr(pnt.getz()));
 	  pnt+=ctr;
 	  if (tri->in(pnt))
 	    tri->dots.push_back(pnt);
@@ -569,6 +570,8 @@ PtinHeader readPtin(std::string inputFile)
 	  pnt=readPoint4(ptinFile);
 	  if (xy(pnt).length()>tri->peri/3)
 	    header.tolRatio=PT_DOT_OUTSIDE;
+	  if (!pnt.isnan())
+	    sqrOffsets.push_back(sqr(pnt.getz()));
 	  pnt+=ctr;
 	  if (pnt.isnan())
 	  {
@@ -611,7 +614,9 @@ PtinHeader readPtin(std::string inputFile)
       if (fabs(zcheck[i]-zCheck[i])>zError)
 	zError=fabs(zcheck[i]-zCheck[i]);
     //cout<<zError/(header.tolRatio*header.tolerance*sqrt(zCheck.getCount()))<<endl;
-    if (zError>header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536)
+    cout<<"zError "<<zError<<" root-sum-square "<<sqrt(pairwisesum(sqrOffsets))<<endl;
+    if (zError>header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536
+               +sqrt(pairwisesum(sqrOffsets))/8192)
       header.tolRatio=PT_ZCHECK_FAIL;
   }
   if (header.tolRatio>0 && header.tolerance>0)
