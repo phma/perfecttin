@@ -44,6 +44,7 @@ mutex adjLog;
 mutex actMutex;
 mutex bucketMutex;
 mutex startMutex;
+mutex opTimeMutex;
 
 int threadCommand;
 vector<thread> threads;
@@ -66,6 +67,7 @@ vector<int> cleanBuckets;
  */
 vector<double> allBuckets,doneBuckets,doneq2Buckets;
 int opcount,trianglesToPaint;
+double opTime; // time for triop and edgeop, in milliseconds
 const char statusNames[][8]=
 {
   "None","Run","Pause","Wait","Stop"
@@ -196,6 +198,7 @@ void startThreads(int n)
   threadCommand=TH_WAIT;
   heldTriangles.resize(n);
   sleepTime.resize(n);
+  opTime=0;
   initTempPointlist(n);
   mtxSquareSize=ceil(sqrt(33*n));
   m=mtxSquareSize*mtxSquareSize;
@@ -309,6 +312,16 @@ void randomizeSleep()
   int i;
   for (i=0;i<sleepTime.size();i++)
     sleepTime[i]=rng.usrandom()/32.768;
+}
+
+void updateOpTime(cr::nanoseconds duration)
+{
+  double time=duration.count()/1e6;
+  opTimeMutex.lock();
+  opTime*=0.999;
+  if (time>opTime)
+    opTime=time;
+  opTimeMutex.unlock();
 }
 
 set<int> whichLocks(vector<int> triangles)
@@ -519,8 +532,11 @@ void TinThread::operator()(int thread)
 	t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
 	tri=&net.triangles[t];
 	net.wingEdge.unlock_shared();
+	cr::time_point<cr::steady_clock> timeStart=clk.now();
 	edgeResult=edgeop(edg,stageTolerance,minArea,thread);
 	triResult=triop(tri,stageTolerance,minArea,thread);
+	cr::nanoseconds elapsed=clk.now()-timeStart;
+	updateOpTime(elapsed);
       }
       else
 	triResult=edgeResult=2;

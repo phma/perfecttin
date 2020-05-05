@@ -79,6 +79,7 @@ struct ThreadAction
 
 extern std::mutex adjLog;
 extern double stageTolerance,minArea;
+extern double opTime;
 extern int opcount,trianglesToPaint;
 extern int currentAction;
 extern std::chrono::steady_clock clk;
