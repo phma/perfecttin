@@ -273,9 +273,9 @@ bool resultQueueEmpty()
 
 void sleep(int thread)
 {
-  sleepTime[thread]+=1;
-  if (sleepTime[thread]>1000)
-    sleepTime[thread]=1000;
+  sleepTime[thread]+=1+sleepTime[thread]/1e3;
+  if (sleepTime[thread]>opTime*sleepTime.size()+1000)
+    sleepTime[thread]=opTime*sleepTime.size()+1000;
   threadStatus[thread]|=256;
   this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
@@ -292,7 +292,7 @@ void sleepDead(int thread)
 
 void unsleep(int thread)
 {
-  sleepTime[thread]-=1;
+  sleepTime[thread]-=1+sleepTime[thread]/1e3;
   if (sleepTime[thread]<0 || std::isnan(sleepTime[thread]))
     sleepTime[thread]=0;
 }
@@ -311,7 +311,7 @@ void randomizeSleep()
 {
   int i;
   for (i=0;i<sleepTime.size();i++)
-    sleepTime[i]=rng.usrandom()/32.768;
+    sleepTime[i]=rng.usrandom()*opTime*sleepTime.size()/32768;
 }
 
 void updateOpTime(cr::nanoseconds duration)
