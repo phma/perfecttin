@@ -141,7 +141,6 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
 
 void flip(edge *e)
 {
-  int i;
   net.wingEdge.lock();
   e->flip(&net);
   //assert(net.checkTinConsistency());

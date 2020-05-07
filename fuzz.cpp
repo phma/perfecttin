@@ -3,7 +3,7 @@
 /* fuzz.cpp - fuzzing main program                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -32,8 +32,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   int exitStatus;
-  int i,sz;
-  int nthreads;
+  int sz;
   string command,file;
   PtinHeader header;
   if (argc>=2)

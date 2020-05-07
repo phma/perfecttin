@@ -3,7 +3,7 @@
 /* dxf.cpp - Drawing Exchange Format                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -219,7 +219,7 @@ string hexEncodeInt(long long num)
 string hexDecodeString(string str)
 {
   int i,ch;
-  char byte;
+  char byte=0;
   string ret;
   for (i=0;i<str.length();i++)
   {
@@ -369,7 +369,7 @@ void writeDxfBinary(std::ostream &file,GroupCode code)
   switch(tagFormat(code.tag))
   {
     case 1:
-      file.put(code.flag);
+      file.put((char)code.flag);
       break;
     case 2:
       writeleshort(file,code.integer);

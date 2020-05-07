@@ -3,7 +3,7 @@
 /* gui.cpp - GUI main program                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -36,7 +36,6 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   int exitStatus;
-  int i,sz;
   QApplication app(argc, argv);
   QTranslator translator,qtTranslator;
   int nthreads;
@@ -73,6 +72,5 @@ int main(int argc, char *argv[])
   exitStatus=app.exec();
   waitForThreads(TH_STOP);
   joinThreads();
-  sz=net.convexHull.size();
   return exitStatus;
 }

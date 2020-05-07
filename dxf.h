@@ -53,7 +53,7 @@ class GroupCode
 {
 public:
   GroupCode();
-  GroupCode(int tag0);
+  explicit GroupCode(int tag0);
   GroupCode(const GroupCode &b);
   GroupCode& operator=(const GroupCode &b);
   ~GroupCode();

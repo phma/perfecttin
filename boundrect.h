@@ -3,7 +3,7 @@
 /* boundrect.h - bounding rectangles                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ private:
   // The six numbers are left, bottom, -right, -top, low, and -high.
 public:
   BoundRect();
-  BoundRect(int ori);
+  explicit BoundRect(int ori);
   void clear();
   void setOrientation(int ori);
   int getOrientation();

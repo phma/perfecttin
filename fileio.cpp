@@ -42,7 +42,7 @@ CoordCheck zCheck;
 
 PtinHeader::PtinHeader()
 {
-  conversionTime=tolRatio=numPoints=numConvexHull=numTriangles=0;
+  conversionTime=tolRatio=density=numPoints=numConvexHull=numTriangles=0;
   tolerance=NAN;
 }
 
@@ -339,7 +339,6 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
  */
 {
   int i,n;
-  unsigned checkSum=0;
   xyz pnt;
   triangle *tri;
   ofstream checkFile(outputFile,ios::binary);
@@ -466,7 +465,7 @@ PtinHeader readPtin(std::string inputFile)
   triangle *tri;
   xyz pnt,ctr;
   bool readingStarted=false;
-  double zError=0,high=-INFINITY,low=INFINITY;
+  double high=-INFINITY,low=INFINITY;
   double absToler;
   vector<double> zcheck;
   zCheck.clear();
@@ -630,7 +629,8 @@ PtinHeader readPtin(std::string inputFile)
       {
 	cerr<<"Can't happen: No triangle found for dot\n";
       }
-      tri->dots.push_back(cloud[i]);
+      else
+	tri->dots.push_back(cloud[i]);
     }
   }
   else if (readingStarted)
