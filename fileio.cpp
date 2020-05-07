@@ -467,6 +467,7 @@ PtinHeader readPtin(std::string inputFile)
   xyz pnt,ctr;
   bool readingStarted=false;
   double zError=0,high=-INFINITY,low=INFINITY;
+  double absToler;
   vector<double> zcheck;
   zCheck.clear();
   header=readPtinHeader(ptinFile);
@@ -607,17 +608,16 @@ PtinHeader readPtin(std::string inputFile)
       zcheck.push_back(0);
     while (zcheck.size()<64)
       zcheck.push_back(zcheck.back());
+    absToler=header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536;
     //cout<<header.tolRatio*header.tolerance*sqrt(zCheck.getCount())<<endl;
     //for (i=0;i<n;i++)
-      //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<zcheck[i]-zCheck[i]<<endl;
+      //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<(zcheck[i]-zCheck[i])/zCheck[i]<<endl;
     for (i=0;i<64;i++)
-      if (fabs(zcheck[i]-zCheck[i])>zError)
-	zError=fabs(zcheck[i]-zCheck[i]);
-    //cout<<zError/(header.tolRatio*header.tolerance*sqrt(zCheck.getCount()))<<endl;
-    cout<<"zError "<<zError<<" root-sum-square "<<sqrt(pairwisesum(sqrOffsets))<<endl;
-    if (zError>header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536
-               +sqrt(pairwisesum(sqrOffsets))/8192)
-      header.tolRatio=PT_ZCHECK_FAIL;
+    {
+      if (fabs(zcheck[i]-zCheck[i])>absToler+fabs(zCheck[i])/1073741824)
+	// zCheck[i]/1e12 suffices for completed jobs, but is too tight for early checkpoint files.
+	header.tolRatio=PT_ZCHECK_FAIL;
+    }
   }
   if (header.tolRatio>0 && header.tolerance>0)
   {
