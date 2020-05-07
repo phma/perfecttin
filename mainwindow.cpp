@@ -216,12 +216,11 @@ void MainWindow::tick()
     lastStageTolerance=stageTolerance;
     toleranceMsg->setText(QString::fromStdString(ldecimal(tolerance,5e-4)+"×"+ldecimal(toleranceRatio,5e-4)));
   }
-  if (opTime!=lastDensity)
+  if (density!=lastDensity)
   { // Density has changed: update status bar
-    lastDensity=opTime;
+    lastDensity=density;
     if (density>0)
-      //densityMsg->setText(QString::fromStdString(ldecimal(density,density/256)+"/m²"));
-      densityMsg->setText(QString::fromStdString(ldecimal(opTime,opTime/256)+" ms"));
+      densityMsg->setText(QString::fromStdString(ldecimal(density,density/256)+"/m²"));
     else
       densityMsg->clear();
   }
