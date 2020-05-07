@@ -5,7 +5,7 @@ Before 0.3.0:
 •Replace saving TIN and DXF files at each stage with export actions ✓
 
 Before 0.4.0:
-•Get rid of spikes that the program hallucinates in areas with no dots
+•Get rid of spikes that the program hallucinates in areas with no dots ✓
 
 Before 0.5.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop
