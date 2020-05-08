@@ -702,8 +702,8 @@ void testflip()
     areaBefore+=net.triangles[i].sarea;
   lengthBefore=net.edges[3].length();
   cout<<"length "<<lengthBefore<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
-  tassert(abs((int)net.triangles[2].dots.size()-402)<15);
-  tassert(abs((int)net.triangles[3].dots.size()-402)<15);
+  tassert(abs((int)net.triangles[2].dots.size()-402)<18);
+  tassert(abs((int)net.triangles[3].dots.size()-402)<18);
   flip(&net.edges[3]);
   drawNet(ps);
   lengthAfter=net.edges[3].length();
@@ -714,8 +714,8 @@ void testflip()
   }
   cout<<"length "<<lengthAfter<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
   cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after\n";
-  tassert(abs((int)net.triangles[2].dots.size()-729)<15);
-  tassert(abs((int)net.triangles[3].dots.size()-75)<15);
+  tassert(abs((int)net.triangles[2].dots.size()-729)<18);
+  tassert(abs((int)net.triangles[3].dots.size()-75)<18);
   tassert(fabs(lengthBefore/lengthAfter-M_SQRT2)<0.02);
   tassert(fabs(areaAfter-areaBefore)<1e-6);
   tassert(net.checkTinConsistency());
