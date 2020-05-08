@@ -294,7 +294,10 @@ int main(int argc, char *argv[])
 	      extension(noExt(inputFiles[i]))=="."+to_string(ptinHeader.tolRatio))
 	    outputFile=noExt(noExt(inputFiles[i]));
 	  if (ptinHeader.tolRatio==1)
+	  {
 	    done=true;
+	    areadone[0]=1;
+	  }
 	}
 	else
 	{
