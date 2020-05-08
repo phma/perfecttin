@@ -293,6 +293,8 @@ int main(int argc, char *argv[])
 	  if (ptinHeader.tolRatio>1 &&
 	      extension(noExt(inputFiles[i]))=="."+to_string(ptinHeader.tolRatio))
 	    outputFile=noExt(noExt(inputFiles[i]));
+	  if (ptinHeader.tolRatio==1)
+	    done=true;
 	}
 	else
 	{
