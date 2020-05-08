@@ -608,12 +608,14 @@ PtinHeader readPtin(std::string inputFile)
     while (zcheck.size()<64)
       zcheck.push_back(zcheck.back());
     absToler=header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536;
-    //cout<<header.tolRatio*header.tolerance*sqrt(zCheck.getCount())<<endl;
-    //for (i=0;i<n;i++)
-      //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<(zcheck[i]-zCheck[i])/zCheck[i]<<endl;
+    for (i=0;i<n;i++)
+    {
+      //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<(zcheck[i]-zCheck[i]);
+      //cout<<' '<<absToler+fabs(zCheck[i])/536870912<<endl;
+    }
     for (i=0;i<64;i++)
     {
-      if (fabs(zcheck[i]-zCheck[i])>absToler+fabs(zCheck[i])/1073741824)
+      if (fabs(zcheck[i]-zCheck[i])>absToler+fabs(zCheck[i])/536870912)
 	// zCheck[i]/1e12 suffices for completed jobs, but is too tight for early checkpoint files.
 	header.tolRatio=PT_ZCHECK_FAIL;
     }
