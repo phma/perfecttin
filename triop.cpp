@@ -34,7 +34,7 @@
 
 using namespace std;
 
-point *split(triangle *tri)
+point *split(triangle *tri,int thread)
 /* Inserts a new point in the triangle, then moves the dots that are in the
  * two new triangles to them.
  */
@@ -71,7 +71,7 @@ point *split(triangle *tri)
   newe0->setnext(tri->b,sideb);
   sideb->setnext(tri->c,newe2);
   newe2->setnext(tri->b,sidea);
-  int newTriNum=net.addtriangle(2);
+  int newTriNum=net.addtriangle(2,thread);
   newt0=&net.triangles[newTriNum];
   newt1=&net.triangles[newTriNum+1];
   newt0->a=tri->a;
@@ -336,7 +336,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
     gotLock2=lockTriangles(thread,triNeigh);
     if (gotLock2)
     {
-      corners.push_back(split(tri));
+      corners.push_back(split(tri,thread));
       triNeigh=triangleNeighbors(corners);
       tri->unsetError();
       logAdjustment(adjustElev(triNeigh,corners));

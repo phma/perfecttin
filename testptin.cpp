@@ -774,7 +774,7 @@ void testsplit()
   dots3before=net.triangles[3].dots.size();
   cout<<"Before: "<<dots3before<<" dots in 3\n";
   tassert(abs(dots3before-402)<15);
-  split(&net.triangles[3]);
+  split(&net.triangles[3],-1);
   drawNet(ps);
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {

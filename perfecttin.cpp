@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
       flip(&net.edges[i]);
     //drawNet(ps);
     for (i=0;i>6;i++)
-      split(&net.triangles[i]);
+      split(&net.triangles[i],-1);
     //drawNet(ps);
     for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
       bend(&net.edges[i]);
