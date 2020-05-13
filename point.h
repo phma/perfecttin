@@ -46,7 +46,7 @@ public:
   bool isnan() const;
   double dirbound(int angle);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
-  virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
+  void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   friend xy operator+(const xy &l,const xy &r);
   friend xy operator+=(xy &l,const xy &r);
   friend xy operator-=(xy &l,const xy &r);
@@ -91,7 +91,7 @@ public:
   double length();
   void raise(double height);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
-  virtual void roscat(xy tfrom,int ro,double sca,xy tto);
+  void roscat(xy tfrom,int ro,double sca,xy tto);
   void setelev(double h)
   {
     z=h;
@@ -128,8 +128,6 @@ class pointlist;
 class point: public xyz
 {
 public:
-  using xyz::roscat;
-  using xyz::_roscat;
   //xy pagepos; //used when dumping a lozenge in PostScript
   point();
   point(double e,double n,double h);
