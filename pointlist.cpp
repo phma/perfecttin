@@ -250,6 +250,8 @@ int pointlist::addtriangle(int n,int thread)
 {
   int i;
   int newTriNum=triangles.size();
+  if (thread>=0)
+    lockNewTriangles(thread,n);
   for (i=0;i<n;i++)
   {
     triangles[newTriNum+i].sarea=0;
