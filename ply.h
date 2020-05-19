@@ -24,3 +24,4 @@
 #include <string>
 
 void readPly(std::string fileName);
+void writePly(std::string fileName);

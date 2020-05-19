@@ -52,8 +52,15 @@ void readPly(string fileName)
   {
   }
 }
+
+void writePly(string filename)
+{
+}
 #else
 void readPly(string fileName)
+{
+}
+void writePly(string fileName)
 {
 }
 #endif
