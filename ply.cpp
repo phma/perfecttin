@@ -55,7 +55,12 @@ void readPly(string fileName)
 
 void writePly(string filename)
 {
-  Property xProp("x",Type::DOUBLE,false);
+  vector<Property> vertexProperties,faceProperties;
+  vertexProperties.push_back(Property("x",Type::DOUBLE,false));
+  vertexProperties.push_back(Property("y",Type::DOUBLE,false));
+  vertexProperties.push_back(Property("z",Type::DOUBLE,false));
+  faceProperties.push_back(Property("vertex_index",Type::INT,true));
+  
 }
 #else
 void readPly(string fileName)
