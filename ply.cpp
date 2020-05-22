@@ -79,7 +79,16 @@ void writePly(string filename)
   faceProperties.push_back(Property("vertex_index",Type::INT,true));
   Element vertexElement("vertex",net.points.size(),vertexProperties);
   Element faceElement("face",net.triangles.size(),faceProperties);
-  
+  FileOut plyfile(filename,File::Format::BINARY_LITTLE_ENDIAN);
+  ElementWriteCallback pointCallback=transmitPoint;
+  ElementWriteCallback triangleCallback=transmitTriangle;
+  ElementsDefinition elements;
+  elements.push_back(vertexElement);
+  elements.push_back(faceElement);
+  plyfile.setElementsDefinition(elements);
+  plyfile.setElementWriteCallback("vertex",pointCallback);
+  plyfile.setElementWriteCallback("face",triangleCallback);
+  plyfile.write();
 }
 #else
 void readPly(string fileName)
