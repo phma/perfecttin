@@ -70,7 +70,7 @@ void readPly(string fileName)
   }
 }
 
-void writePly(string filename)
+void writePly(string filename,bool asc,double outUnit,int flags)
 {
   vector<Property> vertexProperties,faceProperties;
   vertexProperties.push_back(Property("x",Type::DOUBLE,false));
