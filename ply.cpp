@@ -55,6 +55,7 @@ void readPly(string fileName)
 
 void writePly(string filename)
 {
+  Property xProp("x",Type::DOUBLE,false);
 }
 #else
 void readPly(string fileName)
