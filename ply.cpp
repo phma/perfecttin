@@ -28,6 +28,7 @@
 #endif
 #include "ply.h"
 #include "cloud.h"
+#include "octagon.h"
 
 using namespace std;
 #ifdef Plytapus_FOUND
@@ -60,6 +61,8 @@ void writePly(string filename)
   vertexProperties.push_back(Property("y",Type::DOUBLE,false));
   vertexProperties.push_back(Property("z",Type::DOUBLE,false));
   faceProperties.push_back(Property("vertex_index",Type::INT,true));
+  Element vertexElement("vertex",net.points.size(),vertexProperties);
+  Element faceElement("face",net.triangles.size(),faceProperties);
   
 }
 #else
