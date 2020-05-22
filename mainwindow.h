@@ -62,6 +62,8 @@ public slots:
   void enableMenuSplash();
   void exportDxfTxt();
   void exportDxfBin();
+  void exportPlyTxt();
+  void exportPlyBin();
   void exportTinTxt();
   void exportCarlsonTin();
   void exportLandXml();
@@ -97,6 +99,7 @@ private:
   QAction *exportAction,*stopAction,*resumeAction,*exitAction;
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
+  QAction *exportPlyTxtAction,*exportPlyBinAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   UnitButton *unitButtons[4];
