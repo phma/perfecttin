@@ -445,6 +445,56 @@ void MainWindow::exportDxfBin()
   }
 }
 
+void MainWindow::exportPlyTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Export TIN as PLY Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".ply"));
+  fileDialog->setNameFilter(tr("(*.ply)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.param0=true;
+    ta.flags=exportEmpty;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_PLY;
+    enqueueAction(ta);
+  }
+}
+
+void MainWindow::exportPlyBin()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog->setWindowTitle(tr("Export TIN as PLY Binary"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".ply"));
+  fileDialog->setNameFilter(tr("(*.ply)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.param0=false;
+    ta.flags=exportEmpty;
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_PLY;
+    enqueueAction(ta);
+  }
+}
+
 void MainWindow::exportTinTxt()
 {
   int dialogResult;
@@ -743,6 +793,10 @@ void MainWindow::makeActions()
   exportDxfBinAction->setText(tr("DXF Binary"));
   exportMenu->addAction(exportDxfBinAction);
   connect(exportDxfBinAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfBin()));
+  exportPlyBinAction=new QAction(this);
+  exportPlyBinAction->setText(tr("PLY Binary"));
+  exportMenu->addAction(exportPlyBinAction);
+  connect(exportPlyBinAction,SIGNAL(triggered(bool)),this,SLOT(exportPlyBin()));
   exportTinTxtAction=new QAction(this);
   exportTinTxtAction->setText(tr("TIN Text"));
   exportMenu->addAction(exportTinTxtAction);
