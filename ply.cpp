@@ -34,6 +34,8 @@ using namespace std;
 #ifdef Plytapus_FOUND
 using namespace plytapus;
 
+vector<triangle *> trianglesToWrite;
+
 void receivePoint(ElementBuffer &buf)
 {
   xyz pnt(buf[0],buf[1],buf[2]);
@@ -49,7 +51,7 @@ void transmitPoint(ElementBuffer &buf,size_t i)
 
 void transmitTriangle(ElementBuffer &buf,size_t i)
 {
-  triangle *tri=&net.triangles[i];
+  triangle *tri=trianglesToWrite[i];
   buf.reset(3);
   buf[0]=net.revpoints[tri->a]-1;
   buf[1]=net.revpoints[tri->b]-1;
@@ -77,8 +79,17 @@ void writePly(string filename,bool asc,double outUnit,int flags)
   vertexProperties.push_back(Property("y",Type::DOUBLE,false));
   vertexProperties.push_back(Property("z",Type::DOUBLE,false));
   faceProperties.push_back(Property("vertex_index",Type::INT,true));
+  int i;
+  trianglesToWrite.clear();
+  for (i=0;i<net.triangles.size();i++)
+    if (net.triangles[i].ptValid())
+      if (net.triangles[i].dots.size() || (flags&1))
+	trianglesToWrite.push_back(&net.triangles[i]);
+      else;
+    else
+      cerr<<"Invalid triangle "<<i<<endl;
   Element vertexElement("vertex",net.points.size(),vertexProperties);
-  Element faceElement("face",net.triangles.size(),faceProperties);
+  Element faceElement("face",trianglesToWrite.size(),faceProperties);
   FileOut plyfile(filename,File::Format::BINARY_LITTLE_ENDIAN);
   ElementWriteCallback pointCallback=transmitPoint;
   ElementWriteCallback triangleCallback=transmitTriangle;
