@@ -31,6 +31,7 @@
 #include "random.h"
 #include "tintext.h"
 #include "las.h"
+#include "ply.h"
 #include "relprime.h"
 #include "manysum.h"
 #include "carlsontin.h"
@@ -581,6 +582,10 @@ void TinThread::operator()(int thread)
 	  writeLandXml(act.filename,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
+	case ACT_WRITE_PLY:
+	  writePly(act.filename,act.param0,act.param1,act.flags);
+	  unsleep(thread);
+	  break;
 	case ACT_WRITE_PTIN:
 	  adjustLooseCorners(act.param0*act.param1);
 	  writePtin(act.filename,act.param0,act.param1,act.param2);
@@ -640,6 +645,10 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_WRITE_LANDXML:
 	  writeLandXml(act.filename,act.param1,act.flags);
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_PLY:
+	  writePly(act.filename,act.param0,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
