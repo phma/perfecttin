@@ -449,6 +449,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       break;
     case -ACT_WRITE_DXF:
     case -ACT_WRITE_TIN:
+    case -ACT_WRITE_PLY:
     case -ACT_WRITE_CARLSON_TIN:
     case -ACT_WRITE_LANDXML:
     case -ACT_WRITE_PTIN:
