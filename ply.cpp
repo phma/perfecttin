@@ -40,6 +40,22 @@ void receivePoint(ElementBuffer &buf)
   cloud.push_back(pnt);
 }
 
+void transmitPoint(ElementBuffer &buf,size_t i)
+{
+  buf[0]=net.points[i].getx();
+  buf[1]=net.points[i].gety();
+  buf[2]=net.points[i].getz();
+}
+
+void transmitTriangle(ElementBuffer &buf,size_t i)
+{
+  triangle *tri=&net.triangles[i];
+  buf.reset(3);
+  buf[0]=net.revpoints[tri->a];
+  buf[1]=net.revpoints[tri->b];
+  buf[2]=net.revpoints[tri->c];
+}
+
 void readPly(string fileName)
 {
   try
