@@ -42,18 +42,18 @@ void receivePoint(ElementBuffer &buf)
 
 void transmitPoint(ElementBuffer &buf,size_t i)
 {
-  buf[0]=net.points[i].getx();
-  buf[1]=net.points[i].gety();
-  buf[2]=net.points[i].getz();
+  buf[0]=net.points[i+1].getx();
+  buf[1]=net.points[i+1].gety();
+  buf[2]=net.points[i+1].getz();
 }
 
 void transmitTriangle(ElementBuffer &buf,size_t i)
 {
   triangle *tri=&net.triangles[i];
   buf.reset(3);
-  buf[0]=net.revpoints[tri->a];
-  buf[1]=net.revpoints[tri->b];
-  buf[2]=net.revpoints[tri->c];
+  buf[0]=net.revpoints[tri->a]-1;
+  buf[1]=net.revpoints[tri->b]-1;
+  buf[2]=net.revpoints[tri->c]-1;
 }
 
 void readPly(string fileName)
