@@ -793,10 +793,12 @@ void MainWindow::makeActions()
   exportDxfBinAction->setText(tr("DXF Binary"));
   exportMenu->addAction(exportDxfBinAction);
   connect(exportDxfBinAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfBin()));
+#ifdef Plytapus_FOUND
   exportPlyBinAction=new QAction(this);
   exportPlyBinAction->setText(tr("PLY Binary"));
   exportMenu->addAction(exportPlyBinAction);
   connect(exportPlyBinAction,SIGNAL(triggered(bool)),this,SLOT(exportPlyBin()));
+#endif
   exportTinTxtAction=new QAction(this);
   exportTinTxtAction->setText(tr("TIN Text"));
   exportMenu->addAction(exportTinTxtAction);
