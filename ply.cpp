@@ -92,7 +92,7 @@ void writePly(string filename,bool asc,double outUnit,int flags)
       cerr<<"Invalid triangle "<<i<<endl;
   Element vertexElement("vertex",net.points.size(),vertexProperties);
   Element faceElement("face",trianglesToWrite.size(),faceProperties);
-  FileOut plyfile(filename,File::Format::BINARY_LITTLE_ENDIAN);
+  FileOut plyfile(filename,asc?File::Format::ASCII:File::Format::BINARY_LITTLE_ENDIAN);
   ElementWriteCallback pointCallback=transmitPoint;
   ElementWriteCallback triangleCallback=transmitTriangle;
   ElementsDefinition elements;

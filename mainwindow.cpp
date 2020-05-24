@@ -794,6 +794,10 @@ void MainWindow::makeActions()
   exportMenu->addAction(exportDxfBinAction);
   connect(exportDxfBinAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfBin()));
 #ifdef Plytapus_FOUND
+  exportPlyTxtAction=new QAction(this);
+  exportPlyTxtAction->setText(tr("PLY Text"));
+  exportMenu->addAction(exportPlyTxtAction);
+  connect(exportPlyTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportPlyTxt()));
   exportPlyBinAction=new QAction(this);
   exportPlyBinAction->setText(tr("PLY Binary"));
   exportMenu->addAction(exportPlyBinAction);
