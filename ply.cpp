@@ -35,6 +35,7 @@ using namespace std;
 using namespace plytapus;
 
 vector<triangle *> trianglesToWrite;
+double plyUnit;
 
 void receivePoint(ElementBuffer &buf)
 {
@@ -44,9 +45,9 @@ void receivePoint(ElementBuffer &buf)
 
 void transmitPoint(ElementBuffer &buf,size_t i)
 {
-  buf[0]=net.points[i+1].getx();
-  buf[1]=net.points[i+1].gety();
-  buf[2]=net.points[i+1].getz();
+  buf[0]=net.points[i+1].getx()/plyUnit;
+  buf[1]=net.points[i+1].gety()/plyUnit;
+  buf[2]=net.points[i+1].getz()/plyUnit;
 }
 
 void transmitTriangle(ElementBuffer &buf,size_t i)
@@ -81,6 +82,7 @@ void writePly(string filename,bool asc,double outUnit,int flags)
   faceProperties.push_back(Property("vertex_index",Type::INT,true));
   int i;
   trianglesToWrite.clear();
+  plyUnit=outUnit;
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())
       if (net.triangles[i].dots.size() || (flags&1))
