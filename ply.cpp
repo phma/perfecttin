@@ -107,7 +107,7 @@ void writePly(string filename,bool asc,double outUnit,int flags)
 void readPly(string fileName)
 {
 }
-void writePly(string fileName)
+void writePly(string fileName,bool asc,double outUnit,int flags)
 {
 }
 #endif
