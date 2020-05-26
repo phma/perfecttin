@@ -592,6 +592,8 @@ PtinHeader readPtin(std::string inputFile)
       tri->dots.shrink_to_fit();
       net.wingEdge.unlock();
       markBucketDirty(i); // keep painting triangles
+      if (tri->dots.size()>65536)
+        sleepRead(); // Let GUI update between big triangles
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
   if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)

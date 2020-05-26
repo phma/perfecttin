@@ -99,6 +99,7 @@ void enqueueAction(ThreadAction a);
 ThreadAction dequeueResult();
 bool actionQueueEmpty();
 bool resultQueueEmpty();
+void sleepRead();
 void sleep(int thread);
 void sleepDead(int thread);
 void unsleep(int thread);

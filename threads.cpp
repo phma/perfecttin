@@ -271,6 +271,12 @@ bool resultQueueEmpty()
   return resQueue.size()==0;
 }
 
+void sleepRead()
+// Called when reading a ptin file that has many dots per triangle.
+{
+  this_thread::sleep_for(chrono::milliseconds(10));
+}
+
 void sleep(int thread)
 {
   sleepTime[thread]+=1+sleepTime[thread]/1e3;
