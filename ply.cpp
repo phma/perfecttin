@@ -39,8 +39,11 @@ double plyUnit;
 
 void receivePoint(ElementBuffer &buf)
 {
-  xyz pnt(buf[0],buf[1],buf[2]);
-  cloud.push_back(pnt);
+  if (buf.size()==3)
+  {
+    xyz pnt(buf[0],buf[1],buf[2]);
+    cloud.push_back(pnt);
+  }
 }
 
 void transmitPoint(ElementBuffer &buf,size_t i)
