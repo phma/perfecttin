@@ -40,8 +40,8 @@ xyz plyOffset;
 bool centerPlyOut=false;
 
 string plytapusVersion()
-{ // plytapus.h includes its own config.h which redefines VERSION
-  return VERSION;
+{
+  return version();
 }
 
 void receivePoint(ElementBuffer &buf)
