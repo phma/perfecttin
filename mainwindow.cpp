@@ -704,7 +704,8 @@ void MainWindow::aboutProgram()
 {
   QString progName=tr("PerfectTIN");
 #ifdef Plytapus_FOUND
-  QString rajotte=tr("\nPLY file code version %1\n© Simon Rajotte, MIT license").arg(QString::fromStdString(plytapusVersion()));
+  QString rajotte=tr("\nPlytapus library version %1\nCopyright %3\nSimon Rajotte and Pierre Abbat\nMIT license")
+  .arg(QString::fromStdString(plytapusVersion())).arg(plytapusYear());
 #else
   QString rajotte("");
 #endif

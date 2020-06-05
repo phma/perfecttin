@@ -44,6 +44,11 @@ string plytapusVersion()
   return version();
 }
 
+int plytapusYear()
+{
+  return copyrightYear();
+}
+
 void receivePoint(ElementBuffer &buf)
 {
   if (buf.size()==3)
