@@ -23,6 +23,8 @@
  */
 
 #include "config.h"
+#undef VERSION
+#undef COPY_YEAR
 #ifdef Plytapus_FOUND
 #include <plytapus.h>
 #endif
