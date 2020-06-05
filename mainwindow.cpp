@@ -25,6 +25,7 @@
 #include "mainwindow.h"
 #include "ldecimal.h"
 #include "cloud.h"
+#include "ply.h"
 #include "adjelev.h"
 #include "neighbor.h"
 #include "fileio.h"
@@ -703,7 +704,7 @@ void MainWindow::aboutProgram()
 {
   QString progName=tr("PerfectTIN");
 #ifdef Plytapus_FOUND
-  QString rajotte=tr("\nPLY file code © Simon Rajotte, MIT license");
+  QString rajotte=tr("\nPLY file code version %1\n© Simon Rajotte, MIT license").arg(QString::fromStdString(plytapusVersion()));
 #else
   QString rajotte("");
 #endif

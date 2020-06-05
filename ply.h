@@ -23,5 +23,6 @@
  */
 #include <string>
 
+std::string plytapusVersion();
 void readPly(std::string fileName);
 void writePly(std::string fileName,bool asc,double outUnit,int flags);

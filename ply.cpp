@@ -39,6 +39,11 @@ double plyUnit;
 xyz plyOffset;
 bool centerPlyOut=false;
 
+string plytapusVersion()
+{ // plytapus.h includes its own config.h which redefines VERSION
+  return VERSION;
+}
+
 void receivePoint(ElementBuffer &buf)
 {
   if (buf.size()==3)
@@ -115,9 +120,16 @@ void writePly(string filename,bool asc,double outUnit,int flags)
   plyfile.write();
 }
 #else
+
+string plytapusVersion()
+{
+  return "";
+}
+
 void readPly(string fileName)
 {
 }
+
 void writePly(string fileName,bool asc,double outUnit,int flags)
 {
 }
