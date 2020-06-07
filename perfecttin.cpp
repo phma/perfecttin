@@ -46,9 +46,11 @@
 
 #define FMT_DXF_TXT 1
 #define FMT_DXF_BIN 2
-#define FMT_TIN 3
-#define FMT_CARLSON_TIN 4
-#define FMT_LANDXML 5
+#define FMT_PLY_TXT 3
+#define FMT_PLY_BIN 4
+#define FMT_TIN 5
+#define FMT_CARLSON_TIN 6
+#define FMT_LANDXML 7
 
 using namespace std;
 namespace po=boost::program_options;
@@ -67,6 +69,8 @@ const char formats[][12]=
   "",
   "dxftxt",
   "dxfbin",
+  "plytxt",
+  "plybin",
   "tin",
   "carlsontin",
   "landxml"
@@ -179,6 +183,10 @@ int parseFormat(string format)
   for (i=0;i<sizeof(formats)/sizeof(formats[0]);i++)
     if (format==formats[i])
       ret=i;
+#ifndef Plytapus_FOUND
+  if (ret==FMT_PLY_BIN || ret==FMT_PLY_TXT)
+    ret=-1;
+#endif
   return ret;
 }
 
@@ -266,6 +274,10 @@ int main(int argc, char *argv[])
     cerr<<"Formats are ";
     for (i=1;i<sizeof(formats)/sizeof(formats[0]);i++)
     {
+#ifndef Plytapus_FOUND
+      if (i==FMT_PLY_TXT)
+	i+=2;
+#endif
       if (i>1)
 	cerr<<", ";
       if (i==sizeof(formats)/sizeof(formats[0])-1)
@@ -434,6 +446,12 @@ int main(int argc, char *argv[])
 	  break;
 	case FMT_DXF_TXT:
 	  writeDxf(outputFile+".dxf",true,outUnit,exportEmpty);
+	  break;
+	case FMT_PLY_BIN:
+	  writePly(outputFile+".ply",false,outUnit,exportEmpty);
+	  break;
+	case FMT_PLY_TXT:
+	  writePly(outputFile+".ply",true,outUnit,exportEmpty);
 	  break;
 	case FMT_TIN:
 	  writeTinText(outputFile+".tin",outUnit,exportEmpty);
