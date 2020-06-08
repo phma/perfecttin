@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
   cmdline_options.add(generic).add(hidden);
   cout<<"PerfectTIN version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat, GPLv3+\n";
 #ifdef Plytapus_FOUND
-  cout<<"PLY file code © Simon Rajotte, MIT license\n";
+  cout<<"Plytapus library version "<<plytapusVersion()<<" © "<<plytapusYear()<<" Simon Rajotte and Pierre Abbat, MIT license\n";
 #endif
   try
   {
