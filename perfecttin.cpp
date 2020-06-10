@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
       split(&net.triangles[i],-1);
     //drawNet(ps);
     for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
-      bend(&net.edges[i]);
+      bend(&net.edges[i],-1);
     net.makeqindex();
     if (nthreads<1)
       nthreads=1;

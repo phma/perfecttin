@@ -153,7 +153,7 @@ void flip(edge *e)
   dealDots(e->trib,e->tria);
 }
 
-point *bend(edge *e)
+point *bend(edge *e,int thread)
 /* Inserts a new point, bending and breaking the edge e of the perimeter,
  * then flips the edge e.
  */
@@ -188,7 +188,7 @@ point *bend(edge *e)
   pnt->line=&net.edges[newEdgeNum];
   net.edges[newEdgeNum  ].setnext(pnt,&net.edges[newEdgeNum+1]);
   net.edges[newEdgeNum+1].setnext(pnt,&net.edges[newEdgeNum  ]);
-  int newTriNum=net.addtriangle();
+  int newTriNum=net.addtriangle(thread);
   net.triangles[newTriNum].a=pnt;
   // If abear-bbear<0, then e is counterclockwise around the TIN.
   if (abear-bbear<0)
@@ -436,7 +436,7 @@ int edgeop(edge *e,double tolerance,double minArea,int thread)
       gotLock2=lockTriangles(thread,triNeigh);
       if (gotLock2)
       {
-	corners.push_back(bend(e));
+	corners.push_back(bend(e,thread));
 	triNeigh=triangleNeighbors(corners);
 	did=true;
       }
