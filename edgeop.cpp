@@ -188,7 +188,7 @@ point *bend(edge *e,int thread)
   pnt->line=&net.edges[newEdgeNum];
   net.edges[newEdgeNum  ].setnext(pnt,&net.edges[newEdgeNum+1]);
   net.edges[newEdgeNum+1].setnext(pnt,&net.edges[newEdgeNum  ]);
-  int newTriNum=net.addtriangle(thread);
+  int newTriNum=net.addtriangle(1,thread);
   net.triangles[newTriNum].a=pnt;
   // If abear-bbear<0, then e is counterclockwise around the TIN.
   if (abear-bbear<0)

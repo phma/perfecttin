@@ -738,8 +738,7 @@ void testbend()
   tassert(abs((int)net.triangles[3].dots.size()-402)<15);
   for (areaBefore=i=0;i<net.triangles.size();i++)
     areaBefore+=net.triangles[i].sarea;
-  bend(&net.edges[10],-1
-  );
+  bend(&net.edges[10],-1);
   drawNet(ps);
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {
