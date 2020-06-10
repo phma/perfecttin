@@ -56,6 +56,15 @@ matrix::matrix(const matrix &b)
   memcpy(entry,b.entry,sizeof(double)*rows*columns);
 }
 
+matrix::matrix(matrix &&b)
+{
+  rows=b.rows;
+  columns=b.columns;
+  entry=b.entry;
+  b.rows=b.columns=0;
+  b.entry=nullptr;
+}
+
 matrix::~matrix()
 {
   delete[] entry;
@@ -118,6 +127,17 @@ matrix &matrix::operator=(const matrix &b)
     swap(rows,c.rows);
     swap(columns,c.columns);
     swap(entry,c.entry);
+  }
+  return *this;
+}
+
+matrix &matrix::operator=(matrix &&b)
+{
+  if (this!=&b)
+  {
+    swap(rows,b.rows);
+    swap(columns,b.columns);
+    swap(entry,b.entry);
   }
   return *this;
 }

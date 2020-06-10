@@ -53,6 +53,7 @@ public:
   matrix();
   matrix(unsigned r,unsigned c);
   matrix(const matrix &b);
+  matrix(matrix &&b);
   ~matrix();
   void resize(unsigned newrows,unsigned newcolumns);
   unsigned getrows()
@@ -67,6 +68,7 @@ public:
   void setidentity();
   void dump();
   matrix &operator=(const matrix &b);
+  matrix &operator=(matrix &&b);
   double *operator[](unsigned row);
   matrix operator+(matrix& b);
   matrix operator-(matrix& b);
