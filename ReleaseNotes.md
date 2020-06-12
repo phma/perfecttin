@@ -1,5 +1,6 @@
 # Version 0.4.1
 - You can now export a TIN in PLY format.
+- The crash in 0.4.0 is fixed.
 
 # Version 0.4.0
 - Vertical spikes, which used to appear at the edges and in holes in point clouds, are gone.
