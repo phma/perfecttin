@@ -8,7 +8,10 @@ Before 0.4.0:
 •Get rid of spikes that the program hallucinates in areas with no dots ✓
 
 Before 0.4.1:
-•Export in PLY format
+•Export in PLY format ✓
+
+Before 0.4.2:
+•Color the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance
 
 Before 0.5.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop
