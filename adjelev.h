@@ -3,7 +3,7 @@
 /* adjelev.h - adjust elevations of points            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -29,6 +29,22 @@ struct adjustRecord
 {
   bool validMatrix;
   double msAdjustment;
+};
+
+struct adjustBlockResult
+{
+  matrix mtmPart;
+  matrix mtvPart;
+  bool ready;
+};
+
+struct adjustBlockTask
+{
+  triangle *tri;
+  std::vector<point *> pnt;
+  xyz *dots;
+  int numDots;
+  adjustBlockResult *result;
 };
 
 adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
