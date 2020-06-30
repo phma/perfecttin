@@ -681,8 +681,24 @@ void testadjelev()
   };
   int i;
   net.clear();
-  for (i=0;i<45;i+=3)
+  for (i=0;i<15;i+=3)
+  {
     cout<<ldecimal(data[i])<<','<<ldecimal(data[i+1])<<','<<ldecimal(data[i+2])<<'\n';
+    net.addpoint(i/3+1,point(data[i],data[i+1],data[i+2]));
+  }
+  net.addtriangle(4);
+  for (i=0;i<4;i++)
+  {
+    net.triangles[i].a=&net.points[i+1];
+    net.triangles[i].b=&net.points[(i+1)%4+1];
+    net.triangles[i].c=&net.points[5];
+  }
+  net.makeEdges();
+  net.makeqindex();
+  for (i=15;i<45;i+=3)
+  {
+    cout<<ldecimal(data[i])<<','<<ldecimal(data[i+1])<<','<<ldecimal(data[i+2])<<'\n';
+  }
 }
 
 void testflip()
