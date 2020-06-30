@@ -170,6 +170,30 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   return ret;
 }
 
+void computeAdjustBlock(adjustBlockTask &task,adjustBlockResult &result)
+{
+  int i,j,k,ndots=0;
+  matrix m(task.numDots,task.pnt.size());
+  vector<double> v;
+  result.high=-INFINITY;
+  result.low=INFINITY;
+  for (j=0;j<task.numDots;j++,ndots++)
+  {
+    for (k=0;k<task.pnt.size();k++)
+      m[ndots][k]=task.tri->areaCoord(task.tri->dots[j],task.pnt[k]);
+    v.push_back(task.tri->dots[j].elev()-task.tri->elevation(task.tri->dots[j]));
+    if (task.tri->dots[j].elev()>result.high)
+      result.high=task.tri->dots[j].elev();
+    if (task.tri->dots[j].elev()<result.low)
+      result.low=task.tri->dots[j].elev();
+  }
+  matrix mt,vmat=columnvector(v);
+  mt=m.transpose();
+  result.mtmPart=mt.transmult();
+  result.mtvPart=mt*vmat;
+  result.ready=true;
+}
+
 void logAdjustment(adjustRecord rec)
 {
   adjLog.lock();

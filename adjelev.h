@@ -35,6 +35,7 @@ struct adjustBlockResult
 {
   matrix mtmPart;
   matrix mtvPart;
+  double high,low;
   bool ready;
 };
 
@@ -48,6 +49,7 @@ struct adjustBlockTask
 };
 
 adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
+void computeAdjustBlock(adjustBlockTask &task,adjustBlockResult &result);
 void logAdjustment(adjustRecord rec);
 double rmsAdjustment();
 void adjustLooseCorners(double tolerance);
