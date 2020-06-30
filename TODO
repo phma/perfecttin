@@ -10,13 +10,11 @@ Before 0.4.0:
 Before 0.4.1:
 •Export in PLY format ✓
 
-Before 0.4.2:
-•Color the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance
-
 Before 0.5.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop
 
 Whenever:
+•Color the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance
 •Add a magnification window
 •Switch to a list of triangles and edges to be checked when most of them are in tolerance
 •Draw a scale on the window ✓
