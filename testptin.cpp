@@ -694,6 +694,7 @@ void testadjelev()
     net.triangles[i].b=&net.points[i+1];
     net.triangles[i].a=&net.points[(i+1)%4+1];
     net.triangles[i].c=&net.points[5];
+    net.triangles[i].flatten();
   }
   net.makeEdges();
   net.makeqindex();
