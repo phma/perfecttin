@@ -679,7 +679,7 @@ void test1adjelev(const double data[],int nData,double elevInt)
   }
   net.makeEdges();
   net.makeqindex();
-  for (i=15;i<45;i+=3)
+  for (i=15;i<nData;i+=3)
   {
     pnt=xyz(data[i],data[i+1],data[i+2]);
     tri=net.findt(pnt);
@@ -692,18 +692,18 @@ void test1adjelev(const double data[],int nData,double elevInt)
   adjustElev(tri4,point5);
   for (i=1;i<=5;i++)
     cout<<ldecimal(net.points[i].getx())<<','<<ldecimal(net.points[i].gety())<<','<<ldecimal(net.points[i].getz())<<'\n';
-  tassert(fabs(net.points[4].getz()-elevInt)<0.001);
+  tassert(fabs(net.points[5].getz()-elevInt)<0.001);
 }
 
 void testadjelev()
-/* This is actually a test of least squares. The data are from a debugging
- * session. The first five triples are points, the next nine are dots in
- * triangle 1, and the last is a dot in triangle 3. The dots are from
- * a point cloud supplied by 3DSurvey. The resulting matrix is singular,
- * but because of roundoff error, it appears not to be.
- */
 {
-  static const double data[]=
+  static const double data0[]=
+  /* This is actually a test of least squares. The data are from a debugging
+   * session. The first five triples are points, the next nine are dots in
+   * triangle 1, and the last is a dot in triangle 3. The dots are from
+   * a point cloud supplied by 3DSurvey. The resulting matrix is singular,
+   * but because of roundoff error, it appears not to be.
+   */
   {
     3533555.8840822875,5383585.659137168,413.6458686964101,
     3533555.659112278,5383585.94544682,414.2803922905308,
@@ -721,7 +721,29 @@ void testadjelev()
     3533555.9591962998,5383586.0435181,413.6697737,
     3533555.865019,5383585.6876717,413.7036215
   };
-  test1adjelev(data,45,413.608);
+  static const double data1[]=
+  {
+    5,0,31,
+    0,-5,41,
+    -5,0,59,
+    0,5,26,
+    0,0,53,
+    -1,-3,58,
+    1,-3,97,
+    -3,-1,93,
+    -1,-1,23,
+    1,-1,84,
+    3,-1,62,
+    -3,1,64,
+    -1,1,33,
+    1,1,83,
+    3,1,27,
+    -1,3,95,
+    1,3,2
+  };
+  clipHigh=500;
+  test1adjelev(data0,45,413.608);
+  test1adjelev(data1,51,49.25);
 }
 
 void testflip()
