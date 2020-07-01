@@ -654,32 +654,8 @@ void testleastsquares()
   tassert(dist(xyz(x[0],x[1],x[2]),xyz(0.25,0.25,0.5))<1e-9);
 }
 
-void testadjelev()
-/* This is actually a test of least squares. The data are from a debugging
- * session. The first five triples are points, the next nine are dots in
- * triangle 1, and the last is a dot in triangle 3. The dots are from
- * a point cloud supplied by 3DSurvey. The resulting matrix is singular,
- * but because of roundoff error, it appears not to be.
- */
+void test1adjelev(const double data[],int nData,double elevInt)
 {
-  static const double data[]=
-  {
-    3533555.8840822875,5383585.659137168,413.6458686964101,
-    3533555.659112278,5383585.94544682,414.2803922905308,
-    3533555.581388603,5383586.310384517,413.7572658044724,
-    3533556.1608249694,5383585.9448964745,413.6527867551932,
-    3533555.7510551126,5383585.945345965,0, // intersection is assigned 0
-    3533555.9703733,5383586.0626831,413.6781603,
-    3533556.0810758,5383585.9756126,413.6885076,
-    3533555.9381925,5383586.0676994,413.6860052,
-    3533555.9534971,5383586.0211678,413.6619764,
-    3533555.9398481,5383586.0491371,413.6778418,
-    3533555.9803755,5383586.0334473,413.6606813,
-    3533556.0323545,5383586.017004,413.6864973,
-    3533556.0233061,5383586.0072403,413.6559778,
-    3533555.9591962998,5383586.0435181,413.6697737,
-    3533555.865019,5383585.6876717,413.7036215
-  };
   int i;
   xyz pnt;
   triangle *tri;
@@ -716,6 +692,36 @@ void testadjelev()
   adjustElev(tri4,point5);
   for (i=1;i<=5;i++)
     cout<<ldecimal(net.points[i].getx())<<','<<ldecimal(net.points[i].gety())<<','<<ldecimal(net.points[i].getz())<<'\n';
+  tassert(fabs(net.points[4].getz()-elevInt)<0.001);
+}
+
+void testadjelev()
+/* This is actually a test of least squares. The data are from a debugging
+ * session. The first five triples are points, the next nine are dots in
+ * triangle 1, and the last is a dot in triangle 3. The dots are from
+ * a point cloud supplied by 3DSurvey. The resulting matrix is singular,
+ * but because of roundoff error, it appears not to be.
+ */
+{
+  static const double data[]=
+  {
+    3533555.8840822875,5383585.659137168,413.6458686964101,
+    3533555.659112278,5383585.94544682,414.2803922905308,
+    3533555.581388603,5383586.310384517,413.7572658044724,
+    3533556.1608249694,5383585.9448964745,413.6527867551932,
+    3533555.7510551126,5383585.945345965,0, // intersection is assigned 0
+    3533555.9703733,5383586.0626831,413.6781603,
+    3533556.0810758,5383585.9756126,413.6885076,
+    3533555.9381925,5383586.0676994,413.6860052,
+    3533555.9534971,5383586.0211678,413.6619764,
+    3533555.9398481,5383586.0491371,413.6778418,
+    3533555.9803755,5383586.0334473,413.6606813,
+    3533556.0323545,5383586.017004,413.6864973,
+    3533556.0233061,5383586.0072403,413.6559778,
+    3533555.9591962998,5383586.0435181,413.6697737,
+    3533555.865019,5383585.6876717,413.7036215
+  };
+  test1adjelev(data,45,413.608);
 }
 
 void testflip()
