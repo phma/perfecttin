@@ -38,6 +38,7 @@
 #include "dxf.h"
 #include "angle.h"
 #include "pointlist.h"
+#include "adjelev.h"
 #include "octagon.h"
 #include "edgeop.h"
 #include "triop.h"
@@ -682,11 +683,14 @@ void testadjelev()
   int i;
   xyz pnt;
   triangle *tri;
+  vector<triangle *> tri4;
+  vector<point *> point5;
   net.clear();
   for (i=0;i<15;i+=3)
   {
     cout<<ldecimal(data[i])<<','<<ldecimal(data[i+1])<<','<<ldecimal(data[i+2])<<'\n';
     net.addpoint(i/3+1,point(data[i],data[i+1],data[i+2]));
+    point5.push_back(&net.points[i/3+1]);
   }
   net.addtriangle(4);
   for (i=0;i<4;i++)
@@ -695,12 +699,12 @@ void testadjelev()
     net.triangles[i].a=&net.points[(i+1)%4+1];
     net.triangles[i].c=&net.points[5];
     net.triangles[i].flatten();
+    tri4.push_back(&net.triangles[i]);
   }
   net.makeEdges();
   net.makeqindex();
   for (i=15;i<45;i+=3)
   {
-    cout<<ldecimal(data[i])<<','<<ldecimal(data[i+1])<<','<<ldecimal(data[i+2])<<'\n';
     pnt=xyz(data[i],data[i+1],data[i+2]);
     tri=net.findt(pnt);
     if (tri)
@@ -708,6 +712,10 @@ void testadjelev()
     else
       cout<<"point not in any triangle\n";
   }
+  resizeBuckets(1);
+  adjustElev(tri4,point5);
+  for (i=1;i<=5;i++)
+    cout<<ldecimal(net.points[i].getx())<<','<<ldecimal(net.points[i].gety())<<','<<ldecimal(net.points[i].getz())<<'\n';
 }
 
 void testflip()
