@@ -680,6 +680,8 @@ void testadjelev()
     3533555.865019,5383585.6876717,413.7036215
   };
   int i;
+  xyz pnt;
+  triangle *tri;
   net.clear();
   for (i=0;i<15;i+=3)
   {
@@ -689,8 +691,8 @@ void testadjelev()
   net.addtriangle(4);
   for (i=0;i<4;i++)
   {
-    net.triangles[i].a=&net.points[i+1];
-    net.triangles[i].b=&net.points[(i+1)%4+1];
+    net.triangles[i].b=&net.points[i+1];
+    net.triangles[i].a=&net.points[(i+1)%4+1];
     net.triangles[i].c=&net.points[5];
   }
   net.makeEdges();
@@ -698,6 +700,12 @@ void testadjelev()
   for (i=15;i<45;i+=3)
   {
     cout<<ldecimal(data[i])<<','<<ldecimal(data[i+1])<<','<<ldecimal(data[i+2])<<'\n';
+    pnt=xyz(data[i],data[i+1],data[i+2]);
+    tri=net.findt(pnt);
+    if (tri)
+      tri->dots.push_back(pnt);
+    else
+      cout<<"point not in any triangle\n";
   }
 }
 
