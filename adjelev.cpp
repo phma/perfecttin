@@ -178,11 +178,14 @@ AdjustBlockTask::AdjustBlockTask()
   result=nullptr;
 }
 
-void computeAdjustBlock(AdjustBlockTask &task,AdjustBlockResult &result)
+void computeAdjustBlock(AdjustBlockTask &task)
 {
   int i,j,k,ndots=0;
   matrix m(task.numDots,task.pnt.size());
   vector<double> v;
+  if (!task.result)
+    return;
+  AdjustBlockResult &result=*task.result;
   result.high=-INFINITY;
   result.low=INFINITY;
   for (j=0;j<task.numDots;j++,ndots++)

@@ -746,7 +746,7 @@ void testadjelev()
   clipHigh=500;
   test1adjelev(data0,45,413.608);
   test1adjelev(data1,51,49.25);
-  computeAdjustBlock(task,result);
+  computeAdjustBlock(task);
 }
 
 void testflip()
