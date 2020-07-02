@@ -46,6 +46,7 @@ mutex actMutex;
 mutex bucketMutex;
 mutex startMutex;
 mutex opTimeMutex;
+mutex blockTaskMutex;
 
 int threadCommand;
 vector<thread> threads;
@@ -56,6 +57,7 @@ vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
 double minArea;
 queue<ThreadAction> actQueue,resQueue;
+queue<AdjustBlockTask> blockTaskQueue;
 int currentAction;
 int mtxSquareSize;
 
@@ -217,6 +219,30 @@ void joinThreads()
   int i;
   for (i=0;i<threads.size();i++)
     threads[i].join();
+}
+
+void enqueueAdjust(AdjustBlockTask task)
+{
+  blockTaskMutex.lock();
+  blockTaskQueue.push(task);
+  blockTaskMutex.unlock();
+}
+
+AdjustBlockTask dequeueAdjust()
+{
+  AdjustBlockTask ret;
+  blockTaskMutex.lock();
+  if (actQueue.size())
+  {
+    ret=blockTaskQueue.front();
+    blockTaskQueue.pop();
+  }
+  return ret;
+}
+
+bool adjustQueueEmpty()
+{
+  return blockTaskQueue.size()==0;
 }
 
 ThreadAction dequeueAction()

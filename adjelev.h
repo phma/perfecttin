@@ -22,6 +22,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#ifndef ADJELEV_H
+#define ADJELEV_H
 #include "matrix.h"
 #include "triangle.h"
 
@@ -31,7 +33,7 @@ struct adjustRecord
   double msAdjustment;
 };
 
-struct adjustBlockResult
+struct AdjustBlockResult
 {
   matrix mtmPart;
   matrix mtvPart;
@@ -39,18 +41,19 @@ struct adjustBlockResult
   bool ready;
 };
 
-struct adjustBlockTask
+struct AdjustBlockTask
 {
   triangle *tri;
   std::vector<point *> pnt;
   xyz *dots;
   int numDots;
-  adjustBlockResult *result;
+  AdjustBlockResult *result;
 };
 
 adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
-void computeAdjustBlock(adjustBlockTask &task,adjustBlockResult &result);
+void computeAdjustBlock(AdjustBlockTask &task,AdjustBlockResult &result);
 void logAdjustment(adjustRecord rec);
 double rmsAdjustment();
 void adjustLooseCorners(double tolerance);
 void clearLog();
+#endif

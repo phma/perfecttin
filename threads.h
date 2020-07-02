@@ -39,6 +39,7 @@
 #include <vector>
 #include <array>
 #include "fileio.h"
+#include "adjelev.h"
 
 // These are used as both commands to the threads and status from the threads.
 #define TH_RUN 1
@@ -96,6 +97,9 @@ double busyFraction();
 bool livelock(double areadone,double rmsadj);
 void startThreads(int n);
 void joinThreads();
+void enqueueAdjust(AdjustBlockTask task);
+AdjustBlockTask dequeueAdjust();
+bool adjustQueueEmpty();
 void enqueueAction(ThreadAction a);
 ThreadAction dequeueResult();
 bool actionQueueEmpty();

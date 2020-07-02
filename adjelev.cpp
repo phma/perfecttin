@@ -170,7 +170,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   return ret;
 }
 
-void computeAdjustBlock(adjustBlockTask &task,adjustBlockResult &result)
+void computeAdjustBlock(AdjustBlockTask &task,AdjustBlockResult &result)
 {
   int i,j,k,ndots=0;
   matrix m(task.numDots,task.pnt.size());
