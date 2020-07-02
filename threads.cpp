@@ -301,7 +301,7 @@ bool resultQueueEmpty()
 void sleepRead()
 // Called when reading a ptin file that has many dots per triangle.
 {
-  this_thread::sleep_for(chrono::milliseconds(10));
+  this_thread::sleep_for(cr::milliseconds(10));
 }
 
 void sleep(int thread)
@@ -309,9 +309,13 @@ void sleep(int thread)
   sleepTime[thread]+=1+sleepTime[thread]/1e3;
   if (sleepTime[thread]>opTime*sleepTime.size()+1000)
     sleepTime[thread]=opTime*sleepTime.size()+1000;
-  threadStatus[thread]|=256;
-  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
-  threadStatus[thread]&=255;
+  cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
+  while (clk.now()<wakeTime)
+  {
+    threadStatus[thread]|=256;
+    this_thread::sleep_for((wakeTime-clk.now())/2);
+    threadStatus[thread]&=255;
+  }
 }
 
 void sleepDead(int thread)
@@ -319,7 +323,7 @@ void sleepDead(int thread)
 {
   sleepTime[thread]=sleepTime[thread]*(1+1./net.triangles.size())+0.1;
   threadStatus[thread]|=256;
-  this_thread::sleep_for(chrono::milliseconds(lrint(sleepTime[thread])));
+  this_thread::sleep_for(cr::milliseconds(lrint(sleepTime[thread])));
   threadStatus[thread]&=255;
 }
 
