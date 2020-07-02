@@ -170,6 +170,14 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   return ret;
 }
 
+AdjustBlockTask::AdjustBlockTask()
+{
+  tri=nullptr;
+  dots=nullptr;
+  numDots=0;
+  result=nullptr;
+}
+
 void computeAdjustBlock(AdjustBlockTask &task,AdjustBlockResult &result)
 {
   int i,j,k,ndots=0;

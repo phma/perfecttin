@@ -43,6 +43,7 @@ struct AdjustBlockResult
 
 struct AdjustBlockTask
 {
+  AdjustBlockTask();
   triangle *tri;
   std::vector<point *> pnt;
   xyz *dots;
