@@ -146,24 +146,35 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     for (i=0;i<results.size();i++)
       allReady&=results[i].ready;
   }
-  a.resize(ndots,pnt.size());
-  /* Clip the adjusted elevations to the interval from the lowest dot to the
-   * highest dot, and from the second lowest point to the second highest point,
-   * including neighboring points not being adjusted, expanded by 3. The reason
-   * it's the second highest/lowest point is that, if there's already a spike,
-   * we want to clip it.
-   */
-  for (ndots=i=0;i<tri.size();i++)
-    for (j=0;j<tri[i]->dots.size();j++,ndots++)
+  if (results.size())
+    for (i=0;i<results.size();i++)
     {
-      for (k=0;k<pnt.size();k++)
-	a[ndots][k]=tri[i]->areaCoord(tri[i]->dots[j],pnt[k]);
-      b.push_back(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j]));
-      if (tri[i]->dots[j].elev()>localHigh)
-	localHigh=tri[i]->dots[j].elev();
-      if (tri[i]->dots[j].elev()<localLow)
-	localLow=tri[i]->dots[j].elev();
+      if (results[i].high>localHigh)
+	localHigh=results[i].high;
+      if (results[i].low<localLow)
+	localLow=results[i].low;
     }
+  else
+  {
+    a.resize(ndots,pnt.size());
+    /* Clip the adjusted elevations to the interval from the lowest dot to the
+    * highest dot, and from the second lowest point to the second highest point,
+    * including neighboring points not being adjusted, expanded by 3. The reason
+    * it's the second highest/lowest point is that, if there's already a spike,
+    * we want to clip it.
+    */
+    for (ndots=i=0;i<tri.size();i++)
+      for (j=0;j<tri[i]->dots.size();j++,ndots++)
+      {
+	for (k=0;k<pnt.size();k++)
+	  a[ndots][k]=tri[i]->areaCoord(tri[i]->dots[j],pnt[k]);
+	b.push_back(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j]));
+	if (tri[i]->dots[j].elev()>localHigh)
+	  localHigh=tri[i]->dots[j].elev();
+	if (tri[i]->dots[j].elev()<localLow)
+	  localLow=tri[i]->dots[j].elev();
+      }
+  }
   for (i=0;i<nearPoints.size();i++)
   {
     if (nearPoints[i]->elev()>pointHigh)
@@ -183,10 +194,25 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   }
   pointClipHigh=1.125*point2High-0.125*point2Low;
   pointClipLow=1.125*point2Low-0.125*point2High;
-  if (ndots<pnt.size())
-    x=minimumNorm(a,b);
+  if (results.size())
+  {
+    for (i=1;i<results.size();i*=2) // In-place pairwise sum
+      for (j=0;j+i<results.size();j+=2*i)
+      {
+	results[j].mtmPart+=results[j+i].mtmPart;
+	results[j].mtvPart+=results[j+i].mtvPart;
+      }
+    results[0].mtmPart.gausselim(results[0].mtvPart);
+    for (i=0;i<results[0].mtmPart.getcolumns();i++)
+      if (results[0].mtmPart[i][i]==0)
+	results[0].mtvPart[i][0]=NAN;
+    x=results[0].mtvPart;
+  }
   else
-    x=linearLeastSquares(a,b);
+    if (ndots<pnt.size())
+      x=minimumNorm(a,b);
+    else
+      x=linearLeastSquares(a,b);
   assert(x.size()==pnt.size());
   localClipHigh=2*localHigh-localLow;
   localClipLow=2*localLow-localHigh;
