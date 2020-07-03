@@ -699,6 +699,8 @@ void testadjelev()
 {
   AdjustBlockResult result;
   AdjustBlockTask task;
+  int i;
+  vector<int> blkSizes;
   static const double data0[]=
   /* This is actually a test of least squares. The data are from a debugging
    * session. The first five triples are points, the next nine are dots in
@@ -747,6 +749,9 @@ void testadjelev()
   test1adjelev(data0,45,413.608);
   test1adjelev(data1,51,49.25);
   computeAdjustBlock(task);
+  blkSizes=blockSizes(500000);
+  for (i=0;i<blkSizes.size();i++)
+    cout<<blkSizes[i]<<((i+1>=blkSizes.size())?'\n':'+');
 }
 
 void testflip()

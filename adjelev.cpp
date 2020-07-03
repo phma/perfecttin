@@ -47,6 +47,30 @@ void checkIntElev(vector<point *> corners)
       cout<<"Point "<<net.revpoints[corners[i]]<<" elevation "<<corners[i]->elev()<<endl;
 }
 
+vector<int> blockSizes(int total)
+/* Compute the block sizes for adjusting a triangle with a large number of dots.
+ * The sequence is decreasing so that all the threads working on the
+ * adjustment will finish at about the same time.
+ */
+{
+  int numBlocks=lrint(total/65536.);
+  vector<int> ret;
+  int block;
+  if (numBlocks<1)
+    numBlocks=1;
+  while (numBlocks)
+  {
+    if (numBlocks>1)
+      block=lrint(total*1.1/numBlocks);
+    else
+      block=total;
+    ret.push_back(block);
+    total-=block;
+    numBlocks--;
+  }
+  return ret;
+}
+
 adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
 /* Adjusts the points by least squares to fit all the dots in the triangles.
  * The triangles should be all those that have at least one corner in
