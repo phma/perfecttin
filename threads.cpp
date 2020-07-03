@@ -308,8 +308,8 @@ void sleepRead()
 void sleep(int thread)
 {
   sleepTime[thread]+=1+sleepTime[thread]/1e3;
-  if (sleepTime[thread]>opTime*sleepTime.size()+1000)
-    sleepTime[thread]=opTime*sleepTime.size()+1000;
+  if (sleepTime[thread]>opTime*sleepTime.size()/2+500)
+    sleepTime[thread]=opTime*sleepTime.size()/2+500;
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
   while (clk.now()<wakeTime)
   {
