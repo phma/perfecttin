@@ -79,7 +79,7 @@ struct ThreadAction
   PtinHeader ptinResult;
 };
 
-extern std::mutex adjLog;
+extern std::shared_mutex adjLog;
 extern double stageTolerance,minArea;
 extern double opTime;
 extern int opcount,trianglesToPaint;

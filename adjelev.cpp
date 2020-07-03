@@ -309,16 +309,24 @@ double rmsAdjustment()
   int nRecent;
   vector<double> xsq;
   int i,sz;
-  adjLog.lock();
+  static int lastsz;
+  double ret;
+  static double lastret;
+  adjLog.lock_shared();
   sz=adjustmentLog.size();
-  adjLog.unlock();
-  nRecent=lrint(sqrt(sz));
-  for (i=sz-1;i>=0 && xsq.size()<nRecent;i--)
-    if (std::isfinite(adjustmentLog[i].msAdjustment))
-      xsq.push_back(adjustmentLog[i].msAdjustment);
-  if (std::isnan(sqrt(pairwisesum(xsq)/xsq.size())))
-    i++;
-  return sqrt(pairwisesum(xsq)/xsq.size());
+  if (sz==lastsz)
+    ret=lastret;
+  else
+  {
+    nRecent=lrint(sqrt(sz));
+    for (i=sz-1;i>=0 && xsq.size()<nRecent;i--)
+      if (std::isfinite(adjustmentLog[i].msAdjustment))
+	xsq.push_back(adjustmentLog[i].msAdjustment);
+    lastret=ret=sqrt(pairwisesum(xsq)/xsq.size());
+    lastsz=sz;
+  }
+  adjLog.unlock_shared();
+  return ret;
 }
 
 void adjustLooseCorners(double tolerance)

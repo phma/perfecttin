@@ -41,7 +41,7 @@ namespace cr=std::chrono;
 
 map<int,mutex> triMutex; // Lock this while locking or unlocking triangles.
 shared_mutex holderMutex; // for triangleHolders
-mutex adjLog;
+shared_mutex adjLog;
 mutex actMutex;
 mutex bucketMutex;
 mutex startMutex;
