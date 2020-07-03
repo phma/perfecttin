@@ -90,7 +90,6 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
   int i,j,x,p2;
   size_t sz;
   vector<xyz> remainder; // the dots that remain in tri0
-  // memmove overwrites the vtable pointer with the same vtable pointer. Not a problem.
   if (tri1->dots.size())
   {
     sz=tri0->dots.size();
@@ -278,8 +277,6 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   inTol=e->tria->inTolerance(tolerance,minArea)&&e->trib->inTolerance(tolerance,minArea);
   if (e->tria->dots.size()+e->trib->dots.size()<1)
     inTol=false; // Try not to have acicular triangles in holes
-  if (!e->delaunay())
-    inTol=false;
   if (!inTol)
   {
     for (i=0;i<4;i++)
