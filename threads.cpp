@@ -331,9 +331,21 @@ void sleepDead(int thread)
 // Sleep to try to get out of deadlock.
 {
   sleepTime[thread]=sleepTime[thread]*(1+1./net.triangles.size())+0.1;
-  threadStatus[thread]|=256;
-  this_thread::sleep_for(cr::milliseconds(lrint(sleepTime[thread])));
-  threadStatus[thread]&=255;
+  cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
+  while (clk.now()<wakeTime)
+  {
+    if (adjustQueueEmpty())
+    {
+      threadStatus[thread]|=256;
+      this_thread::sleep_for((wakeTime-clk.now())/2);
+      threadStatus[thread]&=255;
+    }
+    else
+    {
+      AdjustBlockTask task=dequeueAdjust();
+      computeAdjustBlock(task);
+    }
+  }
 }
 
 void unsleep(int thread)
