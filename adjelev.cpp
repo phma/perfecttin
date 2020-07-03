@@ -87,23 +87,53 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
  * picked up by other threads.
  */
 {
-  int i,j,k,ndots;
+  int i,j,k,ndots,mostDots,triDots;
   matrix a;
   double localLow=INFINITY,localHigh=-INFINITY,localClipLow,localClipHigh;
   double pointLow=INFINITY,point2Low=INFINITY,pointHigh=-INFINITY,point2High=-INFINITY;
   double pointClipLow,pointClipHigh;
   edge *ed;
+  vector<AdjustBlockTask> tasks;
+  vector<AdjustBlockResult> results;
+  vector<int> blkSizes;
+  bool allReady;
   adjustRecord ret{true,0};
   vector<double> b,x,xsq,nextCornerElev;
   vector<point *> nearPoints; // includes points held still
   double oldelev;
   nearPoints=pointNeighbors(tri);
-  for (ndots=i=0;i<tri.size();i++)
+  for (ndots=mostDots=i=0;i<tri.size();i++)
   {
     ndots+=tri[i]->dots.size();
+    if (tri[i]->dots.size()>mostDots)
+      mostDots=tri[i]->dots.size();
     tri[i]->flatten(); // sets sarea, needed for areaCoord
     if (net.revtriangles.count(tri[i]))
       markBucketDirty(net.revtriangles[tri[i]]);
+  }
+  if (mostDots>98304)
+  {
+    for (i=0;i<tri.size();i++)
+    {
+      blkSizes=blockSizes(tri[i]->dots.size());
+      for (triDots=j=0;j<blkSizes.size();j++)
+      {
+	tasks.resize(tasks.size()+1);
+	results.resize(results.size()+1);
+	tasks.back().tri=tri[i];
+	tasks.back().pnt=pnt;
+	tasks.back().dots=&tri[i]->dots[triDots];
+	tasks.back().numDots=blkSizes[j];
+	triDots+=blkSizes[j];
+      }
+    }
+    for (i=0;i<tasks.size();i++)
+    {
+      tasks[i].result=&results[i];
+      results[i].ready=false;
+    }
+    for (i=0;i<tasks.size();i++)
+      enqueueAdjust(tasks[i]);
   }
   a.resize(ndots,pnt.size());
   /* Clip the adjusted elevations to the interval from the lowest dot to the

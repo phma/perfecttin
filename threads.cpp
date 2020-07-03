@@ -232,11 +232,12 @@ AdjustBlockTask dequeueAdjust()
 {
   AdjustBlockTask ret;
   blockTaskMutex.lock();
-  if (actQueue.size())
+  if (blockTaskQueue.size())
   {
     ret=blockTaskQueue.front();
     blockTaskQueue.pop();
   }
+  blockTaskMutex.unlock();
   return ret;
 }
 
