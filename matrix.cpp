@@ -159,6 +159,16 @@ matrix matrix::operator+(matrix& b)
   return ret;
 }
 
+matrix &matrix::operator+=(matrix &b)
+{
+  if (rows!=b.rows || columns!=b.columns)
+    throw matrixmismatch;
+  int i;
+  for (i=0;i<rows*columns;i++)
+    entry[i]+=b.entry[i];
+  return *this;
+}
+
 matrix matrix::operator-(matrix& b)
 {
   if (rows!=b.rows || columns!=b.columns)
