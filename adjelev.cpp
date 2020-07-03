@@ -96,7 +96,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
   vector<AdjustBlockTask> tasks;
   vector<AdjustBlockResult> results;
   vector<int> blkSizes;
-  bool allReady;
+  bool allReady=false;
   adjustRecord ret{true,0};
   vector<double> b,x,xsq,nextCornerElev;
   vector<point *> nearPoints; // includes points held still
@@ -134,6 +134,17 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     }
     for (i=0;i<tasks.size();i++)
       enqueueAdjust(tasks[i]);
+  }
+  while (!allReady)
+  {
+    if (!adjustQueueEmpty())
+    {
+      AdjustBlockTask task=dequeueAdjust();
+      computeAdjustBlock(task);
+    }
+    allReady=true;
+    for (i=0;i<results.size();i++)
+      allReady&=results[i].ready;
   }
   a.resize(ndots,pnt.size());
   /* Clip the adjusted elevations to the interval from the lowest dot to the
