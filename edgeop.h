@@ -23,6 +23,21 @@
  */
 #include "tin.h"
 
+struct DealBlockResult
+{
+  std::array<std::vector<xyz>,4> dots;
+  bool ready;
+};
+
+struct DealBlockTask
+{
+  DealBlockTask();
+  std::array<triangle *,4> tri;
+  xyz *dots;
+  int numDots;
+  DealBlockResult *result;
+};
+
 void initTempPointlist(int nthreads);
 void recordTriop();
 void flip(edge *e);

@@ -45,6 +45,15 @@ set<edge *> edgesFlippedSet; // Records all edges flipped since the last
 vector<edge *> edgesFlippedVector; // triangle operation.
 shared_mutex edgesFlippedMutex;
 
+DealBlockTask::DealBlockTask()
+{
+  dots=nullptr;
+  result=nullptr;
+  for (numDots=0;numDots<4;numDots++)
+    tri[numDots]=nullptr;
+  numDots=0;
+}
+
 void logCrit(double crit)
 {
   memmove(critLog,critLog+1,(CRITLOGSIZE-1)*sizeof(double));
