@@ -122,9 +122,14 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
  * but tri2 and tri3 may.
  */
 {
-  int i,j,x,p2;
+  int i,j,x,p2,triDots;
   size_t sz;
+  int totalDots[4];
   vector<xyz> remainder; // the dots that remain in tri0
+  vector<DealBlockTask> tasks;
+  vector<DealBlockResult> results;
+  vector<int> blkSizes;
+  bool allReady;
   if (tri1->dots.size())
   {
     sz=tri0->dots.size();
@@ -146,23 +151,94 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
     memmove((void *)&tri0->dots[sz],(void *)&tri3->dots[0],tri3->dots.size()*sizeof(xyz));
     tri3->dots.clear();
   }
-  for (p2=1;p2<=tri0->dots.size();p2*=2);
-  if (p2>tri0->dots.size())
-    p2/=2;
-  x=0x55555555&(p2-1);
-  for (i=0;i<tri0->dots.size();i++)
+  if (tri0->dots.size()>98304)
   {
-    if (i==p2)
-      x=0;
-    j=i^x;
-    if (tri1->in(tri0->dots[j]))
-      tri1->dots.push_back(tri0->dots[j]);
-    else if (tri2 && tri2->in(tri0->dots[j]))
-      tri2->dots.push_back(tri0->dots[j]);
-    else if (tri3 && tri3->in(tri0->dots[j]))
-      tri3->dots.push_back(tri0->dots[j]);
-    else
-      remainder.push_back(tri0->dots[j]);
+    blkSizes=blockSizes(tri0->dots.size());
+    for (triDots=i=0;i<blkSizes.size();i++)
+    {
+      tasks.resize(tasks.size()+1);
+      results.resize(results.size()+1);
+      tasks.back().tri[0]=tri0;
+      tasks.back().tri[1]=tri1;
+      tasks.back().tri[2]=tri2;
+      tasks.back().tri[3]=tri3;
+      tasks.back().dots=&tri0->dots[triDots];
+      tasks.back().numDots=blkSizes[i];
+      triDots+=blkSizes[i];
+    }
+    for (i=0;i<tasks.size();i++)
+    {
+      tasks[i].result=&results[i];
+      results[i].ready=false;
+    }
+    for (i=0;i<tasks.size();i++)
+      enqueueDeal(tasks[i]);
+    while (!allReady)
+    {
+      if (!dealQueueEmpty())
+      {
+	DealBlockTask task=dequeueDeal();
+	computeDealBlock(task);
+      }
+      allReady=true;
+      for (i=0;i<results.size();i++)
+	allReady&=results[i].ready;
+    }
+    totalDots[0]=totalDots[1]=totalDots[2]=totalDots[3]=0;
+    for (i=0;i<results.size();i++)
+      for (j=0;j<4;j++)
+	totalDots[j]+=results[i].dots[j].size();
+    remainder.resize(totalDots[0]);
+    for (triDots=i=0;i<results.size();i++)
+    {
+      if (results[i].dots[0].size())
+	memmove((void *)&remainder[triDots],(void *)&results[i].dots[0][0],results[i].dots[0].size()*sizeof(xyz));
+      triDots+=results[i].dots[0].size();
+    }
+    tri1->dots.resize(totalDots[1]);
+    for (triDots=i=0;i<results.size();i++)
+    {
+      if (results[i].dots[1].size())
+	memmove((void *)&tri1->dots[triDots],(void *)&results[i].dots[1][0],results[i].dots[1].size()*sizeof(xyz));
+      triDots+=results[i].dots[1].size();
+    }
+    if (tri2)
+      tri2->dots.resize(totalDots[2]);
+    for (triDots=i=0;i<results.size();i++)
+    {
+      if (results[i].dots[2].size())
+	memmove((void *)&tri2->dots[triDots],(void *)&results[i].dots[2][0],results[i].dots[2].size()*sizeof(xyz));
+      triDots+=results[i].dots[2].size();
+    }
+    if (tri3)
+      tri3->dots.resize(totalDots[3]);
+    for (triDots=i=0;i<results.size();i++)
+    {
+      if (results[i].dots[3].size())
+	memmove((void *)&tri3->dots[triDots],(void *)&results[i].dots[3][0],results[i].dots[3].size()*sizeof(xyz));
+      triDots+=results[i].dots[3].size();
+    }
+  }
+  else
+  {
+    for (p2=1;p2<=tri0->dots.size();p2*=2);
+    if (p2>tri0->dots.size())
+      p2/=2;
+    x=0x55555555&(p2-1);
+    for (i=0;i<tri0->dots.size();i++)
+    {
+      if (i==p2)
+	x=0;
+      j=i^x;
+      if (tri1->in(tri0->dots[j]))
+	tri1->dots.push_back(tri0->dots[j]);
+      else if (tri2 && tri2->in(tri0->dots[j]))
+	tri2->dots.push_back(tri0->dots[j]);
+      else if (tri3 && tri3->in(tri0->dots[j]))
+	tri3->dots.push_back(tri0->dots[j]);
+      else
+	remainder.push_back(tri0->dots[j]);
+    }
   }
   remainder.shrink_to_fit();
   tri1->dots.shrink_to_fit();
