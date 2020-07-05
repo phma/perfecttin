@@ -57,7 +57,8 @@ vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
 double minArea;
 queue<ThreadAction> actQueue,resQueue;
-queue<AdjustBlockTask> blockTaskQueue;
+queue<AdjustBlockTask> adjustTaskQueue;
+queue<DealBlockTask> dealTaskQueue;
 int currentAction;
 int mtxSquareSize;
 
@@ -224,7 +225,7 @@ void joinThreads()
 void enqueueAdjust(AdjustBlockTask task)
 {
   blockTaskMutex.lock();
-  blockTaskQueue.push(task);
+  adjustTaskQueue.push(task);
   blockTaskMutex.unlock();
 }
 
@@ -232,10 +233,10 @@ AdjustBlockTask dequeueAdjust()
 {
   AdjustBlockTask ret;
   blockTaskMutex.lock();
-  if (blockTaskQueue.size())
+  if (adjustTaskQueue.size())
   {
-    ret=blockTaskQueue.front();
-    blockTaskQueue.pop();
+    ret=adjustTaskQueue.front();
+    adjustTaskQueue.pop();
   }
   blockTaskMutex.unlock();
   return ret;
@@ -243,7 +244,32 @@ AdjustBlockTask dequeueAdjust()
 
 bool adjustQueueEmpty()
 {
-  return blockTaskQueue.size()==0;
+  return adjustTaskQueue.size()==0;
+}
+
+void enqueueDeal(DealBlockTask task)
+{
+  blockTaskMutex.lock();
+  dealTaskQueue.push(task);
+  blockTaskMutex.unlock();
+}
+
+DealBlockTask dequeueDeal()
+{
+  DealBlockTask ret;
+  blockTaskMutex.lock();
+  if (dealTaskQueue.size())
+  {
+    ret=dealTaskQueue.front();
+    dealTaskQueue.pop();
+  }
+  blockTaskMutex.unlock();
+  return ret;
+}
+
+bool dealQueueEmpty()
+{
+  return dealTaskQueue.size()==0;
 }
 
 ThreadAction dequeueAction()

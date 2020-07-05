@@ -21,6 +21,8 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+#ifndef EDGEOP_H
+#define EDGEOP_H
 #include "tin.h"
 
 struct DealBlockResult
@@ -44,3 +46,4 @@ void flip(edge *e);
 point *bend(edge *e,int thread);
 void dealDots(triangle *tri0,triangle *tri1,triangle *tri2=nullptr,triangle *tri3=nullptr);
 int edgeop(edge *e,double tolerance,double minArea,int thread);
+#endif

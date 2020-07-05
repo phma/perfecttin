@@ -40,6 +40,7 @@
 #include <array>
 #include "fileio.h"
 #include "adjelev.h"
+#include "edgeop.h"
 
 // These are used as both commands to the threads and status from the threads.
 #define TH_RUN 1
@@ -100,6 +101,9 @@ void joinThreads();
 void enqueueAdjust(AdjustBlockTask task);
 AdjustBlockTask dequeueAdjust();
 bool adjustQueueEmpty();
+void enqueueDeal(DealBlockTask task);
+DealBlockTask dequeueDeal();
+bool dealQueueEmpty();
 void enqueueAction(ThreadAction a);
 ThreadAction dequeueResult();
 bool actionQueueEmpty();
