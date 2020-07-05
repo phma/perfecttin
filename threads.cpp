@@ -339,7 +339,7 @@ void sleep(int thread)
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
   while (clk.now()<wakeTime)
   {
-    if (adjustQueueEmpty())
+    if (adjustQueueEmpty() && dealQueueEmpty())
     {
       threadStatus[thread]|=256;
       this_thread::sleep_for((wakeTime-clk.now())/2);
@@ -347,8 +347,10 @@ void sleep(int thread)
     }
     else
     {
-      AdjustBlockTask task=dequeueAdjust();
-      computeAdjustBlock(task);
+      AdjustBlockTask atask=dequeueAdjust();
+      computeAdjustBlock(atask);
+      DealBlockTask dtask=dequeueDeal();
+      computeDealBlock(dtask);
     }
   }
 }
@@ -360,7 +362,7 @@ void sleepDead(int thread)
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
   while (clk.now()<wakeTime)
   {
-    if (adjustQueueEmpty())
+    if (adjustQueueEmpty() && dealQueueEmpty())
     {
       threadStatus[thread]|=256;
       this_thread::sleep_for((wakeTime-clk.now())/2);
@@ -368,8 +370,10 @@ void sleepDead(int thread)
     }
     else
     {
-      AdjustBlockTask task=dequeueAdjust();
-      computeAdjustBlock(task);
+      AdjustBlockTask atask=dequeueAdjust();
+      computeAdjustBlock(atask);
+      DealBlockTask dtask=dequeueDeal();
+      computeDealBlock(dtask);
     }
   }
 }

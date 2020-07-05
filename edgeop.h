@@ -44,6 +44,7 @@ void initTempPointlist(int nthreads);
 void recordTriop();
 void flip(edge *e);
 point *bend(edge *e,int thread);
+void computeDealBlock(DealBlockTask &task);
 void dealDots(triangle *tri0,triangle *tri1,triangle *tri2=nullptr,triangle *tri3=nullptr);
 int edgeop(edge *e,double tolerance,double minArea,int thread);
 #endif
