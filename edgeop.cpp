@@ -91,6 +91,32 @@ bool runFlips(edge *e)
   return ret;
 }
 
+void computeDealBlock(DealBlockTask &task)
+{
+  int i,j,x,p2;
+  size_t sz;
+  for (p2=1;p2<=task.numDots;p2*=2);
+  if (p2>task.numDots)
+    p2/=2;
+  x=0x55555555&(p2-1);
+  for (i=0;i<task.numDots;i++)
+  {
+    if (i==p2)
+      x=0;
+    j=i^x;
+    if (task.tri[1]->in(task.dots[j]))
+      task.result->dots[1].push_back(task.dots[j]);
+    else if (task.tri[2] && task.tri[2]->in(task.dots[j]))
+      task.result->dots[2].push_back(task.dots[j]);
+    else if (task.tri[3] && task.tri[3]->in(task.dots[j]))
+      task.result->dots[3].push_back(task.dots[j]);
+    else
+      task.result->dots[0].push_back(task.dots[j]);
+  }
+  if (task.result)
+    task.result->ready=true;
+}
+
 void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
 /* Places dots in their proper triangle. tri0 and tri1 may not be null,
  * but tri2 and tri3 may.
