@@ -157,6 +157,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
     blkSizes=blockSizes(tri0->dots.size());
     for (triDots=i=0;i<blkSizes.size();i++)
     {
+      results[tasks.size()];
       tasks.resize(tasks.size()+1);
       tasks.back().tri[0]=tri0;
       tasks.back().tri[1]=tri1;
@@ -459,6 +460,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	  blkSizes=blockSizes(triab[i]->dots.size());
 	  for (triDots=j=0;j<blkSizes.size();j++)
 	  {
+	    results[tasks.size()];
 	    tasks.resize(tasks.size()+1);
 	    for (k=0;k<4;k++)
 	      tasks.back().tri[k]=&tempPointlist[thread].triangles[k];
