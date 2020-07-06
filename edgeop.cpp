@@ -104,6 +104,7 @@ void computeDealBlock(DealBlockTask &task)
     if (i==p2)
       x=0;
     j=i^x;
+    assert(!task.result->ready);
     if (task.tri[1]->in(task.dots[j]))
       task.result->dots[1].push_back(task.dots[j]);
     else if (task.tri[2] && task.tri[2]->in(task.dots[j]))
@@ -350,9 +351,14 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
  * 2. The triangles' circumcircles would not contain each other's other point. (Delaunay)
  */
 {
-  int i,j;
+  int i,j,k,triDots;
   array<triangle *,2> triab;
   triangle *tri;
+  int totalDots[4];
+  vector<DealBlockTask> tasks;
+  vector<DealBlockResult> results;
+  vector<int> blkSizes;
+  bool allReady;
   bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
   double elev13,elev24,elev5;
   double crit1=0,crit2=0;
@@ -446,12 +452,62 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
     if (validTemp)
     {
       tri=&tempPointlist[thread].triangles[0];
-      for (i=0;i<2;i++)
-	for (j=0;j<triab[i]->dots.size();j++)
+      if (e->tria->dots.size()>98304 || e->trib->dots.size()>98304)
+      {
+	for (i=0;i<2;i++)
 	{
-	  tri=tri->findt(triab[i]->dots[j],true);
-	  tri->dots.push_back(triab[i]->dots[j]);
+	  blkSizes=blockSizes(triab[i]->dots.size());
+	  for (triDots=j=0;j<blkSizes.size();j++)
+	  {
+	    tasks.resize(tasks.size()+1);
+	    results.resize(results.size()+1);
+	    for (k=0;k<4;k++)
+	      tasks.back().tri[k]=&tempPointlist[thread].triangles[k];
+	    tasks.back().dots=&triab[i]->dots[triDots];
+	    tasks.back().numDots=blkSizes[j];
+	    triDots+=blkSizes[j];
+	  }
 	}
+	for (i=0;i<tasks.size();i++)
+	{
+	  tasks[i].result=&results[i];
+	  results[i].ready=false;
+	}
+	for (i=0;i<tasks.size();i++)
+	  enqueueDeal(tasks[i]);
+	while (!allReady)
+	{
+	  if (!dealQueueEmpty())
+	  {
+	    DealBlockTask task=dequeueDeal();
+	    computeDealBlock(task);
+	  }
+	  allReady=true;
+	  for (i=0;i<results.size();i++)
+	    allReady&=results[i].ready;
+	}
+	totalDots[0]=totalDots[1]=totalDots[2]=totalDots[3]=0;
+	for (i=0;i<results.size();i++)
+	  for (j=0;j<4;j++)
+	    totalDots[j]+=results[i].dots[j].size();
+	for (i=0;i<4;i++)
+	{
+	  tempPointlist[thread].triangles[i].dots.resize(totalDots[i]);
+	  for (triDots=j=0;j<results.size();j++)
+	  {
+	    if (results[j].dots[i].size())
+	      memmove((void *)&tempPointlist[thread].triangles[i].dots[triDots],(void *)&results[j].dots[i][0],results[j].dots[i].size()*sizeof(xyz));
+	    triDots+=results[i].dots[0].size();
+	  }
+	}
+      }
+      else
+	for (i=0;i<2;i++)
+	  for (j=0;j<triab[i]->dots.size();j++)
+	  {
+	    tri=tri->findt(triab[i]->dots[j],true);
+	    tri->dots.push_back(triab[i]->dots[j]);
+	  }
       for (i=1;i<6;i++)
 	allpoints.push_back(&tempPointlist[thread].points[i]);
       for (i=0;i<4;i++)
