@@ -44,7 +44,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setMinimumSize(40,30);
-  triangleNum=splashScreenTime=0;
+  triangleNum=splashScreenTime=dartAngle=0;
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
