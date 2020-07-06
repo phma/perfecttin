@@ -130,7 +130,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
   vector<DealBlockTask> tasks;
   map<int,DealBlockResult> results;
   vector<int> blkSizes;
-  bool allReady;
+  bool allReady=false;
   if (tri1->dots.size())
   {
     sz=tri0->dots.size();
@@ -359,7 +359,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   vector<DealBlockTask> tasks;
   map<int,DealBlockResult> results;
   vector<int> blkSizes;
-  bool allReady;
+  bool allReady=false;
   bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
   double elev13,elev24,elev5;
   double crit1=0,crit2=0;
