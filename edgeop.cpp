@@ -499,7 +499,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	  {
 	    if (results[j].dots[i].size())
 	      memmove((void *)&tempPointlist[thread].triangles[i].dots[triDots],(void *)&results[j].dots[i][0],results[j].dots[i].size()*sizeof(xyz));
-	    triDots+=results[i].dots[0].size();
+	    triDots+=results[j].dots[i].size();
 	  }
 	}
       }
