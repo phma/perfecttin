@@ -128,7 +128,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
   int totalDots[4];
   vector<xyz> remainder; // the dots that remain in tri0
   vector<DealBlockTask> tasks;
-  vector<DealBlockResult> results;
+  map<int,DealBlockResult> results;
   vector<int> blkSizes;
   bool allReady;
   if (tri1->dots.size())
@@ -158,7 +158,6 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
     for (triDots=i=0;i<blkSizes.size();i++)
     {
       tasks.resize(tasks.size()+1);
-      results.resize(results.size()+1);
       tasks.back().tri[0]=tri0;
       tasks.back().tri[1]=tri1;
       tasks.back().tri[2]=tri2;
@@ -357,7 +356,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
   triangle *tri;
   int totalDots[4];
   vector<DealBlockTask> tasks;
-  vector<DealBlockResult> results;
+  map<int,DealBlockResult> results;
   vector<int> blkSizes;
   bool allReady;
   bool validTemp,ret=false,inTol,isSpiky,wouldbeSpiky;
@@ -461,7 +460,6 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	  for (triDots=j=0;j<blkSizes.size();j++)
 	  {
 	    tasks.resize(tasks.size()+1);
-	    results.resize(results.size()+1);
 	    for (k=0;k<4;k++)
 	      tasks.back().tri[k]=&tempPointlist[thread].triangles[k];
 	    tasks.back().dots=&triab[i]->dots[triDots];
