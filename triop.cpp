@@ -104,7 +104,7 @@ point *split(triangle *tri,int thread)
   newt0->flatten();
   newt1->flatten();
   recordTriop();
-  dealDots(tri,newt0,newt1);
+  dealDots(thread,tri,newt0,newt1);
   return pnt;
 }
 
@@ -252,10 +252,10 @@ array<point *,3> quarter(triangle *tri,int thread)
   neigha->flatten();
   neighb->flatten();
   neighc->flatten();
-  dealDots(tri,tris[0],tris[1],tris[2]);
-  dealDots(neigha,tris[3]);
-  dealDots(neighb,tris[4]);
-  dealDots(neighc,tris[5]);
+  dealDots(thread,tri,tris[0],tris[1],tris[2]);
+  dealDots(thread,neigha,tris[3]);
+  dealDots(thread,neighb,tris[4]);
+  dealDots(thread,neighc,tris[5]);
   return pnts;
 }
 

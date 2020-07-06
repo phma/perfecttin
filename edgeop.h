@@ -37,14 +37,15 @@ struct DealBlockTask
   std::array<triangle *,4> tri;
   xyz *dots;
   int numDots;
+  int thread;
   DealBlockResult *result;
 };
 
 void initTempPointlist(int nthreads);
 void recordTriop();
-void flip(edge *e);
+void flip(edge *e,int thread);
 point *bend(edge *e,int thread);
 void computeDealBlock(DealBlockTask &task);
-void dealDots(triangle *tri0,triangle *tri1,triangle *tri2=nullptr,triangle *tri3=nullptr);
+void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2=nullptr,triangle *tri3=nullptr);
 int edgeop(edge *e,double tolerance,double minArea,int thread);
 #endif

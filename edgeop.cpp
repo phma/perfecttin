@@ -118,7 +118,7 @@ void computeDealBlock(DealBlockTask &task)
     task.result->ready=true;
 }
 
-void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
+void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
 /* Places dots in their proper triangle. tri0 and tri1 may not be null,
  * but tri2 and tri3 may.
  */
@@ -170,6 +170,7 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
     for (i=0;i<tasks.size();i++)
     {
       tasks[i].result=&results[i];
+      tasks[i].thread=thread;
       results[i].ready=false;
     }
     for (i=0;i<tasks.size();i++)
@@ -250,7 +251,7 @@ void dealDots(triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
   swap(tri0->dots,remainder);
 }
 
-void flip(edge *e)
+void flip(edge *e,int thread)
 {
   net.wingEdge.lock();
   e->flip(&net);
@@ -261,7 +262,7 @@ void flip(edge *e)
   e->trib->flatten();
   e->tria->unsetError();
   e->trib->unsetError();
-  dealDots(e->trib,e->tria);
+  dealDots(thread,e->trib,e->tria);
 }
 
 point *bend(edge *e,int thread)
@@ -331,7 +332,7 @@ point *bend(edge *e,int thread)
   e->setNeighbors();
   //assert(net.checkTinConsistency());
   net.wingEdge.unlock();
-  flip(e);
+  flip(e,thread);
   return pnt;
 }
 
@@ -471,6 +472,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	for (i=0;i<tasks.size();i++)
 	{
 	  tasks[i].result=&results[i];
+	  tasks[i].thread=thread;
 	  results[i].ready=false;
 	}
 	for (i=0;i<tasks.size();i++)
@@ -588,7 +590,7 @@ int edgeop(edge *e,double tolerance,double minArea,int thread)
       gotLock2=lockTriangles(thread,triNeigh);
       if (gotLock2)
       {
-	flip(e);
+	flip(e,thread);
 	did=true;
       }
     }

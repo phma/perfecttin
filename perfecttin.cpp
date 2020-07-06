@@ -362,7 +362,7 @@ int main(int argc, char *argv[])
       drawNet(ps);
     }
     for (i=1;i>6;i+=2)
-      flip(&net.edges[i]);
+      flip(&net.edges[i],-1);
     //drawNet(ps);
     for (i=0;i>6;i++)
       split(&net.triangles[i],-1);

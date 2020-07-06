@@ -773,7 +773,7 @@ void testflip()
   cout<<"length "<<lengthBefore<<' '<<net.triangles[2].dots.size()<<" dots in 2 "<<net.triangles[3].dots.size()<<" dots in 3\n";
   tassert(abs((int)net.triangles[2].dots.size()-402)<18);
   tassert(abs((int)net.triangles[3].dots.size()-402)<18);
-  flip(&net.edges[3]);
+  flip(&net.edges[3],-1);
   drawNet(ps);
   lengthAfter=net.edges[3].length();
   for (areaAfter=i=0;i<net.triangles.size();i++)
@@ -877,7 +877,7 @@ void testquarter()
   setsurface(CIRPAR);
   aster(1500);
   makeOctagon();
-  flip(&net.edges[3]); // This makes triangle 2 interior, a prerequisite for quartering.
+  flip(&net.edges[3],-1); // This makes triangle 2 interior, a prerequisite for quartering.
   drawNet(ps);
   for (areaBefore=i=0;i<net.triangles.size();i++)
     areaBefore+=net.triangles[i].sarea;
