@@ -111,6 +111,10 @@ void computeDealBlock(DealBlockTask &task)
       task.result->dots[2].push_back(task.dots[j]);
     else if (task.tri[3] && task.tri[3]->in(task.dots[j]))
       task.result->dots[3].push_back(task.dots[j]);
+    else if (task.tri[4] && task.tri[4]->in(task.dots[j]))
+      task.result->dots[4].push_back(task.dots[j]);
+    else if (task.tri[5] && task.tri[5]->in(task.dots[j]))
+      task.result->dots[5].push_back(task.dots[j]);
     else
       task.result->dots[0].push_back(task.dots[j]);
   }
@@ -164,6 +168,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
       tasks.back().tri[1]=tri1;
       tasks.back().tri[2]=tri2;
       tasks.back().tri[3]=tri3;
+      tasks.back().tri[4]=tasks.back().tri[5]=nullptr;
       tasks.back().dots=&tri0->dots[triDots];
       tasks.back().numDots=blkSizes[i];
       triDots+=blkSizes[i];
@@ -466,6 +471,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	    results.resize(results.size()+1);
 	    for (k=0;k<4;k++)
 	      tasks.back().tri[k]=&tempPointlist[thread].triangles[k];
+	    tasks.back().tri[4]=tasks.back().tri[5]=nullptr;
 	    tasks.back().dots=&triab[i]->dots[triDots];
 	    tasks.back().numDots=blkSizes[j];
 	    triDots+=blkSizes[j];

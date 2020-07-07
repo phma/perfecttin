@@ -27,14 +27,14 @@
 
 struct DealBlockResult
 {
-  std::array<std::vector<xyz>,4> dots;
+  std::array<std::vector<xyz>,6> dots;
   bool ready;
 };
 
 struct DealBlockTask
 {
   DealBlockTask();
-  std::array<triangle *,4> tri;
+  std::array<triangle *,6> tri;
   xyz *dots;
   int numDots;
   int thread;
