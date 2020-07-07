@@ -22,6 +22,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include <cstring>
 #include <cassert>
 #include "octagon.h"
 #include "relprime.h"
@@ -65,6 +66,11 @@ double makeOctagon()
  */
 {
   int ori=rng.uirandom();
+  int totalDots[6];
+  vector<DealBlockTask> tasks;
+  vector<DealBlockResult> results;
+  vector<int> blkSizes;
+  bool allReady=false;
   BoundRect orthogonal(ori),diagonal(ori+DEG45);
   double bounds[8],width,margin=0,err,maxerr=0,high=-INFINITY,low=INFINITY;
   xyz dot;
@@ -72,7 +78,7 @@ double makeOctagon()
   xy corners[8];
   vector<triangle *> trianglePointers;
   vector<point *> cornerPointers;
-  int i,n,h,sz;
+  int i,j,n,h,sz,triDots;
   triangle *tri;
   net.clear();
   net.triangles[0]; // Create a dummy triangle so that the GUI says "Making octagon"
@@ -157,18 +163,49 @@ double makeOctagon()
   tri=&net.triangles[0];
   net.makeqindex();
   sz=cloud.size();
-  if (sz)
+  blkSizes=blockSizes(sz);
+  for (triDots=i=0;i<blkSizes.size();i++)
   {
-    h=relprime(sz);
-    for (i=n=0;i<sz;i++,n=(n+h)%sz)
+    tasks.resize(tasks.size()+1);
+    results.resize(results.size()+1);
+    for (j=0;j<6;j++)
+      tasks.back().tri[j]=&net.triangles[j];
+    tasks.back().dots=&cloud[triDots];
+    tasks.back().numDots=blkSizes[i];
+    triDots+=blkSizes[i];
+  }
+  for (i=0;i<tasks.size();i++)
+  {
+    tasks[i].result=&results[i];
+    tasks[i].thread=0;
+    results[i].ready=false;
+  }
+  for (i=0;i<tasks.size();i++)
+    enqueueDeal(tasks[i]);
+  while (!allReady)
+  {
+    if (!dealQueueEmpty())
     {
-      tri=tri->findt(cloud[n]);
-      if (!tri)
-      {
-	valid=false;
-	break;
-      }
-      tri->dots.push_back(cloud[n]);
+      DealBlockTask task=dequeueDeal();
+      computeDealBlock(task);
+    }
+    allReady=true;
+    for (i=0;i<results.size();i++)
+      allReady&=results[i].ready;
+  }
+  for (i=0;i<6;i++)
+    totalDots[i]=0;
+  for (i=0;i<results.size();i++)
+    for (j=0;j<6;j++)
+      totalDots[j]+=results[i].dots[j].size();
+  for (i=0;i<6;i++)
+  {
+    net.triangles[i].dots.resize(totalDots[i]);
+    for (triDots=j=0;j<results.size();j++)
+    {
+      if (results[j].dots[i].size())
+	memmove((void *)&net.triangles[i].dots[triDots],(void *)&results[j].dots[i][0],results[j].dots[i].size()*sizeof(xyz));
+      triDots+=results[j].dots[i].size();
     }
   }
   cloud.clear();
