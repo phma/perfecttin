@@ -27,7 +27,6 @@
 struct BoundBlockResult
 {
   BoundRect orthogonal,diagonal;
-  double high,low;
   bool ready;
 };
 
