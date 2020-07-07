@@ -27,6 +27,7 @@
 #include "tin.h"
 #include "angle.h"
 #include "edgeop.h"
+#include "relprime.h"
 #include "octagon.h"
 #include "triop.h"
 #include "neighbor.h"
@@ -196,35 +197,40 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
     for (i=0;i<results.size();i++)
       for (j=0;j<4;j++)
 	totalDots[j]+=results[i].dots[j].size();
+    x=relprime(results.size(),thread);
     remainder.resize(totalDots[0]);
-    for (triDots=i=0;i<results.size();i++)
+    for (triDots=i=j=0;i<results.size();i++)
     {
-      if (results[i].dots[0].size())
-	memmove((void *)&remainder[triDots],(void *)&results[i].dots[0][0],results[i].dots[0].size()*sizeof(xyz));
-      triDots+=results[i].dots[0].size();
+      if (results[j].dots[0].size())
+	memmove((void *)&remainder[triDots],(void *)&results[j].dots[0][0],results[j].dots[0].size()*sizeof(xyz));
+      triDots+=results[j].dots[0].size();
+      j=(j+x)%results.size();
     }
     tri1->dots.resize(totalDots[1]);
-    for (triDots=i=0;i<results.size();i++)
+    for (triDots=i=j=0;i<results.size();i++)
     {
-      if (results[i].dots[1].size())
-	memmove((void *)&tri1->dots[triDots],(void *)&results[i].dots[1][0],results[i].dots[1].size()*sizeof(xyz));
-      triDots+=results[i].dots[1].size();
+      if (results[j].dots[1].size())
+	memmove((void *)&tri1->dots[triDots],(void *)&results[j].dots[1][0],results[j].dots[1].size()*sizeof(xyz));
+      triDots+=results[j].dots[1].size();
+      j=(j+x)%results.size();
     }
     if (tri2)
       tri2->dots.resize(totalDots[2]);
-    for (triDots=i=0;i<results.size();i++)
+    for (triDots=i=j=0;i<results.size();i++)
     {
-      if (results[i].dots[2].size())
-	memmove((void *)&tri2->dots[triDots],(void *)&results[i].dots[2][0],results[i].dots[2].size()*sizeof(xyz));
-      triDots+=results[i].dots[2].size();
+      if (results[j].dots[2].size())
+	memmove((void *)&tri2->dots[triDots],(void *)&results[j].dots[2][0],results[j].dots[2].size()*sizeof(xyz));
+      triDots+=results[j].dots[2].size();
+      j=(j+x)%results.size();
     }
     if (tri3)
       tri3->dots.resize(totalDots[3]);
-    for (triDots=i=0;i<results.size();i++)
+    for (triDots=i=j=0;i<results.size();i++)
     {
-      if (results[i].dots[3].size())
-	memmove((void *)&tri3->dots[triDots],(void *)&results[i].dots[3][0],results[i].dots[3].size()*sizeof(xyz));
-      triDots+=results[i].dots[3].size();
+      if (results[j].dots[3].size())
+	memmove((void *)&tri3->dots[triDots],(void *)&results[j].dots[3][0],results[j].dots[3].size()*sizeof(xyz));
+      triDots+=results[j].dots[3].size();
+      j=(j+x)%results.size();
     }
   }
   else

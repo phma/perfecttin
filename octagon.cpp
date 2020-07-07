@@ -164,6 +164,7 @@ double makeOctagon()
   net.makeqindex();
   sz=cloud.size();
   blkSizes=blockSizes(sz);
+  h=relprime(blkSizes.size());
   for (triDots=i=0;i<blkSizes.size();i++)
   {
     tasks.resize(tasks.size()+1);
@@ -174,11 +175,11 @@ double makeOctagon()
     tasks.back().numDots=blkSizes[i];
     triDots+=blkSizes[i];
   }
-  for (i=0;i<tasks.size();i++)
+  for (i=n=0;i<tasks.size();i++,n=(n+h)%tasks.size())
   {
-    tasks[i].result=&results[i];
+    tasks[i].result=&results[n];
     tasks[i].thread=0;
-    results[i].ready=false;
+    results[n].ready=false;
   }
   for (i=0;i<tasks.size();i++)
     enqueueDeal(tasks[i]);
