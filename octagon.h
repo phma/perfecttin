@@ -38,7 +38,7 @@ struct BoundBlockTask
 {
   BoundBlockTask();
   xyz *dots;
-  int numDots,ori;
+  int numDots;
   BoundBlockResult *result;
 };
 

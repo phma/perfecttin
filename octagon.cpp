@@ -88,9 +88,10 @@ double makeOctagon()
   int totalDots[6];
   vector<DealBlockTask> tasks;
   vector<DealBlockResult> results;
+  vector<BoundBlockTask> btasks;
+  vector<BoundBlockResult> bresults;
   vector<int> blkSizes;
   bool allReady=false;
-  BoundRect orthogonal(ori),diagonal(ori+DEG45);
   double bounds[8],width,margin=0,err,maxerr=0,high=-INFINITY,low=INFINITY;
   xyz dot;
   bool valid=true;
@@ -104,23 +105,64 @@ double makeOctagon()
   net.conversionTime=time(nullptr);
   resizeBuckets(1);
   clearTriangleLocks();
-  for (i=0;i<cloud.size();i++)
+  sz=cloud.size();
+  blkSizes=blockSizes(sz);
+  for (triDots=i=0;i<blkSizes.size();i++)
   {
-    orthogonal.include(cloud[i]);
-    diagonal.include(cloud[i]);
-    if (cloud[i].elev()>high)
-      high=cloud[i].elev();
-    if (cloud[i].elev()<low)
-      low=cloud[i].elev();
+    btasks.resize(btasks.size()+1);
+    bresults.resize(bresults.size()+1);
+    btasks.back().dots=&cloud[triDots];
+    btasks.back().numDots=blkSizes[i];
+    triDots+=blkSizes[i];
   }
-  bounds[0]=orthogonal.left();
-  bounds[1]=diagonal.bottom();
-  bounds[2]=orthogonal.bottom();
-  bounds[3]=-diagonal.right();
-  bounds[4]=-orthogonal.right();
-  bounds[5]=-diagonal.top();
-  bounds[6]=-orthogonal.top();
-  bounds[7]=diagonal.left();
+  for (i=n=0;i<btasks.size();i++)
+  {
+    btasks[i].result=&bresults[i];
+    bresults[i].ready=false;
+    bresults[i].orthogonal.setOrientation(ori);
+    bresults[i].diagonal.setOrientation(ori+DEG45);
+  }
+  for (i=0;i<btasks.size();i++)
+    enqueueBound(btasks[i]);
+  while (!allReady)
+  {
+    if (!boundQueueEmpty())
+    {
+      BoundBlockTask task=dequeueBound();
+      computeBoundBlock(task);
+    }
+    allReady=true;
+    for (i=0;i<bresults.size();i++)
+      allReady&=bresults[i].ready;
+  }
+  for (i=3;i<7;i++)
+  {
+    bounds[i]=INFINITY;
+    bounds[i^4]=INFINITY;
+  }
+  for (i=0;i<bresults.size();i++)
+  {
+    if (bounds[0]>bresults[i].orthogonal.left())
+      bounds[0]=bresults[i].orthogonal.left();
+    if (bounds[1]>bresults[i].diagonal.bottom())
+      bounds[1]=bresults[i].diagonal.bottom();
+    if (bounds[2]>bresults[i].orthogonal.bottom())
+      bounds[2]=bresults[i].orthogonal.bottom();
+    if (bounds[3]>-bresults[i].diagonal.right())
+      bounds[3]=-bresults[i].diagonal.right();
+    if (bounds[4]>-bresults[i].orthogonal.right())
+      bounds[4]=-bresults[i].orthogonal.right();
+    if (bounds[5]>-bresults[i].diagonal.top())
+      bounds[5]=-bresults[i].diagonal.top();
+    if (bounds[6]>-bresults[i].orthogonal.top())
+      bounds[6]=-bresults[i].orthogonal.top();
+    if (bounds[7]>bresults[i].diagonal.left())
+      bounds[7]=bresults[i].diagonal.left();
+    if (low>bresults[i].diagonal.low())
+      low=bresults[i].diagonal.low();
+    if (high<bresults[i].diagonal.high())
+      high=bresults[i].diagonal.high();
+  }
   clipHigh=2*high-low;
   clipLow=2*low-high;
   for (i=0;i<4;i++)
@@ -176,13 +218,9 @@ double makeOctagon()
     net.triangles[i].setneighbor(&net.triangles[i+1]);
     net.triangles[i+1].setneighbor(&net.triangles[i]);
   }
-  //cout<<"Orientation "<<ldecimal(bintodeg(ori),0.01)<<endl;
-  //cout<<"Orthogonal ("<<orthogonal.left()<<','<<orthogonal.bottom()<<")-("<<orthogonal.right()<<','<<orthogonal.top()<<")\n";
-  //cout<<"Diagonal ("<<diagonal.left()<<','<<diagonal.bottom()<<")-("<<diagonal.right()<<','<<diagonal.top()<<")\n";
   tri=&net.triangles[0];
   net.makeqindex();
-  sz=cloud.size();
-  blkSizes=blockSizes(sz);
+  allReady=false;
   h=relprime(blkSizes.size());
   for (triDots=i=0;i<blkSizes.size();i++)
   {
