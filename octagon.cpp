@@ -67,6 +67,18 @@ double estimatedDensity()
   return totalDots/pairwisesum(areas);
 }
 
+void computeBoundBlock(BoundBlockTask &task)
+{
+  int i;
+  for (i=0;i<task.numDots;i++)
+  {
+    task.result->orthogonal.include(task.dots[i]);
+    task.result->diagonal.include(task.dots[i]);
+  }
+  if (task.result)
+    task.result->ready=true;
+}
+
 double makeOctagon()
 /* Creates an octagon which encloses cloud (defined in ply.cpp) and divides it
  * into six triangles. Returns the maximum error of any point in the cloud.
