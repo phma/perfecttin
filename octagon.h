@@ -24,6 +24,21 @@
 #include <array>
 #include "pointlist.h"
 
+struct BoundBlockResult
+{
+  BoundRect orthogonal,diagonal;
+  double high,low;
+  bool ready;
+};
+
+struct BoundBlockTask
+{
+  BoundBlockTask();
+  xyz *dots;
+  int numDots,ori;
+  BoundBlockResult *result;
+};
+
 extern pointlist net;
 extern double clipLow,clipHigh;
 extern std::array<double,2> areadone;

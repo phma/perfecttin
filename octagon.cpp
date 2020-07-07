@@ -43,6 +43,13 @@ double clipLow,clipHigh;
 array<double,2> areadone={0,0};
 double mtxSquareSide;
 
+BoundBlockTask::BoundBlockTask()
+{
+  dots=nullptr;
+  result=nullptr;
+  numDots=0;
+}
+
 void setMutexArea(double area)
 {
   mtxSquareSide=sqrt(area/2)/mtxSquareSize;
