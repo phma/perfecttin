@@ -47,6 +47,7 @@ extern double clipLow,clipHigh;
 extern std::array<double,2> areadone;
 void setMutexArea(double area);
 double estimatedDensity();
+void computeBoundBlock(BoundBlockTask &task);
 double makeOctagon();
 int mtxSquare(xy pnt);
 #endif
