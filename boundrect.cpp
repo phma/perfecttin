@@ -58,16 +58,20 @@ int BoundRect::getOrientation()
   return orientation;
 }
 
-void BoundRect::include(xy obj)
+void BoundRect::include(xyz obj)
 {
   int i;
   double newbound;
   for (i=0;i<4;i++)
   {
-    newbound=obj.dirbound(i*DEG90-orientation);
+    newbound=xy(obj).dirbound(i*DEG90-orientation);
     if (newbound<bounds[i])
       bounds[i]=newbound;
   }
+  if (obj.elev()<bounds[4])
+    bounds[4]=obj.elev();
+  if (-obj.elev()<bounds[5])
+    bounds[5]=-obj.elev();
 }
 
 void BoundRect::include(pointlist *obj)

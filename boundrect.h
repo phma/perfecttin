@@ -38,7 +38,7 @@ public:
   void clear();
   void setOrientation(int ori);
   int getOrientation();
-  void include(xy obj);
+  void include(xyz obj);
   void include(pointlist *obj);
   double left()
   {
