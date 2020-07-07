@@ -29,7 +29,7 @@
 #include <vector>
 #include <array>
 #include <set>
-#include "threads.h"
+#include "mthreads.h"
 #include "point.h"
 #include "tin.h"
 #include "triangle.h"

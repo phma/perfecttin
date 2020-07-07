@@ -26,6 +26,7 @@
 #include <ctime>
 #include <iomanip>
 #include "config.h"
+#include "fileio.h"
 #include "octagon.h"
 #include "ldecimal.h"
 using namespace std;

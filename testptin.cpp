@@ -45,6 +45,7 @@
 #include "qindex.h"
 #include "random.h"
 #include "ps.h"
+#include "threads.h"
 #include "manysum.h"
 #include "ldecimal.h"
 #include "relprime.h"

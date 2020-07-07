@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* octagon.h - bound the points with an octagon       */
+/* mthreads.h - thread-related include files          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -21,32 +21,13 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef OCTAGON_H
-#define OCTAGON_H
-#include <array>
-struct BoundBlockTask;
-#include "pointlist.h"
-#include "boundrect.h"
-
-struct BoundBlockResult
-{
-  BoundRect orthogonal,diagonal;
-  bool ready;
-};
-
-struct BoundBlockTask
-{
-  BoundBlockTask();
-  xyz *dots;
-  int numDots,ori;
-  BoundBlockResult *result;
-};
-
-extern pointlist net;
-extern double clipLow,clipHigh;
-extern std::array<double,2> areadone;
-void setMutexArea(double area);
-double estimatedDensity();
-double makeOctagon();
-int mtxSquare(xy pnt);
+#ifdef __MINGW64__
+#define MINGW_STDTHREAD_REDUNDANCY_WARNING
+#include <../mingw-std-threads/mingw.thread.h>
+#include <../mingw-std-threads/mingw.mutex.h>
+#include <../mingw-std-threads/mingw.shared_mutex.h>
+#else
+#include <thread>
+#include <mutex>
+#include <shared_mutex>
 #endif

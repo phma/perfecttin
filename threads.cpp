@@ -59,6 +59,7 @@ double minArea;
 queue<ThreadAction> actQueue,resQueue;
 queue<AdjustBlockTask> adjustTaskQueue;
 queue<DealBlockTask> dealTaskQueue;
+queue<BoundBlockTask> boundTaskQueue;
 int currentAction;
 int mtxSquareSize;
 
@@ -270,6 +271,31 @@ DealBlockTask dequeueDeal()
 bool dealQueueEmpty()
 {
   return dealTaskQueue.size()==0;
+}
+
+void enqueueBound(BoundBlockTask task)
+{
+  blockTaskMutex.lock();
+  boundTaskQueue.push(task);
+  blockTaskMutex.unlock();
+}
+
+BoundBlockTask dequeueBound()
+{
+  BoundBlockTask ret;
+  blockTaskMutex.lock();
+  if (boundTaskQueue.size())
+  {
+    ret=boundTaskQueue.front();
+    boundTaskQueue.pop();
+  }
+  blockTaskMutex.unlock();
+  return ret;
+}
+
+bool boundQueueEmpty()
+{
+  return boundTaskQueue.size()==0;
 }
 
 ThreadAction dequeueAction()

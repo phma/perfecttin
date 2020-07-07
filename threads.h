@@ -25,22 +25,14 @@
 #ifndef THREADS_H
 #define THREADS_H
 
-#ifdef __MINGW64__
-#define MINGW_STDTHREAD_REDUNDANCY_WARNING
-#include <../mingw-std-threads/mingw.thread.h>
-#include <../mingw-std-threads/mingw.mutex.h>
-#include <../mingw-std-threads/mingw.shared_mutex.h>
-#else
-#include <thread>
-#include <mutex>
-#include <shared_mutex>
-#endif
 #include <chrono>
 #include <vector>
 #include <array>
+#include "mthreads.h"
 #include "fileio.h"
 #include "adjelev.h"
 #include "edgeop.h"
+#include "octagon.h"
 
 // These are used as both commands to the threads and status from the threads.
 #define TH_RUN 1
@@ -104,6 +96,9 @@ bool adjustQueueEmpty();
 void enqueueDeal(DealBlockTask task);
 DealBlockTask dequeueDeal();
 bool dealQueueEmpty();
+void enqueueBound(BoundBlockTask task);
+BoundBlockTask dequeueBound();
+bool boundQueueEmpty();
 void enqueueAction(ThreadAction a);
 ThreadAction dequeueResult();
 bool actionQueueEmpty();
