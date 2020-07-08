@@ -233,7 +233,7 @@ double makeOctagon()
     triDots+=blkSizes[i];
   }
   for (i=n=0;i<tasks.size();i++,n=(n+h)%tasks.size())
-  {
+  { // For why the blocks are shuffled, see edgeop.cpp.
     tasks[i].result=&results[n];
     tasks[i].thread=0;
     results[n].ready=false;

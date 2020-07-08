@@ -123,6 +123,15 @@ void computeDealBlock(DealBlockTask &task)
     task.result->ready=true;
 }
 
+/* This code shuffles the dots so that triangle::setError and shouldQuarter
+ * return quickly if it's out of tolerance and should not be quartered.
+ * As they come from a laser scanner, the dots are in the order of the drone's
+ * flight path, so they're likely to have the first eighth all in one corner,
+ * and only on finding a dot in another corner does shouldQuarter know that
+ * it should not be quartered. With the dots shuffled, the first three dots are
+ * almost certainly not in the same corner, and it returns false quickly.
+ */
+
 void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *tri3)
 /* Places dots in their proper triangle. tri0 and tri1 may not be null,
  * but tri2 and tri3 may.
