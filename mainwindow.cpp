@@ -340,10 +340,11 @@ void MainWindow::loadFile()
 {
   int dialogResult;
   QStringList files;
+  int i;
   string fileName;
   ThreadAction ta;
   fileDialog->setWindowTitle(tr("Load Point Cloud File"));
-  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setFileMode(QFileDialog::ExistingFiles);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->selectFile("");
 #ifdef Plytapus_FOUND
@@ -355,20 +356,23 @@ void MainWindow::loadFile()
   if (dialogResult)
   {
     files=fileDialog->selectedFiles();
-    fileName=files[0].toStdString();
     net.clear();
     tinSizeChanged();
     if (cloud.size()==0)
       fileNames="";
     density=0;
-    ta.opcode=ACT_LOAD;
-    ta.filename=fileName;
-    ta.param1=lengthUnit;
-    enqueueAction(ta);
-    if (fileNames.length())
-      fileNames+=';';
-    fileNames+=baseName(fileName);
-    lastFileName=fileName;
+    for (i=0;i<files.size();i++)
+    {
+      fileName=files[i].toStdString();
+      ta.opcode=ACT_LOAD;
+      ta.filename=fileName;
+      ta.param1=lengthUnit;
+      enqueueAction(ta);
+      if (fileNames.length())
+	fileNames+=';';
+      fileNames+=baseName(fileName);
+      lastFileName=fileName;
+    }
     fileMsg->setText(QString::fromStdString(fileNames));
   }
 }
