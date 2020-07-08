@@ -27,6 +27,9 @@
 #include "matrix.h"
 #include "triangle.h"
 
+#define AVG_TASK_SIZE 65536
+// AVG_TASK_SIZE should be even and must be between 6 and 1301505241.
+
 struct adjustRecord
 {
   bool validMatrix;
