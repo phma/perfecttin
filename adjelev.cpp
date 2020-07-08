@@ -274,15 +274,23 @@ void computeAdjustBlock(AdjustBlockTask &task)
   int i,j,k,ndots=0;
   matrix m(task.numDots,task.pnt.size());
   vector<double> v;
+  vector<int> cx;
+  vector<point *> cp;
   if (!task.result)
     return;
   AdjustBlockResult &result=*task.result;
   result.high=-INFINITY;
   result.low=INFINITY;
+  for (j=0;j<task.pnt.size();j++)
+    if (task.pnt[j]==task.tri->a || task.pnt[j]==task.tri->b || task.pnt[j]==task.tri->c)
+    {
+      cx.push_back(j);
+      cp.push_back(task.pnt[j]);
+    }
   for (j=0;j<task.numDots;j++,ndots++)
   {
-    for (k=0;k<task.pnt.size();k++)
-      m[ndots][k]=task.tri->areaCoord(task.tri->dots[j],task.pnt[k]);
+    for (k=0;k<cx.size();k++)
+      m[ndots][cx[k]]=task.tri->areaCoord(task.tri->dots[j],cp[k]);
     v.push_back(task.tri->dots[j].elev()-task.tri->elevation(task.tri->dots[j]));
     if (task.tri->dots[j].elev()>result.high)
       result.high=task.tri->dots[j].elev();
