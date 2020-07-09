@@ -212,6 +212,7 @@ double makeOctagon()
     net.edges[i+7].trib=&net.triangles[i];
     net.edges[i].trib=&net.triangles[i];
     net.edges[i+1].tria=&net.triangles[i];
+    net.triangles[i].flatten();
   }
   for (i=0;i<5;i++)
   {
