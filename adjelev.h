@@ -27,8 +27,11 @@
 #include "matrix.h"
 #include "triangle.h"
 
-#define AVG_TASK_SIZE 1024
-// AVG_TASK_SIZE should be even and must be between 6 and 1301505241.
+#define TASK_STEP_SIZE 1024
+/* TASK_STEP_SIZE must be less than 715827883.
+ * For GPU programming, it should be a multiple of eight times the number of
+ * cores that execute the same kernel.
+ */
 
 struct adjustRecord
 {

@@ -166,7 +166,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
     memmove((void *)&tri0->dots[sz],(void *)&tri3->dots[0],tri3->dots.size()*sizeof(xyz));
     tri3->dots.clear();
   }
-  if (tri0->dots.size()>AVG_TASK_SIZE*3/2)
+  if (tri0->dots.size()>TASK_STEP_SIZE*3)
   {
     blkSizes=blockSizes(tri0->dots.size());
     for (triDots=i=0;i<blkSizes.size();i++)
@@ -473,7 +473,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
     if (validTemp)
     {
       tri=&tempPointlist[thread].triangles[0];
-      if (e->tria->dots.size()>AVG_TASK_SIZE*3/2 || e->trib->dots.size()>AVG_TASK_SIZE*3/2)
+      if (e->tria->dots.size()>TASK_STEP_SIZE*3 || e->trib->dots.size()>TASK_STEP_SIZE*3)
       {
 	for (i=0;i<2;i++)
 	{

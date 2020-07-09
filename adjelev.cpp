@@ -53,7 +53,7 @@ vector<int> blockSizes(int total)
  * adjustment will finish at about the same time.
  */
 {
-  int numBlocks=lrint(total/(double)AVG_TASK_SIZE);
+  int numBlocks=lrint(total/(double)TASK_STEP_SIZE);
   vector<int> ret;
   int block;
   if (numBlocks<1)
@@ -111,7 +111,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt)
     if (net.revtriangles.count(tri[i]))
       markBucketDirty(net.revtriangles[tri[i]]);
   }
-  if (mostDots>AVG_TASK_SIZE*3/2)
+  if (mostDots>TASK_STEP_SIZE*3)
   {
     for (i=0;i<tri.size();i++)
     {
