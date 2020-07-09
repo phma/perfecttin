@@ -48,7 +48,6 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   densityMsg=new QLabel(this);
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
-  fileDialog=new QFileDialog(this);
   msgBox=new QMessageBox(this);
   connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool)),
 	  this,SLOT(setSettings(double,double,int,bool)));
@@ -320,6 +319,7 @@ void MainWindow::openFile()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Open PerfectTIN File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -334,6 +334,8 @@ void MainWindow::openFile()
     ta.filename=fileName;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::loadFile()
@@ -343,6 +345,7 @@ void MainWindow::loadFile()
   int i;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Load Point Cloud File"));
   fileDialog->setFileMode(QFileDialog::ExistingFiles);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -375,6 +378,8 @@ void MainWindow::loadFile()
     }
     fileMsg->setText(QString::fromStdString(fileNames));
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::disableMenuSplash()
@@ -406,6 +411,7 @@ void MainWindow::exportDxfTxt()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as DXF Text"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -423,6 +429,8 @@ void MainWindow::exportDxfTxt()
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::exportDxfBin()
@@ -431,6 +439,7 @@ void MainWindow::exportDxfBin()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as DXF Binary"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -448,6 +457,8 @@ void MainWindow::exportDxfBin()
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::exportPlyTxt()
@@ -456,6 +467,7 @@ void MainWindow::exportPlyTxt()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as PLY Text"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -473,6 +485,8 @@ void MainWindow::exportPlyTxt()
     ta.opcode=ACT_WRITE_PLY;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::exportPlyBin()
@@ -481,6 +495,7 @@ void MainWindow::exportPlyBin()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as PLY Binary"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -498,6 +513,8 @@ void MainWindow::exportPlyBin()
     ta.opcode=ACT_WRITE_PLY;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::exportTinTxt()
@@ -506,6 +523,7 @@ void MainWindow::exportTinTxt()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as Text (AquaVeo)"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -522,6 +540,8 @@ void MainWindow::exportTinTxt()
     ta.opcode=ACT_WRITE_TIN;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::exportCarlsonTin()
@@ -530,6 +550,7 @@ void MainWindow::exportCarlsonTin()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as Carlson"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -546,6 +567,8 @@ void MainWindow::exportCarlsonTin()
     ta.opcode=ACT_WRITE_CARLSON_TIN;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::exportLandXml()
@@ -554,6 +577,7 @@ void MainWindow::exportLandXml()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Export TIN as LandXML"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -570,6 +594,8 @@ void MainWindow::exportLandXml()
     ta.opcode=ACT_WRITE_LANDXML;
     enqueueAction(ta);
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::startConversion()
@@ -578,6 +604,7 @@ void MainWindow::startConversion()
   QStringList files;
   string fileName;
   ThreadAction ta;
+  fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Convert to TIN"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -597,6 +624,8 @@ void MainWindow::startConversion()
     fileNames=baseName(saveFileName)+".ptin";
     fileMsg->setText(QString::fromStdString(fileNames));
   }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void MainWindow::stopConversion()
