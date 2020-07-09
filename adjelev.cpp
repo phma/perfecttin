@@ -50,23 +50,29 @@ void checkIntElev(vector<point *> corners)
 vector<int> blockSizes(int total)
 /* Compute the block sizes for adjusting a triangle with a large number of dots.
  * The sequence is decreasing so that all the threads working on the
- * adjustment will finish at about the same time.
+ * adjustment will finish at about the same time. The first few terms may
+ * increase and not be multiples of the step size, but after that they will
+ * be decreasing by the step size.
  */
 {
-  int numBlocks=lrint(total/(double)TASK_STEP_SIZE);
   vector<int> ret;
   int block;
-  if (numBlocks<1)
-    numBlocks=1;
-  while (numBlocks)
+  double triroot,dec;
+  while (total)
   {
-    if (numBlocks>1)
-      block=lrint(total*1.1/numBlocks);
+    if (total>TASK_STEP_SIZE)
+    {
+      triroot=sqrt((double)total/TASK_STEP_SIZE*2+0.25)-0.5;
+      dec=triroot+(2*triroot-1)*sin(2*M_PI*triroot)/4/M_PI;
+      block=lrint(dec*TASK_STEP_SIZE);
+      if (block>total)
+	block=total;
+    }
     else
       block=total;
+    assert(block>0);
     ret.push_back(block);
     total-=block;
-    numBlocks--;
   }
   return ret;
 }
