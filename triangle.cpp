@@ -66,6 +66,23 @@ ErrorBlockTask::ErrorBlockTask()
   result=nullptr;
 }
 
+void computeErrorBlock(ErrorBlockTask &task)
+{
+  double tempVError=0,err1;
+  int i;
+  for (i=0;i<task.numDots && tempVError<task.tolerance;i++)
+  {
+    err1=fabs(task.dots[i].elev()-task.tri->elevation(task.dots[i]));
+    if (err1>tempVError)
+      tempVError=err1;
+  }
+  if (task.result)
+  {
+    task.result->vError=tempVError;
+    task.result->ready=true;
+  }
+}
+
 triangle::triangle()
 {
   a=b=c=NULL;

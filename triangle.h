@@ -69,8 +69,11 @@ struct ErrorBlockTask
   xyz *dots;
   int numDots;
   triangle *tri;
+  double tolerance;
   ErrorBlockResult *result;
 };
+
+void computeErrorBlock(ErrorBlockTask &task);
 
 class triangle
 /* A triangle has three corners, arranged as follows:
