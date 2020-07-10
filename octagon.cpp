@@ -285,13 +285,12 @@ double makeOctagon()
   }
   logAdjustment(adjustElev(trianglePointers,cornerPointers));
   for (i=0;i<6;i++)
-    for (n=0;n<net.triangles[i].dots.size();n++)
-    {
-      dot=net.triangles[i].dots[n];
-      err=dot.elev()-net.triangles[i].elevation(dot);
-      if (fabs(err)>maxerr)
-	maxerr=fabs(err);
-    }
+  {
+    net.triangles[i].setError(INFINITY);
+    err=net.triangles[i].vError;
+    if (fabs(err)>maxerr)
+      maxerr=fabs(err);
+  }
   //for (i=1;i<=8;i++)
     //cout<<"corner "<<i<<" has elevation "<<net.points[i].elev()<<endl;
   if (!valid)
