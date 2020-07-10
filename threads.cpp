@@ -391,7 +391,7 @@ void sleep(int thread)
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
   while (clk.now()<wakeTime)
   {
-    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty())
+    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty() && errorQueueEmpty())
     {
       threadStatus[thread]|=256;
       this_thread::sleep_for((wakeTime-clk.now())/2);
@@ -405,6 +405,8 @@ void sleep(int thread)
       computeDealBlock(dtask);
       BoundBlockTask btask=dequeueBound();
       computeBoundBlock(btask);
+      ErrorBlockTask etask=dequeueError();
+      computeErrorBlock(etask);
     }
   }
 }
@@ -416,7 +418,7 @@ void sleepDead(int thread)
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
   while (clk.now()<wakeTime)
   {
-    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty())
+    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty() && errorQueueEmpty())
     {
       threadStatus[thread]|=256;
       this_thread::sleep_for((wakeTime-clk.now())/2);
@@ -430,6 +432,8 @@ void sleepDead(int thread)
       computeDealBlock(dtask);
       BoundBlockTask btask=dequeueBound();
       computeBoundBlock(btask);
+      ErrorBlockTask etask=dequeueError();
+      computeErrorBlock(etask);
     }
   }
 }
