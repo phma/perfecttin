@@ -377,6 +377,30 @@ bool resultQueueEmpty()
   return resQueue.size()==0;
 }
 
+void sleepCommon(cr::steady_clock::time_point wakeTime,int thread)
+{
+  while (clk.now()<wakeTime)
+  {
+    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty() && errorQueueEmpty())
+    {
+      threadStatus[thread]|=256;
+      this_thread::sleep_for((wakeTime-clk.now())/2);
+      threadStatus[thread]&=255;
+    }
+    else
+    {
+      AdjustBlockTask atask=dequeueAdjust();
+      computeAdjustBlock(atask);
+      DealBlockTask dtask=dequeueDeal();
+      computeDealBlock(dtask);
+      BoundBlockTask btask=dequeueBound();
+      computeBoundBlock(btask);
+      ErrorBlockTask etask=dequeueError();
+      computeErrorBlock(etask);
+    }
+  }
+}
+
 void sleepRead()
 // Called when reading a ptin file that has many dots per triangle.
 {
@@ -389,26 +413,7 @@ void sleep(int thread)
   if (sleepTime[thread]>opTime*sleepTime.size()/2+500)
     sleepTime[thread]=opTime*sleepTime.size()/2+500;
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
-  while (clk.now()<wakeTime)
-  {
-    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty() && errorQueueEmpty())
-    {
-      threadStatus[thread]|=256;
-      this_thread::sleep_for((wakeTime-clk.now())/2);
-      threadStatus[thread]&=255;
-    }
-    else
-    {
-      AdjustBlockTask atask=dequeueAdjust();
-      computeAdjustBlock(atask);
-      DealBlockTask dtask=dequeueDeal();
-      computeDealBlock(dtask);
-      BoundBlockTask btask=dequeueBound();
-      computeBoundBlock(btask);
-      ErrorBlockTask etask=dequeueError();
-      computeErrorBlock(etask);
-    }
-  }
+  sleepCommon(wakeTime,thread);
 }
 
 void sleepDead(int thread)
@@ -416,26 +421,7 @@ void sleepDead(int thread)
 {
   sleepTime[thread]=sleepTime[thread]*(1+1./net.triangles.size())+0.1;
   cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
-  while (clk.now()<wakeTime)
-  {
-    if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty() && errorQueueEmpty())
-    {
-      threadStatus[thread]|=256;
-      this_thread::sleep_for((wakeTime-clk.now())/2);
-      threadStatus[thread]&=255;
-    }
-    else
-    {
-      AdjustBlockTask atask=dequeueAdjust();
-      computeAdjustBlock(atask);
-      DealBlockTask dtask=dequeueDeal();
-      computeDealBlock(dtask);
-      BoundBlockTask btask=dequeueBound();
-      computeBoundBlock(btask);
-      ErrorBlockTask etask=dequeueError();
-      computeErrorBlock(etask);
-    }
-  }
+  sleepCommon(wakeTime,thread);
 }
 
 void unsleep(int thread)
