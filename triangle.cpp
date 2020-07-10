@@ -58,6 +58,14 @@ double testfunc::operator()(double x)
 
 #endif
 
+ErrorBlockTask::ErrorBlockTask()
+{
+  dots=nullptr;
+  tri=nullptr;
+  numDots=0;
+  result=nullptr;
+}
+
 triangle::triangle()
 {
   a=b=c=NULL;

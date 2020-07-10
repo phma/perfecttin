@@ -57,6 +57,21 @@ struct triangleHit
   point *cor;
 };
 
+struct ErrorBlockResult
+{
+  double vError;
+  bool ready;
+};
+
+struct ErrorBlockTask
+{
+  ErrorBlockTask();
+  xyz *dots;
+  int numDots;
+  triangle *tri;
+  ErrorBlockResult *result;
+};
+
 class triangle
 /* A triangle has three corners, arranged as follows:
  *   a
