@@ -29,6 +29,7 @@
 #include <cfloat>
 #include "triangle.h"
 #include "angle.h"
+#include "threads.h"
 #include "ldecimal.h"
 #include "tin.h"
 using namespace std;
@@ -163,13 +164,50 @@ bool triangle::inTolerance(double tolerance,double minArea)
 void triangle::setError(double tolerance)
 {
   double tempVError=0,err1;
-  int i;
-  for (i=0;i<dots.size() && tempVError<tolerance;i++)
+  int i,triDots;
+  vector<ErrorBlockTask> tasks;
+  vector<ErrorBlockResult> results;
+  vector<int> blkSizes;
+  bool allReady=false;
+  if (dots.size()>TASK_STEP_SIZE*3)
   {
-    err1=fabs(dots[i].elev()-elevation(dots[i]));
-    if (err1>tempVError)
-      tempVError=err1;
+    blkSizes=blockSizes(dots.size());
+    for (triDots=i=0;i<blkSizes.size();i++)
+    {
+      tasks.resize(tasks.size()+1);
+      results.resize(results.size()+1);
+      tasks.back().tri=this;
+      tasks.back().tolerance=tolerance;
+      tasks.back().dots=&dots[triDots];
+      tasks.back().numDots=blkSizes[i];
+      triDots+=blkSizes[i];
+    }
+    for (i=0;i<tasks.size();i++)
+    {
+      tasks[i].result=&results[i];
+      results[i].ready=false;
+    }
+    for (i=0;i<tasks.size();i++)
+      enqueueError(tasks[i]);
+    while (!allReady)
+    {
+      ErrorBlockTask task=dequeueError();
+      computeErrorBlock(task);
+      allReady=true;
+      for (i=0;i<results.size();i++)
+	allReady&=results[i].ready;
+    }
+    for (tempVError=i=0;i<results.size();i++)
+      if (tempVError<results[i].vError)
+	tempVError=results[i].vError;
   }
+  else
+    for (i=0;i<dots.size() && tempVError<tolerance;i++)
+    {
+      err1=fabs(dots[i].elev()-elevation(dots[i]));
+      if (err1>tempVError)
+	tempVError=err1;
+    }
   vError=tempVError;
   aElev=a->elev();
   bElev=b->elev();
