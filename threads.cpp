@@ -51,7 +51,7 @@ mutex blockTaskMutex;
 int threadCommand;
 vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
-vector<double> sleepTime;
+vector<double> sleepTime,sleepFraction;
 vector<int> triangleHolders; // one per triangle
 vector<vector<int> > heldTriangles; // one list of triangles per thread
 double stageTolerance;
@@ -204,6 +204,7 @@ void startThreads(int n)
   threadCommand=TH_WAIT;
   heldTriangles.resize(n);
   sleepTime.resize(n);
+  sleepFraction.resize(n);
   opTime=0;
   initTempPointlist(n);
   mtxSquareSize=ceil(sqrt(33*n));
@@ -212,6 +213,7 @@ void startThreads(int n)
     triMutex[i];
   for (i=0;i<n;i++)
   {
+    sleepFraction[i]=0.5;
     threads.push_back(thread(TinThread(),i));
     this_thread::sleep_for(chrono::milliseconds(10));
   }
@@ -384,7 +386,10 @@ void sleepCommon(cr::steady_clock::time_point wakeTime,int thread)
     if (adjustQueueEmpty() && dealQueueEmpty() && boundQueueEmpty() && errorQueueEmpty())
     {
       threadStatus[thread]|=256;
-      this_thread::sleep_for((wakeTime-clk.now())/2);
+      this_thread::sleep_for((wakeTime-clk.now())*sleepFraction[thread]);
+      sleepFraction[thread]*=1.25;
+      if (sleepFraction[thread]>0.5)
+	sleepFraction[thread]*=0.75;
       threadStatus[thread]&=255;
     }
     else
@@ -397,6 +402,9 @@ void sleepCommon(cr::steady_clock::time_point wakeTime,int thread)
       computeBoundBlock(btask);
       ErrorBlockTask etask=dequeueError();
       computeErrorBlock(etask);
+      sleepFraction[thread]*=0.75;
+      if (sleepFraction[thread]*sleepTime[thread]<0.001)
+	sleepFraction[thread]*=1.5;
     }
   }
 }
