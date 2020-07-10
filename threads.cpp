@@ -60,6 +60,7 @@ queue<ThreadAction> actQueue,resQueue;
 queue<AdjustBlockTask> adjustTaskQueue;
 queue<DealBlockTask> dealTaskQueue;
 queue<BoundBlockTask> boundTaskQueue;
+queue<ErrorBlockTask> errorTaskQueue;
 int currentAction;
 int mtxSquareSize;
 
@@ -296,6 +297,31 @@ BoundBlockTask dequeueBound()
 bool boundQueueEmpty()
 {
   return boundTaskQueue.size()==0;
+}
+
+void enqueueError(ErrorBlockTask task)
+{
+  blockTaskMutex.lock();
+  errorTaskQueue.push(task);
+  blockTaskMutex.unlock();
+}
+
+ErrorBlockTask dequeueError()
+{
+  ErrorBlockTask ret;
+  blockTaskMutex.lock();
+  if (errorTaskQueue.size())
+  {
+    ret=errorTaskQueue.front();
+    errorTaskQueue.pop();
+  }
+  blockTaskMutex.unlock();
+  return ret;
+}
+
+bool errorQueueEmpty()
+{
+  return errorTaskQueue.size()==0;
 }
 
 ThreadAction dequeueAction()
