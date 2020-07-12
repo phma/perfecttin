@@ -16,7 +16,7 @@ Before 0.5.0:
 Whenever:
 •Color the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance
 •Add a magnification window
-•Switch to a list of triangles and edges to be checked when most of them are in tolerance
+•Switch to a list of triangles and edges to be checked when most of them are in tolerance ✓
 •Draw a scale on the window ✓
 •Search directory for unfinished conversions and resume one
 •Allow the TIN to follow the highest points or the lowest points instead of the average
