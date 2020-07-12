@@ -32,6 +32,7 @@
 #include "tintext.h"
 #include "las.h"
 #include "ply.h"
+#include "unifiro.h"
 #include "relprime.h"
 #include "manysum.h"
 #include "carlsontin.h"
@@ -63,6 +64,8 @@ queue<BoundBlockTask> boundTaskQueue;
 queue<ErrorBlockTask> errorTaskQueue;
 int currentAction;
 int mtxSquareSize;
+Unifiro<triangle *> trianglePool;
+Unifiro<edge *> edgePool;
 
 cr::steady_clock clk;
 vector<int> cleanBuckets;
