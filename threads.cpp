@@ -50,6 +50,7 @@ mutex opTimeMutex;
 mutex blockTaskMutex;
 
 int threadCommand;
+bool stageAlmostDone;
 vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<double> sleepTime,sleepFraction;
@@ -196,6 +197,7 @@ bool livelock(double areadone,double rmsadj)
     unchangedCount++;
   else
     unchangedCount=0;
+  stageAlmostDone=sqrt(net.triangles.size())*(1-areadone)<1;
   lastAreaDone=areadone;
   lastRmsAdj=rmsadj;
   return unchangedCount>=5;
