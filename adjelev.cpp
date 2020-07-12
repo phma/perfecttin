@@ -25,6 +25,7 @@
 #include <iostream>
 #include <cmath>
 #include <cassert>
+#include <cstring>
 #include "leastsquares.h"
 #include "adjelev.h"
 #include "angle.h"
@@ -35,6 +36,7 @@
 using namespace std;
 
 vector<adjustRecord> adjustmentLog;
+size_t adjLogSz=0;
 
 void checkIntElev(vector<point *> corners)
 /* Check whether any of the elevations is an integer.
@@ -314,6 +316,13 @@ void logAdjustment(adjustRecord rec)
 {
   adjLog.lock();
   adjustmentLog.push_back(rec);
+  adjLogSz++;
+  if (adjustmentLog.size()%2==0 && adjustmentLog.size()>2.5*sqrt(adjLogSz)+1024)
+  {
+    int n=adjustmentLog.size()/2;
+    memmove(&adjustmentLog[0],&adjustmentLog[n],n*sizeof(adjustRecord));
+    adjustmentLog.resize(n);
+  }
   adjLog.unlock();
 }
 
@@ -323,21 +332,21 @@ double rmsAdjustment()
   int nRecent;
   vector<double> xsq;
   int i,sz;
-  static int lastsz;
+  static size_t lastsz;
   double ret;
   static double lastret;
   adjLog.lock_shared();
-  sz=adjustmentLog.size();
-  if (sz==lastsz)
+   sz=adjustmentLog.size();
+  if (adjLogSz==lastsz)
     ret=lastret;
   else
   {
-    nRecent=lrint(sqrt(sz));
+    nRecent=lrint(sqrt(adjLogSz));
     for (i=sz-1;i>=0 && xsq.size()<nRecent;i--)
       if (std::isfinite(adjustmentLog[i].msAdjustment))
 	xsq.push_back(adjustmentLog[i].msAdjustment);
     lastret=ret=sqrt(pairwisesum(xsq)/xsq.size());
-    lastsz=sz;
+    lastsz=adjLogSz;
   }
   adjLog.unlock_shared();
   return ret;
@@ -378,5 +387,6 @@ void clearLog()
 {
   adjLog.lock();
   adjustmentLog.clear();
+  adjLogSz=0;
   adjLog.unlock();
 }
