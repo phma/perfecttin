@@ -343,6 +343,8 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
       edgeop(sidea,tolerance,minArea,thread);
       edgeop(sideb,tolerance,minArea,thread);
       edgeop(sidec,tolerance,minArea,thread);
+      poolTriangles(triNeigh,thread);
+      poolEdges(edgeNeighbors(triNeigh),thread);
     }
   }
   unlockTriangles(thread);

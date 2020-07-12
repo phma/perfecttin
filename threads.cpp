@@ -83,6 +83,20 @@ const char statusNames[][8]=
   "None","Run","Pause","Wait","Stop"
 };
 
+void poolEdges(vector<edge *> edges,int thread)
+{
+  int i;
+  for (i=0;stageAlmostDone && i<edges.size();i++)
+    edgePool.enqueue(edges[i],thread);
+}
+
+void poolTriangles(vector<triangle *> triangles,int thread)
+{
+  int i;
+  for (i=0;stageAlmostDone && i<triangles.size();i++)
+    trianglePool.enqueue(triangles[i],thread);
+}
+
 void markBucketClean(int bucket)
 {
   bucketMutex.lock();

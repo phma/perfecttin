@@ -634,7 +634,11 @@ int edgeop(edge *e,double tolerance,double minArea,int thread)
     gotLock2=lockTriangles(thread,triNeigh);
   }
   if (gotLock2 && (did || std::isnan(rmsAdjustment())))
+  {
     logAdjustment(adjustElev(triNeigh,corners));
+    poolTriangles(triNeigh,thread);
+    poolEdges(edgeNeighbors(triNeigh),thread);
+  }
   unlockTriangles(thread);
   return gotLock1*2+gotLock2; // 2 means deadlock
 }

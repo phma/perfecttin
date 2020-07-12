@@ -39,14 +39,14 @@ public:
   T dequeue()
   {
     T ret=nullptr;
+    m.lock();
     if (firo.size())
     {
-      m.lock();
       ret=firo.back();
       uni.erase(ret);
       firo.pop_back();
-      m.unlock();
     }
+    m.unlock();
     return ret;
   }
   void enqueue(T t,int thread)
@@ -57,7 +57,7 @@ public:
       uni.insert(t);
       firo.push_back(t);
       pos=(pos+relprime(firo.size(),thread))%firo.size();
-      swap(firo.back(),firo[pos]);
+      std::swap(firo.back(),firo[pos]);
     }
     m.unlock();
   }

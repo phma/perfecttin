@@ -80,6 +80,8 @@ extern int currentAction;
 extern std::chrono::steady_clock clk;
 extern int mtxSquareSize;
 
+void poolEdges(std::vector<edge *> edges,int thread);
+void poolTriangles(std::vector<triangle *> triangles,int thread);
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
 bool allBucketsClean();
