@@ -687,8 +687,16 @@ void TinThread::operator()(int thread)
       threadStatus[thread]=TH_RUN;
       if (net.edges.size() && net.triangles.size())
       {
-	edg=edgePool.dequeue();
-	tri=trianglePool.dequeue();
+	if (thread)
+	{
+	  edg=edgePool.dequeue();
+	  tri=trianglePool.dequeue();
+	}
+	else
+	{
+	  edg=nullptr;
+	  tri=nullptr;
+	}
 	net.wingEdge.lock_shared();
 	if (!edg)
 	{
