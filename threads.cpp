@@ -673,11 +673,19 @@ void TinThread::operator()(int thread)
       threadStatus[thread]=TH_RUN;
       if (net.edges.size() && net.triangles.size())
       {
+	edg=edgePool.dequeue();
+	tri=trianglePool.dequeue();
 	net.wingEdge.lock_shared();
-	e=(e+relprime(net.edges.size(),thread))%net.edges.size();
-	edg=&net.edges[e];
-	t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
-	tri=&net.triangles[t];
+	if (!edg)
+	{
+	  e=(e+relprime(net.edges.size(),thread))%net.edges.size();
+	  edg=&net.edges[e];
+	}
+	if (!tri)
+	{
+	  t=(t+relprime(net.triangles.size(),thread))%net.triangles.size();
+	  tri=&net.triangles[t];
+	}
 	net.wingEdge.unlock_shared();
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
 	edgeResult=edgeop(edg,stageTolerance,minArea,thread);
