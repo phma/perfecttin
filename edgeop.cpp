@@ -273,10 +273,11 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
 
 void flip(edge *e,int thread)
 {
-  net.wingEdge.lock_shared();
+  net.wingEdge.lock();
+  // lock_shared causes occasional "Winged edge corruption" messages and may cause crash.
   e->flip(&net);
   //assert(net.checkTinConsistency());
-  net.wingEdge.unlock_shared();
+  net.wingEdge.unlock();
   recordFlip(e);
   e->tria->flatten();
   e->trib->flatten();
