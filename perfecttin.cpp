@@ -360,10 +360,10 @@ int main(int argc, char *argv[])
     }
     if (!done)
     {
-      ps.open("perfecttin.ps");
-      ps.setpaper(papersizes["A4 portrait"],0);
-      ps.prolog();
-      drawNet(ps);
+      //ps.open("perfecttin.ps");
+      //ps.setpaper(papersizes["A4 portrait"],0);
+      //ps.prolog();
+      //drawNet(ps);
     }
     for (i=1;i>6;i+=2)
       flip(&net.edges[i],-1);
@@ -417,7 +417,8 @@ int main(int argc, char *argv[])
 	    else
 	      ta.filename=outputFile+"."+to_string(ta.param0)+".ptin";
 	    enqueueAction(ta);
-	    drawNet(ps);
+	    if (ps.isOpen())
+	      drawNet(ps);
 	    waitForQueueEmpty();
 	    waitForThreads(TH_RUN);
 	  }
