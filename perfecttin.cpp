@@ -340,6 +340,10 @@ int main(int argc, char *argv[])
 	cerr<<"No point cloud found in "<<inputFiles[0]<<endl;
       done=true;
     }
+    if (nthreads<1)
+      nthreads=1;
+    startThreads(nthreads);
+    waitForThreads(TH_RUN);
     if (!ptinFilesOpened && !done)
     {
       areadone[0]=makeOctagon();
@@ -370,10 +374,6 @@ int main(int argc, char *argv[])
     for (i=0;i>13;i+=(i?1:6)) // edges 1-5 are interior
       bend(&net.edges[i],-1);
     net.makeqindex();
-    if (nthreads<1)
-      nthreads=1;
-    startThreads(nthreads);
-    waitForThreads(TH_RUN);
     tri=&net.triangles[0];
     for (i=e=t=d=0;!done;i++)
     {
