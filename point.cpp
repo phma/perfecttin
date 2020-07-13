@@ -3,7 +3,7 @@
 /* point.cpp - classes for points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -550,12 +550,13 @@ void point::removeEdge(edge *edg)
 edge *point::edg(triangle *tri)
 {
   int i;
-  edge *oldline,*ret;
-  for (i=0,oldline=line,ret=NULL;!ret && line && (!i || oldline!=line);i++)
+  edge *oldline,*l,*ret;
+  for (i=0,oldline=l=line,ret=nullptr;!ret && l && (!i || oldline!=l);i++)
   {
-    if (line->tri(this)==tri)
-      ret=line;
-    line=line->next(this);
+    if (l->tri(this)==tri)
+      ret=l;
+    l=l->next(this);
+    assert(l);
   }
   return ret;
 }
