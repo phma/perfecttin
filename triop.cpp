@@ -314,6 +314,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
     sidea=tri->c->edg(tri);
     sideb=tri->a->edg(tri);
     sidec=tri->b->edg(tri);
+    assert(sidea && sideb && sidec);
   }
   if (gotLock1 && (qtr=shouldQuarter(tri,tolerance,minArea)))
   {
