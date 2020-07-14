@@ -3,7 +3,7 @@
 /* ps.h - PostScript output                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -76,9 +76,9 @@ public:
   void lineto(xy pnt);
   void endline(bool closed=false,bool fill=false);
   void widen(double factor);
-  void write(xy pnt,std::string text);
-  void centerWrite(xy pnt,std::string text);
-  void comment(std::string text);
+  void write(xy pnt,const std::string &text);
+  void centerWrite(xy pnt,const std::string &text);
+  void comment(const std::string &text);
 };
 
 #endif

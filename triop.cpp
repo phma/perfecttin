@@ -42,7 +42,6 @@ point *split(triangle *tri,int thread)
   edge *sidea,*sideb,*sidec;
   triangle *newt0,*newt1;
   edge *newe0,*newe1,*newe2;
-  int i;
   net.wingEdge.lock();
   point newPoint(((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3);
   int newPointNum=net.points.size()+1;

@@ -3,7 +3,7 @@
 /* qindex.cpp - quad index to tin                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -334,7 +334,7 @@ set<triangle *> qindex::localTriangles(xy center,double radius,int max)
 	else
 	{
 	  max+=list.size();
-	  for (j=sublist.begin();j!=sublist.end();j++)
+	  for (j=sublist.begin();j!=sublist.end();++j)
 	    list.insert(*j);
 	  max-=list.size();
 	}

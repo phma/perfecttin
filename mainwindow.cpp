@@ -602,7 +602,6 @@ void MainWindow::startConversion()
 {
   int dialogResult;
   QStringList files;
-  string fileName;
   ThreadAction ta;
   fileDialog=new QFileDialog(this);
   fileDialog->setWindowTitle(tr("Convert to TIN"));

@@ -528,7 +528,7 @@ bool lockTriangles(int thread,vector<int> triangles)
   int origSz;
   set<int> lockSet=whichLocks(triangles);
   set<int>::iterator j;
-  for (j=lockSet.begin();j!=lockSet.end();j++)
+  for (j=lockSet.begin();j!=lockSet.end();++j)
     triMutex[*j].lock();
   origSz=heldTriangles[thread].size();
   for (i=0;ret && i<triangles.size();i++)
@@ -557,7 +557,7 @@ bool lockTriangles(int thread,vector<int> triangles)
   for (i=0;ret && i<triangles.size();i++)
     triangleHolders[triangles[i]]=thread;
   holderMutex.unlock_shared();
-  for (j=lockSet.begin();j!=lockSet.end();j++)
+  for (j=lockSet.begin();j!=lockSet.end();++j)
     triMutex[*j].unlock();
   return ret;
 }
@@ -579,7 +579,7 @@ void unlockTriangles(int thread)
   int i;
   set<int> lockSet=whichLocks(heldTriangles[thread]);
   set<int>::iterator j;
-  for (j=lockSet.begin();j!=lockSet.end();j++)
+  for (j=lockSet.begin();j!=lockSet.end();++j)
     triMutex[*j].lock();
   holderMutex.lock_shared();
   /* It is possible somehow for heldTriangles to hold a number of a triangle
@@ -592,7 +592,7 @@ void unlockTriangles(int thread)
       triangleHolders[heldTriangles[thread][i]]=-1;
   holderMutex.unlock_shared();
   heldTriangles[thread].clear();
-  for (j=lockSet.begin();j!=lockSet.end();j++)
+  for (j=lockSet.begin();j!=lockSet.end();++j)
     triMutex[*j].unlock();
 }
 

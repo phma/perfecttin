@@ -45,7 +45,7 @@ vector<triangle *> triangleNeighbors(vector<point *> corners)
     if (ed!=ed0)
       cerr<<"Winged edge corruption\n";
   }
-  for (k=tmpRet.begin();k!=tmpRet.end();k++)
+  for (k=tmpRet.begin();k!=tmpRet.end();++k)
     if (*k!=nullptr)
       ret.push_back(*k);
   net.wingEdge.unlock_shared();
@@ -65,7 +65,7 @@ vector<edge *> edgeNeighbors(vector<triangle *> triangles)
     tmpRet.insert(triangles[i]->b->edg(triangles[i]));
     tmpRet.insert(triangles[i]->c->edg(triangles[i]));
   }
-  for (k=tmpRet.begin();k!=tmpRet.end();k++)
+  for (k=tmpRet.begin();k!=tmpRet.end();++k)
     if (*k!=nullptr)
       ret.push_back(*k);
   net.wingEdge.unlock_shared();
@@ -85,7 +85,7 @@ vector<point *> pointNeighbors(vector<triangle *> triangles)
     tmpRet.insert(triangles[i]->b);
     tmpRet.insert(triangles[i]->c);
   }
-  for (k=tmpRet.begin();k!=tmpRet.end();k++)
+  for (k=tmpRet.begin();k!=tmpRet.end();++k)
     if (*k!=nullptr)
       ret.push_back(*k);
   net.wingEdge.unlock_shared();

@@ -219,7 +219,6 @@ double makeOctagon()
     net.triangles[i].setneighbor(&net.triangles[i+1]);
     net.triangles[i+1].setneighbor(&net.triangles[i]);
   }
-  tri=&net.triangles[0];
   net.makeqindex();
   allReady=false;
   h=relprime(blkSizes.size());

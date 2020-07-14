@@ -135,7 +135,7 @@ public:
   point(xyz pnt);
   point(const point &rhs);
   //~point();
-  const point& operator=(const point &rhs);
+  point& operator=(const point &rhs);
   friend class edge;
   friend void rotate(pointlist &pl,int n);
   friend void movesideways(pointlist &pl,double sw);

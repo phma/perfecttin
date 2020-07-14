@@ -44,10 +44,9 @@ vector<double> linearLeastSquares(const matrix &m,const vector<double> &v)
   return mtv;
 }
 
-vector<double> minimumNorm(matrix m,vector<double> v)
+vector<double> minimumNorm(matrix &m,const vector<double> &v)
 {
   matrix mmt,mt,vmat=columnvector(v),mtv;
-  int i;
   mt=m.transpose();
   mmt=m.transmult();
   mmt.gausselim(vmat);

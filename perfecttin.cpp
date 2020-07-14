@@ -133,7 +133,7 @@ void drawNet(PostScript &ps)
 
 void drawMag(PostScript &ps)
 {
-  int i,j;
+  int i;
   ps.startpage();
   ps.setscale(magnifyCenter.getx()-magnifySize,magnifyCenter.gety()-magnifySize,
 	      magnifyCenter.getx()+magnifySize,magnifyCenter.gety()+magnifySize);
@@ -148,7 +148,7 @@ void drawMag(PostScript &ps)
   ps.endpage();
 }
 
-double parseUnit(string unit)
+double parseUnit(const string &unit)
 {
   if (unit=="m")
     return 1;
@@ -177,7 +177,7 @@ void parseUnits(string units)
   outUnit=parseUnit(outUnitStr);
 }
 
-int parseFormat(string format)
+int parseFormat(const string &format)
 {
   int i,ret=-1;
   for (i=0;i<sizeof(formats)/sizeof(formats[0]);i++)
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
   string unitStr;
   ThreadAction ta;
   PtinHeader ptinHeader;
-  bool validArgs,validCmd=true;
+  bool validCmd=true;
   po::options_description generic("Options");
   po::options_description hidden("Hidden options");
   po::options_description cmdline_options;
@@ -241,9 +241,9 @@ int main(int argc, char *argv[])
     if (vm.count("export-empty"))
       exportEmpty=true;
   }
-  catch (exception &e)
+  catch (exception &ex)
   {
-    cerr<<e.what()<<endl;
+    cerr<<ex.what()<<endl;
     validCmd=false;
   }
   if (outputFile.length() && extension(outputFile)==".ptin")

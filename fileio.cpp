@@ -230,7 +230,7 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   writeDxfGroups(dxfFile,dxfCodes,asc);
 }
 
-int readCloud(string inputFile,double inUnit)
+int readCloud(string &inputFile,double inUnit)
 {
   int i,already=cloud.size(),ret=0;
   readPly(inputFile);

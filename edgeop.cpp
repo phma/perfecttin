@@ -95,7 +95,6 @@ bool runFlips(edge *e)
 void computeDealBlock(DealBlockTask &task)
 {
   int i,j,x,p2;
-  size_t sz;
   for (p2=1;p2<=task.numDots;p2*=2);
   if (p2>task.numDots)
     p2/=2;

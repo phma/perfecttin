@@ -428,7 +428,7 @@ point::point(const point &rhs)
   line=rhs.line;
 }
 
-const point& point::operator=(const point &rhs)
+point& point::operator=(const point &rhs)
 {
   if (this!=&rhs)
   {

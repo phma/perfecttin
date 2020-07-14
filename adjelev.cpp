@@ -279,7 +279,7 @@ AdjustBlockTask::AdjustBlockTask()
 
 void computeAdjustBlock(AdjustBlockTask &task)
 {
-  int i,j,k,ndots=0;
+  int j,k,ndots=0;
   matrix m(task.numDots,task.pnt.size());
   vector<double> v;
   vector<int> cx;

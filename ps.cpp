@@ -3,7 +3,7 @@
 /* ps.cpp - PostScript output                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -87,9 +87,10 @@ PostScript::PostScript()
   oldr=oldg=oldb=NAN;
   paper=xy(210,297);
   scale=1;
-  orientation=pages=0;
+  pageorientation=orientation=pages=0;
   indocument=inpage=inlin=false;
   psfile=nullptr;
+  pl=nullptr;
 }
 
 PostScript::~PostScript()
@@ -382,21 +383,21 @@ void PostScript::widen(double factor)
   *psfile<<"currentlinewidth "<<ldecimal(factor)<<" mul setlinewidth"<<endl;
 }
 
-void PostScript::write(xy pnt,string text)
+void PostScript::write(xy pnt,const string &text)
 {
   pnt=turn(pnt,orientation);
   *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
   <<" m ("<<escape(text)<<") show"<<endl;
 }
 
-void PostScript::centerWrite(xy pnt,string text)
+void PostScript::centerWrite(xy pnt,const string &text)
 {
   pnt=turn(pnt,orientation);
   *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
   <<" m ("<<escape(text)<<") c."<<endl;
 }
 
-void PostScript::comment(string text)
+void PostScript::comment(const string &text)
 {
   *psfile<<'%'<<text<<endl;
 }

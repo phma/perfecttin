@@ -67,7 +67,7 @@ bool pointlist::checkTinConsistency()
   ptlist::iterator p;
   vector<int> edgebearings;
   edge *ed;
-  for (p=points.begin();p!=points.end();p++)
+  for (p=points.begin();p!=points.end();++p)
   {
     ed=p->second.line;
     if (ed==nullptr || (ed->a!=&p->second && ed->b!=&p->second))
@@ -336,7 +336,7 @@ vector<int> pointlist::valencyHistogram()
   point *p;
   vector<int> ret;
   wingEdge.lock_shared();
-  for (i=points.begin();i!=points.end();i++)
+  for (i=points.begin();i!=points.end();++i)
   {
     p=&i->second;
     e=p->line;
@@ -355,7 +355,7 @@ void pointlist::makeqindex()
   vector<xy> plist;
   ptlist::iterator i;
   qinx.clear();
-  for (i=points.begin();i!=points.end();i++)
+  for (i=points.begin();i!=points.end();++i)
     plist.push_back(i->second);
   qinx.sizefit(plist);
   qinx.split(plist);
@@ -392,7 +392,7 @@ double pointlist::dirbound(int angle)
   ptlist::iterator i;
   double bound=HUGE_VAL,turncoord;
   double s=sin(angle),c=cos(angle);
-  for (i=points.begin();i!=points.end();i++)
+  for (i=points.begin();i!=points.end();++i)
   {
     turncoord=i->second.east()*c+i->second.north()*s;
     if (turncoord<bound)
@@ -410,7 +410,7 @@ void pointlist::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   xy cs=cossin(ro);
   ptlist::iterator j;
-  for (j=points.begin();j!=points.end();j++)
+  for (j=points.begin();j!=points.end();++j)
     j->second._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
 }
 
