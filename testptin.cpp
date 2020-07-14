@@ -755,6 +755,70 @@ void testadjelev()
     cout<<blkSizes[i]<<((i+1>=blkSizes.size())?'\n':'+');
 }
 
+void testadjblock()
+/* Computes the adjustment using dots that are on the plane z=2x+y+7 with
+ * lots of noise added.
+ */
+{
+  int i,j,h,phase,angle;
+  double r,z;
+  triangle *tri;
+  xy xycoord;
+  AdjustBlockTask task;
+  AdjustBlockResult result;
+  net.clear();
+  net.addpoint(1,point(1,0,exp(1)));
+  net.addpoint(2,point(-0.5,M_SQRT_3_4,M_PI));
+  net.addpoint(3,point(-0.5,-M_SQRT_3_4,M_SQRT2));
+  i=net.addtriangle();
+  tassert(i==0);
+  tri=&net.triangles[0];
+  tri->a=&net.points[1];
+  tri->b=&net.points[2];
+  tri->c=&net.points[3];
+  tri->flatten();
+  h=(rng.usrandom()&4095)|1;
+  tri->dots.resize(4096);
+  tri->dots[0]=xyz(0,0,7);
+  for (i=5;i<4096;i+=5)
+  {
+    r=sqrt(i/4096.);
+    angle=rng.uirandom();
+    phase=rng.uirandom();
+    for (j=0;j<5;j++)
+    {
+      xycoord=cossin(angle+j*DEG72)*r;
+      z=2*xycoord.getx()+xycoord.gety()+7+sin(phase+j*DEG144);
+      tri->dots[((i-j)*h)&4095]=xyz(xycoord,z);
+    }
+  }
+  task.tri=tri;
+  task.pnt.resize(3);
+  for (i=0;i<3;i++)
+    task.pnt[i]=&net.points[i+1];
+  task.dots=&tri->dots[0];
+  task.numDots=4096;
+  task.result=&result;
+  result.ready=false;
+  computeAdjustBlock(task);
+  tassert(result.ready);
+  for (i=0;i<3;i++)
+  {
+    for (j=0;j<3;j++)
+      printf("%7.3f ",result.mtmPart[i][j]);
+    printf("    %7.3f\n",result.mtvPart[i][0]);
+  }
+  result.mtmPart.gausselim(result.mtvPart);
+  for (i=0;i<3;i++)
+    net.points[i+1].raise(result.mtvPart[i][0]);
+  cout<<ldecimal(tri->elevation(xy(0,0)))<<endl;
+  cout<<ldecimal(tri->elevation(xy(1,0)))<<endl;
+  cout<<ldecimal(tri->elevation(xy(0,1)))<<endl;
+  tassert(fabs(tri->elevation(xy(0,0))-7)<1e-9);
+  tassert(fabs(tri->elevation(xy(1,0))-9)<1e-9);
+  tassert(fabs(tri->elevation(xy(0,1))-8)<1e-9);
+}
+
 void testflip()
 {
   double lengthBefore,lengthAfter;
@@ -973,6 +1037,8 @@ int main(int argc, char *argv[])
     testleastsquares();
   if (shoulddo("adjelev"))
     testadjelev();
+  if (shoulddo("adjblock"))
+    testadjblock();
   if (shoulddo("flip"))
     testflip();
   if (shoulddo("bend"))
