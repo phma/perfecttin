@@ -328,6 +328,7 @@ void MainWindow::openFile()
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
+    loadAction->setEnabled(false);
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
     ta.opcode=ACT_READ_PTIN;
