@@ -750,6 +750,9 @@ void testadjelev()
   test1adjelev(data0,45,413.608);
   test1adjelev(data1,51,49.25);
   computeAdjustBlock(task);
+  blkSizes=blockSizes(86400); // 1024 times intertriangular. d/s is irrelevant.
+  for (i=0;i<blkSizes.size();i++)
+    cout<<blkSizes[i]<<((i+1>=blkSizes.size())?'\n':'+');
   blkSizes=blockSizes(500000);
   for (i=0;i<blkSizes.size();i++)
     cout<<blkSizes[i]<<((i+1>=blkSizes.size())?'\n':'+');
