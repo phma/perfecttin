@@ -355,6 +355,7 @@ ThreadAction dequeueAction()
     ret=actQueue.front();
     actQueue.pop();
     currentAction=ret.opcode;
+    cout<<"Action "<<ret.opcode<<" File "<<ret.filename<<endl;
   }
   actMutex.unlock();
   return ret;
@@ -789,6 +790,7 @@ void TinThread::operator()(int thread)
       switch (act.opcode)
       {
 	case ACT_LOAD:
+	  net.clear();
 	  act.result=readCloud(act.filename,act.param1);
 	  enqueueResult(act);
 	  unsleep(thread);

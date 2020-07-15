@@ -359,7 +359,6 @@ void MainWindow::loadFile()
   if (dialogResult)
   {
     files=fileDialog->selectedFiles();
-    net.clear();
     tinSizeChanged();
     if (cloud.size()==0)
       fileNames="";
