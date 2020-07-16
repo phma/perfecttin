@@ -355,7 +355,7 @@ ThreadAction dequeueAction()
     ret=actQueue.front();
     actQueue.pop();
     currentAction=ret.opcode;
-    cout<<"Action "<<ret.opcode<<" File "<<ret.filename<<endl;
+    //cout<<"Action "<<ret.opcode<<" File "<<ret.filename<<endl;
   }
   actMutex.unlock();
   return ret;
