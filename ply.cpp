@@ -63,9 +63,13 @@ void receivePoint(ElementBuffer &buf)
 void transmitPoint(ElementBuffer &buf,size_t i)
 {
   xyz pnt=net.points[i+1]-plyOffset;
+  int color=elevColor(pnt.getz());
   buf[0]=pnt.getx()/plyUnit;
   buf[1]=pnt.gety()/plyUnit;
   buf[2]=pnt.getz()/plyUnit;
+  buf[3]=(color>>16)&255;
+  buf[4]=(color>>8)&255;
+  buf[5]=(color)&255;
 }
 
 void transmitTriangle(ElementBuffer &buf,size_t i)
