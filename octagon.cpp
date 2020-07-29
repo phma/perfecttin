@@ -322,9 +322,9 @@ int elevColor(double elev)
   int iRed,iGreen,iBlue;
   x=((elev-clipLow)*3/(clipHigh-clipLow)-1)*M_PI;
   y=sin(x);
-  rRed=(M_PI-x-y)/M_PI;
+  rRed=(x-y)/M_PI;
   rGreen=y;
-  rBlue=(x-y)/M_PI;
+  rBlue=(M_PI-x-y)/M_PI;
   iRed=floor(rRed*256);
   iGreen=floor(rGreen*256);
   iBlue=floor(rBlue*256);
