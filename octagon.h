@@ -50,5 +50,5 @@ double estimatedDensity();
 void computeBoundBlock(BoundBlockTask &task);
 double makeOctagon();
 int mtxSquare(xy pnt);
-int elevColor(double elev);
+int elevColor(double elev,bool loose);
 #endif

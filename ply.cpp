@@ -30,6 +30,7 @@
 #endif
 #include "ply.h"
 #include "cloud.h"
+#include "adjelev.h"
 #include "octagon.h"
 
 using namespace std;
@@ -63,7 +64,7 @@ void receivePoint(ElementBuffer &buf)
 void transmitPoint(ElementBuffer &buf,size_t i)
 {
   xyz pnt=net.points[i+1]-plyOffset;
-  int color=elevColor(pnt.getz());
+  int color=elevColor(net.points[i+1].getz(),isLoose(net.points[i+1]));
   buf[0]=pnt.getx()/plyUnit;
   buf[1]=pnt.gety()/plyUnit;
   buf[2]=pnt.getz()/plyUnit;
