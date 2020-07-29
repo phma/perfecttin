@@ -97,6 +97,9 @@ void writePly(string filename,bool asc,double outUnit,int flags)
   vertexProperties.push_back(Property("x",Type::DOUBLE,false));
   vertexProperties.push_back(Property("y",Type::DOUBLE,false));
   vertexProperties.push_back(Property("z",Type::DOUBLE,false));
+  vertexProperties.push_back(Property("red",Type::UCHAR,false));
+  vertexProperties.push_back(Property("green",Type::UCHAR,false));
+  vertexProperties.push_back(Property("blue",Type::UCHAR,false));
   faceProperties.push_back(Property("vertex_index",Type::INT,true));
   int i;
   plyOffset=xyz(0,0,0);
