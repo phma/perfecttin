@@ -352,6 +352,18 @@ double rmsAdjustment()
   return ret;
 }
 
+bool isLoose(point &pnt)
+{
+  vector<point *> oneCorner;
+  vector<triangle *> nextTriangles;
+  int i,ndots;
+  oneCorner.push_back(&pnt);
+  nextTriangles=triangleNeighbors(oneCorner);
+  for (ndots=i=0;i<nextTriangles.size();i++)
+    ndots+=nextTriangles[i]->dots.size();
+  return ndots==0;
+}
+
 void adjustLooseCorners(double tolerance)
 /* A loose corner is a point which is not a corner of any triangle with dots in it.
  * Loose corners are not adjusted by adjustElev; their elevation can be 0
@@ -359,20 +371,14 @@ void adjustLooseCorners(double tolerance)
  * with only a few dots.
  */
 {
-  vector<point *> looseCorners,oneCorner;
-  vector<triangle *> nextTriangles;
+  vector<point *> looseCorners;
   edge *ed;
   vector<double> nextCornerElev;
-  int i,j,ndots;
-  oneCorner.resize(1);
+  int i,j;
   for (i=1;i<=net.points.size();i++)
   {
-    oneCorner[0]=&net.points[i];
-    nextTriangles=triangleNeighbors(oneCorner);
-    for (ndots=j=0;j<nextTriangles.size();j++)
-      ndots+=nextTriangles[j]->dots.size();
-    if (ndots==0)
-      looseCorners.push_back(oneCorner[0]);
+    if (isLoose(net.points[i]))
+      looseCorners.push_back(&net.points[i]);
   }
   for (i=0;i<looseCorners.size();i++)
   {

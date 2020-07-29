@@ -62,6 +62,7 @@ adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
 void computeAdjustBlock(AdjustBlockTask &task);
 void logAdjustment(adjustRecord rec);
 double rmsAdjustment();
+bool isLoose(point &pnt);
 void adjustLooseCorners(double tolerance);
 void clearLog();
 #endif
