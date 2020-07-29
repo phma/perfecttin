@@ -261,6 +261,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
 	remainder.push_back(tri0->dots[j]);
     }
   }
+  assert(remainder.size()==0 || tri0->in(remainder[0]));
   remainder.shrink_to_fit();
   tri1->dots.shrink_to_fit();
   if (tri2)
