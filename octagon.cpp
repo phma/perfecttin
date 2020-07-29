@@ -312,3 +312,24 @@ int mtxSquare(xy pnt)
     y+=mtxSquareSize;
   return y*mtxSquareSize+x;
 }
+
+int elevColor(double elev)
+/* Returns an integer 00rrggbb depending on the elevation.
+ * Blue is the lowest dot elevation; red is the highest.
+ */
+{
+  double x,y,rRed,rGreen,rBlue;
+  int iRed,iGreen,iBlue;
+  x=((elev-clipLow)*3/(clipHigh-clipLow)-1)*M_PI;
+  y=sin(x);
+  rRed=(M_PI-x-y)/M_PI;
+  rGreen=y;
+  rBlue=(x-y)/M_PI;
+  iRed=floor(rRed*256);
+  iGreen=floor(rGreen*256);
+  iBlue=floor(rBlue*256);
+  iRed=max(0,min(255,iRed));
+  iGreen=max(0,min(255,iGreen));
+  iBlue=max(0,min(255,iBlue));
+  return iRed*65536+iGreen*256+iBlue;
+}
