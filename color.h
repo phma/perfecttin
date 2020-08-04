@@ -28,6 +28,9 @@
 #include "triangle.h"
 #include "point.h"
 
+#define CS_GRADIENT 0
+#define CS_ELEVATION 1
+
 class Color
 {
 public:
@@ -67,12 +70,14 @@ public:
   Colorize();
   void setLimits(double l,double h);
   void setOrientation(int o);
+  void setScheme(int s);
   Color operator()(point *pnt);
   Color operator()(triangle *tri);
 private:
   double low;
   double high;
   int ori;
+  int scheme;
 };
 
 #endif

@@ -54,6 +54,11 @@ void Colorize::setOrientation(int o)
   ori=o;
 }
 
+void Colorize::setScheme(int s)
+{
+  scheme=s;
+}
+
 Color Colorize::operator()(point *pnt)
 {
   Color ret;
