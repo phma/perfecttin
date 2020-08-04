@@ -78,6 +78,8 @@ private:
   double high;
   int ori;
   int scheme;
+  Color gradientColor(xy gradient);
+  Color elevationColor(double elevation);
 };
 
 #endif
