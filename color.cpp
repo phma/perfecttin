@@ -36,3 +36,32 @@ Color::Color()
 {
   r=g=b=0;
 }
+
+Colorize::Colorize()
+{
+  high=low=NAN;
+  ori=0;
+}
+
+void Colorize::setLimits(double l,double h)
+{
+  low=l;
+  high=h;
+}
+
+void Colorize::setOrientation(int o)
+{
+  ori=o;
+}
+
+Color Colorize::operator()(point *pnt)
+{
+  Color ret;
+  return ret;
+}
+
+Color Colorize::operator()(triangle *tri)
+{
+  Color ret;
+  return ret;
+}

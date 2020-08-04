@@ -25,6 +25,8 @@
 #define COLOR_H
 #include <cmath>
 #include <algorithm>
+#include "triangle.h"
+#include "point.h"
 
 class Color
 {
@@ -57,6 +59,20 @@ public:
   }
 private:
   double r,g,b;
+};
+
+class Colorize
+{
+public:
+  Colorize();
+  void setLimits(double l,double h);
+  void setOrientation(int o);
+  Color operator()(point *pnt);
+  Color operator()(triangle *tri);
+private:
+  double low;
+  double high;
+  int ori;
 };
 
 #endif
