@@ -28,6 +28,7 @@
 #include "octagon.h"
 #include "relprime.h"
 #include "angle.h"
+#include "color.h"
 #include "threads.h"
 #include "ldecimal.h"
 

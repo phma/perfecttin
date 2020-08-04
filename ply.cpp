@@ -32,6 +32,7 @@
 #include "cloud.h"
 #include "adjelev.h"
 #include "octagon.h"
+#include "color.h"
 
 using namespace std;
 #ifdef Plytapus_FOUND
