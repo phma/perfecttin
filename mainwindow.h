@@ -70,6 +70,8 @@ public slots:
   void startConversion();
   void stopConversion();
   void resumeConversion();
+  void colorElevation();
+  void colorGradient();
   void clearCloud();
   void configure();
   void msgNoCloudArea();

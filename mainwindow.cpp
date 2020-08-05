@@ -642,6 +642,18 @@ void MainWindow::resumeConversion()
   }
 }
 
+void MainWindow::colorElevation()
+{
+  colorize.setScheme(CS_ELEVATION);
+  tinSizeChanged();
+}
+
+void MainWindow::colorGradient()
+{
+  colorize.setScheme(CS_GRADIENT);
+  tinSizeChanged();
+}
+
 void MainWindow::clearCloud()
 {
   cloud.clear();
@@ -856,11 +868,11 @@ void MainWindow::makeActions()
   colorGradientAction=new QAction(this);
   colorGradientAction->setText(tr("Gradient"));
   colorMenu->addAction(colorGradientAction);
-  //connect(colorGradientAction,SIGNAL(triggered(bool)),this,SLOT(colorGradient()));
+  connect(colorGradientAction,SIGNAL(triggered(bool)),this,SLOT(colorGradient()));
   colorElevationAction=new QAction(this);
   colorElevationAction->setText(tr("Elevation"));
   colorMenu->addAction(colorElevationAction);
-  //connect(colorElevationAction,SIGNAL(triggered(bool)),this,SLOT(colorElevation()));
+  connect(colorElevationAction,SIGNAL(triggered(bool)),this,SLOT(colorElevation()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
