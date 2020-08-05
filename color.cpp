@@ -90,6 +90,11 @@ void Colorize::setScheme(int s)
   scheme=s;
 }
 
+int Colorize::getScheme()
+{
+  return scheme;
+}
+
 Color Colorize::operator()(point *pnt)
 {
   Color ret;

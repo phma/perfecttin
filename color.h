@@ -72,6 +72,7 @@ public:
   void setLimits(double l,double h);
   void setOrientation(int o);
   void setScheme(int s);
+  int getScheme();
   Color operator()(point *pnt);
   Color operator()(triangle *tri);
 private:
