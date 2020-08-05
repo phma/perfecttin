@@ -897,6 +897,7 @@ void MainWindow::readSettings()
   tolerance=settings.value("tolerance",0.1).toDouble();
   lengthUnit=settings.value("lengthUnit",1).toDouble();
   exportEmpty=settings.value("exportEmpty",false).toBool();
+  colorize.setScheme(settings.value("colorScheme",CS_GRADIENT).toInt());
   lengthUnitChanged(lengthUnit);
 }
 
@@ -909,6 +910,7 @@ void MainWindow::writeSettings()
   settings.setValue("tolerance",tolerance);
   settings.setValue("lengthUnit",lengthUnit);
   settings.setValue("exportEmpty",exportEmpty);
+  settings.setValue("colorScheme",colorize.getScheme());
 }
 
 void MainWindow::setSettings(double lu,double tol,int thr,bool ee)
