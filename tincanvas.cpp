@@ -310,6 +310,7 @@ void TinCanvas::startSplashScreen()
     }
     net.maketriangles();
     net.wingEdge.unlock();
+    colorize.setLimits(-0.5,0.5);
     splashScreenStarted();
     sizeToFit();
   }
