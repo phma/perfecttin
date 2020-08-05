@@ -92,7 +92,7 @@ private:
   QMessageBox *msgBox;
   QToolBar *toolbar;
   ConfigurationDialog *configDialog;
-  QMenu *fileMenu,*settingsMenu,*helpMenu,*exportMenu;
+  QMenu *fileMenu,*viewMenu,*settingsMenu,*helpMenu,*exportMenu,*colorMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg,*densityMsg;
   QProgressBar *doneBar,*busyBar;
   QAction *openAction,*loadAction,*convertAction,*clearAction;
@@ -100,6 +100,7 @@ private:
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
   QAction *exportPlyTxtAction,*exportPlyBinAction;
+  QAction *colorGradientAction,*colorElevationAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   UnitButton *unitButtons[4];

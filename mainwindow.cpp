@@ -777,6 +777,7 @@ void MainWindow::makeActions()
 {
   int i;
   fileMenu=menuBar()->addMenu(tr("&File"));
+  viewMenu=menuBar()->addMenu(tr("&View"));
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
   // File menu
@@ -849,6 +850,17 @@ void MainWindow::makeActions()
   exportLandXmlAction->setText(tr("LandXML"));
   exportMenu->addAction(exportLandXmlAction);
   connect(exportLandXmlAction,SIGNAL(triggered(bool)),this,SLOT(exportLandXml()));
+  // View menu
+  colorMenu=viewMenu->addMenu(tr("Color by"));
+  // Color menu
+  colorGradientAction=new QAction(this);
+  colorGradientAction->setText(tr("Gradient"));
+  colorMenu->addAction(colorGradientAction);
+  //connect(colorGradientAction,SIGNAL(triggered(bool)),this,SLOT(colorGradient()));
+  colorElevationAction=new QAction(this);
+  colorElevationAction->setText(tr("Elevation"));
+  colorMenu->addAction(colorElevationAction);
+  //connect(colorElevationAction,SIGNAL(triggered(bool)),this,SLOT(colorElevation()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
