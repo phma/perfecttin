@@ -60,6 +60,7 @@ public:
   {
     return std::min(255,(int)floor(255*b));
   }
+  void mix(const Color &diluent,double part);
 private:
   double r,g,b;
 };

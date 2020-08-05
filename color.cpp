@@ -38,6 +38,15 @@ Color::Color()
   r=g=b=0;
 }
 
+void Color::mix(const Color &diluent,double part)
+{
+  r=(r+diluent.r*part)/(1+part);
+  g=(g+diluent.g*part)/(1+part);
+  b=(b+diluent.b*part)/(1+part);
+}
+
+const Color white(1,1,1);
+
 Colorize::Colorize()
 {
   high=low=NAN;
@@ -87,11 +96,13 @@ Color Colorize::operator()(point *pnt)
   vector<point *> pnt1(1,pnt);
   vector<triangle *> tris;
   xy sumGradient;
-  int i;
+  int i,nEmpty=0;
+  tris=triangleNeighbors(pnt1);
+  for (i=0;i<tris.size();i++)
+    nEmpty+=tris[i]->dots.size()==0;
   switch (scheme)
   {
     case CS_GRADIENT:
-      tris=triangleNeighbors(pnt1);
       for (i=0;i<tris.size();i++)
 	if (tris[i]->a)
 	  sumGradient+=tris[i]->gradient(tris[i]->centroid());
@@ -103,6 +114,7 @@ Color Colorize::operator()(point *pnt)
 	ret=elevationColor(pnt->elev());
       break;
   }
+  ret.mix(white,(double)nEmpty/2*tris.size());
   return ret;
 }
 
