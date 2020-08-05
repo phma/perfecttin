@@ -66,7 +66,8 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp configdialog.cpp
-               dxf.cpp edgeop.cpp fileio.cpp gui.cpp landxml.cpp las.cpp ldecimal.cpp
+               csaction.cpp dxf.cpp edgeop.cpp fileio.cpp
+               gui.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp lissajous.cpp mainwindow.cpp
                manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp
