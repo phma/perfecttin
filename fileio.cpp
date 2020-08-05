@@ -600,6 +600,7 @@ PtinHeader readPtin(std::string inputFile)
     header.tolRatio=PT_EDGE_MISMATCH;
   if (header.tolRatio>0 && header.tolerance>0)
   {
+    colorize.setLimits(low,high);
     clipHigh=2*high-low;
     clipLow=2*low-high;
     n=ptinFile.get()&255;

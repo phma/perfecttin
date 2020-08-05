@@ -74,13 +74,13 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                unitbutton.cpp ${lib_resources} ${qm_files})
 add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp dxf.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
                relprime.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 add_executable(testptin adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp dxf.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp

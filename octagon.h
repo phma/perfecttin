@@ -27,6 +27,7 @@
 struct BoundBlockTask;
 #include "pointlist.h"
 #include "boundrect.h"
+#include "color.h"
 
 struct BoundBlockResult
 {
@@ -45,6 +46,7 @@ struct BoundBlockTask
 extern pointlist net;
 extern double clipLow,clipHigh;
 extern std::array<double,2> areadone;
+extern Colorize colorize;
 void setMutexArea(double area);
 double estimatedDensity();
 void computeBoundBlock(BoundBlockTask &task);
