@@ -121,5 +121,18 @@ Color Colorize::operator()(point *pnt)
 Color Colorize::operator()(triangle *tri)
 {
   Color ret;
+  switch (scheme)
+  {
+    case CS_GRADIENT:
+      if (tri->a)
+	ret=gradientColor(tri->gradient(tri->centroid()));
+      break;
+    case CS_ELEVATION:
+      if (tri->a)
+	ret=elevationColor(tri->elevation(tri->centroid()));
+      break;
+  }
+  if (tri->dots.size()==0)
+    ret.mix(white,0.5);
   return ret;
 }
