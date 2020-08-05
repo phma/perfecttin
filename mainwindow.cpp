@@ -642,16 +642,11 @@ void MainWindow::resumeConversion()
   }
 }
 
-void MainWindow::colorElevation()
+void MainWindow::setColorScheme(int scheme)
 {
-  colorize.setScheme(CS_ELEVATION);
+  colorize.setScheme(scheme);
   tinSizeChanged();
-}
-
-void MainWindow::colorGradient()
-{
-  colorize.setScheme(CS_GRADIENT);
-  tinSizeChanged();
+  colorSchemeChanged(scheme);
 }
 
 void MainWindow::clearCloud()
@@ -865,14 +860,18 @@ void MainWindow::makeActions()
   // View menu
   colorMenu=viewMenu->addMenu(tr("Color by"));
   // Color menu
-  colorGradientAction=new QAction(this);
+  colorGradientAction=new ColorSchemeAction(this,CS_GRADIENT);
   colorGradientAction->setText(tr("Gradient"));
   colorMenu->addAction(colorGradientAction);
-  connect(colorGradientAction,SIGNAL(triggered(bool)),this,SLOT(colorGradient()));
-  colorElevationAction=new QAction(this);
+  connect(this,SIGNAL(colorSchemeChanged(int)),colorGradientAction,SLOT(setScheme(int)));
+  connect(colorGradientAction,SIGNAL(triggered(bool)),colorGradientAction,SLOT(selfTriggered(bool)));
+  connect(colorGradientAction,SIGNAL(schemeChanged(int)),this,SLOT(setColorScheme(int)));
+  colorElevationAction=new ColorSchemeAction(this,CS_ELEVATION);
   colorElevationAction->setText(tr("Elevation"));
   colorMenu->addAction(colorElevationAction);
-  connect(colorElevationAction,SIGNAL(triggered(bool)),this,SLOT(colorElevation()));
+  connect(this,SIGNAL(colorSchemeChanged(int)),colorElevationAction,SLOT(setScheme(int)));
+  connect(colorElevationAction,SIGNAL(triggered(bool)),colorElevationAction,SLOT(selfTriggered(bool)));
+  connect(colorElevationAction,SIGNAL(schemeChanged(int)),this,SLOT(setColorScheme(int)));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
@@ -923,6 +922,7 @@ void MainWindow::readSettings()
   exportEmpty=settings.value("exportEmpty",false).toBool();
   colorize.setScheme(settings.value("colorScheme",CS_GRADIENT).toInt());
   lengthUnitChanged(lengthUnit);
+  colorSchemeChanged(colorize.getScheme());
 }
 
 void MainWindow::writeSettings()

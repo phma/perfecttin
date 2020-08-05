@@ -30,6 +30,7 @@
 #include <array>
 #include "configdialog.h"
 #include "unitbutton.h"
+#include "csaction.h"
 #include "tincanvas.h"
 
 class MainWindow: public QMainWindow
@@ -50,6 +51,7 @@ public:
 signals:
   void tinSizeChanged();
   void lengthUnitChanged(double unit);
+  void colorSchemeChanged(int scheme);
   void noCloudArea();
   void gotResult(ThreadAction ta);
 public slots:
@@ -70,8 +72,7 @@ public slots:
   void startConversion();
   void stopConversion();
   void resumeConversion();
-  void colorElevation();
-  void colorGradient();
+  void setColorScheme(int scheme);
   void clearCloud();
   void configure();
   void msgNoCloudArea();
@@ -102,7 +103,7 @@ private:
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
   QAction *exportPlyTxtAction,*exportPlyBinAction;
-  QAction *colorGradientAction,*colorElevationAction;
+  ColorSchemeAction *colorGradientAction,*colorElevationAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   UnitButton *unitButtons[4];
