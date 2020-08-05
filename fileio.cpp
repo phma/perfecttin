@@ -488,8 +488,14 @@ PtinHeader readPtin(std::string inputFile)
 	header.tolRatio=PT_EOF;
 	break;
       }
+      if (net.points[i].getz()>high)
+	high=net.points[i].getz();
+      if (net.points[i].getz()<low)
+	low=net.points[i].getz();
     }
   }
+  colorize.setLimits(low,high);
+  swap(low,high);
   if (header.tolRatio>0 && header.tolerance>0)
     for (i=0;i<header.numConvexHull;i++)
     {
