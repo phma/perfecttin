@@ -65,6 +65,8 @@ private:
   double r,g,b;
 };
 
+extern const Color white;
+
 class Colorize
 {
 public:
