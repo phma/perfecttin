@@ -40,9 +40,9 @@ Color::Color()
 
 void Color::mix(const Color &diluent,double part)
 {
-  r=(r+diluent.r*part)/(1+part);
-  g=(g+diluent.g*part)/(1+part);
-  b=(b+diluent.b*part)/(1+part);
+  r=(r*(1-part)+diluent.r*part);
+  g=(g*(1-part)+diluent.g*part);
+  b=(b*(1-part)+diluent.b*part);
 }
 
 const Color white(1,1,1);

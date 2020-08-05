@@ -232,7 +232,7 @@ void TinCanvas::tick()
       net.wingEdge.unlock_shared();
       color=colorize(tri);
       if (splashScreenTime)
-	color.mix(white,(double)splashScreenTime/SPLASH_TIME);
+	color.mix(white,1-(double)splashScreenTime/SPLASH_TIME);
       brush.setColor(QColor::fromRgbF(color.fr(),color.fg(),color.fb()));
       painter.setBrush(brush);
       polygon=QPolygon();
