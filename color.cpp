@@ -119,7 +119,7 @@ Color Colorize::operator()(point *pnt)
 	ret=elevationColor(pnt->elev());
       break;
   }
-  ret.mix(white,(double)nEmpty/2*tris.size());
+  ret.mix(white,nEmpty/2./tris.size());
   return ret;
 }
 
