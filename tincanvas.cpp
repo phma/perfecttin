@@ -90,7 +90,7 @@ void TinCanvas::sizeToFit()
 
 void TinCanvas::tick()
 {
-  int i,sz;
+  int i,sz,timeLimit;
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
   double splashElev;
@@ -211,8 +211,12 @@ void TinCanvas::tick()
     painter.drawText(textBox,Qt::AlignCenter,QString::fromStdString(scaleText));
   }
   painter.setPen(Qt::NoPen);
-  // Paint some triangles in the TIN in colors depending on their gradient.
-  for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
+  // Paint some triangles in the TIN in colors depending on their gradient or elevation.
+  if (state==TH_WAIT || state==TH_PAUSE)
+    timeLimit=45;
+  else
+    timeLimit=20;
+  for (;trianglesToPaint && elapsed<cr::milliseconds(timeLimit);trianglesToPaint--)
   {
     net.wingEdge.lock_shared();
     if (++triangleNum>=net.triangles.size())
