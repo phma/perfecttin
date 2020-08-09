@@ -61,7 +61,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
                dxf.cpp edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
-               qindex.cpp random.cpp relprime.cpp test.cpp
+               qindex.cpp random.cpp relprime.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
@@ -71,7 +71,7 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                leastsquares.cpp lissajous.cpp mainwindow.cpp
                manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp
-               qindex.cpp random.cpp relprime.cpp test.cpp
+               qindex.cpp random.cpp relprime.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                unitbutton.cpp ${lib_resources} ${qm_files})
 add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp
