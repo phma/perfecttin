@@ -267,6 +267,13 @@ double xyz::length()
   return sqrt(x*x+y*y+z*z);
 }
 
+void xyz::normalize()
+{
+  double len=length();
+  if (len)
+    *this/=(len);
+}
+
 xyz::xyz()
 {
   x=y=z=0;
