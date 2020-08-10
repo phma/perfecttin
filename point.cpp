@@ -283,7 +283,19 @@ void xyz::raise(double height)
 {
   z+=height;
 }
+
 void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
+{
+  double tx,ty;
+  x-=tfrom.x;
+  y-=tfrom.y;
+  tx=x*cis.x-y*cis.y;
+  ty=y*cis.x+x*cis.y;
+  x=tx+tto.x;
+  y=ty+tto.y;
+}
+
+void xyz::_roscat(xyz tfrom,int ro,double sca,xy cis,xyz tto)
 {
   double tx,ty;
   x-=tfrom.x;
@@ -309,6 +321,11 @@ xyz cross(xyz a,xyz b)
 }
 
 void xyz::roscat(xy tfrom,int ro,double sca,xy tto)
+{
+  _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+}
+
+void xyz::roscat(xyz tfrom,int ro,double sca,xyz tto)
 {
   _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
 }

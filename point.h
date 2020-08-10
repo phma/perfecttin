@@ -92,7 +92,9 @@ public:
   void normalize();
   void raise(double height);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
+  void _roscat(xyz tfrom,int ro,double sca,xy cis,xyz tto);
   void roscat(xy tfrom,int ro,double sca,xy tto);
+  void roscat(xyz tfrom,int ro,double sca,xyz tto);
   void setelev(double h)
   {
     z=h;
