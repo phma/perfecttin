@@ -85,7 +85,7 @@ add_executable(testptin adjelev.cpp angle.cpp binio.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
-               relprime.cpp test.cpp testptin.cpp threads.cpp
+               relprime.cpp stl.cpp test.cpp testptin.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})

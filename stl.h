@@ -42,4 +42,6 @@ struct Printer3dSize
   double minBase;
 };
 
+double hScale(pointlist &ptl,Printer3dSize &pri,int ori);
+
 #endif

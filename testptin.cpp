@@ -996,6 +996,7 @@ void testquarter()
 
 void teststl()
 {
+  int i;
   PostScript ps;
   Printer3dSize printer;
   ps.open("stl.ps");
@@ -1007,6 +1008,8 @@ void teststl()
   printer.x=210;
   printer.y=297;
   printer.z=192;
+  for (i=0;i<180;i+=5)
+    cout<<i<<' '<<hScale(net,printer,degtobin(i))<<endl;
   ps.close();
 }
 

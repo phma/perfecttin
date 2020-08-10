@@ -23,6 +23,7 @@
  */
 
 #include "stl.h"
+#include "boundrect.h"
 using namespace std;
 
 /* The STL polyhedron consists of three kinds of face: bottom, side, and top.
@@ -43,4 +44,14 @@ StlTriangle::StlTriangle(xyz A,xyz B,xyz C)
   c=C;
   normal=cross(a-b,b-c);
   normal.normalize();
+}
+
+double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
+{
+  double xscale,yscale;
+  BoundRect br(ori);
+  br.include(&ptl);
+  xscale=pri.x/(br.right()-br.left());
+  yscale=pri.y/(br.top()-br.bottom());
+  return min(xscale,yscale);
 }
