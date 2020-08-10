@@ -119,8 +119,14 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
 vector<StlTriangle> StlMesh(Printer3dSize &pri)
 {
   int i,ori;
+  double scale;
+  xyz worldCenter,printerCenter;
   BoundRect br;
   vector<StlTriangle> ret;
   ori=turnFitInPrinter(net,pri);
+  br.setOrientation(ori);
+  br.include(&net);
+  worldCenter=xyz((br.left()+br.right())/2,(br.bottom()+br.top())/2,br.low());
+  printerCenter=xyz(pri.x/2,pri.y/2,pri.minBase);
   return ret;
 }
