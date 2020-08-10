@@ -71,6 +71,7 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
   set<int> turnings;
   map<int,double> scales;
   vector<int> inserenda;
+  double maxScale=0;
   int i,j,bear;
   map<int,double>::iterator k;
   for (i=0;i<ptl.convexHull.size();i++)
@@ -99,6 +100,10 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
       scales[inserenda[i]]=hScale(ptl,pri,inserenda[i]);
   } while (inserenda.size());
   for (k=scales.begin();k!=scales.end();++k)
-    cout<<k->first<<' '<<k->second<<endl;
-  return 0;
+    if (fabs(k->second)>maxScale)
+    {
+      bear=k->first;
+      maxScale=k->second;
+    }
+  return bear;
 }

@@ -997,6 +997,7 @@ void testquarter()
 void teststl()
 {
   int i;
+  double bear;
   PostScript ps;
   Printer3dSize printer;
   ps.open("stl.ps");
@@ -1010,7 +1011,8 @@ void teststl()
   printer.z=192;
   for (i=0;i<180;i+=5)
     cout<<i<<' '<<hScale(net,printer,degtobin(i))<<endl;
-  turnFitInPrinter(net,printer);
+  bear=turnFitInPrinter(net,printer);
+  cout<<"Turn by "<<bintodeg(bear)<<endl;
   ps.close();
 }
 
