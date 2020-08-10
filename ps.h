@@ -30,6 +30,8 @@
 #include "boundrect.h"
 class pointlist;
 
+extern const char rscales[];
+
 struct papersize
 {
   int width,height; // in micrometers
