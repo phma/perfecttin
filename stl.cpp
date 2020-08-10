@@ -61,10 +61,18 @@ double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
 }
 
 int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
+/* Finds the orientation where the pointlist best fits in the printer.
+ * The worst fit orientation is where an internal diagonal is perpendicular
+ * to the printer; the best fit orientation is either where a side of the
+ * convex hull is parallel to the printer, or where the scale on both sides
+ * of the printer is equal (shown by changing the sign of hScale).
+ */
 {
   set<int> turnings;
-  vector<int> turningv;
+  map<int,double> scales;
+  vector<int> inserenda;
   int i,j,bear;
+  map<int,double>::iterator k;
   for (i=0;i<ptl.convexHull.size();i++)
     for (j=0;j<i;j++)
     {
@@ -74,8 +82,23 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
     }
   for (int a:turnings)
   {
-    cout<<a<<endl;
-    turningv.push_back(a);
+    scales[a]=hScale(ptl,pri,a);
   }
+  do
+  {
+    inserenda.clear();
+    for (k=scales.begin();k!=scales.end();++k)
+      bear=k->first-DEG180;
+    for (k=scales.begin();k!=scales.end();++k)
+    {
+      if (scales[bear&(DEG180-1)]*k->second<0 && k->first-bear>1)
+	inserenda.push_back((k->first+bear)/2);
+      bear=k->first;
+    }
+    for (i=0;i<inserenda.size();i++)
+      scales[inserenda[i]]=hScale(ptl,pri,inserenda[i]);
+  } while (inserenda.size());
+  for (k=scales.begin();k!=scales.end();++k)
+    cout<<k->first<<' '<<k->second<<endl;
   return 0;
 }
