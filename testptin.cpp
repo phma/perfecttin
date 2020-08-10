@@ -36,6 +36,7 @@
 #include "test.h"
 #include "tin.h"
 #include "dxf.h"
+#include "stl.h"
 #include "angle.h"
 #include "pointlist.h"
 #include "adjelev.h"
@@ -993,6 +994,22 @@ void testquarter()
   ps.close();
 }
 
+void teststl()
+{
+  PostScript ps;
+  Printer3dSize printer;
+  ps.open("stl.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  aster(1500);
+  makeOctagon();
+  printer.x=210;
+  printer.y=297;
+  printer.z=192;
+  ps.close();
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -1050,6 +1067,8 @@ int main(int argc, char *argv[])
     testsplit();
   if (shoulddo("quarter"))
     testquarter();
+  if (shoulddo("stl"))
+    teststl();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
