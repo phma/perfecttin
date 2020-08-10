@@ -1010,6 +1010,7 @@ void teststl()
   printer.z=192;
   for (i=0;i<180;i+=5)
     cout<<i<<' '<<hScale(net,printer,degtobin(i))<<endl;
+  turnFitInPrinter(net,printer);
   ps.close();
 }
 

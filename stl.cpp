@@ -23,6 +23,7 @@
  */
 
 #include "stl.h"
+#include "angle.h"
 #include "boundrect.h"
 using namespace std;
 
@@ -57,4 +58,24 @@ double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
     return xscale;
   else
     return -yscale;
+}
+
+int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
+{
+  set<int> turnings;
+  vector<int> turningv;
+  int i,j,bear;
+  for (i=0;i<ptl.convexHull.size();i++)
+    for (j=0;j<i;j++)
+    {
+      bear=dir((xy)*ptl.convexHull[i],(xy)*ptl.convexHull[j]);
+      turnings.insert(bear&(DEG180-1));
+      turnings.insert((bear+DEG90)&(DEG180-1));
+    }
+  for (int a:turnings)
+  {
+    cout<<a<<endl;
+    turningv.push_back(a);
+  }
+  return 0;
 }
