@@ -21,7 +21,8 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-
+#ifndef STL_H
+#define STL_H
 #include <array>
 #include <vector>
 #include "point.h"
@@ -34,3 +35,11 @@ struct StlTriangle
   StlTriangle();
   StlTriangle(xyz A,xyz B,xyz C);
 };
+
+struct Printer3dSize
+{
+  double x,y,z; // all in millimeters
+  double minBase;
+};
+
+#endif
