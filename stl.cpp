@@ -61,8 +61,10 @@ double hScale(BoundRect &br,Printer3dSize &pri)
 
 double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
 {
+  int i;
   BoundRect br(ori);
-  br.include(&ptl);
+  for (i=0;i<ptl.convexHull.size();i++)
+    br.include(*ptl.convexHull[i]);
   return hScale(br,pri);
 }
 
