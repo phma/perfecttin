@@ -116,11 +116,12 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
   return bear;
 }
 
-vector<StlTriangle> StlMesh(Printer3dSize &pri)
+vector<StlTriangle> stlMesh(Printer3dSize &pri)
 {
   int i,ori;
+  triangle *tri;
   double scale;
-  xyz worldCenter,printerCenter;
+  xyz worldCenter,printerCenter,a,b,c;
   BoundRect br;
   vector<StlTriangle> ret;
   ori=turnFitInPrinter(net,pri);
@@ -128,5 +129,17 @@ vector<StlTriangle> StlMesh(Printer3dSize &pri)
   br.include(&net);
   worldCenter=xyz((br.left()+br.right())/2,(br.bottom()+br.top())/2,br.low());
   printerCenter=xyz(pri.x/2,pri.y/2,pri.minBase);
+  scale=hScale(br,pri);
+  for (i=0;i<net.triangles.size();i++)
+  {
+    tri=&net.triangles[i];
+    a=*tri->a;
+    b=*tri->b;
+    c=*tri->c;
+    a.roscat(worldCenter,-ori,scale,printerCenter);
+    b.roscat(worldCenter,-ori,scale,printerCenter);
+    c.roscat(worldCenter,-ori,scale,printerCenter);
+    ret.push_back(StlTriangle(a,b,c));
+  }
   return ret;
 }

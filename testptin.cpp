@@ -998,6 +998,7 @@ void teststl()
 {
   int i;
   double bear;
+  vector<StlTriangle> stltri;
   PostScript ps;
   Printer3dSize printer;
   ps.open("stl.ps");
@@ -1009,10 +1010,16 @@ void teststl()
   printer.x=210;
   printer.y=297;
   printer.z=192;
+  printer.minBase=10;
   for (i=0;i<180;i+=5)
     cout<<i<<' '<<hScale(net,printer,degtobin(i))<<endl;
   bear=turnFitInPrinter(net,printer);
   cout<<"Turn by "<<bintodeg(bear)<<endl;
+  stltri=stlMesh(printer);
+  for (i=0;i<stltri.size();i++)
+  {
+    cout<<stltri[i].b.getx()<<' '<<stltri[i].b.gety()<<' '<<stltri[i].b.getz()<<endl;
+  }
   ps.close();
 }
 
