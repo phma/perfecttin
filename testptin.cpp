@@ -1003,7 +1003,7 @@ void teststl()
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   setsurface(CIRPAR);
-  aster(1500);
+  lozenge(150);
   makeOctagon();
   printer.x=210;
   printer.y=297;
