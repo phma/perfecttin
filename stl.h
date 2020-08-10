@@ -27,10 +27,10 @@
 #include "point.h"
 #include "config.h"
 
-struct stltriangle
+struct StlTriangle
 {
   xyz normal,a,b,c;
   std::string attributes;
-  stltriangle();
-  stltriangle(xyz A,xyz B,xyz C);
+  StlTriangle();
+  StlTriangle(xyz A,xyz B,xyz C);
 };

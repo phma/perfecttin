@@ -31,12 +31,12 @@ using namespace std;
  * TIN surface.
  */
 
-stltriangle::stltriangle()
+StlTriangle::StlTriangle()
 {
   normal=a=b=c=xyz(0,0,0);
 }
 
-stltriangle::stltriangle(xyz A,xyz B,xyz C)
+StlTriangle::StlTriangle(xyz A,xyz B,xyz C)
 {
   a=A;
   b=B;
