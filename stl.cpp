@@ -53,5 +53,8 @@ double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
   br.include(&ptl);
   xscale=pri.x/(br.right()-br.left());
   yscale=pri.y/(br.top()-br.bottom());
-  return min(xscale,yscale);
+  if (xscale>yscale)
+    return xscale;
+  else
+    return -yscale;
 }
