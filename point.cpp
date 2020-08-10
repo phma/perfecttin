@@ -297,13 +297,16 @@ void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 
 void xyz::_roscat(xyz tfrom,int ro,double sca,xy cis,xyz tto)
 {
-  double tx,ty;
+  double tx,ty,tz;
   x-=tfrom.x;
   y-=tfrom.y;
+  z-=tfrom.z;
   tx=x*cis.x-y*cis.y;
   ty=y*cis.x+x*cis.y;
+  tz=z*sca;
   x=tx+tto.x;
   y=ty+tto.y;
+  z=tz+tto.z;
 }
 
 double dot(xyz a,xyz b)
