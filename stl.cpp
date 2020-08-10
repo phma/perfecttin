@@ -24,6 +24,7 @@
 
 #include "stl.h"
 #include "angle.h"
+#include "octagon.h"
 #include "boundrect.h"
 using namespace std;
 
@@ -47,17 +48,22 @@ StlTriangle::StlTriangle(xyz A,xyz B,xyz C)
   normal.normalize();
 }
 
-double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
+double hScale(BoundRect &br,Printer3dSize &pri)
 {
   double xscale,yscale;
-  BoundRect br(ori);
-  br.include(&ptl);
   xscale=pri.x/(br.right()-br.left());
   yscale=pri.y/(br.top()-br.bottom());
   if (xscale<yscale)
     return xscale;
   else
     return -yscale;
+}
+
+double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
+{
+  BoundRect br(ori);
+  br.include(&ptl);
+  return hScale(br,pri);
 }
 
 int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
@@ -106,4 +112,13 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
       maxScale=k->second;
     }
   return bear;
+}
+
+vector<StlTriangle> StlMesh(Printer3dSize &pri)
+{
+  int i,ori;
+  BoundRect br;
+  vector<StlTriangle> ret;
+  ori=turnFitInPrinter(net,pri);
+  return ret;
 }
