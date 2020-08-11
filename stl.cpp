@@ -26,6 +26,7 @@
 #include "binio.h"
 #include "angle.h"
 #include "octagon.h"
+#include "ldecimal.h"
 #include "boundrect.h"
 using namespace std;
 
@@ -152,12 +153,32 @@ void writefxyz(ostream &file,xyz pnt)
   writelefloat(file,pnt.getz());
 }
 
+void writetxyz(ostream &file,xyz pnt)
+{
+  file<<' '<<ldecimal(pnt.getx());
+  file<<' '<<ldecimal(pnt.gety());
+  file<<' '<<ldecimal(pnt.getz());
+}
+
 void writeStlBinary(ostream &file,StlTriangle &tri)
 {
   writefxyz(file,tri.normal);
   writefxyz(file,tri.a);
   writefxyz(file,tri.b);
   writefxyz(file,tri.c);
+}
+
+void writeStlText(ostream &file,StlTriangle &tri)
+{
+  file<<"facet normal";
+  writetxyz(file,tri.normal);
+  file<<"\nouter loop\nvertex";
+  writetxyz(file,tri.a);
+  file<<"\nvertex";
+  writetxyz(file,tri.b);
+  file<<"\nvertex";
+  writetxyz(file,tri.c);
+  file<<"\nendloop\nendfacet\n";
 }
 
 void writeStlHeader(ostream &file)
@@ -183,4 +204,13 @@ void writeStlBinary(ostream &file,vector<StlTriangle> &mesh)
   writeleint(file,mesh.size());
   for (i=0;i<mesh.size();i++)
     writeStlBinary(file,mesh[i]);
+}
+
+void writeStlText(ostream &file,vector<StlTriangle> &mesh)
+{
+  int i;
+  file<<"solid \n";
+  for (i=0;i<mesh.size();i++)
+    writeStlText(file,mesh[i]);
+  file<<"endsolid \n";
 }

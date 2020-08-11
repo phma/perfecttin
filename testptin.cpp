@@ -1000,7 +1000,8 @@ void teststl()
   double bear;
   vector<StlTriangle> stltri;
   PostScript ps;
-  ofstream stlFile("stl.stl",ios::binary);
+  ofstream stlBinFile("stlbin.stl",ios::binary);
+  ofstream stlTxtFile("stltxt.stl");
   Printer3dSize printer;
   ps.open("stl.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -1017,7 +1018,8 @@ void teststl()
   bear=turnFitInPrinter(net,printer);
   cout<<"Turn by "<<bintodeg(bear)<<endl;
   stltri=stlMesh(printer);
-  writeStlBinary(stlFile,stltri);
+  writeStlBinary(stlBinFile,stltri);
+  writeStlText(stlTxtFile,stltri);
   for (i=0;i<stltri.size();i++)
   {
     cout<<stltri[i].b.getx()<<' '<<stltri[i].b.gety()<<' '<<stltri[i].b.getz()<<endl;
