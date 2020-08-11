@@ -994,20 +994,14 @@ void testquarter()
   ps.close();
 }
 
-void teststl()
+void test1stl(PostScript &ps,string name)
 {
   int i;
   double bear;
-  vector<StlTriangle> stltri;
-  PostScript ps;
-  ofstream stlBinFile("stlbin.stl",ios::binary);
-  ofstream stlTxtFile("stltxt.stl");
   Printer3dSize printer;
-  ps.open("stl.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
-  ps.prolog();
-  setsurface(CIRPAR);
-  lozenge(150);
+  vector<StlTriangle> stltri;
+  ofstream stlBinFile(name+"bin.stl",ios::binary);
+  ofstream stlTxtFile(name+"txt.stl");
   makeOctagon();
   printer.x=210;
   printer.y=297;
@@ -1032,6 +1026,19 @@ void teststl()
     cout<<stltri[i].b.getx()<<' '<<stltri[i].b.gety()<<' '<<stltri[i].b.getz()<<endl;
   }
   ps.endpage();
+}
+
+void teststl()
+{
+  PostScript ps;
+  ps.open("stl.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  lozenge(150);
+  test1stl(ps,"lozenge");
+  aster(1500);
+  test1stl(ps,"aster");
   ps.close();
 }
 
