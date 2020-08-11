@@ -131,6 +131,7 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri)
   br.include(&net);
   worldCenter=xyz((br.left()+br.right())/2,(br.bottom()+br.top())/2,br.low());
   printerCenter=xyz(pri.x/2,pri.y/2,pri.minBase);
+  worldCenter.roscat(xy(0,0),-ori,1,xy(0,0));
   o=xyz(pri.x/2,pri.y/2,0);
   scale=hScale(br,pri);
   for (i=0;i<net.triangles.size();i++)

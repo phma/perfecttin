@@ -1037,7 +1037,7 @@ void teststl()
   setsurface(CIRPAR);
   lozenge(150);
   test1stl(ps,"lozenge");
-  aster(1500);
+  aster(150);
   test1stl(ps,"aster");
   ps.close();
 }
