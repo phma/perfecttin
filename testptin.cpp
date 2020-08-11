@@ -1004,7 +1004,7 @@ void teststl()
   ofstream stlTxtFile("stltxt.stl");
   Printer3dSize printer;
   ps.open("stl.ps");
-  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   setsurface(CIRPAR);
   lozenge(150);
@@ -1020,10 +1020,18 @@ void teststl()
   stltri=stlMesh(printer);
   writeStlBinary(stlBinFile,stltri);
   writeStlText(stlTxtFile,stltri);
+  ps.startpage();
+  ps.setscale(1,1,209,296);
   for (i=0;i<stltri.size();i++)
   {
+    ps.startline();
+    ps.lineto(stltri[i].a);
+    ps.lineto(stltri[i].b);
+    ps.lineto(stltri[i].c);
+    ps.endline(true);
     cout<<stltri[i].b.getx()<<' '<<stltri[i].b.gety()<<' '<<stltri[i].b.getz()<<endl;
   }
+  ps.endpage();
   ps.close();
 }
 
