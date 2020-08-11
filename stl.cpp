@@ -87,7 +87,7 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
   for (i=0;i<ptl.convexHull.size();i++)
     for (j=0;j<i;j++)
     {
-      bear=dir((xy)*ptl.convexHull[i],(xy)*ptl.convexHull[j]);
+      bear=-dir((xy)*ptl.convexHull[i],(xy)*ptl.convexHull[j]);
       turnings.insert(bear&(DEG180-1));
       turnings.insert((bear+DEG90)&(DEG180-1));
     }
@@ -139,9 +139,9 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri)
     a=*tri->a;
     b=*tri->b;
     c=*tri->c;
-    a.roscat(worldCenter,-ori,scale,printerCenter);
-    b.roscat(worldCenter,-ori,scale,printerCenter);
-    c.roscat(worldCenter,-ori,scale,printerCenter);
+    a.roscat(worldCenter,ori,scale,printerCenter);
+    b.roscat(worldCenter,ori,scale,printerCenter);
+    c.roscat(worldCenter,ori,scale,printerCenter);
     ret.push_back(StlTriangle(a,b,c));
   }
   sz=net.convexHull.size();
@@ -149,8 +149,8 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri)
   {
     a=*net.convexHull[i];
     b=*net.convexHull[(i+1)%sz];
-    a.roscat(worldCenter,-ori,scale,printerCenter);
-    b.roscat(worldCenter,-ori,scale,printerCenter);
+    a.roscat(worldCenter,ori,scale,printerCenter);
+    b.roscat(worldCenter,ori,scale,printerCenter);
     c=xyz(a.getx(),a.gety(),0);
     d=xyz(b.getx(),b.gety(),0);
     ret.push_back(StlTriangle(c,b,a));
