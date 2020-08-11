@@ -1021,7 +1021,7 @@ void teststl()
   writeStlBinary(stlBinFile,stltri);
   writeStlText(stlTxtFile,stltri);
   ps.startpage();
-  ps.setscale(1,1,209,296);
+  ps.setscale(11,15,199,282); // setscale uses a 5% margin on each side
   for (i=0;i<stltri.size();i++)
   {
     ps.startline();
