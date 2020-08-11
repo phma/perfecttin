@@ -166,6 +166,7 @@ void writeStlBinary(ostream &file,StlTriangle &tri)
   writefxyz(file,tri.a);
   writefxyz(file,tri.b);
   writefxyz(file,tri.c);
+  writeleshort(file,0);
 }
 
 void writeStlText(ostream &file,StlTriangle &tri)
