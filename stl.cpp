@@ -120,10 +120,10 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
 
 vector<StlTriangle> stlMesh(Printer3dSize &pri)
 {
-  int i,ori;
+  int i,ori,sz;
   triangle *tri;
   double scale;
-  xyz worldCenter,printerCenter,a,b,c;
+  xyz worldCenter,printerCenter,a,b,c,d;
   BoundRect br;
   vector<StlTriangle> ret;
   ori=turnFitInPrinter(net,pri);
@@ -142,6 +142,18 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri)
     b.roscat(worldCenter,-ori,scale,printerCenter);
     c.roscat(worldCenter,-ori,scale,printerCenter);
     ret.push_back(StlTriangle(a,b,c));
+  }
+  sz=net.convexHull.size();
+  for (i=0;i<sz;i++)
+  {
+    a=*net.convexHull[i];
+    b=*net.convexHull[(i+1)%sz];
+    a.roscat(worldCenter,-ori,scale,printerCenter);
+    b.roscat(worldCenter,-ori,scale,printerCenter);
+    c=xyz(a.getx(),a.gety(),0);
+    d=xyz(b.getx(),b.gety(),0);
+    ret.push_back(StlTriangle(c,b,a));
+    ret.push_back(StlTriangle(b,c,d));
   }
   return ret;
 }
