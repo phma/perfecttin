@@ -23,6 +23,7 @@
  */
 
 #include "stl.h"
+#include "binio.h"
 #include "angle.h"
 #include "octagon.h"
 #include "boundrect.h"
@@ -142,4 +143,44 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri)
     ret.push_back(StlTriangle(a,b,c));
   }
   return ret;
+}
+
+void writefxyz(ostream &file,xyz pnt)
+{
+  writelefloat(file,pnt.getx());
+  writelefloat(file,pnt.gety());
+  writelefloat(file,pnt.getz());
+}
+
+void writeStlBinary(ostream &file,StlTriangle &tri)
+{
+  writefxyz(file,tri.normal);
+  writefxyz(file,tri.a);
+  writefxyz(file,tri.b);
+  writefxyz(file,tri.c);
+}
+
+void writeStlHeader(ostream &file)
+/* The header is 80 bytes, but what goes in those bytes is unspecified.
+ * I put the following:
+ * "STL\0" to show that this is an STL file
+ * 0.001 meaning that dimensions are in millimeters
+ * The timestamp.
+ */
+{
+  int i;
+  writeleint(file,0x4c5453);
+  writelefloat(file,0.001);
+  writelelong(file,net.conversionTime);
+  for (i=4;i<20;i++)
+    writeleint(file,0);
+}
+
+void writeStlBinary(ostream &file,vector<StlTriangle> &mesh)
+{
+  int i;
+  writeStlHeader(file);
+  writeleint(file,mesh.size());
+  for (i=0;i<mesh.size();i++)
+    writeStlBinary(file,mesh[i]);
 }

@@ -45,5 +45,6 @@ struct Printer3dSize
 double hScale(pointlist &ptl,Printer3dSize &pri,int ori);
 int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri);
 std::vector<StlTriangle> stlMesh(Printer3dSize &pri);
+void writeStlBinary(std::ostream &file,std::vector<StlTriangle> &mesh);
 
 #endif
