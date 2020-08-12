@@ -75,6 +75,11 @@ const char formats[][12]=
   "carlsontin",
   "landxml"
 };
+const char colorSchemes[][12]=
+{
+  "gradient",
+  "elevation"
+};
 
 void drawNet(PostScript &ps)
 {
@@ -190,6 +195,15 @@ int parseFormat(const string &format)
   return ret;
 }
 
+int parseColorScheme(const string &scheme)
+{
+  int i,ret=-1;
+  for (i=0;i<sizeof(colorSchemes)/sizeof(colorSchemes[0]);i++)
+    if (scheme==colorSchemes[i])
+      ret=i;
+  return ret;
+}
+
 int main(int argc, char *argv[])
 {
   PostScript ps;
@@ -201,9 +215,9 @@ int main(int argc, char *argv[])
   double tolerance,rmsadj,density;
   bool done=false;
   bool asciiFormat=false;
-  int format;
+  int format,colorScheme;
   size_t already;
-  string formatStr;
+  string formatStr,colorStr;
   triangle *tri;
   string outputFile;
   vector<string> inputFiles;
@@ -225,6 +239,7 @@ int main(int argc, char *argv[])
     ("asteraceous",po::value<int>(&asterPoints),"Process an asteraceous test pattern")
     ("output,o",po::value<string>(&outputFile),"Output file")
     ("format,f",po::value<string>(&formatStr),"Output format")
+    ("color",po::value<string>(&colorStr)->default_value("gradient"),"Color scheme")
     ("export-empty,e","Export empty triangles");
   hidden.add_options()
     ("input",po::value<vector<string> >(&inputFiles),"Input file");
@@ -287,6 +302,22 @@ int main(int argc, char *argv[])
     cerr<<".\n";
     validCmd=false;
   }
+  colorScheme=parseColorScheme(colorStr);
+  if (colorScheme<0)
+  {
+    cerr<<"Color schemes are ";
+    for (i=0;i<sizeof(colorSchemes)/sizeof(colorSchemes[0]);i++)
+    {
+      //if (i>0)
+	//cerr<<", ";
+      if (i==sizeof(colorSchemes)/sizeof(colorSchemes[0])-1)
+	cerr<<" and ";
+      cerr<<colorSchemes[i];
+    }
+    cerr<<".\n";
+    validCmd=false;
+  }
+  colorize.setScheme(colorScheme);
   if (validCmd)
   {
     if (inputFiles.size())
