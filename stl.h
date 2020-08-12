@@ -28,6 +28,10 @@
 #include "point.h"
 #include "config.h"
 
+#define P3S_ABSOLUTE 0
+#define P3S_RECTANGULAR 1
+// TODO: handle circular and hexagonal
+
 struct StlTriangle
 {
   xyz normal,a,b,c;
@@ -38,7 +42,9 @@ struct StlTriangle
 
 struct Printer3dSize
 {
+  int shape;
   double x,y,z; // all in millimeters
+  double scale;
   double minBase;
 };
 
