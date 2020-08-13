@@ -64,10 +64,20 @@ double hScale(BoundRect &br,Printer3dSize &pri)
 double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
 {
   int i;
+  double ret=NAN;
   BoundRect br(ori);
-  for (i=0;i<ptl.convexHull.size();i++)
-    br.include(*ptl.convexHull[i]);
-  return hScale(br,pri);
+  switch (pri.shape)
+  { // Circular and hexagonal build areas will require bounding circle and hexagon.
+    case P3S_ABSOLUTE:
+      ret=pri.scale;
+      break;
+    case P3S_RECTANGULAR:
+      for (i=0;i<ptl.convexHull.size();i++)
+	br.include(*ptl.convexHull[i]);
+      ret=hScale(br,pri);
+      break;
+  }
+  return ret;
 }
 
 int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)

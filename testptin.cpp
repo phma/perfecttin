@@ -1003,6 +1003,7 @@ void test1stl(PostScript &ps,string name)
   ofstream stlBinFile(name+"bin.stl",ios::binary);
   ofstream stlTxtFile(name+"txt.stl");
   makeOctagon();
+  printer.shape=P3S_RECTANGULAR;
   printer.x=210;
   printer.y=297;
   printer.z=192;
