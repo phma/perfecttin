@@ -39,6 +39,7 @@
 using namespace std;
 
 CoordCheck zCheck;
+Printer3dSize printer3d;
 
 PtinHeader::PtinHeader()
 {
@@ -228,6 +229,25 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   closeEntitySection(dxfCodes);
   dxfEnd(dxfCodes);
   writeDxfGroups(dxfFile,dxfCodes,asc);
+}
+
+void writeStl(string outputFile,bool asc,double outUnit,int flags)
+/* Unlike the other export functions, setting outUnit to feed does not result
+ * in an STL file in feet; the file is always in millimeters. Rather, it means
+ * to prefer scales 1:x where x is divisible by 12. Also the flag does not mean
+ * to write empty triangles, which must always be written in STL; rather
+ * it means to decrease the scale to a round number.
+ */
+{
+  ofstream stlFile(outputFile,asc?ios::trunc:(ios::binary|ios::trunc));
+  double bear;
+  vector<StlTriangle> stltri;
+  bear=turnFitInPrinter(net,printer3d);
+  stltri=stlMesh(printer3d,false,false);
+  if (asc)
+    writeStlText(stlFile,stltri);
+  else
+    writeStlBinary(stlFile,stltri);
 }
 
 int readCloud(string &inputFile,double inUnit)

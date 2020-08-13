@@ -79,7 +79,7 @@ add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
-               relprime.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+               relprime.cpp stl.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 add_executable(testptin adjelev.cpp angle.cpp binio.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
