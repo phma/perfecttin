@@ -52,10 +52,13 @@ StlTriangle::StlTriangle(xyz A,xyz B,xyz C)
 
 double hScale(BoundRect &br,Printer3dSize &pri)
 {
-  double xscale,yscale;
+  double xscale,yscale,zscale;
   xscale=pri.x/(br.right()-br.left());
   yscale=pri.y/(br.top()-br.bottom());
-  if (xscale<yscale)
+  zscale=(pri.z-pri.minBase)/(br.high()-br.low());
+  if (zscale<xscale && zscale<yscale)
+    return zscale;
+  else if (xscale<yscale)
     return xscale;
   else
     return -yscale;
