@@ -128,11 +128,18 @@ int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri)
   return bear;
 }
 
-vector<StlTriangle> stlMesh(Printer3dSize &pri)
+vector<StlTriangle> stlMesh(Printer3dSize &pri,bool roundScale,bool feet)
+/* Returns a mesh of triangles of net, scaled to fit pri. If roundScale is true,
+ * the scale is reduced to the inverse of one of those listed in ps.cpp times
+ * some power of 10, unless pri says the scale is absolute, in which case
+ * roundScale is ignored. The mesh is completed with sides and a bottom, making
+ * a closed polyhedron.
+ */
 {
   int i,ori,sz;
   triangle *tri;
-  double scale;
+  double scale,maxScale;
+  double inScale=feet?1.2:1.0;
   xyz worldCenter,printerCenter,a,b,c,d,o;
   BoundRect br;
   vector<StlTriangle> ret;
@@ -144,6 +151,15 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri)
   worldCenter.roscat(xy(0,0),-ori,1,xy(0,0));
   o=xyz(pri.x/2,pri.y/2,0);
   scale=hScale(br,pri);
+  if (roundScale && pri.shape!=P3S_ABSOLUTE)
+  {
+    maxScale=scale;
+    for (scale=1;scale/10<maxScale;scale*=10);
+    for (;scale/80/inScale>maxScale;scale/=10);
+    for (i=0;i<9 && scale/rscales[i]/inScale>maxScale;i++);
+    scale/=rscales[i]*inScale;
+    //cout<<"Scale 1:"<<1000/scale<<endl;
+  }
   for (i=0;i<net.triangles.size();i++)
   {
     tri=&net.triangles[i];

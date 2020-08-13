@@ -1012,7 +1012,7 @@ void test1stl(PostScript &ps,string name)
     cout<<i<<' '<<hScale(net,printer,degtobin(i))<<endl;
   bear=turnFitInPrinter(net,printer);
   cout<<"Turn by "<<bintodeg(bear)<<endl;
-  stltri=stlMesh(printer);
+  stltri=stlMesh(printer,false,false);
   writeStlBinary(stlBinFile,stltri);
   writeStlText(stlTxtFile,stltri);
   ps.startpage();
