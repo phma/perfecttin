@@ -54,6 +54,7 @@
 #define ACT_WRITE_LANDXML 9
 #define ACT_QINDEX 10
 #define ACT_WRITE_PLY 11
+#define ACT_WRITE_STL 12
 
 #define RES_LOAD_PLY 1
 #define RES_LOAD_LAS 2
