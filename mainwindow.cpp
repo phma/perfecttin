@@ -517,6 +517,62 @@ void MainWindow::exportPlyBin()
   fileDialog=nullptr;
 }
 
+void MainWindow::exportStlTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN as STL Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".stl"));
+  fileDialog->setNameFilter(tr("(*.stl)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.param0=true;
+    ta.flags=true; // TODO choose whether to round down to a round scale
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_STL;
+    enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
+}
+
+void MainWindow::exportStlBin()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN as STL Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".stl"));
+  fileDialog->setNameFilter(tr("(*.stl)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.param0=false;
+    ta.flags=true; // TODO choose whether to round down to a round scale
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_STL;
+    enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
+}
+
 void MainWindow::exportTinTxt()
 {
   int dialogResult;
@@ -845,6 +901,14 @@ void MainWindow::makeActions()
   exportMenu->addAction(exportPlyBinAction);
   connect(exportPlyBinAction,SIGNAL(triggered(bool)),this,SLOT(exportPlyBin()));
 #endif
+  exportStlTxtAction=new QAction(this);
+  exportStlTxtAction->setText(tr("STL Text"));
+  exportMenu->addAction(exportStlTxtAction);
+  connect(exportStlTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportStlTxt()));
+  exportStlBinAction=new QAction(this);
+  exportStlBinAction->setText(tr("STL Binary"));
+  exportMenu->addAction(exportStlBinAction);
+  connect(exportStlBinAction,SIGNAL(triggered(bool)),this,SLOT(exportStlBin()));
   exportTinTxtAction=new QAction(this);
   exportTinTxtAction->setText(tr("TIN Text"));
   exportMenu->addAction(exportTinTxtAction);

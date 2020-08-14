@@ -66,6 +66,8 @@ public slots:
   void exportDxfBin();
   void exportPlyTxt();
   void exportPlyBin();
+  void exportStlTxt();
+  void exportStlBin();
   void exportTinTxt();
   void exportCarlsonTin();
   void exportLandXml();
@@ -103,6 +105,7 @@ private:
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
   QAction *exportPlyTxtAction,*exportPlyBinAction;
+  QAction *exportStlTxtAction,*exportStlBinAction;
   ColorSchemeAction *colorGradientAction,*colorElevationAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
