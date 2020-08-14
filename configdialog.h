@@ -26,6 +26,7 @@
 #define CONFIGDIALOG_H
 #include <vector>
 #include <QDialog>
+#include <QDialogButtonBox>
 #include <QLabel>
 #include <QComboBox>
 #include <QCheckBox>
@@ -36,11 +37,25 @@
 extern const double conversionFactors[4];
 extern const char unitNames[4][12];
 
+class GeneralTab: public QWidget
+{
+  Q_OBJECT
+public:
+  GeneralTab(QWidget *parent=nullptr);
+  QLabel *lengthUnitLabel,*toleranceLabel;
+  QLabel *threadLabel,*threadDefault;
+  QLabel *toleranceInUnit;
+  QComboBox *lengthUnitBox,*toleranceBox;
+  QGridLayout *gridLayout;
+  QLineEdit *threadInput;
+  QCheckBox *exportEmptyCheck;
+};
+
 class ConfigurationDialog: public QDialog
 {
   Q_OBJECT
 public:
-  ConfigurationDialog(QWidget *parent=0);
+  ConfigurationDialog(QWidget *parent=nullptr);
 signals:
   void settingsChanged(double lu,double tol,int thr,bool ee);
 public slots:
@@ -48,14 +63,11 @@ public slots:
   void updateToleranceConversion();
   virtual void accept();
 private:
-  QLabel *lengthUnitLabel,*toleranceLabel;
-  QLabel *threadLabel,*threadDefault;
-  QLabel *toleranceInUnit;
-  QComboBox *lengthUnitBox,*toleranceBox;
+  QTabWidget *tabWidget;
+  GeneralTab *general;
+  QVBoxLayout *boxLayout;
+  QDialogButtonBox *buttonBox;
   QPushButton *okButton,*cancelButton;
-  QGridLayout *gridLayout;
-  QLineEdit *threadInput;
-  QCheckBox *exportEmptyCheck;
 };
 #endif
 
