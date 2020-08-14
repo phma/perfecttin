@@ -78,6 +78,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   buttonBox->addButton(cancelButton,QDialogButtonBox::RejectRole);
   boxLayout->addWidget(tabWidget);
   boxLayout->addWidget(buttonBox);
+  tabWidget->addTab(general,tr("General"));
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(general->lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
