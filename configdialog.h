@@ -51,6 +51,20 @@ public:
   QCheckBox *exportEmptyCheck;
 };
 
+class Printer3dTab: public QWidget
+{
+  Q_OBJECT
+public:
+  Printer3dTab(QWidget *parent=nullptr);
+  QLabel *shapeLabel;
+  QLabel *lengthLabel,*widthLabel,*heightLabel;
+  QLabel *baseLabel;
+  QGridLayout *gridLayout;
+  QComboBox *shapeBox;
+  QLineEdit *lengthInput,*widthInput,*heightInput;
+  QLineEdit *baseInput;
+};
+
 class ConfigurationDialog: public QDialog
 {
   Q_OBJECT
@@ -65,6 +79,7 @@ public slots:
 private:
   QTabWidget *tabWidget;
   GeneralTab *general;
+  Printer3dTab *printTab;
   QVBoxLayout *boxLayout;
   QDialogButtonBox *buttonBox;
   QPushButton *okButton,*cancelButton;

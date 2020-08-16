@@ -66,11 +66,37 @@ GeneralTab::GeneralTab(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(exportEmptyCheck,4,1);
 }
 
+Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
+{
+  shapeLabel=new QLabel(this);
+  lengthLabel=new QLabel(this);
+  widthLabel=new QLabel(this);
+  heightLabel=new QLabel(this);
+  baseLabel=new QLabel(this);
+  gridLayout=new QGridLayout(this);
+  shapeBox=new QComboBox(this);
+  lengthInput=new QLineEdit(this);
+  widthInput=new QLineEdit(this);
+  heightInput=new QLineEdit(this);
+  baseInput=new QLineEdit(this);
+  gridLayout->addWidget(shapeLabel,0,0);
+  gridLayout->addWidget(shapeBox,0,1);
+  gridLayout->addWidget(lengthLabel,1,0);
+  gridLayout->addWidget(lengthInput,1,1);
+  gridLayout->addWidget(widthLabel,2,0);
+  gridLayout->addWidget(widthInput,2,1);
+  gridLayout->addWidget(heightLabel,3,0);
+  gridLayout->addWidget(heightInput,3,1);
+  gridLayout->addWidget(baseLabel,4,0);
+  gridLayout->addWidget(baseInput,4,1);
+}
+
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
 {
   boxLayout=new QVBoxLayout(this);
   tabWidget=new QTabWidget(this);
   general=new GeneralTab(this);
+  printTab=new Printer3dTab(this);
   buttonBox=new QDialogButtonBox(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
@@ -79,6 +105,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   boxLayout->addWidget(tabWidget);
   boxLayout->addWidget(buttonBox);
   tabWidget->addTab(general,tr("General"));
+  tabWidget->addTab(printTab,tr("3D Printer"));
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(general->lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
