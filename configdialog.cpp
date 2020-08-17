@@ -41,6 +41,11 @@ const char toleranceStr[10][7]=
 {
   "10 mm","25 mm","50 mm","100 mm","150 mm","200 mm","1/3 m","2/3 m","1 m","10/3 m"
 };
+const char shapeNames[2][12]=
+{
+  QT_TRANSLATE_NOOP("Printer3dTab","Absolute"),
+  QT_TRANSLATE_NOOP("Printer3dTab","Rectangular")
+};
 
 GeneralTab::GeneralTab(QWidget *parent):QWidget(parent)
 {
@@ -68,13 +73,28 @@ GeneralTab::GeneralTab(QWidget *parent):QWidget(parent)
 
 Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
 {
+  int i;
   shapeLabel=new QLabel(this);
+  shapeLabel->setText(tr("Shape"));
   lengthLabel=new QLabel(this);
+  lengthLabel->setText(tr("Length"));
   widthLabel=new QLabel(this);
+  widthLabel->setText(tr("Width"));
   heightLabel=new QLabel(this);
+  heightLabel->setText(tr("Height"));
   baseLabel=new QLabel(this);
+  baseLabel->setText(tr("Base"));
+  for (i=0;i<sizeof(mmLabel)/sizeof(mmLabel[0]);i++)
+  {
+    mmLabel[i]=new QLabel(this);
+    mmLabel[i]->setText(tr("mm"));
+  }
   gridLayout=new QGridLayout(this);
   shapeBox=new QComboBox(this);
+  for (i=0;i<sizeof(shapeNames)/sizeof(shapeNames[0]);i++)
+  {
+    shapeBox->addItem(tr(shapeNames[i]));
+  }
   lengthInput=new QLineEdit(this);
   widthInput=new QLineEdit(this);
   heightInput=new QLineEdit(this);
@@ -83,12 +103,16 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(shapeBox,0,1);
   gridLayout->addWidget(lengthLabel,1,0);
   gridLayout->addWidget(lengthInput,1,1);
+  gridLayout->addWidget(mmLabel[0],1,2);
   gridLayout->addWidget(widthLabel,2,0);
   gridLayout->addWidget(widthInput,2,1);
+  gridLayout->addWidget(mmLabel[1],2,2);
   gridLayout->addWidget(heightLabel,3,0);
   gridLayout->addWidget(heightInput,3,1);
+  gridLayout->addWidget(mmLabel[2],3,2);
   gridLayout->addWidget(baseLabel,4,0);
   gridLayout->addWidget(baseInput,4,1);
+  gridLayout->addWidget(mmLabel[3],4,2);
 }
 
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
