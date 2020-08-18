@@ -175,9 +175,16 @@ void ConfigurationDialog::updateToleranceConversion()
 
 void ConfigurationDialog::accept()
 {
+  Printer3dSize pri;
+  pri.shape=printTab->shapeBox->currentIndex();
+  pri.x=printTab->lengthInput->text().toDouble();
+  pri.y=printTab->widthInput->text().toDouble();
+  pri.z=printTab->heightInput->text().toDouble();
+  pri.minBase=printTab->baseInput->text().toDouble();
   settingsChanged(conversionFactors[general->lengthUnitBox->currentIndex()],
 		  tolerances[general->toleranceBox->currentIndex()],
 		  general->threadInput->text().toInt(),
-		  general->exportEmptyCheck->checkState()>0);
+		  general->exportEmptyCheck->checkState()>0,
+		  pri);
   QDialog::accept();
 }

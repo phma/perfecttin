@@ -33,6 +33,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QGridLayout>
+#include "stl.h"
 
 extern const double conversionFactors[4];
 extern const char unitNames[4][12];
@@ -72,7 +73,7 @@ class ConfigurationDialog: public QDialog
 public:
   ConfigurationDialog(QWidget *parent=nullptr);
 signals:
-  void settingsChanged(double lu,double tol,int thr,bool ee);
+  void settingsChanged(double lu,double tol,int thr,bool ee,Printer3dSize pri);
 public slots:
   void set(double lengthUnit,double tolerance,int threads,bool exportEmpty);
   void updateToleranceConversion();

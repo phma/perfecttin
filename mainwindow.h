@@ -56,7 +56,7 @@ signals:
   void gotResult(ThreadAction ta);
 public slots:
   void tick();
-  void setSettings(double lu,double tol,int thr,bool ee);
+  void setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri);
   void setUnit(double lu);
   void openFile();
   void loadFile();

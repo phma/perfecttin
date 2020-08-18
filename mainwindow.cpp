@@ -49,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
   msgBox=new QMessageBox(this);
-  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool)),
-	  this,SLOT(setSettings(double,double,int,bool)));
+  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool,Printer3dSize)),
+	  this,SLOT(setSettings(double,double,int,bool,Printer3dSize)));
   connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
@@ -1001,12 +1001,13 @@ void MainWindow::writeSettings()
   settings.setValue("colorScheme",colorize.getScheme());
 }
 
-void MainWindow::setSettings(double lu,double tol,int thr,bool ee)
+void MainWindow::setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri)
 {
   lengthUnit=lu;
   tolerance=tol;
   numberThreads=thr;
   exportEmpty=ee;
+  printer3d=pri;
   writeSettings();
   lengthUnitChanged(lengthUnit);
 }
