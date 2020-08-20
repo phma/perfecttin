@@ -153,7 +153,7 @@ vector<StlTriangle> stlMesh(Printer3dSize &pri,bool roundScale,bool feet)
   printerCenter=xyz(pri.x/2,pri.y/2,pri.minBase);
   worldCenter.roscat(xy(0,0),-ori,1,xy(0,0));
   o=xyz(pri.x/2,pri.y/2,0);
-  scale=hScale(br,pri);
+  scale=fabs(hScale(br,pri));
   if (roundScale && pri.shape!=P3S_ABSOLUTE)
   {
     maxScale=scale;
