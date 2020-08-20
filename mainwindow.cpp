@@ -986,12 +986,12 @@ void MainWindow::readSettings()
   exportEmpty=settings.value("exportEmpty",false).toBool();
   colorize.setScheme(settings.value("colorScheme",CS_GRADIENT).toInt());
   printer3d.shape=settings.value("3dprinter/shape",1).toUInt();
-  printer3d.x=settings.value("3dprinter/length",1).toDouble();
-  printer3d.y=settings.value("3dprinter/width",1).toDouble();
-  printer3d.z=settings.value("3dprinter/height",1).toDouble();
-  printer3d.minBase=settings.value("3dprinter/base",1).toDouble();
+  printer3d.x=settings.value("3dprinter/length",300).toDouble();
+  printer3d.y=settings.value("3dprinter/width",300).toDouble();
+  printer3d.z=settings.value("3dprinter/height",300).toDouble();
+  printer3d.minBase=settings.value("3dprinter/base",10).toDouble();
   printer3d.scaleNum=settings.value("3dprinter/scaleNum",1).toUInt();
-  printer3d.scaleDenom=settings.value("3dprinter/scaleDenom",1).toUInt();
+  printer3d.scaleDenom=settings.value("3dprinter/scaleDenom",1000).toUInt();
   lengthUnitChanged(lengthUnit);
   colorSchemeChanged(colorize.getScheme());
 }
