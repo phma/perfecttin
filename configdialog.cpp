@@ -146,7 +146,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(general->toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
 }
 
-void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,bool exportEmpty)
+void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer)
 {
   int i;
   general->lengthUnitBox->clear();
@@ -171,6 +171,15 @@ void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,boo
       general->toleranceBox->setCurrentIndex(i);
   general->threadInput->setText(QString::number(threads));
   general->exportEmptyCheck->setCheckState(exportEmpty?Qt::Checked:Qt::Unchecked);
+  for (i=0;i<sizeof(shapeNames)/sizeof(shapeNames[1]);i++)
+    if (printer.shape==i)
+      printTab->shapeBox->setCurrentIndex(i);
+  printTab->lengthInput->setText(QString::number(printer.x));
+  printTab->widthInput->setText(QString::number(printer.y));
+  printTab->heightInput->setText(QString::number(printer.z));
+  printTab->baseInput->setText(QString::number(printer.minBase));
+  printTab->scaleNumInput->setText(QString::number(printer.scaleNum));
+  printTab->scaleDenomInput->setText(QString::number(printer.scaleDenom));
 }
 
 void ConfigurationDialog::updateToleranceConversion()

@@ -77,7 +77,7 @@ public:
 signals:
   void settingsChanged(double lu,double tol,int thr,bool ee,Printer3dSize pri);
 public slots:
-  void set(double lengthUnit,double tolerance,int threads,bool exportEmpty);
+  void set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer);
   void updateToleranceConversion();
   virtual void accept();
 private:

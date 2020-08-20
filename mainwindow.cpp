@@ -717,7 +717,7 @@ void MainWindow::clearCloud()
 
 void MainWindow::configure()
 {
-  configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty);
+  configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty,printer3d);
   configDialog->open();
 }
 
