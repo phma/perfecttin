@@ -67,6 +67,8 @@ public:
   QLineEdit *lengthInput,*widthInput,*heightInput;
   QLineEdit *baseInput;
   QLineEdit *scaleNumInput,*scaleDenomInput;
+public slots:
+  void disableSome();
 };
 
 class ConfigurationDialog: public QDialog

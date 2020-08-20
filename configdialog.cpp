@@ -123,6 +123,30 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(scaleNumInput,5,1,1,1);
   gridLayout->addWidget(colonLabel,5,2,1,1);
   gridLayout->addWidget(scaleDenomInput,5,3,1,1);
+  connect(shapeBox,SIGNAL(currentIndexChanged(int)),this,SLOT(disableSome()));
+}
+
+void Printer3dTab::disableSome()
+{
+  switch (shapeBox->currentIndex())
+  {
+    case P3S_ABSOLUTE:
+      lengthInput->setEnabled(false);
+      widthInput->setEnabled(false);
+      heightInput->setEnabled(false);
+      baseInput->setEnabled(true);
+      scaleNumInput->setEnabled(true);
+      scaleDenomInput->setEnabled(true);
+      break;
+    case P3S_RECTANGULAR:
+      lengthInput->setEnabled(true);
+      widthInput->setEnabled(true);
+      heightInput->setEnabled(true);
+      baseInput->setEnabled(true);
+      scaleNumInput->setEnabled(false);
+      scaleDenomInput->setEnabled(false);
+      break;
+  }
 }
 
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
