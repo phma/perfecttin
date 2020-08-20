@@ -67,11 +67,6 @@ int main(int argc, char *argv[])
     nthreads=thread::hardware_concurrency();
   if (nthreads<1)
     nthreads=2;
-  printer3d.shape=P3S_RECTANGULAR;
-  printer3d.x=300;
-  printer3d.y=300;
-  printer3d.z=300;
-  printer3d.minBase=10;
   startThreads(nthreads);
   window.show();
   exitStatus=app.exec();
