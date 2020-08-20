@@ -60,11 +60,13 @@ public:
   QLabel *shapeLabel;
   QLabel *lengthLabel,*widthLabel,*heightLabel;
   QLabel *baseLabel;
+  QLabel *scaleLabel,*colonLabel;
   QLabel *mmLabel[4];
   QGridLayout *gridLayout;
   QComboBox *shapeBox;
   QLineEdit *lengthInput,*widthInput,*heightInput;
   QLineEdit *baseInput;
+  QLineEdit *scaleNumInput,*scaleDenomInput;
 };
 
 class ConfigurationDialog: public QDialog

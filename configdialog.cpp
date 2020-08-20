@@ -84,6 +84,10 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   heightLabel->setText(tr("Height"));
   baseLabel=new QLabel(this);
   baseLabel->setText(tr("Base"));
+  scaleLabel=new QLabel(this);
+  scaleLabel->setText(tr("Scale"));
+  colonLabel=new QLabel(this);
+  colonLabel->setText(tr(":"));
   for (i=0;i<sizeof(mmLabel)/sizeof(mmLabel[0]);i++)
   {
     mmLabel[i]=new QLabel(this);
@@ -99,6 +103,8 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   widthInput=new QLineEdit(this);
   heightInput=new QLineEdit(this);
   baseInput=new QLineEdit(this);
+  scaleNumInput=new QLineEdit(this);
+  scaleDenomInput=new QLineEdit(this);
   gridLayout->addWidget(shapeLabel,0,0,1,1);
   gridLayout->addWidget(shapeBox,0,1,1,3);
   gridLayout->addWidget(lengthLabel,1,0,1,1);
@@ -113,6 +119,10 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(baseLabel,4,0,1,1);
   gridLayout->addWidget(baseInput,4,1,1,3);
   gridLayout->addWidget(mmLabel[3],4,4,1,1);
+  gridLayout->addWidget(scaleLabel,5,0,1,1);
+  gridLayout->addWidget(scaleNumInput,5,1,1,1);
+  gridLayout->addWidget(colonLabel,5,2,1,1);
+  gridLayout->addWidget(scaleDenomInput,5,3,1,1);
 }
 
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
@@ -181,6 +191,8 @@ void ConfigurationDialog::accept()
   pri.y=printTab->widthInput->text().toDouble();
   pri.z=printTab->heightInput->text().toDouble();
   pri.minBase=printTab->baseInput->text().toDouble();
+  pri.scaleNum=printTab->scaleNumInput->text().toUInt();
+  pri.scaleDenom=printTab->scaleDenomInput->text().toUInt();
   settingsChanged(conversionFactors[general->lengthUnitBox->currentIndex()],
 		  tolerances[general->toleranceBox->currentIndex()],
 		  general->threadInput->text().toInt(),
