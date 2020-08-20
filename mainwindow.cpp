@@ -999,6 +999,12 @@ void MainWindow::writeSettings()
   settings.setValue("lengthUnit",lengthUnit);
   settings.setValue("exportEmpty",exportEmpty);
   settings.setValue("colorScheme",colorize.getScheme());
+  settings.setValue("3dprinter/shape",printer3d.shape);
+  settings.setValue("3dprinter/length",printer3d.x);
+  settings.setValue("3dprinter/width",printer3d.y);
+  settings.setValue("3dprinter/height",printer3d.z);
+  settings.setValue("3dprinter/scaleNum",printer3d.scaleNum);
+  settings.setValue("3dprinter/scaleDenom",printer3d.scaleDenom);
 }
 
 void MainWindow::setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri)
