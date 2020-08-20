@@ -99,20 +99,20 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   widthInput=new QLineEdit(this);
   heightInput=new QLineEdit(this);
   baseInput=new QLineEdit(this);
-  gridLayout->addWidget(shapeLabel,0,0);
-  gridLayout->addWidget(shapeBox,0,1);
-  gridLayout->addWidget(lengthLabel,1,0);
-  gridLayout->addWidget(lengthInput,1,1);
-  gridLayout->addWidget(mmLabel[0],1,2);
-  gridLayout->addWidget(widthLabel,2,0);
-  gridLayout->addWidget(widthInput,2,1);
-  gridLayout->addWidget(mmLabel[1],2,2);
-  gridLayout->addWidget(heightLabel,3,0);
-  gridLayout->addWidget(heightInput,3,1);
-  gridLayout->addWidget(mmLabel[2],3,2);
-  gridLayout->addWidget(baseLabel,4,0);
-  gridLayout->addWidget(baseInput,4,1);
-  gridLayout->addWidget(mmLabel[3],4,2);
+  gridLayout->addWidget(shapeLabel,0,0,1,1);
+  gridLayout->addWidget(shapeBox,0,1,1,3);
+  gridLayout->addWidget(lengthLabel,1,0,1,1);
+  gridLayout->addWidget(lengthInput,1,1,1,3);
+  gridLayout->addWidget(mmLabel[0],1,4,1,1);
+  gridLayout->addWidget(widthLabel,2,0,1,1);
+  gridLayout->addWidget(widthInput,2,1,1,3);
+  gridLayout->addWidget(mmLabel[1],2,4,1,1);
+  gridLayout->addWidget(heightLabel,3,0,1,1);
+  gridLayout->addWidget(heightInput,3,1,1,3);
+  gridLayout->addWidget(mmLabel[2],3,4,1,1);
+  gridLayout->addWidget(baseLabel,4,0,1,1);
+  gridLayout->addWidget(baseInput,4,1,1,3);
+  gridLayout->addWidget(mmLabel[3],4,4,1,1);
 }
 
 ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
