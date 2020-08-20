@@ -124,6 +124,31 @@ Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(colonLabel,5,2,1,1);
   gridLayout->addWidget(scaleDenomInput,5,3,1,1);
   connect(shapeBox,SIGNAL(currentIndexChanged(int)),this,SLOT(disableSome()));
+  connect(lengthInput,SIGNAL(textChanged(QString)),this,SIGNAL(contentChanged()));
+  connect(widthInput,SIGNAL(textChanged(QString)),this,SIGNAL(contentChanged()));
+  connect(heightInput,SIGNAL(textChanged(QString)),this,SIGNAL(contentChanged()));
+  connect(baseInput,SIGNAL(textChanged(QString)),this,SIGNAL(contentChanged()));
+  connect(scaleNumInput,SIGNAL(textChanged(QString)),this,SIGNAL(contentChanged()));
+  connect(scaleDenomInput,SIGNAL(textChanged(QString)),this,SIGNAL(contentChanged()));
+  connect(shapeBox,SIGNAL(currentIndexChanged(int)),this,SIGNAL(contentChanged()));
+}
+
+bool Printer3dTab::isValid()
+{
+  switch (shapeBox->currentIndex())
+  {
+    case P3S_ABSOLUTE:
+      return scaleNumInput->text().toUInt()>0 &&
+	     scaleDenomInput->text().toUInt()>0 &&
+	     baseInput->text().toDouble()>0;
+    case P3S_RECTANGULAR:
+      return lengthInput->text().toDouble()>0 &&
+	     widthInput->text().toDouble()>0 &&
+	     baseInput->text().toDouble()>0 &&
+	     heightInput->text().toDouble()>baseInput->text().toDouble();
+    default:
+      return false;
+  }
 }
 
 void Printer3dTab::disableSome()
@@ -168,6 +193,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(general->lengthUnitBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
   connect(general->toleranceBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateToleranceConversion()));
+  connect(printTab,SIGNAL(contentChanged()),this,SLOT(checkValid()));
 }
 
 void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer)
@@ -214,6 +240,11 @@ void ConfigurationDialog::updateToleranceConversion()
   {
     general->toleranceInUnit->setText(QString::fromStdString(ldecimal(tolIn,tolIn/1000)));
   }
+}
+
+void ConfigurationDialog::checkValid()
+{
+  okButton->setEnabled(printTab->isValid());
 }
 
 void ConfigurationDialog::accept()

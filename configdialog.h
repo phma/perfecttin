@@ -67,6 +67,9 @@ public:
   QLineEdit *lengthInput,*widthInput,*heightInput;
   QLineEdit *baseInput;
   QLineEdit *scaleNumInput,*scaleDenomInput;
+  bool isValid();
+signals:
+  void contentChanged();
 public slots:
   void disableSome();
 };
@@ -81,6 +84,7 @@ signals:
 public slots:
   void set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer);
   void updateToleranceConversion();
+  void checkValid();
   virtual void accept();
 private:
   QTabWidget *tabWidget;
