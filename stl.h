@@ -44,7 +44,7 @@ struct Printer3dSize
 {
   int shape;
   double x,y,z; // all in millimeters
-  double scale;
+  unsigned scaleNum,scaleDenom;
   double minBase;
 };
 

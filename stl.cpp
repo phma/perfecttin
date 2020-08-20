@@ -72,7 +72,7 @@ double hScale(pointlist &ptl,Printer3dSize &pri,int ori)
   switch (pri.shape)
   { // Circular and hexagonal build areas will require bounding circle and hexagon.
     case P3S_ABSOLUTE:
-      ret=pri.scale;
+      ret=pri.scaleNum*1e3/pri.scaleDenom; // 1e3: output is in millimeters
       break;
     case P3S_RECTANGULAR:
       for (i=0;i<ptl.convexHull.size();i++)
