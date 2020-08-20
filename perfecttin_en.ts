@@ -24,22 +24,31 @@
         <translation>Indian foot</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="54"/>
+        <location filename="configdialog.cpp" line="184"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="55"/>
+        <location filename="configdialog.cpp" line="185"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="57"/>
-        <source>Export empty</source>
-        <translation>Export empty triangles</translation>
+        <location filename="configdialog.cpp" line="190"/>
+        <source>General</source>
+        <translation>General</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="82"/>
+        <location filename="configdialog.cpp" line="191"/>
+        <source>3D Printer</source>
+        <translation>3D Printer</translation>
+    </message>
+    <message>
+        <source>Export empty</source>
+        <translation type="vanished">Export empty triangles</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="204"/>
         <source>Length unit</source>
         <oldsource>Input unit</oldsource>
         <translation>Length unit</translation>
@@ -53,17 +62,17 @@
         <translation type="vanished">Output unit</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="83"/>
+        <location filename="configdialog.cpp" line="205"/>
         <source>Tolerance</source>
         <translation>Tolerance</translation>
     </message>
     <message>
-        <location filename="configdialog.cpp" line="84"/>
+        <location filename="configdialog.cpp" line="206"/>
         <source>Threads:</source>
         <translation>Threads:</translation>
     </message>
     <message numerus="yes">
-        <location filename="configdialog.cpp" line="85"/>
+        <location filename="configdialog.cpp" line="207"/>
         <source>default is %n</source>
         <translation>
             <numerusform>default is %n</numerusform>
@@ -73,6 +82,14 @@
     <message>
         <source>Text mode DXF</source>
         <translation type="vanished">Text mode DXF</translation>
+    </message>
+</context>
+<context>
+    <name>GeneralTab</name>
+    <message>
+        <location filename="configdialog.cpp" line="60"/>
+        <source>Export empty</source>
+        <translation>Export empty triangles</translation>
     </message>
 </context>
 <context>
@@ -156,7 +173,6 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="527"/>
-        <location filename="mainwindow.cpp" line="555"/>
         <source>Export TIN as STL Text</source>
         <translation>Export TIN as STL Text</translation>
     </message>
@@ -165,6 +181,11 @@
         <location filename="mainwindow.cpp" line="559"/>
         <source>(*.stl)</source>
         <translation>STL 3D printing files (*.stl)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="555"/>
+        <source>Export TIN as STL Binary</source>
+        <translation>Export TIN as STL Binary</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="583"/>
@@ -436,6 +457,59 @@ License LGPL 3 or later%4</translation>
         <location filename="mainwindow.cpp" line="951"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
+    </message>
+</context>
+<context>
+    <name>Printer3dTab</name>
+    <message>
+        <location filename="configdialog.cpp" line="46"/>
+        <source>Absolute</source>
+        <translation>Absolute</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="47"/>
+        <source>Rectangular</source>
+        <translation>Rectangular</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="78"/>
+        <source>Shape</source>
+        <translation>Shape</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="80"/>
+        <source>Length</source>
+        <translation>Length</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="82"/>
+        <source>Width</source>
+        <translation>Width</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="84"/>
+        <source>Height</source>
+        <translation>Height</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="86"/>
+        <source>Base</source>
+        <translation>Base</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="88"/>
+        <source>Scale</source>
+        <translation>Scale</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="90"/>
+        <source>:</source>
+        <translation>:</translation>
+    </message>
+    <message>
+        <location filename="configdialog.cpp" line="94"/>
+        <source>mm</source>
+        <translation>mm</translation>
     </message>
 </context>
 <context>

@@ -552,7 +552,7 @@ void MainWindow::exportStlBin()
   string fileName;
   ThreadAction ta;
   fileDialog=new QFileDialog(this);
-  fileDialog->setWindowTitle(tr("Export TIN as STL Text"));
+  fileDialog->setWindowTitle(tr("Export TIN as STL Binary"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   fileDialog->selectFile(QString::fromStdString(saveFileName+".stl"));
