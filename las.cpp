@@ -31,6 +31,7 @@
 
 const int MASK_GPSTIME=0x7fa;
 const int MASK_RGB=0x5ac;
+const int MASK_NIR=0x500;
 const int MASK_WAVE=0x630;
 
 using namespace std;
@@ -227,6 +228,8 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.green=readleshort(*lasfile);
     ret.blue=readleshort(*lasfile);
   }
+  if ((1<<pointFormat)&MASK_NIR) // 10 or 8
+    ret.nir=readleshort(*lasfile);
   if ((1<<pointFormat)&MASK_WAVE) // 10, 9, 5 or 4
   {
     ret.waveIndex=(unsigned char)lasfile->get();
