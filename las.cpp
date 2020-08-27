@@ -203,24 +203,6 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.scanAngle=degtobin((signed char)lasfile->get());
     ret.userData=(unsigned char)lasfile->get();
     ret.pointSource=readleshort(*lasfile);
-    if ((1<<pointFormat)&MASK_GPSTIME) // 5, 4, 3, or 1
-      ret.gpsTime=readledouble(*lasfile);
-    if ((1<<pointFormat)&MASK_RGB) // 5, 3, or 2
-    {
-      ret.red=readleshort(*lasfile);
-      ret.green=readleshort(*lasfile);
-      ret.blue=readleshort(*lasfile);
-    }
-    if ((1<<pointFormat)&MASK_WAVE) // 5 or 4
-    {
-      ret.waveIndex=(unsigned char)lasfile->get();
-      ret.waveformOffset=readlelong(*lasfile);
-      ret.waveformSize=readleint(*lasfile);
-      ret.waveformTime=readlefloat(*lasfile);
-      ret.xDir=readlefloat(*lasfile);
-      ret.yDir=readlefloat(*lasfile);
-      ret.zDir=readlefloat(*lasfile);
-    }
   }
   else // formats 6 through 10
   {
@@ -236,8 +218,24 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.userData=(unsigned char)lasfile->get();
     ret.scanAngle=degtobin(readleshort(*lasfile)*0.006);
     ret.pointSource=readleshort(*lasfile);
+  }
+  if ((1<<pointFormat)&MASK_GPSTIME) // 10-5, 4, 3, or 1
     ret.gpsTime=readledouble(*lasfile);
-    // switch(pointFormat)...
+  if ((1<<pointFormat)&MASK_RGB) // 10, 8, 7, 5, 3, or 2
+  {
+    ret.red=readleshort(*lasfile);
+    ret.green=readleshort(*lasfile);
+    ret.blue=readleshort(*lasfile);
+  }
+  if ((1<<pointFormat)&MASK_WAVE) // 10, 9, 5 or 4
+  {
+    ret.waveIndex=(unsigned char)lasfile->get();
+    ret.waveformOffset=readlelong(*lasfile);
+    ret.waveformSize=readleint(*lasfile);
+    ret.waveformTime=readlefloat(*lasfile);
+    ret.xDir=readlefloat(*lasfile);
+    ret.yDir=readlefloat(*lasfile);
+    ret.zDir=readlefloat(*lasfile);
   }
   ret.location=xyz(xOffset+xScale*xInt,yOffset+yScale*yInt,zOffset+zScale*zInt);
   if (!lasfile->good())
