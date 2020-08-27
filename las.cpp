@@ -3,7 +3,7 @@
 /* las.cpp - laser point cloud files                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -28,6 +28,10 @@
 #include "octagon.h"
 #include "angle.h"
 #include "cloud.h"
+
+const int MASK_GPSTIME=0x7fa;
+const int MASK_RGB=0x5ac;
+const int MASK_WAVE=0x630;
 
 using namespace std;
 
@@ -199,15 +203,15 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.scanAngle=degtobin((signed char)lasfile->get());
     ret.userData=(unsigned char)lasfile->get();
     ret.pointSource=readleshort(*lasfile);
-    if ((1<<pointFormat)&0x3a) // 5, 4, 3, or 1
+    if ((1<<pointFormat)&MASK_GPSTIME) // 5, 4, 3, or 1
       ret.gpsTime=readledouble(*lasfile);
-    if ((1<<pointFormat)&0x2c) // 5, 3, or 2
+    if ((1<<pointFormat)&MASK_RGB) // 5, 3, or 2
     {
       ret.red=readleshort(*lasfile);
       ret.green=readleshort(*lasfile);
       ret.blue=readleshort(*lasfile);
     }
-    if (pointFormat>=4) // 5 or 4
+    if ((1<<pointFormat)&MASK_WAVE) // 5 or 4
     {
       ret.waveIndex=(unsigned char)lasfile->get();
       ret.waveformOffset=readlelong(*lasfile);
@@ -218,7 +222,7 @@ LasPoint LasHeader::readPoint(size_t num)
       ret.zDir=readlefloat(*lasfile);
     }
   }
-  else
+  else // formats 6 through 10
   {
     temp=lasfile->get();
     ret.returnNum=temp&15;
