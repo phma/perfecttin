@@ -44,6 +44,51 @@ string read32(ifstream &file)
   return string(buf);
 }
 
+VariableLengthRecord::VariableLengthRecord()
+{
+  reserved=recordId=0;
+}
+
+void VariableLengthRecord::setUserId(string uid)
+{
+  userId=uid;
+}
+
+void VariableLengthRecord::setRecordId(int rid)
+{
+  recordId=rid;
+}
+
+void VariableLengthRecord::setDescription(string desc)
+{
+  description=desc;
+}
+
+void VariableLengthRecord::setData(string dat)
+{
+  data=dat;
+}
+
+string VariableLengthRecord::getUserId()
+{
+  return userId;
+}
+
+int VariableLengthRecord::getRecordId()
+{
+  return recordId;
+}
+
+string VariableLengthRecord::getDescription()
+{
+  return description;
+}
+
+string VariableLengthRecord::getData()
+{
+  return data;
+}
+
 LasHeader::LasHeader()
 {
   lasfile=nullptr;

@@ -3,7 +3,7 @@
 /* las.h - laser point cloud files                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -43,6 +43,28 @@ struct LasPoint
   size_t waveformOffset;
   unsigned int waveformSize;
   float waveformTime,xDir,yDir,zDir;
+};
+
+class VariableLengthRecord
+// Used for extended variable length records as well.
+{
+private:
+  unsigned short reserved;
+  std::string userId;
+  unsigned short recordId;
+  std::string description;
+  std::string data;
+public:
+  VariableLengthRecord();
+  void setUserId(std::string uid);
+  void setRecordId(int rid);
+  void setDescription(std::string desc);
+  void setData(std::string dat);
+  std::string getUserId();
+  int getRecordId();
+  std::string getDescription();
+  std::string getData();
+  friend class LasHeader;
 };
 
 class LasHeader
