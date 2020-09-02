@@ -86,6 +86,7 @@ private:
   size_t startWaveform,startExtendedVariableLength;
   unsigned int nExtendedVariableLength;
   size_t nPoints[16]; // [0] is total; [1]..[15] are each return
+  size_t readPos,extReadPos;
 public:
   LasHeader();
   ~LasHeader();
@@ -93,7 +94,11 @@ public:
   bool isValid();
   void close();
   size_t numberPoints(int r=0);
+  size_t numberRecords();
+  size_t numberExtRecords();
   LasPoint readPoint(size_t num);
+  VariableLengthRecord readRecord();
+  VariableLengthRecord readExtRecord();
 };
 
 void readLas(std::string fileName);

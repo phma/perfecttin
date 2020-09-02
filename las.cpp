@@ -36,6 +36,14 @@ const int MASK_WAVE=0x630;
 
 using namespace std;
 
+string read16(istream &file)
+{
+  char buf[24];
+  memset(buf,0,24);
+  file.read(buf,16);
+  return string(buf);
+}
+
 string read32(ifstream &file)
 {
   char buf[40];
@@ -207,6 +215,8 @@ void LasHeader::open(std::string fileName)
 	nPoints[i]=0;
     if (pointLength==0)
       versionMajor=versionMinor=nPoints[0]=0;
+    readPos=headerSize;
+    extReadPos=startExtendedVariableLength;
   }
   else // file does not begin with "LASF"
     versionMajor=versionMinor=nPoints[0]=0;
@@ -226,6 +236,16 @@ void LasHeader::close()
 size_t LasHeader::numberPoints(int r)
 {
   return nPoints[r];
+}
+
+size_t LasHeader::numberRecords()
+{
+  return nVariableLength;
+}
+
+size_t LasHeader::numberExtRecords()
+{
+  return nExtendedVariableLength;
 }
 
 LasPoint LasHeader::readPoint(size_t num)
@@ -291,12 +311,77 @@ LasPoint LasHeader::readPoint(size_t num)
   return ret;
 }
 
+VariableLengthRecord LasHeader::readRecord()
+{
+  VariableLengthRecord ret;
+  size_t length,i;
+  int ch;
+  lasfile->seekg(readPos,ios::beg);
+  ret.reserved=readleshort(*lasfile);
+  ret.userId=read16(*lasfile);
+  ret.recordId=readleshort(*lasfile);
+  length=(unsigned short)readleshort(*lasfile);
+  ret.description=read32(*lasfile);
+  for (i=0;i<length;i++)
+  {
+    ch=lasfile->get();
+    if (ch>=0)
+      ret.data+=(char)ch;
+    else
+    {
+      ret.reserved=-1;
+      break;
+    }
+  }
+  readPos=lasfile->tellg();
+  if (!lasfile->good())
+    throw -1;
+  return ret;
+}
+
+VariableLengthRecord LasHeader::readExtRecord()
+{
+  VariableLengthRecord ret;
+  size_t length,i;
+  int ch;
+  lasfile->seekg(extReadPos,ios::beg);
+  ret.reserved=readleshort(*lasfile);
+  ret.userId=read16(*lasfile);
+  ret.recordId=readleshort(*lasfile);
+  length=readlelong(*lasfile);
+  ret.description=read32(*lasfile);
+  for (i=0;i<length;i++)
+  {
+    ch=lasfile->get();
+    if (ch>=0)
+      ret.data+=(char)ch;
+    else
+    {
+      ret.reserved=-1;
+      break;
+    }
+  }
+  extReadPos=lasfile->tellg();
+  if (!lasfile->good())
+    throw -1;
+  return ret;
+}
+
 void readLas(string fileName)
 {
   size_t i;
   LasHeader header;
   LasPoint pnt;
+  vector<VariableLengthRecord> records;
   header.open(fileName);
+  for (i=0;i<header.numberRecords();i++)
+    records.push_back(header.readRecord());
+  for (i=0;i<header.numberExtRecords();i++)
+    records.push_back(header.readExtRecord());
+  cout<<"File contains "<<records.size()<<" variable-length records\n";
+  //for (i=0;i<records.size();i++)
+    //if (records[i].getRecordId()==2112) // WKT
+      //cout<<records[i].getData();
   //cout<<"File contains "<<header.numberPoints()<<" dots\n";
   for (i=0;i<header.numberPoints();i++)
   {
