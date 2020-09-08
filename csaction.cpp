@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* octagon.h - bound the points with an octagon       */
+/* csaction.cpp - color scheme menu items             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -21,36 +21,22 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef OCTAGON_H
-#define OCTAGON_H
-#include <array>
-struct BoundBlockTask;
-#include "pointlist.h"
-#include "boundrect.h"
-#include "color.h"
+#include "csaction.h"
 
-struct BoundBlockResult
+using namespace std;
+
+ColorSchemeAction::ColorSchemeAction(QObject *parent,int sch):QAction(parent)
 {
-  BoundRect orthogonal,diagonal;
-  bool ready;
-};
+  scheme=sch;
+  setCheckable(true);
+}
 
-struct BoundBlockTask
+void ColorSchemeAction::setScheme(int sch)
 {
-  BoundBlockTask();
-  xyz *dots;
-  int numDots;
-  BoundBlockResult *result;
-};
+  setChecked(sch==scheme);
+}
 
-extern pointlist net;
-extern double clipLow,clipHigh;
-extern std::array<double,2> areadone;
-extern Colorize colorize;
-void setMutexArea(double area);
-double estimatedDensity();
-void computeBoundBlock(BoundBlockTask &task);
-double makeOctagon();
-int mtxSquare(xy pnt);
-int elevColor(double elev,bool loose);
-#endif
+void ColorSchemeAction::selfTriggered(bool dummy)
+{
+  schemeChanged(scheme);
+}

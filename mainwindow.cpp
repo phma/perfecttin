@@ -49,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
   msgBox=new QMessageBox(this);
-  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool)),
-	  this,SLOT(setSettings(double,double,int,bool)));
+  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool,Printer3dSize)),
+	  this,SLOT(setSettings(double,double,int,bool,Printer3dSize)));
   connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
@@ -517,6 +517,62 @@ void MainWindow::exportPlyBin()
   fileDialog=nullptr;
 }
 
+void MainWindow::exportStlTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN as STL Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".stl"));
+  fileDialog->setNameFilter(tr("(*.stl)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.param0=true;
+    ta.flags=true; // TODO choose whether to round down to a round scale
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_STL;
+    enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
+}
+
+void MainWindow::exportStlBin()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN as STL Binary"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".stl"));
+  fileDialog->setNameFilter(tr("(*.stl)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    ta.param1=lengthUnit;
+    ta.param0=false;
+    ta.flags=true; // TODO choose whether to round down to a round scale
+    ta.filename=fileName;
+    ta.opcode=ACT_WRITE_STL;
+    enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
+}
+
 void MainWindow::exportTinTxt()
 {
   int dialogResult;
@@ -642,6 +698,13 @@ void MainWindow::resumeConversion()
   }
 }
 
+void MainWindow::setColorScheme(int scheme)
+{
+  colorize.setScheme(scheme);
+  tinSizeChanged();
+  colorSchemeChanged(scheme);
+}
+
 void MainWindow::clearCloud()
 {
   cloud.clear();
@@ -654,7 +717,7 @@ void MainWindow::clearCloud()
 
 void MainWindow::configure()
 {
-  configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty);
+  configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty,printer3d);
   configDialog->open();
 }
 
@@ -777,6 +840,7 @@ void MainWindow::makeActions()
 {
   int i;
   fileMenu=menuBar()->addMenu(tr("&File"));
+  viewMenu=menuBar()->addMenu(tr("&View"));
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
   // File menu
@@ -837,6 +901,14 @@ void MainWindow::makeActions()
   exportMenu->addAction(exportPlyBinAction);
   connect(exportPlyBinAction,SIGNAL(triggered(bool)),this,SLOT(exportPlyBin()));
 #endif
+  exportStlTxtAction=new QAction(this);
+  exportStlTxtAction->setText(tr("STL Text"));
+  exportMenu->addAction(exportStlTxtAction);
+  connect(exportStlTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportStlTxt()));
+  exportStlBinAction=new QAction(this);
+  exportStlBinAction->setText(tr("STL Binary"));
+  exportMenu->addAction(exportStlBinAction);
+  connect(exportStlBinAction,SIGNAL(triggered(bool)),this,SLOT(exportStlBin()));
   exportTinTxtAction=new QAction(this);
   exportTinTxtAction->setText(tr("TIN Text"));
   exportMenu->addAction(exportTinTxtAction);
@@ -849,6 +921,21 @@ void MainWindow::makeActions()
   exportLandXmlAction->setText(tr("LandXML"));
   exportMenu->addAction(exportLandXmlAction);
   connect(exportLandXmlAction,SIGNAL(triggered(bool)),this,SLOT(exportLandXml()));
+  // View menu
+  colorMenu=viewMenu->addMenu(tr("Color by"));
+  // Color menu
+  colorGradientAction=new ColorSchemeAction(this,CS_GRADIENT);
+  colorGradientAction->setText(tr("Gradient"));
+  colorMenu->addAction(colorGradientAction);
+  connect(this,SIGNAL(colorSchemeChanged(int)),colorGradientAction,SLOT(setScheme(int)));
+  connect(colorGradientAction,SIGNAL(triggered(bool)),colorGradientAction,SLOT(selfTriggered(bool)));
+  connect(colorGradientAction,SIGNAL(schemeChanged(int)),this,SLOT(setColorScheme(int)));
+  colorElevationAction=new ColorSchemeAction(this,CS_ELEVATION);
+  colorElevationAction->setText(tr("Elevation"));
+  colorMenu->addAction(colorElevationAction);
+  connect(this,SIGNAL(colorSchemeChanged(int)),colorElevationAction,SLOT(setScheme(int)));
+  connect(colorElevationAction,SIGNAL(triggered(bool)),colorElevationAction,SLOT(selfTriggered(bool)));
+  connect(colorElevationAction,SIGNAL(schemeChanged(int)),this,SLOT(setColorScheme(int)));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
@@ -897,7 +984,16 @@ void MainWindow::readSettings()
   tolerance=settings.value("tolerance",0.1).toDouble();
   lengthUnit=settings.value("lengthUnit",1).toDouble();
   exportEmpty=settings.value("exportEmpty",false).toBool();
+  colorize.setScheme(settings.value("colorScheme",CS_GRADIENT).toInt());
+  printer3d.shape=settings.value("3dprinter/shape",1).toUInt();
+  printer3d.x=settings.value("3dprinter/length",300).toDouble();
+  printer3d.y=settings.value("3dprinter/width",300).toDouble();
+  printer3d.z=settings.value("3dprinter/height",300).toDouble();
+  printer3d.minBase=settings.value("3dprinter/base",10).toDouble();
+  printer3d.scaleNum=settings.value("3dprinter/scaleNum",1).toUInt();
+  printer3d.scaleDenom=settings.value("3dprinter/scaleDenom",1000).toUInt();
   lengthUnitChanged(lengthUnit);
+  colorSchemeChanged(colorize.getScheme());
 }
 
 void MainWindow::writeSettings()
@@ -909,14 +1005,23 @@ void MainWindow::writeSettings()
   settings.setValue("tolerance",tolerance);
   settings.setValue("lengthUnit",lengthUnit);
   settings.setValue("exportEmpty",exportEmpty);
+  settings.setValue("colorScheme",colorize.getScheme());
+  settings.setValue("3dprinter/shape",printer3d.shape);
+  settings.setValue("3dprinter/length",printer3d.x);
+  settings.setValue("3dprinter/width",printer3d.y);
+  settings.setValue("3dprinter/height",printer3d.z);
+  settings.setValue("3dprinter/base",printer3d.minBase);
+  settings.setValue("3dprinter/scaleNum",printer3d.scaleNum);
+  settings.setValue("3dprinter/scaleDenom",printer3d.scaleDenom);
 }
 
-void MainWindow::setSettings(double lu,double tol,int thr,bool ee)
+void MainWindow::setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri)
 {
   lengthUnit=lu;
   tolerance=tol;
   numberThreads=thr;
   exportEmpty=ee;
+  printer3d=pri;
   writeSettings();
   lengthUnitChanged(lengthUnit);
 }

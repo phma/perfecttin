@@ -42,6 +42,7 @@ pointlist net;
 double clipLow,clipHigh;
 array<double,2> areadone={0,0};
 double mtxSquareSide;
+Colorize colorize;
 
 BoundBlockTask::BoundBlockTask()
 {
@@ -163,6 +164,7 @@ double makeOctagon()
     if (high<bresults[i].diagonal.high())
       high=bresults[i].diagonal.high();
   }
+  colorize.setLimits(low,high);
   clipHigh=2*high-low;
   clipLow=2*low-high;
   for (i=0;i<4;i++)

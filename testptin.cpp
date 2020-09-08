@@ -36,6 +36,7 @@
 #include "test.h"
 #include "tin.h"
 #include "dxf.h"
+#include "stl.h"
 #include "angle.h"
 #include "pointlist.h"
 #include "adjelev.h"
@@ -993,6 +994,55 @@ void testquarter()
   ps.close();
 }
 
+void test1stl(PostScript &ps,string name)
+{
+  int i;
+  double bear;
+  Printer3dSize printer;
+  vector<StlTriangle> stltri;
+  ofstream stlBinFile(name+"bin.stl",ios::binary);
+  ofstream stlTxtFile(name+"txt.stl");
+  makeOctagon();
+  printer.shape=P3S_RECTANGULAR;
+  printer.x=210;
+  printer.y=297;
+  printer.z=192;
+  printer.minBase=10;
+  for (i=0;i<180;i+=5)
+    cout<<i<<' '<<hScale(net,printer,degtobin(i))<<endl;
+  bear=turnFitInPrinter(net,printer);
+  cout<<"Turn by "<<bintodeg(bear)<<endl;
+  stltri=stlMesh(printer,false,false);
+  writeStlBinary(stlBinFile,stltri);
+  writeStlText(stlTxtFile,stltri);
+  ps.startpage();
+  ps.setscale(11,15,199,282); // setscale uses a 5% margin on each side
+  for (i=0;i<stltri.size();i++)
+  {
+    ps.startline();
+    ps.lineto(stltri[i].a);
+    ps.lineto(stltri[i].b);
+    ps.lineto(stltri[i].c);
+    ps.endline(true);
+    cout<<stltri[i].b.getx()<<' '<<stltri[i].b.gety()<<' '<<stltri[i].b.getz()<<endl;
+  }
+  ps.endpage();
+}
+
+void teststl()
+{
+  PostScript ps;
+  ps.open("stl.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  lozenge(150);
+  test1stl(ps,"lozenge");
+  aster(150);
+  test1stl(ps,"aster");
+  ps.close();
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -1050,6 +1100,8 @@ int main(int argc, char *argv[])
     testsplit();
   if (shoulddo("quarter"))
     testquarter();
+  if (shoulddo("stl"))
+    teststl();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }

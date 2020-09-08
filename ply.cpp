@@ -32,6 +32,7 @@
 #include "cloud.h"
 #include "adjelev.h"
 #include "octagon.h"
+#include "color.h"
 
 using namespace std;
 #ifdef Plytapus_FOUND
@@ -64,13 +65,13 @@ void receivePoint(ElementBuffer &buf)
 void transmitPoint(ElementBuffer &buf,size_t i)
 {
   xyz pnt=net.points[i+1]-plyOffset;
-  int color=elevColor(net.points[i+1].getz(),isLoose(net.points[i+1]));
+  Color color=colorize(&net.points[i+1]);
   buf[0]=pnt.getx()/plyUnit;
   buf[1]=pnt.gety()/plyUnit;
   buf[2]=pnt.getz()/plyUnit;
-  buf[3]=(color>>16)&255;
-  buf[4]=(color>>8)&255;
-  buf[5]=(color)&255;
+  buf[3]=color.br();
+  buf[4]=color.bg();
+  buf[5]=color.bb();
 }
 
 void transmitTriangle(ElementBuffer &buf,size_t i)

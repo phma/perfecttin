@@ -26,36 +26,73 @@
 #define CONFIGDIALOG_H
 #include <vector>
 #include <QDialog>
+#include <QDialogButtonBox>
 #include <QLabel>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QGridLayout>
+#include "stl.h"
 
 extern const double conversionFactors[4];
 extern const char unitNames[4][12];
+
+class GeneralTab: public QWidget
+{
+  Q_OBJECT
+public:
+  GeneralTab(QWidget *parent=nullptr);
+  QLabel *lengthUnitLabel,*toleranceLabel;
+  QLabel *threadLabel,*threadDefault;
+  QLabel *toleranceInUnit;
+  QComboBox *lengthUnitBox,*toleranceBox;
+  QGridLayout *gridLayout;
+  QLineEdit *threadInput;
+  QCheckBox *exportEmptyCheck;
+};
+
+class Printer3dTab: public QWidget
+{
+  Q_OBJECT
+public:
+  Printer3dTab(QWidget *parent=nullptr);
+  QLabel *shapeLabel;
+  QLabel *lengthLabel,*widthLabel,*heightLabel;
+  QLabel *baseLabel;
+  QLabel *scaleLabel,*colonLabel;
+  QLabel *mmLabel[4];
+  QGridLayout *gridLayout;
+  QComboBox *shapeBox;
+  QLineEdit *lengthInput,*widthInput,*heightInput;
+  QLineEdit *baseInput;
+  QLineEdit *scaleNumInput,*scaleDenomInput;
+  bool isValid();
+signals:
+  void contentChanged();
+public slots:
+  void disableSome();
+};
 
 class ConfigurationDialog: public QDialog
 {
   Q_OBJECT
 public:
-  ConfigurationDialog(QWidget *parent=0);
+  ConfigurationDialog(QWidget *parent=nullptr);
 signals:
-  void settingsChanged(double lu,double tol,int thr,bool ee);
+  void settingsChanged(double lu,double tol,int thr,bool ee,Printer3dSize pri);
 public slots:
-  void set(double lengthUnit,double tolerance,int threads,bool exportEmpty);
+  void set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer);
   void updateToleranceConversion();
+  void checkValid();
   virtual void accept();
 private:
-  QLabel *lengthUnitLabel,*toleranceLabel;
-  QLabel *threadLabel,*threadDefault;
-  QLabel *toleranceInUnit;
-  QComboBox *lengthUnitBox,*toleranceBox;
+  QTabWidget *tabWidget;
+  GeneralTab *general;
+  Printer3dTab *printTab;
+  QVBoxLayout *boxLayout;
+  QDialogButtonBox *buttonBox;
   QPushButton *okButton,*cancelButton;
-  QGridLayout *gridLayout;
-  QLineEdit *threadInput;
-  QCheckBox *exportEmptyCheck;
 };
 #endif
 

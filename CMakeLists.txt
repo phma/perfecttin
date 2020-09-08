@@ -57,34 +57,35 @@ qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 
 if (${Boost_FOUND})
 add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp
                dxf.cpp edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
-               qindex.cpp random.cpp relprime.cpp test.cpp
+               qindex.cpp random.cpp relprime.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp configdialog.cpp
-               dxf.cpp edgeop.cpp fileio.cpp gui.cpp landxml.cpp las.cpp ldecimal.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp configdialog.cpp
+               csaction.cpp dxf.cpp edgeop.cpp fileio.cpp
+               gui.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp lissajous.cpp mainwindow.cpp
                manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp
-               qindex.cpp random.cpp relprime.cpp test.cpp
+               qindex.cpp random.cpp relprime.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                unitbutton.cpp ${lib_resources} ${qm_files})
 add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp dxf.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
-               relprime.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+               relprime.cpp stl.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 add_executable(testptin adjelev.cpp angle.cpp binio.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp dxf.cpp
+	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
-               relprime.cpp test.cpp testptin.cpp threads.cpp
+               relprime.cpp stl.cpp test.cpp testptin.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
@@ -135,7 +136,7 @@ check_type_size("int *" INT_POINTER)
 
 set(PERFECTTIN_MAJOR_VERSION 0)
 set(PERFECTTIN_MINOR_VERSION 5)
-set(PERFECTTIN_PATCH_VERSION 0+)
+set(PERFECTTIN_PATCH_VERSION 1alpha)
 set(PERFECTTIN_VERSION ${PERFECTTIN_MAJOR_VERSION}.${PERFECTTIN_MINOR_VERSION}.${PERFECTTIN_PATCH_VERSION})
 set(COPY_YEAR 2020)
 
@@ -164,3 +165,4 @@ add_test(leastsquares testptin leastsquares adjelev adjblock)
 add_test(fileio testptin csvline pnezd ldecimal)
 add_test(edgeop testptin flip bend)
 add_test(triop testptin split quarter)
+add_test(stl testptin stl)

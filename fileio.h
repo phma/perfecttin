@@ -26,6 +26,7 @@
 #include <string>
 #include "manysum.h"
 #include "point.h"
+#include "stl.h"
 
 #define PT_UNKNOWN_HEADER_FORMAT -1
 #define PT_NOT_PTIN_FILE -2
@@ -43,6 +44,8 @@
  * Any other negative tolRatio value: file is corrupt.
  * tolRatio>0 but tolerance is NaN: file was incompletely written.
  */
+
+extern Printer3dSize printer3d;
 
 struct PtinHeader
 {
@@ -78,6 +81,7 @@ std::string extension(std::string fileName);
 std::string baseName(std::string fileName);
 void deleteFile(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit,int flags);
+void writeStl(std::string outputFile,bool asc,double outUnit,int flags);
 int readCloud(std::string &inputFile,double inUnit);
 void writePoint(std::ostream &file,xyz pnt);
 xyz readPoint(std::istream &file);

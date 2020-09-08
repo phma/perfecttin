@@ -763,6 +763,10 @@ void TinThread::operator()(int thread)
 	  writePly(act.filename,act.param0,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
+	case ACT_WRITE_STL:
+	  writeStl(act.filename,act.param0,act.param1,act.flags);
+	  unsleep(thread);
+	  break;
 	case ACT_WRITE_PTIN:
 	  adjustLooseCorners(act.param0*act.param1);
 	  writePtin(act.filename,act.param0,act.param1,act.param2);
@@ -827,6 +831,10 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_WRITE_PLY:
 	  writePly(act.filename,act.param0,act.param1,act.flags);
+	  unsleep(thread);
+	  break;
+	case ACT_WRITE_STL:
+	  writeStl(act.filename,act.param0,act.param1,act.flags);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:

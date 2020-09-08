@@ -30,6 +30,7 @@
 #include <array>
 #include "configdialog.h"
 #include "unitbutton.h"
+#include "csaction.h"
 #include "tincanvas.h"
 
 class MainWindow: public QMainWindow
@@ -50,11 +51,12 @@ public:
 signals:
   void tinSizeChanged();
   void lengthUnitChanged(double unit);
+  void colorSchemeChanged(int scheme);
   void noCloudArea();
   void gotResult(ThreadAction ta);
 public slots:
   void tick();
-  void setSettings(double lu,double tol,int thr,bool ee);
+  void setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri);
   void setUnit(double lu);
   void openFile();
   void loadFile();
@@ -64,12 +66,15 @@ public slots:
   void exportDxfBin();
   void exportPlyTxt();
   void exportPlyBin();
+  void exportStlTxt();
+  void exportStlBin();
   void exportTinTxt();
   void exportCarlsonTin();
   void exportLandXml();
   void startConversion();
   void stopConversion();
   void resumeConversion();
+  void setColorScheme(int scheme);
   void clearCloud();
   void configure();
   void msgNoCloudArea();
@@ -92,7 +97,7 @@ private:
   QMessageBox *msgBox;
   QToolBar *toolbar;
   ConfigurationDialog *configDialog;
-  QMenu *fileMenu,*settingsMenu,*helpMenu,*exportMenu;
+  QMenu *fileMenu,*viewMenu,*settingsMenu,*helpMenu,*exportMenu,*colorMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg,*densityMsg;
   QProgressBar *doneBar,*busyBar;
   QAction *openAction,*loadAction,*convertAction,*clearAction;
@@ -100,6 +105,8 @@ private:
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
   QAction *exportPlyTxtAction,*exportPlyBinAction;
+  QAction *exportStlTxtAction,*exportStlBinAction;
+  ColorSchemeAction *colorGradientAction,*colorElevationAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   UnitButton *unitButtons[4];

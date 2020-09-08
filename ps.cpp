@@ -38,7 +38,7 @@ using namespace std;
 
 #define PAPERRES 0.004
 
-char rscales[]={10,12,15,20,25,30,40,50,60,80};
+const char rscales[]={10,12,15,20,25,30,40,50,60,80};
 const double PSPoint=25.4/72;
 map<string,papersize> papersizes=
 /* These mean the physical orientation of the paper in the printer. If you

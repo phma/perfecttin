@@ -28,6 +28,7 @@
 #include "octagon.h"
 #include "relprime.h"
 #include "angle.h"
+#include "color.h"
 #include "threads.h"
 #include "ldecimal.h"
 
@@ -89,10 +90,11 @@ void TinCanvas::sizeToFit()
 
 void TinCanvas::tick()
 {
-  int i,sz;
+  int i,sz,timeLimit;
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
-  double r,g,b,splashElev;
+  double splashElev;
+  Color color;
   triangle *tri=nullptr;
   xy gradient,A,B,C;
   xy dartCorners[4];
@@ -209,8 +211,12 @@ void TinCanvas::tick()
     painter.drawText(textBox,Qt::AlignCenter,QString::fromStdString(scaleText));
   }
   painter.setPen(Qt::NoPen);
-  // Paint some triangles in the TIN in colors depending on their gradient.
-  for (;trianglesToPaint && elapsed<cr::milliseconds(20);trianglesToPaint--)
+  // Paint some triangles in the TIN in colors depending on their gradient or elevation.
+  if (state==TH_WAIT || state==TH_PAUSE)
+    timeLimit=45;
+  else
+    timeLimit=20;
+  for (;trianglesToPaint && elapsed<cr::milliseconds(timeLimit);trianglesToPaint--)
   {
     net.wingEdge.lock_shared();
     if (++triangleNum>=net.triangles.size())
@@ -228,28 +234,10 @@ void TinCanvas::tick()
       B=*tri->b;
       C=*tri->c;
       net.wingEdge.unlock_shared();
-      r=0.5+gradient.north()*0.1294+gradient.east()*0.483;
-      g=0.5+gradient.north()*0.3535-gradient.east()*0.3535;
-      b=0.5-gradient.north()*0.483 -gradient.east()*0.1294;
+      color=colorize(tri);
       if (splashScreenTime)
-      {
-	r+=0.5-0.5*splashScreenTime/SPLASH_TIME;
-	g+=0.5-0.5*splashScreenTime/SPLASH_TIME;
-	b+=0.5-0.5*splashScreenTime/SPLASH_TIME;
-      }
-      if (r>1)
-	r=1;
-      if (r<0)
-	r=0;
-      if (g>1)
-	g=1;
-      if (g<0)
-	g=0;
-      if (b>1)
-	b=1;
-      if (b<0)
-	b=0;
-      brush.setColor(QColor::fromRgbF(r,g,b));
+	color.mix(white,1-(double)splashScreenTime/SPLASH_TIME);
+      brush.setColor(QColor::fromRgbF(color.fr(),color.fg(),color.fb()));
       painter.setBrush(brush);
       polygon=QPolygon();
       polygon<<worldToWindow(A)<<worldToWindow(B)<<worldToWindow(C);
@@ -326,6 +314,7 @@ void TinCanvas::startSplashScreen()
     }
     net.maketriangles();
     net.wingEdge.unlock();
+    colorize.setLimits(-0.5,0.5);
     splashScreenStarted();
     sizeToFit();
   }
@@ -450,6 +439,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
     case -ACT_WRITE_DXF:
     case -ACT_WRITE_TIN:
     case -ACT_WRITE_PLY:
+    case -ACT_WRITE_STL:
     case -ACT_WRITE_CARLSON_TIN:
     case -ACT_WRITE_LANDXML:
     case -ACT_WRITE_PTIN:

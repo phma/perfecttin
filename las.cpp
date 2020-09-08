@@ -3,7 +3,7 @@
 /* las.cpp - laser point cloud files                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -29,7 +29,20 @@
 #include "angle.h"
 #include "cloud.h"
 
+const int MASK_GPSTIME=0x7fa;
+const int MASK_RGB=0x5ac;
+const int MASK_NIR=0x500;
+const int MASK_WAVE=0x630;
+
 using namespace std;
+
+string read16(istream &file)
+{
+  char buf[24];
+  memset(buf,0,24);
+  file.read(buf,16);
+  return string(buf);
+}
 
 string read32(ifstream &file)
 {
@@ -37,6 +50,51 @@ string read32(ifstream &file)
   memset(buf,0,40);
   file.read(buf,32);
   return string(buf);
+}
+
+VariableLengthRecord::VariableLengthRecord()
+{
+  reserved=recordId=0;
+}
+
+void VariableLengthRecord::setUserId(string uid)
+{
+  userId=uid;
+}
+
+void VariableLengthRecord::setRecordId(int rid)
+{
+  recordId=rid;
+}
+
+void VariableLengthRecord::setDescription(string desc)
+{
+  description=desc;
+}
+
+void VariableLengthRecord::setData(string dat)
+{
+  data=dat;
+}
+
+string VariableLengthRecord::getUserId()
+{
+  return userId;
+}
+
+int VariableLengthRecord::getRecordId()
+{
+  return recordId;
+}
+
+string VariableLengthRecord::getDescription()
+{
+  return description;
+}
+
+string VariableLengthRecord::getData()
+{
+  return data;
 }
 
 LasHeader::LasHeader()
@@ -157,6 +215,8 @@ void LasHeader::open(std::string fileName)
 	nPoints[i]=0;
     if (pointLength==0)
       versionMajor=versionMinor=nPoints[0]=0;
+    readPos=headerSize;
+    extReadPos=startExtendedVariableLength;
   }
   else // file does not begin with "LASF"
     versionMajor=versionMinor=nPoints[0]=0;
@@ -176,6 +236,16 @@ void LasHeader::close()
 size_t LasHeader::numberPoints(int r)
 {
   return nPoints[r];
+}
+
+size_t LasHeader::numberRecords()
+{
+  return nVariableLength;
+}
+
+size_t LasHeader::numberExtRecords()
+{
+  return nExtendedVariableLength;
 }
 
 LasPoint LasHeader::readPoint(size_t num)
@@ -199,26 +269,8 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.scanAngle=degtobin((signed char)lasfile->get());
     ret.userData=(unsigned char)lasfile->get();
     ret.pointSource=readleshort(*lasfile);
-    if ((1<<pointFormat)&0x3a) // 5, 4, 3, or 1
-      ret.gpsTime=readledouble(*lasfile);
-    if ((1<<pointFormat)&0x2c) // 5, 3, or 2
-    {
-      ret.red=readleshort(*lasfile);
-      ret.green=readleshort(*lasfile);
-      ret.blue=readleshort(*lasfile);
-    }
-    if (pointFormat>=4) // 5 or 4
-    {
-      ret.waveIndex=(unsigned char)lasfile->get();
-      ret.waveformOffset=readlelong(*lasfile);
-      ret.waveformSize=readleint(*lasfile);
-      ret.waveformTime=readlefloat(*lasfile);
-      ret.xDir=readlefloat(*lasfile);
-      ret.yDir=readlefloat(*lasfile);
-      ret.zDir=readlefloat(*lasfile);
-    }
   }
-  else
+  else // formats 6 through 10
   {
     temp=lasfile->get();
     ret.returnNum=temp&15;
@@ -232,10 +284,84 @@ LasPoint LasHeader::readPoint(size_t num)
     ret.userData=(unsigned char)lasfile->get();
     ret.scanAngle=degtobin(readleshort(*lasfile)*0.006);
     ret.pointSource=readleshort(*lasfile);
+  }
+  if ((1<<pointFormat)&MASK_GPSTIME) // 10-5, 4, 3, or 1
     ret.gpsTime=readledouble(*lasfile);
-    // switch(pointFormat)...
+  if ((1<<pointFormat)&MASK_RGB) // 10, 8, 7, 5, 3, or 2
+  {
+    ret.red=readleshort(*lasfile);
+    ret.green=readleshort(*lasfile);
+    ret.blue=readleshort(*lasfile);
+  }
+  if ((1<<pointFormat)&MASK_NIR) // 10 or 8
+    ret.nir=readleshort(*lasfile);
+  if ((1<<pointFormat)&MASK_WAVE) // 10, 9, 5 or 4
+  {
+    ret.waveIndex=(unsigned char)lasfile->get();
+    ret.waveformOffset=readlelong(*lasfile);
+    ret.waveformSize=readleint(*lasfile);
+    ret.waveformTime=readlefloat(*lasfile);
+    ret.xDir=readlefloat(*lasfile);
+    ret.yDir=readlefloat(*lasfile);
+    ret.zDir=readlefloat(*lasfile);
   }
   ret.location=xyz(xOffset+xScale*xInt,yOffset+yScale*yInt,zOffset+zScale*zInt);
+  if (!lasfile->good())
+    throw -1;
+  return ret;
+}
+
+VariableLengthRecord LasHeader::readRecord()
+{
+  VariableLengthRecord ret;
+  size_t length,i;
+  int ch;
+  lasfile->seekg(readPos,ios::beg);
+  ret.reserved=readleshort(*lasfile);
+  ret.userId=read16(*lasfile);
+  ret.recordId=readleshort(*lasfile);
+  length=(unsigned short)readleshort(*lasfile);
+  ret.description=read32(*lasfile);
+  for (i=0;i<length;i++)
+  {
+    ch=lasfile->get();
+    if (ch>=0)
+      ret.data+=(char)ch;
+    else
+    {
+      ret.reserved=-1;
+      break;
+    }
+  }
+  readPos=lasfile->tellg();
+  if (!lasfile->good())
+    throw -1;
+  return ret;
+}
+
+VariableLengthRecord LasHeader::readExtRecord()
+{
+  VariableLengthRecord ret;
+  size_t length,i;
+  int ch;
+  lasfile->seekg(extReadPos,ios::beg);
+  ret.reserved=readleshort(*lasfile);
+  ret.userId=read16(*lasfile);
+  ret.recordId=readleshort(*lasfile);
+  length=readlelong(*lasfile);
+  ret.description=read32(*lasfile);
+  for (i=0;i<length;i++)
+  {
+    ch=lasfile->get();
+    if (ch>=0)
+      ret.data+=(char)ch;
+    else
+    {
+      ret.reserved=-1;
+      break;
+    }
+  }
+  extReadPos=lasfile->tellg();
   if (!lasfile->good())
     throw -1;
   return ret;
@@ -246,7 +372,16 @@ void readLas(string fileName)
   size_t i;
   LasHeader header;
   LasPoint pnt;
+  vector<VariableLengthRecord> records;
   header.open(fileName);
+  for (i=0;i<header.numberRecords();i++)
+    records.push_back(header.readRecord());
+  for (i=0;i<header.numberExtRecords();i++)
+    records.push_back(header.readExtRecord());
+  cout<<"File contains "<<records.size()<<" variable-length records\n";
+  //for (i=0;i<records.size();i++)
+    //if (records[i].getRecordId()==2112) // WKT
+      //cout<<records[i].getData();
   //cout<<"File contains "<<header.numberPoints()<<" dots\n";
   for (i=0;i<header.numberPoints();i++)
   {

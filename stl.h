@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* octagon.h - bound the points with an octagon       */
+/* stl.h - stereolithography (3D printing) export     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -21,36 +21,37 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#ifndef OCTAGON_H
-#define OCTAGON_H
+#ifndef STL_H
+#define STL_H
 #include <array>
-struct BoundBlockTask;
-#include "pointlist.h"
-#include "boundrect.h"
-#include "color.h"
+#include <vector>
+#include "point.h"
+#include "config.h"
 
-struct BoundBlockResult
+#define P3S_ABSOLUTE 0
+#define P3S_RECTANGULAR 1
+// TODO: handle circular and hexagonal
+
+struct StlTriangle
 {
-  BoundRect orthogonal,diagonal;
-  bool ready;
+  xyz normal,a,b,c;
+  std::string attributes;
+  StlTriangle();
+  StlTriangle(xyz A,xyz B,xyz C);
 };
 
-struct BoundBlockTask
+struct Printer3dSize
 {
-  BoundBlockTask();
-  xyz *dots;
-  int numDots;
-  BoundBlockResult *result;
+  int shape;
+  double x,y,z; // all in millimeters
+  unsigned scaleNum,scaleDenom;
+  double minBase;
 };
 
-extern pointlist net;
-extern double clipLow,clipHigh;
-extern std::array<double,2> areadone;
-extern Colorize colorize;
-void setMutexArea(double area);
-double estimatedDensity();
-void computeBoundBlock(BoundBlockTask &task);
-double makeOctagon();
-int mtxSquare(xy pnt);
-int elevColor(double elev,bool loose);
+double hScale(pointlist &ptl,Printer3dSize &pri,int ori);
+int turnFitInPrinter(pointlist &ptl,Printer3dSize &pri);
+std::vector<StlTriangle> stlMesh(Printer3dSize &pri,bool roundScale,bool feet);
+void writeStlBinary(std::ostream &file,std::vector<StlTriangle> &mesh);
+void writeStlText(std::ostream &file,std::vector<StlTriangle> &mesh);
+
 #endif

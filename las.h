@@ -3,7 +3,7 @@
 /* las.h - laser point cloud files                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -45,6 +45,28 @@ struct LasPoint
   float waveformTime,xDir,yDir,zDir;
 };
 
+class VariableLengthRecord
+// Used for extended variable length records as well.
+{
+private:
+  unsigned short reserved;
+  std::string userId;
+  unsigned short recordId;
+  std::string description;
+  std::string data;
+public:
+  VariableLengthRecord();
+  void setUserId(std::string uid);
+  void setRecordId(int rid);
+  void setDescription(std::string desc);
+  void setData(std::string dat);
+  std::string getUserId();
+  int getRecordId();
+  std::string getDescription();
+  std::string getData();
+  friend class LasHeader;
+};
+
 class LasHeader
 {
 private:
@@ -64,6 +86,7 @@ private:
   size_t startWaveform,startExtendedVariableLength;
   unsigned int nExtendedVariableLength;
   size_t nPoints[16]; // [0] is total; [1]..[15] are each return
+  size_t readPos,extReadPos;
 public:
   LasHeader();
   ~LasHeader();
@@ -71,7 +94,11 @@ public:
   bool isValid();
   void close();
   size_t numberPoints(int r=0);
+  size_t numberRecords();
+  size_t numberExtRecords();
   LasPoint readPoint(size_t num);
+  VariableLengthRecord readRecord();
+  VariableLengthRecord readExtRecord();
 };
 
 void readLas(std::string fileName);

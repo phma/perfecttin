@@ -3,7 +3,7 @@
 /* point.h - classes for points                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -89,9 +89,12 @@ public:
   bool isfinite() const;
   bool isnan() const;
   double length();
+  void normalize();
   void raise(double height);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
+  void _roscat(xyz tfrom,int ro,double sca,xy cis,xyz tto);
   void roscat(xy tfrom,int ro,double sca,xy tto);
+  void roscat(xyz tfrom,int ro,double sca,xyz tto);
   void setelev(double h)
   {
     z=h;
