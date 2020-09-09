@@ -1,3 +1,9 @@
+# Version 0.5.1
+- PLY export is now colored.
+- You can view a TIN colored by gradient or by elevation.
+- Pale coloring indicates which areas are holes in the point cloud.
+- You can now export a TIN in STL format and specify the size of your 3D printer.
+
 # Version 0.5.0
 - Conversion is much faster.
 - A longstanding bug, which could crash the program if you load a point cloud right after opening a PerfectTIN file, is fixed.
