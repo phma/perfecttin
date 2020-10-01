@@ -57,7 +57,7 @@ qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
 if (${Boost_FOUND})
-add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
+add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp
                dxf.cpp edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
@@ -65,7 +65,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp binio.cpp
                qindex.cpp random.cpp relprime.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 endif (${Boost_FOUND})
-add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
+add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp configdialog.cpp
                csaction.cpp dxf.cpp edgeop.cpp fileio.cpp
                gui.cpp landxml.cpp las.cpp ldecimal.cpp
@@ -75,13 +75,13 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp binio.cpp
                qindex.cpp random.cpp relprime.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                unitbutton.cpp ${lib_resources} ${qm_files})
-add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp
+add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
                relprime.cpp stl.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
-add_executable(testptin adjelev.cpp angle.cpp binio.cpp
+add_executable(testptin adjelev.cpp angle.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
@@ -109,6 +109,8 @@ endif (${Plytapus_FOUND})
 if (${Mitobrevno_FOUND})
 target_link_libraries(perfecttin ${Mitobrevno_LIBRARY})
 target_link_libraries(perfecttin-gui ${Mitobrevno_LIBRARY})
+target_link_libraries(fuzzptin ${Mitobrevno_LIBRARY})
+target_link_libraries(testptin ${Mitobrevno_LIBRARY})
 endif (${Mitobrevno_FOUND})
 set_target_properties(perfecttin-gui PROPERTIES WIN32_EXECUTABLE TRUE)
 
