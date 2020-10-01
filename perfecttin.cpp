@@ -43,6 +43,7 @@
 #include "carlsontin.h"
 #include "landxml.h"
 #include "fileio.h"
+#include "brevno.h"
 
 #define FMT_DXF_TXT 1
 #define FMT_DXF_BIN 2
@@ -455,6 +456,7 @@ int main(int argc, char *argv[])
 	  }
 	}
       }
+      writeBufLog();
     }
     waitForThreads(TH_STOP);
     if (ps.isOpen())
@@ -491,6 +493,7 @@ int main(int argc, char *argv[])
       }
       deleteFile(outputFile+".2.ptin");
     }
+    writeBufLog();
     joinThreads();
   }
   return 0;

@@ -30,10 +30,12 @@
 void openThreadLog();
 void logBeginSplit(int thread,int tri);
 void logEndSplit(int thread,int tri);
+void writeBufLog();
 #else
 #define openThreadLog()
 #define logBeginSplit(thread,tri)
 #define logEndSplit(thread,tri)
+#define writeBufLog()
 #endif
 
 #endif

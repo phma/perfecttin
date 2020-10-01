@@ -46,4 +46,9 @@ void logEndSplit(int thread,int tri)
   logEvent(MB_END_SPLIT,tri);
 }
 
+void writeBufLog()
+{
+  writeBufferedLog();
+}
+
 #endif

@@ -31,6 +31,7 @@
 #include "fileio.h"
 #include "angle.h"
 #include "octagon.h"
+#include "brevno.h"
 using namespace std;
 
 const char unitIconNames[4][28]=
@@ -311,6 +312,7 @@ void MainWindow::tick()
       stopAction->setEnabled(true);
     }
   }
+  writeBufLog();
 }
 
 void MainWindow::openFile()

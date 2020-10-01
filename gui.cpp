@@ -30,6 +30,7 @@
 #include "octagon.h"
 #include "config.h"
 #include "mainwindow.h"
+#include "brevno.h"
 
 using namespace std;
 
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
   window.show();
   exitStatus=app.exec();
   waitForThreads(TH_STOP);
+  writeBufLog();
   joinThreads();
   return exitStatus;
 }

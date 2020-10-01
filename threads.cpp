@@ -37,6 +37,7 @@
 #include "manysum.h"
 #include "carlsontin.h"
 #include "landxml.h"
+#include "brevno.h"
 using namespace std;
 namespace cr=std::chrono;
 
@@ -221,6 +222,7 @@ void startThreads(int n)
 {
   int i,m;
   threadCommand=TH_WAIT;
+  openThreadLog();
   heldTriangles.resize(n);
   sleepTime.resize(n);
   sleepFraction.resize(n);
