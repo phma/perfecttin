@@ -23,11 +23,11 @@
  */
 #include "brevno.h"
 using namespace std;
-using namespace mitobrevno;
 
 #ifdef Mitobrevno_FOUND
 #define MB_BEGIN_SPLIT 0x2000
 #define MB_END_SPLIT 0x3000
+using namespace mitobrevno;
 
 void openThreadLog()
 {
