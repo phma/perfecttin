@@ -25,6 +25,7 @@
 using namespace std;
 
 #ifdef Mitobrevno_FOUND
+#define MB_START_THREAD 0
 #define MB_BEGIN_SPLIT 0x2000
 #define MB_END_SPLIT 0x3000
 using namespace mitobrevno;
@@ -34,6 +35,13 @@ void openThreadLog()
   openLogFile("thread.log");
   describeEvent(MB_BEGIN_SPLIT,"split triangle");
   describeParam(MB_BEGIN_SPLIT,0,"triangle");
+}
+
+void logStartThread()
+{
+  vector<int> intParams;
+  vector<float> floatParams;
+  logEvent(MB_START_THREAD,intParams,floatParams);
 }
 
 void logBeginSplit(int tri)

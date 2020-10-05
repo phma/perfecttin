@@ -223,6 +223,7 @@ void startThreads(int n)
   int i,m;
   threadCommand=TH_WAIT;
   openThreadLog();
+  logStartThread();
   heldTriangles.resize(n);
   sleepTime.resize(n);
   sleepFraction.resize(n);
@@ -675,6 +676,7 @@ void TinThread::operator()(int thread)
   edge *edg;
   triangle *tri;
   ThreadAction act;
+  logStartThread();
   startMutex.lock();
   if (threadStatus.size()!=thread)
   {

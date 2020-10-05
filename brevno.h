@@ -28,6 +28,7 @@
 #ifdef Mitobrevno_FOUND
 #include "mitobrevno.h"
 void openThreadLog();
+void logStartThread();
 void logBeginSplit(int tri);
 void logEndSplit(int tri);
 void writeBufLog();
