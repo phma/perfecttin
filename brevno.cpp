@@ -35,6 +35,8 @@ void openThreadLog()
   openLogFile("thread.log");
   describeEvent(MB_BEGIN_SPLIT,"split triangle");
   describeParam(MB_BEGIN_SPLIT,0,"triangle");
+  formatParam(MB_BEGIN_SPLIT,1,0);
+  describeEvent(MB_START_THREAD,"start thread");
 }
 
 void logStartThread()
