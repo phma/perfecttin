@@ -38,12 +38,18 @@ void openThreadLog()
 
 void logBeginSplit(int thread,int tri)
 {
-  logEvent(MB_BEGIN_SPLIT,tri);
+  vector<int> intParams;
+  vector<float> floatParams;
+  intParams.push_back(tri);
+  logEvent(MB_BEGIN_SPLIT,intParams,floatParams);
 }
 
 void logEndSplit(int thread,int tri)
 {
-  logEvent(MB_END_SPLIT,tri);
+  vector<int> intParams;
+  vector<float> floatParams;
+  intParams.push_back(tri);
+  logEvent(MB_END_SPLIT,intParams,floatParams);
 }
 
 void writeBufLog()
