@@ -44,7 +44,7 @@ point *split(triangle *tri,int thread)
   triangle *newt0,*newt1;
   edge *newe0,*newe1,*newe2;
   net.wingEdge.lock();
-  logBeginSplit(thread,net.revtriangles[tri]);
+  logBeginSplit(net.revtriangles[tri]);
   point newPoint(((xyz)*tri->a+(xyz)*tri->b+(xyz)*tri->c)/3);
   int newPointNum=net.points.size()+1;
   net.addpoint(newPointNum,newPoint);
@@ -100,7 +100,7 @@ point *split(triangle *tri,int thread)
   newe1->setNeighbors();
   newe2->setNeighbors();
   //assert(net.checkTinConsistency());
-  logEndSplit(thread,net.revtriangles[tri]);
+  logEndSplit(net.revtriangles[tri]);
   net.wingEdge.unlock();
   tri->flatten();
   newt0->flatten();

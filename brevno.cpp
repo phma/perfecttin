@@ -36,7 +36,7 @@ void openThreadLog()
   describeParam(MB_BEGIN_SPLIT,0,"triangle");
 }
 
-void logBeginSplit(int thread,int tri)
+void logBeginSplit(int tri)
 {
   vector<int> intParams;
   vector<float> floatParams;
@@ -44,7 +44,7 @@ void logBeginSplit(int thread,int tri)
   logEvent(MB_BEGIN_SPLIT,intParams,floatParams);
 }
 
-void logEndSplit(int thread,int tri)
+void logEndSplit(int tri)
 {
   vector<int> intParams;
   vector<float> floatParams;

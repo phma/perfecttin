@@ -28,8 +28,8 @@
 #ifdef Mitobrevno_FOUND
 #include "mitobrevno.h"
 void openThreadLog();
-void logBeginSplit(int thread,int tri);
-void logEndSplit(int thread,int tri);
+void logBeginSplit(int tri);
+void logEndSplit(int tri);
 void writeBufLog();
 #else
 #define openThreadLog()
