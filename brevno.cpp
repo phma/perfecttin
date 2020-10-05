@@ -33,7 +33,7 @@ void openThreadLog()
 {
   openLogFile("thread.log");
   describeEvent(MB_BEGIN_SPLIT,"split triangle");
-  describeParam(0,"triangle");
+  describeParam(MB_BEGIN_SPLIT,0,"triangle");
 }
 
 void logBeginSplit(int thread,int tri)
