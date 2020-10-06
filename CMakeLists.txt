@@ -130,6 +130,7 @@ install(TARGETS perfecttin DESTINATION bin)
 endif (${Boost_FOUND})
 install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
+install(FILES perfecttin.png DESTINATION share/perfecttin)
 endif ()
 
 if (WIN32)
