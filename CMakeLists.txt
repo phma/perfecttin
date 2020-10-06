@@ -45,6 +45,8 @@ if (${FORCE_COLORED_OUTPUT})
   endif ()
 endif ()
 
+option(ENABLE_MITOBREVNO "Enable debugging with Mitobrevno if found." FALSE)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(Plytapus)
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)

@@ -24,7 +24,7 @@
 #include "brevno.h"
 using namespace std;
 
-#ifdef Mitobrevno_FOUND
+#if defined(Mitobrevno_FOUND) && defined(ENABLE_MITOBREVNO)
 #define MB_START_THREAD 0
 #define MB_BEGIN_SPLIT 0x2000
 #define MB_END_SPLIT 0x3000

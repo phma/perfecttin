@@ -25,7 +25,7 @@
 #define BREVNO_H
 #include "config.h"
 
-#ifdef Mitobrevno_FOUND
+#if defined(Mitobrevno_FOUND) && defined(ENABLE_MITOBREVNO)
 #include "mitobrevno.h"
 void openThreadLog();
 void logStartThread();
@@ -34,8 +34,9 @@ void logEndSplit(int tri);
 void writeBufLog();
 #else
 #define openThreadLog()
-#define logBeginSplit(thread,tri)
-#define logEndSplit(thread,tri)
+#define logStartThread()
+#define logBeginSplit(tri)
+#define logEndSplit(tri)
 #define writeBufLog()
 #endif
 
