@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.1
+Name=PerfectTIN
+GenericName=Point cloud surface maker
+GenericName[en]=Point cloud surface maker
+GenericName[es]=Hace superficies de nubes de puntos
+Type=Application
+Exec=@CMAKE_INSTALL_PREFIX@/bin/perfecttin-gui
+Icon=@SHARE_DIR@/perfecttin.png
+Terminal=false
+Categories=Graphics;3DGraphics;Qt;
