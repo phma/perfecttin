@@ -22,12 +22,12 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "brevno.h"
-using namespace std;
 
 #if defined(Mitobrevno_FOUND) && defined(ENABLE_MITOBREVNO)
 #define MB_START_THREAD 0
 #define MB_BEGIN_SPLIT 0x2000
 #define MB_END_SPLIT 0x3000
+using namespace std;
 using namespace mitobrevno;
 
 void openThreadLog()
