@@ -659,6 +659,7 @@ PtinHeader readPtin(std::string inputFile)
       if (!tri)
       {
 	cerr<<"Can't happen: No triangle found for dot\n";
+	tri=&net.triangles[0];
       }
       else
 	tri->dots.push_back(cloud[i]);
