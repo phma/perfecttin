@@ -14,7 +14,7 @@ Before 0.5.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop ✓
 
 Whenever:
-•Color the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance
+•Color the triangles of the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance (Points, not triangles, are colored in 0.5.1, and it does not indicate dots out of tolerance.)
 •Add a magnification window
 •Switch to a list of triangles and edges to be checked when most of them are in tolerance ✓
 •Draw a scale on the window ✓
