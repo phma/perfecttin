@@ -410,6 +410,7 @@ int main(int argc, char *argv[])
     for (i=e=t=d=0;!done;i++)
     {
       this_thread::sleep_for(chrono::milliseconds(1));
+      writeBufLog();
       now=time(nullptr);
       if (now!=then)
       {
