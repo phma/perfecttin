@@ -54,11 +54,12 @@ struct AdjustBlockTask
   std::vector<point *> pnt;
   xyz *dots;
   int numDots;
+  int thread;
   AdjustBlockResult *result;
 };
 
 std::vector<int> blockSizes(int total);
-adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt);
+adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt,int thread);
 void computeAdjustBlock(AdjustBlockTask &task);
 void logAdjustment(adjustRecord rec);
 double rmsAdjustment();

@@ -330,7 +330,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
       corners.push_back(midpoints[2]);
       triNeigh=triangleNeighbors(corners);
       tri->unsetError();
-      logAdjustment(adjustElev(triNeigh,corners));
+      logAdjustment(adjustElev(triNeigh,corners,thread));
     }
   }
   if (gotLock1 && !qtr && (spl=shouldSplit(tri,tolerance,minArea)))
@@ -342,7 +342,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
       corners.push_back(split(tri,thread));
       triNeigh=triangleNeighbors(corners);
       tri->unsetError();
-      logAdjustment(adjustElev(triNeigh,corners));
+      logAdjustment(adjustElev(triNeigh,corners,thread));
       edgeop(sidea,tolerance,minArea,thread);
       edgeop(sideb,tolerance,minArea,thread);
       edgeop(sidec,tolerance,minArea,thread);

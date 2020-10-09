@@ -284,7 +284,7 @@ double makeOctagon()
     cornerPointers.push_back(&net.points[i]);
     net.convexHull.push_back(&net.points[i]);
   }
-  logAdjustment(adjustElev(trianglePointers,cornerPointers));
+  logAdjustment(adjustElev(trianglePointers,cornerPointers,-1));
   for (i=0;i<6;i++)
   {
     net.triangles[i].setError(INFINITY);
