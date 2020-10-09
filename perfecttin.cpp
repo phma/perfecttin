@@ -375,7 +375,6 @@ int main(int argc, char *argv[])
     if (nthreads<1)
       nthreads=1;
     startThreads(nthreads);
-    waitForThreads(TH_RUN);
     if (!ptinFilesOpened && !done)
     {
       areadone[0]=makeOctagon();
@@ -407,6 +406,7 @@ int main(int argc, char *argv[])
       bend(&net.edges[i],-1);
     net.makeqindex();
     tri=&net.triangles[0];
+    waitForThreads(TH_RUN);
     for (i=e=t=d=0;!done;i++)
     {
       this_thread::sleep_for(chrono::milliseconds(1));
