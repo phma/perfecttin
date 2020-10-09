@@ -31,12 +31,14 @@ void openThreadLog();
 void logStartThread();
 void logBeginSplit(int tri);
 void logEndSplit(int tri);
+void logThreadStatus(int status);
 void writeBufLog();
 #else
 #define openThreadLog()
 #define logStartThread()
 #define logBeginSplit(tri)
 #define logEndSplit(tri)
+#define logThreadStatus(status)
 #define writeBufLog()
 #endif
 

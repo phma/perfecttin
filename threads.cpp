@@ -690,6 +690,7 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_RUN)
     {
       threadStatus[thread]=TH_RUN;
+      logThreadStatus(TH_RUN);
       if (net.edges.size() && net.triangles.size())
       {
 	if (thread)
@@ -732,6 +733,7 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_PAUSE)
     { // The job is ongoing, but has to pause to write out the files.
       threadStatus[thread]=TH_PAUSE;
+      logThreadStatus(TH_PAUSE);
       act=dequeueAction();
       switch (act.opcode)
       {
@@ -791,6 +793,7 @@ void TinThread::operator()(int thread)
     if (threadCommand==TH_WAIT)
     { // There is no job. The threads are waiting for a job.
       threadStatus[thread]=TH_WAIT;
+      logThreadStatus(TH_WAIT);
       if (thread)
 	act.opcode=0;
       else
@@ -858,5 +861,6 @@ void TinThread::operator()(int thread)
       }
     }
   }
+  logThreadStatus(TH_STOP);
   threadStatus[thread]=TH_STOP;
 }

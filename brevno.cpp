@@ -25,6 +25,7 @@
 
 #if defined(Mitobrevno_FOUND) && defined(ENABLE_MITOBREVNO)
 #define MB_START_THREAD 0
+#define MB_THREAD_STATUS 0x1000
 #define MB_BEGIN_SPLIT 0x2000
 #define MB_END_SPLIT 0x3000
 using namespace std;
@@ -37,6 +38,9 @@ void openThreadLog()
   describeParam(MB_BEGIN_SPLIT,0,"triangle");
   formatParam(MB_BEGIN_SPLIT,1,0);
   describeEvent(MB_START_THREAD,"start thread");
+  describeEvent(MB_THREAD_STATUS,"thread status");
+  describeParam(MB_THREAD_STATUS,0,"status");
+  formatParam(MB_THREAD_STATUS,1,0);
 }
 
 void logStartThread()
@@ -60,6 +64,14 @@ void logEndSplit(int tri)
   vector<float> floatParams;
   intParams.push_back(tri);
   logEvent(MB_END_SPLIT,intParams,floatParams);
+}
+
+void logThreadStatus(int status)
+{
+  vector<int> intParams;
+  vector<float> floatParams;
+  intParams.push_back(status);
+  logEvent(MB_THREAD_STATUS,intParams,floatParams);
 }
 
 void writeBufLog()
