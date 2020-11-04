@@ -8,11 +8,11 @@ Before compiling PerfectTIN, if you want it to read PLY files, clone the [plytap
 
 The GUI program needs Qt5; the command-line program needs Boost.
 
-PerfectTIN compiles on Ubuntu Bionic and Eoan, DragonFly 5.5, and Windows 10. It does not compile on RHEL 7 because the CMake is too old. It does compile on Fedora 32, and probably also on RHEL 8. It may crash on Wayland.
+PerfectTIN compiles on Ubuntu Eoan and Focal, DragonFly 5.5, and Windows 10. It does not compile on RHEL 7 because the CMake is too old. It does compile on Fedora 32, and probably also on RHEL 8. It may crash on Wayland.
 
 If building on MinGW, clone the repo https://github.com/meganz/mingw-std-threads and put it beside this one.
 
-To build the documentation, install Pandoc and TeXLive. If Pandoc is not installed, you'll get the program, but not the documentation. If Pandoc is installed, but TeXLive is not, you'll get an error.
+To build the documentation, install Pandoc and TeXLive. If Pandoc or TeXLive is not installed, you'll get the program, but not the documentation.
 
 To compile, if you're not developing the program:
 
