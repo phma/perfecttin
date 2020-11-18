@@ -791,8 +791,15 @@ void testadjblock()
     phase=rng.uirandom();
     for (j=0;j<5;j++)
     {
-      xycoord=cossin(angle+j*DEG72)*r;
-      z=2*xycoord.getx()+xycoord.gety()+7+sin(phase+j*DEG144);
+      /* This was "cossin(angle+j*DEG72)", but 5*DEG72 is 0x80000002, which is
+       * undefined behavior to compute as a signed int. In the package build
+       * for Ubuntu, the compiler put both j*DEG72 and j*DEG144 in registers,
+       * made j*DEG72>0X7fffffff the termination condition, then deleted it
+       * because it can't happen, resulting in an infinite loop. Computing it
+       * as unsigned fixes this bug.
+       */
+      xycoord=cossin((int)(angle+(unsigned)j*DEG72))*r;
+      z=2*xycoord.getx()+xycoord.gety()+7+sin((int)(phase+(unsigned)j*DEG144));
       tri->dots[((i-j)*h)&4095]=xyz(xycoord,z);
     }
   }
