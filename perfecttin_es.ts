@@ -336,7 +336,7 @@ Licencia LGPL 3 o siguiente%4</translation>
     <message>
         <location filename="mainwindow.cpp" line="844"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Ajustes</translation>
+        <translation>&amp;Preferencias</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="845"/>
