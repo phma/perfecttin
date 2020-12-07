@@ -102,6 +102,7 @@ public:
   friend class xy;
   friend class point;
   friend class triangle;
+  friend class Quaternion;
   friend double dist(xyz a,xyz b);
   friend double dot(xyz a,xyz b);
   friend xyz cross(xyz a,xyz b);
