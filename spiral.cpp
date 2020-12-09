@@ -59,7 +59,6 @@
 #include <cfloat>
 #include "spiral.h"
 #include "angle.h"
-#include "vcurve.h"
 #include "manysum.h"
 #include "cogospiral.h"
 using namespace std;
@@ -207,7 +206,6 @@ double spiralcurvature(double t,double curvature=0,double clothance=1)
 spiralarc::spiralarc()
 {
   mid=start=end=xyz(0,0,0);
-  control1=control2=0;
   cur=clo=len=0;
   midbear=0;
 }
@@ -217,8 +215,6 @@ spiralarc::spiralarc(const segment &b)
   start=b.start;
   end=b.end;
   mid=(start+end)/2;
-  control1=b.control1;
-  control2=b.control2;
   cur=clo=0;
   len=b.length();
   midbear=atan2i(xy(end-start));
@@ -229,8 +225,6 @@ spiralarc::spiralarc(const arc &b)
   start=b.start;
   end=b.end;
   mid=b.midpoint();
-  control1=b.control1;
-  control2=b.control2;
   cur=b.curvature(0);
   clo=0;
   len=b.length();
@@ -241,8 +235,6 @@ spiralarc::spiralarc(xyz kra,xyz fam)
 {
   start=kra;
   end=fam;
-  control1=(2*start.elev()+end.elev())/3;
-  control2=(start.elev()+2*end.elev())/3;
   mid=(start+end)/2;
   len=dist(xy(start),xy(end));
   cur=clo=0;
@@ -263,8 +255,6 @@ spiralarc::spiralarc(xyz kra,int sbear,double c1,double c2,double length,double 
   midbear=sbear+ispiralbearing(length/2,c1,clo);
   cur=spiralcurvature(length/2,c1,clo);
   len=length;
-  control1=(2*start.elev()+end.elev())/3;
-  control2=(start.elev()+2*end.elev())/3;
   end=station(length);
 }
 
@@ -278,8 +268,6 @@ spiralarc::spiralarc(xyz kra,xy mij,xyz fam,int mbear,double curvature,double cl
   cur=curvature;
   clo=clothance;
   len=length;
-  control1=(2*start.elev()+end.elev())/3;
-  control2=(start.elev()+2*end.elev())/3;
 }
 
 spiralarc::spiralarc(xyz pnt,double curvature,double clothance,int bear,double startLength,double endLength)
@@ -293,19 +281,11 @@ spiralarc::spiralarc(xyz pnt,double curvature,double clothance,int bear,double s
   cur=spiralcurvature(midLength,curvature,clothance);
   clo=clothance;
   len=endLength-startLength;
-  control1=control2=pnt.elev();
-}
-
-int spiralarc::type()
-{
-  return OBJ_SPIRALARC;
 }
 
 spiralarc spiralarc::operator-() const
 {
   spiralarc ret(end,mid,start,midbear+DEG180,-cur,clo,len);
-  ret.control1=control2;
-  ret.control2=control1;
   return ret;
 }
 
@@ -387,91 +367,6 @@ xy spiralarc::center()
   return mid+cossin(midbear+DEG90)/cur;
 }
 
-double spiralarc::sthrow()
-{
-  Circle startCircle=osculatingCircle(0),endCircle=osculatingCircle(len);
-  array<double,2> closeAlong=besidement(startCircle,endCircle);
-  double dist0,dist1;
-  if (isfinite(closeAlong[0]))
-  {
-    dist0=dist(startCircle.station(closeAlong[0]),endCircle.station(closeAlong[1]));
-    // If the spiralarc is curly, besidement may return farthest instead of closest.
-  }
-  else
-    dist0=dist1=0;
-  if (clo<0)
-    dist0=-dist0;
-  return dist0;
-}
-
-bool spiralarc::isCurly()
-{
-  xy inflect(NAN,NAN);
-  bool ret;
-  double inflpos=NAN;
-  double startCur=curvature(0),endCur=curvature(len);
-  double lessDelta=0,moreDelta=0;
-  if (sign(startCur)*sign(endCur)<0)
-  {
-    inflect=station(inflpos=len*startCur/(startCur-endCur));
-    lessDelta=fabs(spiralbearing(inflpos,0,clo));
-    moreDelta=fabs(spiralbearing(inflpos-len,0,clo));
-    if (lessDelta>moreDelta)
-      swap(lessDelta,moreDelta);
-  }
-  else
-    moreDelta=fabs(len*cur);
-  ret=moreDelta>M_PI;
-  if (!ret)
-    ret=lessDelta>0.47429470686 && moreDelta>2.0450910337;
-  /* A spiralarc with 0.47429470686 rad on one side of the inflection point
-   * and 2.0450910337 rad on the other has the tangent to one end perpendicular
-   * to the other. If it exceeds both of these, it is curly, even if the
-   * distanceInDirection criterion says it isn't. See testspiral.
-   */
-  if (!ret)
-    ret=distanceInDirection(start,end,startbearing())<=0 || distanceInDirection(start,end,endbearing())<=0;
-  return ret;
-}
-
-bool spiralarc::isTooCurly()
-{
-  xy inflect(NAN,NAN);
-  bool ret;
-  int i,regions=0;
-  double inflpos=NAN;
-  double startCur=curvature(0),endCur=curvature(len);
-  double lessDelta=0,moreDelta=0;
-  if (sign(startCur)*sign(endCur)<0)
-  {
-    inflect=station(inflpos=len*startCur/(startCur-endCur));
-    lessDelta=fabs(spiralbearing(inflpos,0,clo));
-    moreDelta=fabs(spiralbearing(inflpos-len,0,clo));
-    if (lessDelta>moreDelta)
-      swap(lessDelta,moreDelta);
-  }
-  else
-    moreDelta=fabs(len*cur);
-  ret=moreDelta>2*M_PI;
-  if (!ret)
-    ret=lessDelta>0.67092325837 && moreDelta>3.81251591196;
-  /* A spiralarc with 0.67092325837 rad on one side of the inflection point
-   * and 3.81251591196 rad on the other has the tangents at both ends
-   * coincident in opposite directions. If it exceeds both of these, it is
-   * too curly, even if the distanceInDirection criterion says it isn't.
-   * See testspiral.
-   */
-  if (!ret && startCur*endCur>0)
-    ret=distanceInDirection(start,end,startbearing()+DEG90)*cur<0 || distanceInDirection(start,end,endbearing()-DEG90)*cur<0;
-  for (i=0;!ret && i<=CURLTEST;i++)
-  {
-    regions|=tooCurlyRegion(station(len*i/CURLTEST));
-    if (((regions&18)==18) || ((regions&36)==36))
-      ret=true;
-  }
-  return ret;
-}
-
 void spiralarc::_setdelta(int d,int s)
 {
   cur=bintorad(d)/len;
@@ -529,7 +424,6 @@ void spiralarc::split(double along,spiralarc &a,spiralarc &b)
   b.end=end;
   a.clo=b.clo=clo;
   a.end=b.start=splitpoint;
-  vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
@@ -545,7 +439,6 @@ void spiralarc::lengthen(int which,double along)
   int newMidbear;
   if (which==START)
   {
-    oldSlope=endslope();
     newMid=station((along+len)/2);
     newCur=curvature((along+len)/2);
     newMidbear=bearing((along+len)/2);
@@ -554,12 +447,9 @@ void spiralarc::lengthen(int which,double along)
     cur=newCur;
     midbear=newMidbear;
     start=newEnd;
-    setslope(START,newSlope);
-    setslope(END,oldSlope);
   }
   if (which==END)
   {
-    oldSlope=startslope();
     newMid=station(along/2);
     newCur=curvature(along/2);
     newMidbear=bearing(along/2);
@@ -568,8 +458,6 @@ void spiralarc::lengthen(int which,double along)
     cur=newCur;
     midbear=newMidbear;
     end=newEnd;
-    setslope(END,newSlope);
-    setslope(START,oldSlope);
   }
 }
 
@@ -650,34 +538,4 @@ void spiralarc::setcurvature(double startc,double endc)
     while ((abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6) && i<256);
   if (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6)
     cur=clo=len=NAN;
-}
-
-string formatClothance(double clothance,Measure ms)
-/* The coherent unit of clothance is the square diopter (not an SI unit, but
- * coherent with SI). For roads, the square millidiopter is closer to the size.
- * When roads are measured in feet, however, clothance is expressed not in per
- * square feet, but by stating the change in degree of curve over a 100-foot arc.
- */
-{
-  double hundredFeet=ms.parseMeasurement("100 ft",LENGTH).magnitude;
-  bool isFoot;
-  string hundredFeetString=ms.formatMeasurement(hundredFeet,LENGTH);
-  int i;
-  for (i=0;i<hundredFeetString.length();i++)
-  {
-    if (hundredFeetString[i]=='1')
-    {
-      isFoot=true;
-      break;
-    }
-    if (hundredFeetString[i]=='3')
-    {
-      isFoot=false;
-      break;
-    }
-  }
-  if (isFoot)
-    return ms.formatMeasurementUnit(clothance*hundredFeet*hundredFeet,ANGLE);
-  else
-    return ms.formatMeasurementUnit(clothance,CLOTHANCE);
 }

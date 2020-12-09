@@ -32,7 +32,7 @@ using namespace std;
 arc::arc()
 {
   start=end=xyz(0,0,0);
-  rchordbearing=control1=control2=delta=0;
+  rchordbearing=delta=0;
 }
 
 arc::arc(xyz kra,xyz fam)
@@ -40,8 +40,6 @@ arc::arc(xyz kra,xyz fam)
   start=kra;
   end=fam;
   delta=0;
-  control1=(2*start.elev()+end.elev())/3;
-  control2=(start.elev()+2*end.elev())/3;
   rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
@@ -57,8 +55,6 @@ arc::arc(xyz kra,xyz mij,xyz fam)
     p=dist(xy(kra),xy(mij))/dist(xy(kra),xy(fam));
   q=1-p;
   r=(mij.elev()-start.elev()-p*(end.elev()-start.elev()))/(p*q)/3;
-  control1=(2*start.elev()+end.elev())/3+r;
-  control2=(start.elev()+2*end.elev())/3+r;
   rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
@@ -67,8 +63,6 @@ arc::arc(xyz kra,xyz fam,int d)
   start=kra;
   end=fam;
   delta=d;
-  control1=(2*start.elev()+end.elev())/3;
-  control2=(start.elev()+2*end.elev())/3;
   rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
@@ -166,7 +160,6 @@ void arc::split(double along,arc &a,arc &b)
   deltab=delta-deltaa;
   a=arc(start,splitpoint,deltaa);
   b=arc(splitpoint,end,deltab);
-  vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
@@ -181,19 +174,13 @@ void arc::lengthen(int which,double along)
   xyz newEnd=station(along);
   if (which==START)
   {
-    oldSlope=endslope();
     start=newEnd;
     delta=radtobin((oldLength-along)*oldCurvature);
-    setslope(START,newSlope);
-    setslope(END,oldSlope);
   }
   if (which==END)
   {
-    oldSlope=startslope();
     end=newEnd;
     delta=radtobin(along*oldCurvature);
-    setslope(END,newSlope);
-    setslope(START,oldSlope);
   }
   rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }

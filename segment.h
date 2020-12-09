@@ -41,7 +41,6 @@ class segment
 {
 protected:
   xyz start,end;
-  double control1,control2;
 public:
   segment();
   segment(xyz kra,xyz fam);
@@ -54,13 +53,10 @@ public:
   {
     return end;
   }
-  virtual int type();
   virtual bool operator==(const segment b) const;
   segment operator-() const;
   virtual double length() const;
   std::vector<double> vextrema(bool withends);
-  void setslope(int which,double s);
-  void setctrl(int which,double el);
   virtual void setdelta(int d,int s=0)
   {
   }
@@ -68,11 +64,9 @@ public:
   {
   }
   double elev(double along) const;
-  double slope(double along);
+  double slope(double along=0);
   double accel(double along);
   double jerk();
-  double startslope();
-  double endslope();
   double contourcept(double e);
   double contourcept_br(double e);
   bool crosses(double e)
@@ -144,9 +138,6 @@ public:
   {
     return 0;
   }
-  int tooCurlyRegion(xy pnt);
-  virtual bool isCurly();
-  virtual bool isTooCurly();
   double closest(xy topoint,double closesofar=INFINITY,bool offends=false);
   double dirbound(int angle,double boundsofar=INFINITY);
   virtual void split(double along,segment &a,segment &b);
@@ -158,12 +149,6 @@ public:
   friend double missDistance(segment seg1,segment seg2);
   friend class arc;
   friend class spiralarc;
-  virtual bool hasProperty(int prop);
-  virtual int getIntProperty(int prop);
-  virtual double getDoubleProperty(int prop);
-  virtual xy getXyProperty(int prop);
-  virtual xyz getXyzProperty(int prop);
-  virtual void writeXml(std::ofstream &ofile);
 };
 
 #endif

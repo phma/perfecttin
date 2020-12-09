@@ -63,7 +63,6 @@ public:
   spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev);
   spiralarc(xyz kra,xy mij,xyz fam,int mbear,double curvature,double clothance,double length);
   spiralarc(xyz pnt,double curvature,double clothance,int bear,double startLength,double endLength);
-  virtual int type();
   virtual double in(xy pnt);
   virtual xy pointOfIntersection();
   virtual double tangentLength(int which);
@@ -107,15 +106,6 @@ public:
   }
   virtual xyz station(double along) const;
   virtual xy center();
-  virtual double sthrow();
-  /* "throw" is a reserved word.
-   * The throw is the minimum distance between the circles (one of which may be a line)
-   * that osculate the ends of the spiral arc. It is also called the offset, but
-   * offset() will create a segment or arc that is parallel to the given one.
-   * Trying to offset a spiral arc will throw an error.
-   */
-  virtual bool isCurly();
-  virtual bool isTooCurly();
   void _setdelta(int d,int s=0);
   void _setcurvature(double startc,double endc);
   void _fixends(double p);
