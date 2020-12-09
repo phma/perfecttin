@@ -13,6 +13,9 @@ Before 0.4.1:
 Before 0.5.0:
 •Split large matrix operations among threads when only one thread is trying to do a rowop or triop ✓
 
+Before 1.0.0:
+•Draw contours, removing wiggles as long as they don't violate the accuracy requirement.
+
 Whenever:
 •Color the triangles of the TIN in PLY format to show which triangles are empty, even if empty triangles are exported, and which have dots out of tolerance (Points, not triangles, are colored in 0.5.1, and it does not indicate dots out of tolerance.)
 •Add a magnification window
