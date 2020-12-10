@@ -63,7 +63,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp b
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp cogospiral.cpp color.cpp
                dxf.cpp edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
-               perfecttin.cpp ply.cpp point.cpp pointlist.cpp ps.cpp
+               perfecttin.cpp ply.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
                segment.cpp spiral.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
@@ -75,7 +75,7 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.c
                gui.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp lissajous.cpp mainwindow.cpp
                manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
-               ply.cpp point.cpp pointlist.cpp ps.cpp
+               ply.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
                segment.cpp spiral.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
