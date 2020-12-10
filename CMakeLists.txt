@@ -61,7 +61,7 @@ qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 if (${Boost_FOUND})
 add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp cogospiral.cpp color.cpp
-               dxf.cpp edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
+               contour.cpp dxf.cpp edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
@@ -70,7 +70,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp b
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp
-	       cogospiral.cpp color.cpp configdialog.cpp
+	       cogospiral.cpp color.cpp configdialog.cpp contour.cpp
                csaction.cpp dxf.cpp edgeop.cpp fileio.cpp
                gui.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp lissajous.cpp mainwindow.cpp
