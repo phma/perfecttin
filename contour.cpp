@@ -167,10 +167,10 @@ float splitpoint(double leftclamp,double rightclamp,double tolerance)
   return sp;
 }
 
-vector<uintptr_t> contstarts(pointlist &pts,double elev)
+vector<edge *> contstarts(pointlist &pts,double elev)
 {
-  vector<uintptr_t> ret;
-  uintptr_t ep;
+  vector<edge *> ret;
+  edge *ep;
   int sd,io;
   triangle *tri;
   int i,j;
@@ -184,29 +184,26 @@ vector<uintptr_t> contstarts(pointlist &pts,double elev)
 	  tri=pts.edges[i].trib;
 	assert(tri);
 	//cout<<' '<<i;
-	for (j=0;j<3;j++)
+	ep=&pts.edges[i];
+	sd=tri->subdir(ep);
+	if (tri->crosses(sd,elev) && (io || tri->upleft(sd)))
 	{
-	  ep=j+(uintptr_t)&pts.edges[i];
-	  sd=tri->subdir(ep);
-	  if (tri->crosses(sd,elev) && (io || tri->upleft(sd)))
-	  {
-	    //cout<<(char)(j+'a');
-	    ret.push_back(ep);
-	  }
+	  //cout<<(char)(j+'a');
+	  ret.push_back(ep);
 	}
       }
   //cout<<endl;
   return ret;
 }
 
-void mark(uintptr_t ep)
+void mark(edge *ep)
 {
-  ((edge *)(ep&-4))->mark(ep&3);
+  ep->mark(0);
 }
 
-bool ismarked(uintptr_t ep)
+bool ismarked(edge *ep)
 {
-  return ((edge *)(ep&-4))->ismarked(ep&3);
+  return ep->ismarked(0);
 }
 
 polyline intrace(triangle *tri,double elev)
@@ -245,16 +242,16 @@ polyline intrace(triangle *tri,double elev)
   return ret;
 }
 
-polyline trace(uintptr_t edgep,double elev)
+polyline trace(edge *edgep,double elev)
 {
   polyline ret(elev);
   int subedge,subnext,i;
-  uintptr_t prevedgep;
+  edge *prevedgep;
   bool wasmarked;
   xy lastcept,thiscept,firstcept;
   triangle *tri,*ntri;
-  tri=((edge *)(edgep&-4))->tria;
-  ntri=((edge *)(edgep&-4))->trib;
+  tri=edgep->tria;
+  ntri=edgep->trib;
   if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
     tri=ntri;
   mark(edgep);

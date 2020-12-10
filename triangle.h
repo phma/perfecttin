@@ -123,6 +123,7 @@ public:
   double spelevation(int angle,double x,double y);
   int pointtype(xy pnt);
   edge *edgepart(int subdir);
+  int subdir(edge *edgepart);
   edge *checkBentContour();
 private:
 };

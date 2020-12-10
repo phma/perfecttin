@@ -71,8 +71,8 @@ private:
 };
 
 float splitpoint(double leftclamp,double rightclamp,double tolerance);
-std::vector<uintptr_t> contstarts(pointlist &pts,double elev);
-polyline trace(uintptr_t edgep,double elev);
+std::vector<edge *> contstarts(pointlist &pts,double elev);
+polyline trace(edge *edgep,double elev);
 polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
 void rough1contour(pointlist &pl,double elev);

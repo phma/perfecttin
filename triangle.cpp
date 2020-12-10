@@ -729,19 +729,28 @@ edge *triangle::edgepart(int subdir)
   if (subdir==0) // the side starting at A is side c
   {
     sid=b->edg(this); // which is found by asking point B
-    base=apos;
   }
   if (subdir==1) // the side starting at B is side a
   {
     sid=c->edg(this); // which is found by asking point C
-    base=bpos;
   }
   if (subdir==2) // the side starting at C is side b
   {
     sid=a->edg(this); // which is found by asking point A
-    base=cpos;
   }
   return sid;
+}
+
+int triangle::subdir(edge *edgepart)
+{
+  int ret=-1;
+  if (edgepart==b->edg(this))
+    ret=0;
+  if (edgepart==c->edg(this))
+    ret=1;
+  if (edgepart==a->edg(this))
+    ret=2;
+  return ret;
 }
 
 void clip1(const xy &astart,xy &a,const xy &x,xy &b,const xy &bstart)
