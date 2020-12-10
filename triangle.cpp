@@ -718,17 +718,31 @@ int triangle::pointtype(xy pnt)
   return i;
 }
 
-/* To subdivide a triangle:
- * 1. Find all critical points in the interior and on the edges.
- * 2. Connect the interior critical points to each other.
- * 3. Connect each interior critical point to all corners and edge critical points.
- * 4. Connect the edge critical points to each other.
- * 5. Connect each corner to the critical points on the opposite edge.
- * 6. Sort all these segments by their numbers of extrema and by length.
- * 7. Of any two segments that intersect in ACXBD, ACTBD, or BDTAC manner,
- *    remove the one with more extrema.
- *    If they have the same number of extrema, remove the longer.
+/* Unlike Bezitopo, PerfectTIN's triangles are flat and do not have subdivisions.
+ * The sides are numbered as if they were subdivisions, with 0 being c,
+ * 1 being a, and 2 being b.
  */
+edge *triangle::edgepart(int subdir)
+{
+  edge *sid=nullptr;
+  subdir&=65535;
+  if (subdir==0) // the side starting at A is side c
+  {
+    sid=b->edg(this); // which is found by asking point B
+    base=apos;
+  }
+  if (subdir==1) // the side starting at B is side a
+  {
+    sid=c->edg(this); // which is found by asking point C
+    base=bpos;
+  }
+  if (subdir==2) // the side starting at C is side b
+  {
+    sid=a->edg(this); // which is found by asking point A
+    base=cpos;
+  }
+  return sid;
+}
 
 void clip1(const xy &astart,xy &a,const xy &x,xy &b,const xy &bstart)
 // If x is between a and b, moves a or b to x so that the midpoint is still between them.

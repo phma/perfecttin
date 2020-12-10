@@ -122,6 +122,7 @@ public:
   std::vector<double> xsect(int angle,double offset);
   double spelevation(int angle,double x,double y);
   int pointtype(xy pnt);
+  edge *edgepart(int subdir);
   edge *checkBentContour();
 private:
 };

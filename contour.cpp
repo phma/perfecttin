@@ -103,14 +103,6 @@ ContourInterval::ContourInterval(double unit,int icode,bool fine)
   }
 }
 
-string ContourInterval::valueString(Measure meas,bool precise)
-/* Returns the value of mediumInterval with 1 or 7 significant digits.
- * Uses 7 digits if precise to distinguish which foot it was set in.
- */
-{
-  return meas.formatMeasurementUnit(mediumInterval(),LENGTH,0,mediumInterval()/M_SQRT_10/(precise?1e6:1));
-}
-
 int ContourInterval::contourType(double elev)
 /* Returns the sum of two numbers:
  * 0 for fine contours, 256 for medium contours, 512 for coarse (index) contours.

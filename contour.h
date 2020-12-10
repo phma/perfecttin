@@ -63,7 +63,6 @@ public:
   {
     return interval*fineRatio*coarseRatio;
   };
-  std::string valueString(Measure meas,bool precise=false);
   int contourType(double elev);
   void writeXml(std::ostream &ofile);
 private:
