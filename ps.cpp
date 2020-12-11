@@ -378,6 +378,37 @@ void PostScript::endline(bool closed,bool fill)
   inlin=false;
 }
 
+void PostScript::spline(bezier3d spl,bool fill)
+{
+  int i,j,n;
+  vector<xyz> seg;
+  xy pnt;
+  n=spl.size();
+  pnt=turn(xy(spl[0][0]),orientation);
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<" m\n";
+  for (i=0;i<n;i++)
+  {
+    seg=spl[i];
+    if (isstraight(seg))
+    {
+      pnt=turn(xy(seg[3]),orientation);
+      *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' '<<"l\n";
+    }
+    else
+    {
+      for (j=1;j<4;j++)
+      {
+        pnt=turn(xy(seg[j]),orientation);
+        if (pnt.isnan())
+          cerr<<"NaN point"<<endl;
+        *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' ';
+      }
+      *psfile<<"c\n";
+    }
+  }
+  *psfile<<(fill?"fill":"s")<<endl;
+}
+
 void PostScript::widen(double factor)
 {
   *psfile<<"currentlinewidth "<<ldecimal(factor)<<" mul setlinewidth"<<endl;

@@ -26,6 +26,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include "bezier3d.h"
 #include "tin.h"
 #include "boundrect.h"
 class pointlist;
@@ -77,6 +78,7 @@ public:
   void startline();
   void lineto(xy pnt);
   void endline(bool closed=false,bool fill=false);
+  void spline(bezier3d spl,bool fill=false);
   void widen(double factor);
   void write(xy pnt,const std::string &text);
   void centerWrite(xy pnt,const std::string &text);
