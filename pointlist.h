@@ -34,6 +34,8 @@
 #include "tin.h"
 #include "triangle.h"
 #include "qindex.h"
+#include "polyline.h"
+#include "contour.h"
 
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;
@@ -51,6 +53,7 @@ public:
    * point to edges, and the pointers would be messed up by moving memory
    * when a vector is resized.
    */
+  std::vector<polyspiral> contours;
   qindex qinx;
   std::vector<point*> convexHull;
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
@@ -64,6 +67,7 @@ public:
   std::vector<int> valencyHistogram();
   void clear();
   int size();
+  void clearmarks();
   void clearTin();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
@@ -80,6 +84,7 @@ public:
   double totalEdgeLength();
   double elevation(xy location);
   double dirbound(int angle);
+  std::array<double,2> lohi();
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
 };
 

@@ -520,3 +520,21 @@ double pointlist::totalEdgeLength()
     edgeLengths.push_back(i->second.length());
   return pairwisesum(edgeLengths);
 }
+
+array<double,2> pointlist::lohi()
+{
+  int i;
+  array<double,2> ret;
+  array<double,4> tlohi;
+  ret[0]=INFINITY;
+  ret[1]=-INFINITY;
+  for (i=0;i<triangles.size();i++)
+  {
+    tlohi=triangles[i].lohi();
+    if (ret[0]>tlohi[0])
+      ret[0]=tlohi[0];
+    if (ret[1]<tlohi[3])
+      ret[1]=tlohi[3];
+  }
+  return ret;
+}
