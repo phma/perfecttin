@@ -3,7 +3,7 @@
 /* tin.cpp - triangulated irregular network           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -331,6 +331,21 @@ double edge::length()
   c=*a;
   d=*b;
   return dist(c,d);
+}
+
+void edge::clearmarks()
+{
+  contour=0;
+}
+
+void edge::mark(int n)
+{
+  contour|=(1<<n);
+}
+
+bool edge::ismarked(int n)
+{
+  return (contour>>n)&1;
 }
 
 bool goodcenter(xy a,xy b,xy c,xy d)

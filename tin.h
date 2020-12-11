@@ -3,7 +3,7 @@
 /* tin.h - triangulated irregular network             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -43,6 +43,12 @@ public:
   // nexta points to the next edge counterclockwise about a.
   triangle *tria,*trib;
   // When going from a to b, tria is on the right and trib on the left.
+  char contour;
+  /* When drawing a contour, set the low bit of edge::contour to true
+   * for each edge that crosses the contour. Keep the flags set when you go to
+   * the next contour of the same elevation. When you go to the next elevation,
+   * clear the flags.
+   */
   edge();
   void flip(pointlist *topopoints);
   void reverse();
@@ -59,6 +65,9 @@ public:
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
+  void clearmarks();
+  void mark(int n);
+  bool ismarked(int n);
 };
 
 typedef std::pair<double,point*> ipoint;
