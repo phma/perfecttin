@@ -124,6 +124,7 @@ public:
   int pointtype(xy pnt);
   edge *edgepart(int subdir);
   int subdir(edge *edgepart);
+  bool crosses(int subdir,double elevation);
   edge *checkBentContour();
 private:
 };

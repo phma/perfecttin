@@ -771,3 +771,22 @@ void clip1(const xy &astart,xy &a,const xy &x,xy &b,const xy &bstart)
       a=x;
   }
 }
+
+bool triangle::crosses(int subdir,double elevation)
+{
+  subdir&=65535;
+  switch (subdir)
+  {
+    case 0:
+      return (b->elev()<elevation)^(a->elev()<elevation);
+      break;
+    case 1:
+      return (c->elev()<elevation)^(b->elev()<elevation);
+      break;
+    case 2:
+      return (a->elev()<elevation)^(c->elev()<elevation);
+      break;
+    default:
+      return false;
+  }
+}
