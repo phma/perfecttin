@@ -206,42 +206,6 @@ bool ismarked(edge *ep)
   return ep->ismarked(0);
 }
 
-polyline intrace(triangle *tri,double elev)
-/* Returns the contour that is inside the triangle, if any. The contour is an elliptic curve.
- * If a contour is wholly inside a triangle, there is at most one contour partly in it.
- * If there is no contour wholly inside the triangle, there can be three partly inside it.
- * Start at a subsegment and trace the contour. One of three things will happen:
- * • You get a segment number greater than the number of subsegments (i.e. 65535). You've exited the triangle.
- * • You get a segment number less than the one you started with. You're retracing a contour you traced already.
- * • You get the segment number you started with. You've found a contour inside the triangle.
- */
-{
-  polyline ret(elev);
-  int i,j=-610,start=-987;
-  vector<int> sube;
-  xy cept;
-  for (i=0;i<tri->subdiv.size();i++)
-    if (tri->crosses(i,elev))
-    {
-      start=i;
-      if (!tri->upleft(start))
-	start+=65536;
-      sube.clear();
-      for (j=start;sube.size()==0 || (j&65535)>(start&65535) && (j&65535)<tri->subdiv.size() && sube.size()<256;j=tri->proceed(j,elev))
-	sube.push_back(j);
-      if (j==start)
-	break;
-    }
-  if (j==start)
-    for (i=0;i<sube.size();i++)
-    {
-      cept=tri->contourcept(sube[i],elev);
-      if (cept.isfinite())
-	ret.insert(cept);
-    }
-  return ret;
-}
-
 polyline trace(edge *edgep,double elev)
 {
   polyline ret(elev);
@@ -390,15 +354,6 @@ void rough1contour(pointlist &pl,double elev)
       ctour.dedup();
       pl.contours.push_back(ctour);
     }
-  for (j=0;j<pl.triangles.size();j++)
-  {
-    ctour=intrace(&pl.triangles[j],elev);
-    if (ctour.size())
-    {
-      ctour.setlengths();
-      pl.contours.push_back(ctour);
-    }
-  }
 }
 
 void roughcontours(pointlist &pl,double conterval)
