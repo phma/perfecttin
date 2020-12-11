@@ -124,6 +124,7 @@ public:
   int pointtype(xy pnt);
   edge *edgepart(int subdir);
   int subdir(edge *edgepart);
+  int proceed(int subdir,double elevation);
   bool crosses(int subdir,double elevation);
   bool upleft(int subdir);
   xy contourcept(int subdir,double elevation);

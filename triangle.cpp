@@ -772,6 +772,20 @@ void clip1(const xy &astart,xy &a,const xy &x,xy &b,const xy &bstart)
   }
 }
 
+int triangle::proceed(int subdir,double elevation)
+{
+  int i,j,sign,ret;
+  sign=1; // entering triangle: proceed to the other side
+  if (subdir&65536)
+    sign=-1; // exiting triangle: shouldn't happen
+  subdir&=65535;
+  for (ret=i=0;i<3;i++)
+    if (crosses(subdir,elevation))
+      ret+=i;
+  ret-=sign*subdir;
+  return ret;
+}
+
 bool triangle::crosses(int subdir,double elevation)
 {
   subdir&=65535;
