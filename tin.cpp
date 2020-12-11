@@ -333,6 +333,12 @@ double edge::length()
   return dist(c,d);
 }
 
+segment edge::getsegment()
+{
+  segment ret(*a,*b);
+  return ret;
+}
+
 void edge::clearmarks()
 {
   contour=0;

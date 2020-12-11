@@ -32,6 +32,7 @@
 #include "cogo.h"
 #include "triangle.h"
 #include "pointlist.h"
+#include "segment.h"
 
 class pointlist;
 
@@ -65,6 +66,7 @@ public:
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
+  segment getsegment();
   void clearmarks();
   void mark(int n);
   bool ismarked(int n);
