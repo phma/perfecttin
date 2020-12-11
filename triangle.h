@@ -126,6 +126,7 @@ public:
   int subdir(edge *edgepart);
   bool crosses(int subdir,double elevation);
   bool upleft(int subdir);
+  xy contourcept(int subdir,double elevation);
   edge *checkBentContour();
 private:
 };

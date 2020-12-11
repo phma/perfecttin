@@ -814,3 +814,25 @@ bool triangle::upleft(int subdir)
       return false;
   }
 }
+
+xy triangle::contourcept(int subdir,double elevation)
+{
+  segment seg;
+  subdir&=65535;
+  switch (subdir)
+  {
+    case 0:
+      seg=b->edg(this)->getsegment();
+      break;
+    case 1:
+      seg=c->edg(this)->getsegment();
+      break;
+    case 2:
+      seg=a->edg(this)->getsegment();
+      break;
+  }
+  if (subdir<3)
+    return seg.station(seg.contourcept(elevation));
+  else
+    return xy(NAN,NAN);
+}
