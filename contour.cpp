@@ -305,7 +305,7 @@ polyline trace(edge *edgep,double elev)
 	lastcept=thiscept;
       }
       mark(edgep);
-      ntri=((edge *)(edgep&-4))->othertri(tri);
+      ntri=edgep->othertri(tri);
     }
     if (ntri)
       tri=ntri;
@@ -315,34 +315,9 @@ polyline trace(edge *edgep,double elev)
   return ret;
 }
 
-void checkedgediscrepancies(pointlist &pl)
-{
-  int i,j;
-  array<double,4> disc;
-  vector<array<double,4> > discs;
-  vector<int> edgenums;
-  for (i=0;i<pl.edges.size();i++)
-  {
-    disc=pl.edges[i].ctrlpts();
-    if (std::isfinite(disc[0]) && std::isfinite(disc[1]) && (disc[0]!=disc[1] || disc[2]!=disc[3]))
-    {
-      discs.push_back(disc);
-      edgenums.push_back(i);
-    }
-  }
-  //cout<<"Edge discrepancies:"<<endl;
-  for (i=0;i<discs.size();i++)
-  {
-    cout<<edgenums[i];
-    for (j=0;j<4;j++)
-      cout<<' '<<ldecimal(discs[i][j]);
-    cout<<endl;
-  }
-}
-
 void rough1contour(pointlist &pl,double elev)
 {
-  vector<uintptr_t> cstarts;
+  vector<edge *> cstarts;
   polyline ctour;
   int j;
   cstarts=contstarts(pl,elev);

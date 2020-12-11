@@ -80,5 +80,4 @@ void roughcontours(pointlist &pl,double conterval);
 void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript &ps,
                     double we,double ea,double so,double no);
 void smoothcontours(pointlist &pl,double conterval,bool spiral=true,bool log=false);
-void checkedgediscrepancies(pointlist &pl);
 #endif
