@@ -718,6 +718,27 @@ int triangle::pointtype(xy pnt)
   return i;
 }
 
+array<double,2> triangle::lohi()
+/* Returns an array of two numbers: the lowest elevation anywhere in the triangle,
+ * and the highest elevation anywhere.
+ */
+{
+  int i;
+  double e;
+  edge *sid=NULL;
+  array<double,2> ret;
+  ret[0]=ret[1]=a->z;
+  if (b->z<ret[0])
+    ret[0]=b->z;
+  if (b->z>ret[1])
+    ret[1]=b->z;
+  if (c->z<ret[0])
+    ret[0]=c->z;
+  if (c->z>ret[1])
+    ret[1]=c->z;
+  return ret;
+}
+
 /* Unlike Bezitopo, PerfectTIN's triangles are flat and do not have subdivisions.
  * The sides are numbered as if they were subdivisions, with 0 being c,
  * 1 being a, and 2 being b.

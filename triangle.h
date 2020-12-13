@@ -123,6 +123,7 @@ public:
   double spelevation(int angle,double x,double y);
   int pointtype(xy pnt);
   edge *edgepart(int subdir);
+  std::array<double,2> lohi();
   int subdir(edge *edgepart);
   int proceed(int subdir,double elevation);
   bool crosses(int subdir,double elevation);
