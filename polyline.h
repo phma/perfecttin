@@ -56,6 +56,8 @@ public:
   friend class polyarc;
   friend class polyspiral;
   polyline();
+  virtual ~polyline()
+  {}
   explicit polyline(double e);
   double getElevation()
   {
