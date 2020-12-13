@@ -77,7 +77,5 @@ polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
 void rough1contour(pointlist &pl,double elev);
 void roughcontours(pointlist &pl,double conterval);
-void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript &ps,
-                    double we,double ea,double so,double no);
 void smoothcontours(pointlist &pl,double conterval,bool spiral=true,bool log=false);
 #endif
