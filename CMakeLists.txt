@@ -80,18 +80,20 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.c
                segment.cpp spiral.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
                unitbutton.cpp ${lib_resources} ${qm_files})
-add_executable(fuzzptin adjelev.cpp angle.cpp binio.cpp brevno.cpp
+add_executable(fuzzptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
-               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
-               relprime.cpp stl.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
-add_executable(testptin adjelev.cpp angle.cpp binio.cpp brevno.cpp
+               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp
+               relprime.cpp rootfind.cpp segment.cpp spiral.cpp stl.cpp threads.cpp
+               tin.cpp tintext.cpp triangle.cpp triop.cpp)
+add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp manysum.cpp matrix.cpp neighbor.cpp octagon.cpp
-               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp random.cpp
-               relprime.cpp stl.cpp test.cpp testptin.cpp threads.cpp
+               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp
+               relprime.cpp rootfind.cpp segment.cpp spiral.cpp
+               stl.cpp test.cpp testptin.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
