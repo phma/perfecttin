@@ -41,7 +41,7 @@ class ContourIntervalDialog: public QDialog
   Q_OBJECT
 public:
   ContourIntervalDialog(QWidget *parent=0);
-  void set(ContourInterval *ci,Measure meas);
+  void set(ContourInterval *ci,double unit);
 signals:
 public slots:
   void selectInterval(int n);

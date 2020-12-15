@@ -45,7 +45,7 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
 
-void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
+void ContourIntervalDialog::set(ContourInterval *ci,double unit)
 {
   bool precise;
   int i,closeInx=-1;
@@ -62,15 +62,15 @@ void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
      * display it with six more digits of precision to show that it's in
      * a different unit.
      */
-    mantissa=frac(log10(ci->mediumInterval()/meas.toCoherent(1,LENGTH)));
+    mantissa=frac(log10(ci->mediumInterval()/unit));
     precise=fabs(mantissa)>0.0000005 && fabs(mantissa-0.30103)>0.0000005 &&
             fabs(mantissa-0.69897)>0.0000005 && fabs(mantissa-1)>0.0000005;
-    currentInterval->setText(QString::fromStdString(ci->valueString(meas,precise)));
+    currentInterval->setText(QString::fromStdString(ci->valueString(unit,precise)));
     okButton->setEnabled(true);
-    for (i=rint(3*log10(meas.fromCoherent(MININTERVAL/3,LENGTH)));
-         i<=rint(3*log10(meas.fromCoherent(MAXINTERVAL*3,LENGTH)));i++)
+    for (i=rint(3*log10(MININTERVAL/3/unit));
+         i<=rint(3*log10(MAXINTERVAL*3/unit));i++)
     {
-      temp=ContourInterval(meas.toCoherent(1,LENGTH),i,false);
+      temp=ContourInterval(unit,i,false);
       if (fabs(log(ci->mediumInterval()/temp.mediumInterval()))<closeDiff)
       {
         closeDiff=fabs(log(ci->mediumInterval()/temp.mediumInterval()));
@@ -79,7 +79,7 @@ void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
       if (temp.mediumInterval()>=MININTERVAL && temp.mediumInterval()<=MAXINTERVAL)
       {
         ciList.push_back(temp);
-        comboBox->addItem(QString::fromStdString(temp.valueString(meas,false)));
+        comboBox->addItem(QString::fromStdString(temp.valueString(unit,false)));
       }
     }
     comboBox->setCurrentIndex(closeInx);
