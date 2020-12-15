@@ -69,7 +69,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp b
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
-	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp
+	       boundrect.cpp carlsontin.cpp cidialog.cpp cloud.cpp cogo.cpp
 	       cogospiral.cpp color.cpp configdialog.cpp contour.cpp
                csaction.cpp dxf.cpp edgeop.cpp fileio.cpp
                gui.cpp landxml.cpp las.cpp ldecimal.cpp
