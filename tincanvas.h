@@ -26,6 +26,7 @@
 #include <QWidget>
 #include "lissajous.h"
 #include "point.h"
+#include "cidialog.h"
 
 #define SPLASH_TIME 60
 
@@ -47,12 +48,16 @@ public slots:
   void setScalePos();
   void tick(); // 50 ms
   void startSplashScreen();
+  void selectContourInterval();
 protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
   QPixmap frameBuffer;
   Lissajous lis;
+  ContourIntervalDialog *ciDialog;
+  double conterval;
+  ContourInterval contourInterval;
   xy windowCenter,worldCenter;
   double scale;
   double lengthUnit;

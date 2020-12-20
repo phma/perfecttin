@@ -45,6 +45,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setMinimumSize(40,30);
+  ciDialog=new ContourIntervalDialog(this);
   triangleNum=splashScreenTime=dartAngle=ballAngle=0;
 }
 
@@ -404,6 +405,12 @@ void TinCanvas::setLengthUnit(double unit)
 {
   lengthUnit=unit;
   setScalePos();
+}
+
+void TinCanvas::selectContourInterval()
+{
+  ciDialog->set(&contourInterval,lengthUnit);
+  ciDialog->exec();
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)

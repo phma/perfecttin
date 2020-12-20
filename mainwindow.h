@@ -31,6 +31,7 @@
 #include "configdialog.h"
 #include "unitbutton.h"
 #include "csaction.h"
+#include "cidialog.h"
 #include "tincanvas.h"
 
 class MainWindow: public QMainWindow
