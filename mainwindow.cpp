@@ -843,6 +843,7 @@ void MainWindow::makeActions()
   int i;
   fileMenu=menuBar()->addMenu(tr("&File"));
   viewMenu=menuBar()->addMenu(tr("&View"));
+  contourMenu=menuBar()->addMenu(tr("&Contour"));
   settingsMenu=menuBar()->addMenu(tr("&Settings"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
   // File menu
@@ -938,6 +939,16 @@ void MainWindow::makeActions()
   connect(this,SIGNAL(colorSchemeChanged(int)),colorElevationAction,SLOT(setScheme(int)));
   connect(colorElevationAction,SIGNAL(triggered(bool)),colorElevationAction,SLOT(selfTriggered(bool)));
   connect(colorElevationAction,SIGNAL(schemeChanged(int)),this,SLOT(setColorScheme(int)));
+  // Contour menu
+  selectContourIntervalAction=new QAction(this);
+  selectContourIntervalAction->setText(tr("Select contour interval"));
+  contourMenu->addAction(selectContourIntervalAction);
+  connect(selectContourIntervalAction,SIGNAL(triggered(bool)),canvas,SLOT(selectContourInterval()));
+  roughContoursAction=new QAction(this);
+  //makeTinAction->setIcon(QIcon(":/roughcon.png"));
+  roughContoursAction->setText(tr("Draw rough contours"));
+  contourMenu->addAction(roughContoursAction);
+  connect(roughContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(roughContours()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
