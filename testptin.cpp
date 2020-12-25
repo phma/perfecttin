@@ -988,7 +988,7 @@ void testquarter()
   cout<<"Before: "<<dots1before<<" dots in 1\n";
   cout<<"After: "<<dots1after<<" dots in 1 "<<dots11<<" dots in 11\n";
   cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after\n";
-  tassert(abs(dots2before-729)<15);
+  tassert(abs(dots2before-729)<17);
   tassert(abs(dots2after-186)<15);
   tassert(abs(dots6-181)<15);
   tassert(abs(dots7-181)<15);
