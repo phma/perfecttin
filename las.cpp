@@ -388,6 +388,8 @@ void readLas(string fileName)
     pnt=header.readPoint(i);
     //if (i%1000000==0)
       //cout<<"return "<<pnt.returnNum<<" of "<<pnt.nReturns<<endl;
+    //if (pnt.returnNum==0)
+      //cout<<"returnNum=0\n";
     cloud.push_back(pnt.location);
   }
 }
