@@ -3,7 +3,7 @@
 /* fileio.cpp - file I/O                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -350,6 +350,37 @@ const int ptinHeaderFormat=0x00000028;
  * the start of points. The low two bytes are the count of bytes; the high
  * two bytes are used to disambiguate between header formats that have
  * the same number of bytes.
+ *
+ * Header formats:
+ * 0006 001c 01f0 1fc0	Magic numbers
+ * uint32		Header format (0x20, 0x28, or 0x2c)
+ * uint64		Timestamp
+ * uint32		Tolerance ratio
+ * double		Tolerance
+ * double		Density, not present in format 0x20
+ * uint32		Number of points
+ * uint32		Number of points in convex hull
+ * uint32		Number of triangles
+ * uint32		Number of groups of polylines, not present in format 0x20 or 0x28
+ */
+
+/* Format of contour lines:
+ * 0000		This is a group of contour lines
+ * 0008		Length of the label
+ * double	Label of this group of contour lines (the contour interval)
+ * 0000		Each contour is a 2D polyline with elevation
+ * uint32	Number of contours
+ * Format of one contour:
+ * double	Elevation
+ * uint32	Number of endpoints
+ * double*2n	Endpoints
+ * uint32	Number of lengths
+ * double*n	Lengths
+ * uint32	Number of deltas
+ * int32*n	Deltas (final zeros omitted)
+ * uint32	Number of delta2s
+ * int32*n	Delta2s (final zeros omitted)
+ * TBD		Checksums
  */
 
 void writePtin(string outputFile,int tolRatio,double tolerance,double density)
