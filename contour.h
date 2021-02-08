@@ -3,7 +3,7 @@
 /* contour.h - generates contours                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -63,6 +63,19 @@ public:
   {
     return interval*fineRatio*coarseRatio;
   };
+  double tolerance()
+  {
+    return interval*fineRatio*relativeTolerance;
+  };
+  double getRelativeTolerance()
+  {
+    return relativeTolerance;
+  };
+  void setRelativeTolerance(double tol)
+  {
+    relativeTolerance=tol;
+  }
+  void setInterval(double unit,int icode,bool fine);
   std::string valueString(double unit,bool precise=false);
   int contourType(double elev);
   void writeXml(std::ostream &ofile);

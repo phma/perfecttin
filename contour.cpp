@@ -3,7 +3,7 @@
 /* contour.cpp - generates contours                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -54,6 +54,7 @@ ContourInterval::ContourInterval()
   interval=1;
   fineRatio=1;
   coarseRatio=5;
+  relativeTolerance=0.5;
 }
 
 ContourInterval::ContourInterval(double unit,int icode,bool fine)
@@ -67,6 +68,12 @@ ContourInterval::ContourInterval(double unit,int icode,bool fine)
  * 3  10
  * If fine is true, the fine contour interval is enabled.
  */
+{
+  setInterval(unit,icode,fine);
+  relativeTolerance=0.5;
+}
+
+void ContourInterval::setInterval(double unit,int icode,bool fine)
 {
   int i;
   fineRatio=1;
