@@ -3,7 +3,7 @@
 /* cidialog.cpp - contour interval dialog             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -25,22 +25,31 @@
 #include "cidialog.h"
 using namespace std;
 
+const double tol[]=
+{
+  0.1,0.2,1/3.,0.5
+};
+const char tolStr[4][5]=
+{
+  "1/10","1/5","1/3","1/2"
+};
+
 ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
 {
   currentInterval=new QLabel(tr("None"),this);
-  comboBox=new QComboBox(this);
+  intervalBox=new QComboBox(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(currentInterval,0,0);
-  gridLayout->addWidget(comboBox,0,1);
+  gridLayout->addWidget(intervalBox,0,1);
   gridLayout->addWidget(okButton,1,0);
   gridLayout->addWidget(cancelButton,1,1);
   contourInterval=nullptr;
   okButton->setEnabled(false);
   okButton->setDefault(true);
-  connect(comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(selectInterval(int)));
+  connect(intervalBox,SIGNAL(currentIndexChanged(int)),this,SLOT(selectInterval(int)));
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
@@ -52,7 +61,7 @@ void ContourIntervalDialog::set(ContourInterval *ci,double unit)
   ContourInterval temp;
   double mantissa,closeDiff=INFINITY;
   contourInterval=ci;
-  comboBox->clear();
+  intervalBox->clear();
   ciList.clear();
   if (ci)
   {
@@ -74,15 +83,15 @@ void ContourIntervalDialog::set(ContourInterval *ci,double unit)
       if (fabs(log(ci->mediumInterval()/temp.mediumInterval()))<closeDiff)
       {
         closeDiff=fabs(log(ci->mediumInterval()/temp.mediumInterval()));
-        closeInx=comboBox->count();
+        closeInx=intervalBox->count();
       }
       if (temp.mediumInterval()>=MININTERVAL && temp.mediumInterval()<=MAXINTERVAL)
       {
         ciList.push_back(temp);
-        comboBox->addItem(QString::fromStdString(temp.valueString(unit,false)));
+        intervalBox->addItem(QString::fromStdString(temp.valueString(unit,false)));
       }
     }
-    comboBox->setCurrentIndex(closeInx);
+    intervalBox->setCurrentIndex(closeInx);
   }
   else
   {

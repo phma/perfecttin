@@ -3,7 +3,7 @@
 /* cidialog.h - contour interval dialog               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -48,8 +48,9 @@ public slots:
   virtual void accept();
 private:
   ContourInterval *contourInterval,selectedInterval;
+  double relTol;
   QLabel *currentInterval;
-  QComboBox *comboBox;
+  QComboBox *intervalBox,*toleranceBox;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
   std::vector<ContourInterval> ciList;
