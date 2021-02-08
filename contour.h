@@ -67,7 +67,7 @@ public:
   int contourType(double elev);
   void writeXml(std::ostream &ofile);
 private:
-  double interval;
+  double interval,relativeTolerance;
   int fineRatio,coarseRatio;
 };
 
