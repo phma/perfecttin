@@ -63,6 +63,7 @@ void ContourIntervalDialog::set(ContourInterval *ci,double unit)
   ContourInterval temp;
   double mantissa,closeDiff=INFINITY;
   contourInterval=ci;
+  relTol=ci->getRelativeTolerance();
   intervalBox->clear();
   toleranceBox->clear();
   ciList.clear();
@@ -121,6 +122,9 @@ void ContourIntervalDialog::selectInterval(int n)
 void ContourIntervalDialog::accept()
 {
   if (contourInterval)
+  {
     *contourInterval=selectedInterval;
+    contourInterval->setRelativeTolerance(tol[toleranceBox->currentIndex()]);
+  }
   QDialog::accept();
 }
