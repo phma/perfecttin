@@ -1005,6 +1005,8 @@ void MainWindow::readSettings()
   printer3d.minBase=settings.value("3dprinter/base",10).toDouble();
   printer3d.scaleNum=settings.value("3dprinter/scaleNum",1).toUInt();
   printer3d.scaleDenom=settings.value("3dprinter/scaleDenom",1000).toUInt();
+  canvas->contourInterval.setIntervalRatios(settings.value("contourInterval",1).toDouble(),
+					    1,settings.value("contourRatio",5).toInt());
   lengthUnitChanged(lengthUnit);
   colorSchemeChanged(colorize.getScheme());
 }
@@ -1026,6 +1028,9 @@ void MainWindow::writeSettings()
   settings.setValue("3dprinter/base",printer3d.minBase);
   settings.setValue("3dprinter/scaleNum",printer3d.scaleNum);
   settings.setValue("3dprinter/scaleDenom",printer3d.scaleDenom);
+  settings.setValue("contourInterval",canvas->contourInterval.mediumInterval());
+  settings.setValue("contourRatio",(int)lrint(canvas->contourInterval.coarseInterval()/
+					      canvas->contourInterval.mediumInterval()));
 }
 
 void MainWindow::setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri)

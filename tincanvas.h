@@ -37,6 +37,7 @@ public:
   TinCanvas(QWidget *parent=0);
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
+  ContourInterval contourInterval;
   int state;
 signals:
   void splashScreenStarted();
@@ -57,7 +58,6 @@ private:
   Lissajous lis;
   ContourIntervalDialog *ciDialog;
   double conterval;
-  ContourInterval contourInterval;
   xy windowCenter,worldCenter;
   double scale;
   double lengthUnit;

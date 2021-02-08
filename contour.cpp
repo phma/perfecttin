@@ -110,6 +110,17 @@ void ContourInterval::setInterval(double unit,int icode,bool fine)
   }
 }
 
+void ContourInterval::setIntervalRatios(double i,int f,int c)
+// For restoring settings when program starts
+{
+  if (i>0 && f>0 && f<10 && c>0 && c<10)
+  {
+    interval=i;
+    fineRatio=f;
+    coarseRatio=c;
+  }
+}
+
 string ContourInterval::valueString(double unit,bool precise)
 /* Returns the value of mediumInterval with 1 or 7 significant digits.
  * Uses 7 digits if precise to distinguish which foot it was set in.

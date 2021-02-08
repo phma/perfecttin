@@ -76,6 +76,7 @@ public:
     relativeTolerance=tol;
   }
   void setInterval(double unit,int icode,bool fine);
+  void setIntervalRatios(double i,int f,int c);
   std::string valueString(double unit,bool precise=false);
   int contourType(double elev);
   void writeXml(std::ostream &ofile);
