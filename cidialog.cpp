@@ -38,14 +38,16 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
 {
   currentInterval=new QLabel(tr("None"),this);
   intervalBox=new QComboBox(this);
+  toleranceBox=new QComboBox(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(currentInterval,0,0);
   gridLayout->addWidget(intervalBox,0,1);
-  gridLayout->addWidget(okButton,1,0);
-  gridLayout->addWidget(cancelButton,1,1);
+  gridLayout->addWidget(toleranceBox,1,1);
+  gridLayout->addWidget(okButton,2,0);
+  gridLayout->addWidget(cancelButton,2,1);
   contourInterval=nullptr;
   okButton->setEnabled(false);
   okButton->setDefault(true);
@@ -62,6 +64,7 @@ void ContourIntervalDialog::set(ContourInterval *ci,double unit)
   double mantissa,closeDiff=INFINITY;
   contourInterval=ci;
   intervalBox->clear();
+  toleranceBox->clear();
   ciList.clear();
   if (ci)
   {
@@ -92,6 +95,12 @@ void ContourIntervalDialog::set(ContourInterval *ci,double unit)
       }
     }
     intervalBox->setCurrentIndex(closeInx);
+    for (i=0;i<sizeof(tol)/sizeof(tol[0]);i++)
+    {
+      toleranceBox->addItem(QString::fromStdString(tolStr[i]));
+      if (relTol==tol[i])
+	toleranceBox->setCurrentIndex(i);
+    }
   }
   else
   {
