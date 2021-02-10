@@ -3,7 +3,7 @@
 /* tincanvas.h - canvas for drawing TIN               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -24,9 +24,18 @@
 #ifndef TINCANVAS_H
 #define TINCANVAS_H
 #include <QWidget>
+#include <QProgressDialog>
+#include <QTimer>
+#include <QTime>
 #include "lissajous.h"
 #include "point.h"
 #include "cidialog.h"
+
+// goals
+#define DONE 0
+#define MAKE_TIN 1
+#define ROUGH_CONTOURS 2
+#define SMOOTH_CONTOURS 3
 
 #define SPLASH_TIME 60
 
@@ -39,6 +48,7 @@ public:
   xy windowToWorld(QPointF pnt);
   ContourInterval contourInterval;
   int state;
+  void repaintSeldom();
 signals:
   void splashScreenStarted();
   void splashScreenFinished();
@@ -50,12 +60,22 @@ public slots:
   void tick(); // 50 ms
   void startSplashScreen();
   void selectContourInterval();
+  void roughContours();
+  void rough1Contour();
+  void roughContoursFinish();
+  void contoursCancel();
 protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
   QPixmap frameBuffer;
   Lissajous lis;
+  QPen contourPen[3][20];
+  unsigned short contourColor[20];
+  short contourLineType[3];
+  unsigned short contourThickness[3];
+  QProgressDialog *progressDialog;
+  QTimer *timer;
   ContourIntervalDialog *ciDialog;
   double conterval;
   xy windowCenter,worldCenter;
@@ -64,11 +84,19 @@ private:
   double maxScaleSize,scaleSize;
   xy ballPos;
   xy leftScaleEnd,rightScaleEnd,scaleEnd;
+  int goal;
+  int progInx; // used in progress bar loops
+  int elevHi,elevLo; // in contour interval unit
+  std::array<double,2> tinlohi;
+  bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
+  bool smoothContoursValid;
   int penPos;
   int triangleNum;
   int lastOpcount;
   int ballAngle,dartAngle;
   int lastntri;
   int splashScreenTime; // in ticks
+  QTime lastPaintTime;
+  int lastPaintDuration;
 };
 #endif

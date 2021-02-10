@@ -3,7 +3,7 @@
 /* tincanvas.cpp - canvas for drawing TIN             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -45,8 +45,18 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setMinimumSize(40,30);
+  progressDialog=new QProgressDialog(this);
+  progressDialog->reset();
   ciDialog=new ContourIntervalDialog(this);
+  timer=new QTimer(this);
   triangleNum=splashScreenTime=dartAngle=ballAngle=0;
+}
+
+void TinCanvas::repaintSeldom()
+// Spends up to 5% of the time repainting during long operations.
+{
+  if (lastPaintTime.elapsed()>20*lastPaintDuration)
+    repaint();
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
@@ -413,10 +423,76 @@ void TinCanvas::selectContourInterval()
   ciDialog->exec();
 }
 
+void TinCanvas::roughContours()
+{
+  conterval=contourInterval.fineInterval();
+  if (goal==DONE)
+  {
+    goal=ROUGH_CONTOURS;
+    timer->start(0);
+    progressDialog->show();
+  }
+  if (net.triangles.size())
+    tinlohi=net.lohi();
+  net.contours.clear();
+  elevLo=floor(tinlohi[0]/conterval);
+  elevHi=ceil(tinlohi[1]/conterval);
+  progInx=elevLo;
+  progressDialog->setRange(elevLo,elevHi);
+  progressDialog->setValue(progInx);
+  progressDialog->setWindowTitle(tr("Drawing contours"));
+  progressDialog->setLabelText(tr("Drawing rough contours..."));
+  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  connect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
+}
+
+void TinCanvas::rough1Contour()
+{
+  rough1contour(net,progInx*conterval);
+  if (++progInx>elevHi)
+  {
+    disconnect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
+  }
+  else
+    progressDialog->setValue(progInx);
+  repaintSeldom();
+}
+
+void TinCanvas::roughContoursFinish()
+{
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
+  switch (goal)
+  {
+    case ROUGH_CONTOURS:
+      goal=DONE;
+      progressDialog->reset();
+      timer->stop();
+      break;
+    case SMOOTH_CONTOURS:
+      connect(timer,SIGNAL(timeout()),this,SLOT(smoothContours()));
+      break;
+  }
+  roughContoursValid=true;
+  smoothContoursValid=false;
+  update();
+}
+
+void TinCanvas::contoursCancel()
+{
+  goal=DONE;
+  progressDialog->reset();
+  timer->stop();
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  update();
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i;
   QPainter painter(this);
+  QTime paintTime,subTime;
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
   QRectF sclera(ballPos.getx()-10,ballPos.gety()-5,20,10);
   QRectF iris(ballPos.getx()-5,ballPos.gety()-5,10,10);
@@ -424,6 +500,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
   QPolygonF octagon;
   double x0,x1,y;
+  paintTime.start();
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()-4.14);
   octagon<<QPointF(ballPos.getx()-4.14,ballPos.gety()-10);
   octagon<<QPointF(ballPos.getx()+4.14,ballPos.gety()-10);
@@ -486,6 +563,8 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.drawEllipse(QPointF(ballPos.getx(),ballPos.gety()),10,10);
       break;
   }
+  lastPaintTime=paintTime;
+  lastPaintDuration=paintTime.elapsed();
 }
 
 void TinCanvas::resizeEvent(QResizeEvent *event)
