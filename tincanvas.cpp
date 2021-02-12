@@ -49,6 +49,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   progressDialog->reset();
   ciDialog=new ContourIntervalDialog(this);
   timer=new QTimer(this);
+  goal=DONE;
   triangleNum=splashScreenTime=dartAngle=ballAngle=0;
 }
 
