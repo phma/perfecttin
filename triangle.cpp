@@ -3,7 +3,7 @@
 /* triangle.cpp - triangles                             */
 /*                                                      */
 /********************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -798,12 +798,15 @@ int triangle::proceed(int subdir,double elevation)
   int i,j,sign,ret;
   sign=1; // entering triangle: proceed to the other side
   if (subdir&65536)
-    sign=-1; // exiting triangle: shouldn't happen
+    sign=-1; // exiting triangle: return -1
   subdir&=65535;
-  for (ret=i=0;i<3;i++)
-    if (crosses(subdir,elevation))
+  for (ret=65536,i=0;i<3;i++)
+    if (crosses(i,elevation))
       ret+=i;
-  ret-=sign*subdir;
+  if (sign>0)
+    ret-=subdir;
+  else
+    ret=-1;
   return ret;
 }
 
