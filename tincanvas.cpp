@@ -463,6 +463,9 @@ void TinCanvas::rough1Contour()
 
 void TinCanvas::roughContoursFinish()
 {
+  PostScript ps;
+  BoundRect br;
+  int i;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
   switch (goal)
   {
@@ -478,6 +481,15 @@ void TinCanvas::roughContoursFinish()
   roughContoursValid=true;
   smoothContoursValid=false;
   update();
+  ps.open("contours.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.startpage();
+  br.include(&net);
+  ps.setscale(br);
+  for (i=0;i<net.contours.size();i++)
+    ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+  ps.endpage();
 }
 
 void TinCanvas::contoursCancel()
