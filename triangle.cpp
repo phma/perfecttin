@@ -718,24 +718,47 @@ int triangle::pointtype(xy pnt)
   return i;
 }
 
+void updlohi(array<double,2> &lh,double elev)
+{
+  if (elev<lh[0])
+    lh[0]=elev;
+  if (elev>lh[1])
+    lh[1]=elev;
+}
+
 array<double,2> triangle::lohi()
 /* Returns an array of two numbers: the lowest elevation anywhere in the triangle,
  * and the highest elevation anywhere.
  */
 {
-  int i;
-  double e;
-  edge *sid=NULL;
   array<double,2> ret;
   ret[0]=ret[1]=a->z;
-  if (b->z<ret[0])
-    ret[0]=b->z;
-  if (b->z>ret[1])
-    ret[1]=b->z;
-  if (c->z<ret[0])
-    ret[0]=c->z;
-  if (c->z>ret[1])
-    ret[1]=c->z;
+  updlohi(ret,b->z);
+  updlohi(ret,c->z);
+  return ret;
+}
+
+array<double,2> triangle::lohi(segment seg)
+/* Returns the lowest and highest elevations of that part of the segment
+ * that lies in the triangle.
+ */
+{
+  segment side;
+  array<double,2> ret;
+  ret[0]=INFINITY;
+  if (in(seg.getstart()))
+    updlohi(ret,elevation(seg.getstart()));
+  if (in(seg.getend()))
+    updlohi(ret,elevation(seg.getend()));
+  side=a->edg(this)->getsegment();
+  if (intersection_type(seg,side)!=NOINT)
+    updlohi(ret,elevation(intersection(seg,side)));
+  side=b->edg(this)->getsegment();
+  if (intersection_type(seg,side)!=NOINT)
+    updlohi(ret,elevation(intersection(seg,side)));
+  side=c->edg(this)->getsegment();
+  if (intersection_type(seg,side)!=NOINT)
+    updlohi(ret,elevation(intersection(seg,side)));
   return ret;
 }
 

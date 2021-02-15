@@ -3,7 +3,7 @@
 /* triangle.h - triangles                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 #include <vector>
 #include <array>
 #include "cogo.h"
+#include "segment.h"
 #define M_SQRT_3_4 0.86602540378443864676372317
 #define M_SQRT_3 1.73205080756887729352744634
 #define M_SQRT_1_3 0.5773502691896257645091487805
@@ -124,6 +125,7 @@ public:
   int pointtype(xy pnt);
   edge *edgepart(int subdir);
   std::array<double,2> lohi();
+  std::array<double,2> lohi(segment seg);
   int subdir(edge *edgepart);
   int proceed(int subdir,double elevation);
   bool crosses(int subdir,double elevation);
