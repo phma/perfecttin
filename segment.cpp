@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -34,6 +34,7 @@
 #include "spiral.h"
 #include "ldecimal.h"
 #include "rootfind.h"
+#include "minquad.h"
 
 #define TOLERMULT 33
 /* TOLERMULT must have a power between DEG90 and DEG180.
@@ -251,4 +252,162 @@ bool sameXyz(segment seg1,segment seg2)
 double missDistance(segment seg1,segment seg2)
 {
   return missDistance(seg1.start,seg1.end,seg2.start,seg2.end);
+}
+
+double segment::closest(xy topoint,double closesofar,bool offends)
+/* Finds the closest point on the segment/arc/spiralarc to the point topoint.
+ * Does successive parabolic interpolation on the square of the distance.
+ * This method finds the exact closest point on a segment in one step;
+ * the function takes one more step to verify the solution and maybe another
+ * because of roundoff error. On arcs and spiralarcs, takes more steps.
+ *
+ * If the distance to the closest point is obviously greater than closesofar,
+ * it stops early and returns an inaccurate result. This is used when finding
+ * the closest point on an alignment consisting of many segments and arcs.
+ *
+ * This usually takes few iterations (most often 18 in testmanyarc), but
+ * occasionally hundreds of thousands of iterations. This usually happens when
+ * the distance is small (<100 µm out of 500 m), but at least once it took
+ * the longest time on the point that was farthest from the spiralarc.
+ */
+{
+  int nstartpoints,i,angerr,angtoler,endangle;
+  double closest,closedist,lastclosedist,fardist,len,len2,vertex;
+  map<double,double> stdist;
+  set<double> inserenda,delenda;
+  set<double>::iterator j;
+  map<double,double>::iterator k0,k1,k2;
+#ifndef NDEBUG
+  closetime=0;
+#endif
+  closesofar*=closesofar;
+  len=length();
+  closest=fabs(curvature(0));
+  closedist=fabs(curvature(len));
+  if (closedist>closest)
+    closest=closedist;
+  nstartpoints=nearbyint(closest*len)+2;
+  closedist=INFINITY;
+  fardist=0;
+  for (i=0;i<=nstartpoints;i++)
+    inserenda.insert(((double)i/nstartpoints)*len);
+  do
+  {
+    lastclosedist=closedist;
+    for (j=delenda.begin();j!=delenda.end();++j)
+      stdist.erase(*j);
+    for (j=inserenda.begin();j!=inserenda.end();++j)
+    {
+      len2=sqr(dist((xy)station(*j),topoint));
+      if (len2<closedist)
+      {
+	closest=*j;
+	closedist=len2;
+	angerr=((bearing(*j)-atan2i((xy)station(*j)-topoint))&(DEG180-1))-DEG90;
+      }
+      if (len2>fardist)
+	fardist=len2;
+      stdist[*j]=len2;
+    }
+    inserenda.clear();
+    delenda.clear();
+    for (k0=k1=stdist.begin(),k2=++k1,++k2;stdist.size()>2 && k2!=stdist.end();++k0,++k1,++k2)
+    {
+      vertex=minquad(k0->first,k0->second,k1->first,k1->second,k2->first,k2->second);
+      if (vertex<0 && vertex>-len/2)
+	vertex=-vertex;
+      if (vertex>len && vertex<3*len/2)
+	vertex=2*len-vertex;
+      if (stdist.count(vertex) && vertex!=k1->first || (k1->second-k0->second)*(k2->second-k1->second)>0)
+	delenda.insert(k1->first);
+      if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
+	inserenda.insert(vertex);
+#ifndef DEBUG
+      closetime++;
+#endif
+    }
+    if (lastclosedist>closedist)
+      angtoler=1;
+    else
+      angtoler*=TOLERMULT;
+  } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar && !((closest==0 && isinsector(dir(topoint,start)-startbearing(),0xf00ff00f)) || (closest==len && isinsector(dir(topoint,end)-endbearing(),0x0ff00ff0))));
+  endangle=DEG90;
+  if (closest==0)
+    endangle=foldangle(dir(topoint,start)-startbearing());
+  if (closest==len)
+    endangle=foldangle(dir(end,topoint)-endbearing());
+  if (!offends && endangle>-DEG90 && endangle<DEG90)
+    closest=(closest==0)?-INFINITY:INFINITY;
+  return closest;
+}
+
+double segment::dirbound(int angle,double boundsofar)
+/* angle=0x00000000: returns least easting.
+ * angle=0x20000000: returns least northing.
+ * angle=0x40000000: returns negative of greatest easting.
+ * The algorithm is the same as segment::closest, except that the distance
+ * is not squared.
+ */
+{
+  int nstartpoints,i,angerr,angtoler,endangle;
+  double bound=HUGE_VAL,turncoord;
+  double s=sin(angle),c=cos(angle);
+  double closest,closedist,lastclosedist,fardist,len,len2,vertex;
+  xy sta;
+  map<double,double> stdist;
+  set<double> inserenda,delenda;
+  set<double>::iterator j;
+  map<double,double>::iterator k0,k1,k2;
+  len=length();
+  closest=curvature(0);
+  closedist=curvature(len);
+  if (closedist>closest)
+    closest=closedist;
+  nstartpoints=nearbyint(fabs(closest*len))+2;
+  closedist=INFINITY;
+  fardist=-INFINITY;
+  if (std::isfinite(len))
+  {
+    for (i=0;i<=nstartpoints;i++)
+      inserenda.insert(((double)i/nstartpoints)*len);
+    do
+    {
+      lastclosedist=closedist;
+      for (j=delenda.begin();j!=delenda.end();++j)
+	stdist.erase(*j);
+      for (j=inserenda.begin();j!=inserenda.end();++j)
+      {
+	sta=station(*j);
+	len2=sta.east()*c+sta.north()*s;
+	if (len2<closedist)
+	{
+	  closest=*j;
+	  closedist=len2;
+	  angerr=((bearing(*j)-angle)&(DEG180-1))-DEG90;
+	}
+	if (len2>fardist)
+	  fardist=len2;
+	stdist[*j]=len2;
+      }
+      inserenda.clear();
+      delenda.clear();
+      for (k0=k1=stdist.begin(),k2=++k1,++k2;stdist.size()>2 && k2!=stdist.end();++k0,++k1,++k2)
+      {
+	vertex=minquad(k0->first,k0->second,k1->first,k1->second,k2->first,k2->second);
+	if (vertex<0 && vertex>-len/2)
+	  vertex=-vertex;
+	if (vertex>len && vertex<3*len/2)
+	  vertex=2*len-vertex;
+	if (stdist.count(vertex) && vertex!=k1->first)
+	  delenda.insert(k1->first);
+	if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
+	  inserenda.insert(vertex);
+      }
+      if (lastclosedist>closedist)
+	angtoler=1;
+      else
+	angtoler*=TOLERMULT;
+    } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<boundsofar && !((closest==0 && isinsector(angle-startbearing(),0xf00ff00f)) || (closest==len && isinsector(angle-endbearing(),0x0ff00ff0))));
+  }
+  return closedist;
 }
