@@ -86,7 +86,8 @@ add_executable(fuzzptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp bre
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp lohi.cpp manysum.cpp matrix.cpp
                minquad.cpp neighbor.cpp octagon.cpp
-               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp
+               ply.cpp point.cpp pointlist.cpp polyline.cpp
+               ps.cpp qindex.cpp quaternion.cpp random.cpp
                relprime.cpp rootfind.cpp segment.cpp spiral.cpp stl.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp)
 add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
@@ -94,7 +95,8 @@ add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp bre
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
                leastsquares.cpp lohi.cpp manysum.cpp matrix.cpp
                minquad.cpp neighbor.cpp octagon.cpp
-               ply.cpp point.cpp pointlist.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp
+               ply.cpp point.cpp pointlist.cpp polyline.cpp
+               ps.cpp qindex.cpp quaternion.cpp random.cpp
                relprime.cpp rootfind.cpp segment.cpp spiral.cpp
                stl.cpp test.cpp testptin.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp)

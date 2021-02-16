@@ -24,3 +24,4 @@
 #include <array>
 
 void updlohi(std::array<double,2> &lh,double elev);
+void updlohi(std::array<double,2> &lh,const std::array<double,2> &elevs);

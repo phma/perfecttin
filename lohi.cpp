@@ -31,3 +31,9 @@ void updlohi(array<double,2> &lh,double elev)
   if (elev>lh[1])
     lh[1]=elev;
 }
+
+void updlohi(array<double,2> &lh,const array<double,2> &elevs)
+{
+  updlohi(lh,elevs[0]);
+  updlohi(lh,elevs[1]);
+}
