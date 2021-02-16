@@ -85,6 +85,7 @@ public:
   double elevation(xy location);
   double dirbound(int angle);
   std::array<double,2> lohi();
+  std::array<double,2> lohi(polyline p);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
 };
 
