@@ -32,6 +32,7 @@
 #include "threads.h"
 #include "ldecimal.h"
 #include "tin.h"
+#include "lohi.h"
 using namespace std;
 
 const char ctrlpttab[16]=
@@ -716,14 +717,6 @@ int triangle::pointtype(xy pnt)
       i=PT_GRASS;
   }
   return i;
-}
-
-void updlohi(array<double,2> &lh,double elev)
-{
-  if (elev<lh[0])
-    lh[0]=elev;
-  if (elev>lh[1])
-    lh[1]=elev;
 }
 
 array<double,2> triangle::lohi()

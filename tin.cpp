@@ -3,7 +3,7 @@
 /* tin.cpp - triangulated irregular network           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -34,6 +34,7 @@
 #include "manysum.h"
 #include "random.h"
 #include "relprime.h"
+#include "lohi.h"
 
 #define THR 16777216
 //threshold for goodcenter to determine if a point is sufficiently
