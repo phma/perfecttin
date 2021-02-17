@@ -372,6 +372,25 @@ void roughcontours(pointlist &pl,double conterval)
     rough1contour(pl,i*conterval);
 }
 
+void prune1contour(pointlist &pl,double tolerance,int i)
+{
+  static int n=0;
+  int j,sz,origsz;
+  polyline change;
+  origsz=sz=pl.contours[i].size();
+  for (j=0;j<sz;j++)
+  {
+    n=(n+relprime(sz))%sz;
+    if (n || !pl.contours[i].isopen())
+    {
+      //change.clear();
+      change.insert(pl.contours[i].getEndpoint(n-1));
+      change.insert(pl.contours[i].getEndpoint(n));
+      change.insert(pl.contours[i].getEndpoint(n+1));
+    }
+  }
+}
+
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
 {
   int i;
