@@ -543,6 +543,69 @@ void polyarc::erase(int pos)
     lengths[i]=getarc(i).length();
 }
 
+void polyspiral::erase(int pos)
+{
+  int i;
+  vector<xy>::iterator ptit,midit;
+  vector<int>::iterator arcit,brgit,d2it,mbrit;
+  vector<double>::iterator lenit,cumit,cloit,crvit;
+  spiralarc spi;
+  if (pos<0)
+    pos=0;
+  if (pos>=endpoints.size())
+    pos=endpoints.size()-1;
+  ptit=endpoints.begin()+pos;
+  brgit=bearings.begin()+pos;
+  if (pos<lengths.size())
+  {
+    lenit=lengths.begin()+pos;
+    cumit=cumLengths.begin()+pos;
+    arcit=deltas.begin()+pos;
+    d2it=delta2s.begin()+pos;
+    midit=midpoints.begin()+pos;
+    mbrit=midbearings.begin()+pos;
+    cloit=clothances.begin()+pos;
+    crvit=curvatures.begin()+pos;
+  }
+  else
+  {
+    lenit=lengths.begin()+pos-1;
+    cumit=cumLengths.begin()+pos-1;
+    arcit=deltas.begin()+pos-1;
+    d2it=delta2s.begin()+pos-1;
+    midit=midpoints.begin()+pos-1;
+    mbrit=midbearings.begin()+pos-1;
+    cloit=clothances.begin()+pos-1;
+    crvit=curvatures.begin()+pos-1;
+  }
+  if (endpoints.size())
+  {
+    endpoints.erase(ptit);
+    bearings.erase(brgit);
+  }
+  if (lengths.size())
+  {
+    lengths.erase(lenit);
+    cumLengths.erase(cumit);
+    deltas.erase(arcit);
+    delta2s.erase(d2it);
+    midpoints.erase(midit);
+    midbearings.erase(mbrit);
+    clothances.erase(cloit);
+    curvatures.erase(crvit);
+  }
+  i=pos-1; // If deleted point 1, length 0 is wrong.
+  if (i<0)
+    i=lengths.size()-1;
+  if (i>=0)
+  {
+    for (i=-1;i<2;i++)
+      setbear((pos+i+endpoints.size())%endpoints.size());
+    for (i=-1;i<3;i++)
+      setspiral((pos+i+lengths.size())%lengths.size());
+  }
+}
+
 /* After inserting, erasing, opening, or closing, call setlengths before calling
  * length or station. If insert called setlengths, manipulation would take
  * too long. So do a lot of inserts, then call setlengths.

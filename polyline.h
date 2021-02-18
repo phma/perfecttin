@@ -126,6 +126,7 @@ public:
   spiralarc getspiralarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
+  virtual void erase(int pos);
   void setbear(int i);
   void setbear(int i,int bear);
   void setspiral(int i);
