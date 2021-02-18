@@ -473,11 +473,9 @@ void polyspiral::insert(xy newpoint,int pos)
 
 void polyline::erase(int pos)
 {
-  bool wasopen;
   int i;
   vector<xy>::iterator ptit;
   vector<double>::iterator lenit,cumit;
-  wasopen=isopen();
   if (pos<0)
     pos=0;
   if (pos>=endpoints.size())
@@ -507,7 +505,45 @@ void polyline::erase(int pos)
     lengths[i]=getsegment(i).length();
 }
 
-/* After inserting, opening, or closing, call setlengths before calling
+void polyarc::erase(int pos)
+{
+  int i;
+  vector<xy>::iterator ptit;
+  vector<int>::iterator arcit;
+  vector<double>::iterator lenit,cumit;
+  if (pos<0)
+    pos=0;
+  if (pos>=endpoints.size())
+    pos=endpoints.size()-1;
+  ptit=endpoints.begin()+pos;
+  if (pos<lengths.size())
+  {
+    lenit=lengths.begin()+pos;
+    cumit=cumLengths.begin()+pos;
+    arcit=deltas.begin()+pos;
+  }
+  else
+  {
+    lenit=lengths.begin()+pos-1;
+    cumit=cumLengths.begin()+pos-1;
+    arcit=deltas.begin()+pos-1;
+  }
+  if (endpoints.size())
+    endpoints.erase(ptit);
+  if (lengths.size())
+  {
+    lengths.erase(lenit);
+    cumLengths.erase(cumit);
+    deltas.erase(arcit);
+  }
+  i=pos-1; // If deleted point 1, length 0 is wrong.
+  if (i<0)
+    i=lengths.size()-1;
+  if (i>=0)
+    lengths[i]=getarc(i).length();
+}
+
+/* After inserting, erasing, opening, or closing, call setlengths before calling
  * length or station. If insert called setlengths, manipulation would take
  * too long. So do a lot of inserts, then call setlengths.
  */
