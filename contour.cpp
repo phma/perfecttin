@@ -373,10 +373,15 @@ void roughcontours(pointlist &pl,double conterval)
 }
 
 void prune1contour(pointlist &pl,double tolerance,int i)
+/* Removes points from the ith contour, as long as it stays within tolerance.
+ * If the resulting contour is closed and has only two points, it should be deleted.
+ */
 {
   static int n=0;
   int j,sz,origsz;
+  array<double,2> lohiElev;
   polyline change;
+  double e=pl.contours[i].getElevation();
   origsz=sz=pl.contours[i].size();
   for (j=0;j<sz;j++)
   {
@@ -387,6 +392,13 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       change.insert(pl.contours[i].getEndpoint(n-1));
       change.insert(pl.contours[i].getEndpoint(n));
       change.insert(pl.contours[i].getEndpoint(n+1));
+      lohiElev=pl.lohi(change);
+      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+      {
+	j=0;
+	//pl.contours[i].erase(n);
+	sz--;
+      }
     }
   }
 }
