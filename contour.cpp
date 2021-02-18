@@ -383,7 +383,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
     n=(n+relprime(sz))%sz;
     if (n || !pl.contours[i].isopen())
     {
-      //change.clear();
+      change.clear();
       change.insert(pl.contours[i].getEndpoint(n-1));
       change.insert(pl.contours[i].getEndpoint(n));
       change.insert(pl.contours[i].getEndpoint(n+1));

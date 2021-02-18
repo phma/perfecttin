@@ -3,7 +3,7 @@
 /* polyline.h - polylines                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -63,6 +63,7 @@ public:
   {
     return elevation;
   }
+  virtual void clear();
   bool isopen();
   int size();
   segment getsegment(int i);
@@ -93,6 +94,7 @@ public:
   polyarc();
   explicit polyarc(double e);
   polyarc(polyline &p);
+  virtual void clear();
   arc getarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
@@ -118,6 +120,7 @@ public:
   polyspiral();
   explicit polyspiral(double e);
   polyspiral(polyline &p);
+  virtual void clear();
   spiralarc getspiralarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);

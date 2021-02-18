@@ -3,7 +3,7 @@
 /* polyline.cpp - polylines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -108,6 +108,35 @@ polyspiral::polyspiral(polyline &p)
     bearings[i]=midbearings[i];
   }
   curvy=false;
+}
+
+void polyline::clear()
+{
+  endpoints.clear();
+  lengths.clear();
+  cumLengths.clear();
+}
+
+void polyarc::clear()
+{
+  endpoints.clear();
+  lengths.clear();
+  cumLengths.clear();
+  deltas.clear();
+}
+
+void polyspiral::clear()
+{
+  endpoints.clear();
+  lengths.clear();
+  cumLengths.clear();
+  deltas.clear();
+  delta2s.clear();
+  bearings.clear();
+  midbearings.clear();
+  midpoints.clear();
+  clothances.clear();
+  curvatures.clear();
 }
 
 bool polyline::isopen()
