@@ -396,7 +396,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
       {
 	j=0;
-	//pl.contours[i].erase(n);
+	pl.contours[i].erase(n);
 	sz--;
       }
     }

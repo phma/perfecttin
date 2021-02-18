@@ -73,6 +73,7 @@ public:
   void dedup();
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
+  virtual void erase(int pos);
   virtual void setlengths();
   virtual void open();
   virtual void close();

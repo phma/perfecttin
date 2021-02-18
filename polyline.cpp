@@ -409,6 +409,104 @@ void polyarc::insert(xy newpoint,int pos)
   }
 }
 
+void polyspiral::insert(xy newpoint,int pos)
+/* If there is one point after insertion and the polyspiral is closed:
+ * Adds a line from the point to itself.
+ * If there are two points after insertion and the polyspiral is open:
+ * Adds a line from one point to the other.
+ * If it's closed:
+ * Adds two 180° arcs, making a circle.
+ * If there are at least three points after insertion:
+ * Updates the bearings of the new point and two adjacent points (unless
+ * it is the first or last of an open polyspiral, in which case one) to
+ * match an arc passing through three points, then updates the clothances
+ * and curvatures of four consecutive spirals (unless the polyspiral is open
+ * and the point is one of the first two or last two) to match the bearings.
+ */
+{
+  bool wasopen;
+  int i,savepos,newBearing=0;
+  vector<xy>::iterator ptit,midit;
+  vector<int>::iterator arcit,brgit,d2it,mbrit;
+  vector<double>::iterator lenit,cloit,crvit;
+  wasopen=isopen();
+  if (pos<0 || pos>endpoints.size())
+    pos=endpoints.size();
+  if (bearings.size())
+    if (pos<=bearings.size()/2)
+      newBearing=bearings[pos];
+    else
+      newBearing=bearings[pos-1];
+  ptit=endpoints.begin()+pos;
+  brgit=bearings.begin()+pos;
+  savepos=pos;
+  pos--;
+  if (pos<0)
+    if (wasopen || endpoints.size()==0)
+      pos=0;
+    else
+      pos+=endpoints.size();
+  midit=midpoints.begin()+pos;
+  lenit=lengths.begin()+pos;
+  arcit=deltas.begin()+pos;
+  d2it=delta2s.begin()+pos;
+  mbrit=midbearings.begin()+pos;
+  cloit=clothances.begin()+pos;
+  crvit=curvatures.begin()+pos;
+  endpoints.insert(ptit,newpoint);
+  deltas.insert(arcit,0);
+  lengths.insert(lenit,1);
+  midpoints.insert(midit,newpoint);
+  bearings.insert(brgit,newBearing);
+  delta2s.insert(d2it,0);
+  midbearings.insert(mbrit,0);
+  curvatures.insert(crvit,0);
+  clothances.insert(cloit,0);
+  lenit=cumLengths.begin()+pos;
+  cumLengths.insert(lenit,0);
+  pos=savepos;
+  for (i=-1;i<2;i++)
+    setbear((pos+i+endpoints.size())%endpoints.size());
+  for (i=-1;i<3;i++)
+    setspiral((pos+i+lengths.size())%lengths.size());
+}
+
+void polyline::erase(int pos)
+{
+  bool wasopen;
+  int i;
+  vector<xy>::iterator ptit;
+  vector<double>::iterator lenit,cumit;
+  wasopen=isopen();
+  if (pos<0)
+    pos=0;
+  if (pos>=endpoints.size())
+    pos=endpoints.size()-1;
+  ptit=endpoints.begin()+pos;
+  if (pos<lengths.size())
+  {
+    lenit=lengths.begin()+pos;
+    cumit=cumLengths.begin()+pos;
+  }
+  else
+  {
+    lenit=lengths.begin()+pos-1;
+    cumit=cumLengths.begin()+pos-1;
+  }
+  if (endpoints.size())
+    endpoints.erase(ptit);
+  if (lengths.size())
+  {
+    lengths.erase(lenit);
+    cumLengths.erase(cumit);
+  }
+  i=pos-1; // If deleted point 1, length 0 is wrong.
+  if (i<0)
+    i=lengths.size()-1;
+  if (i>=0)
+    lengths[i]=getsegment(i).length();
+}
+
 /* After inserting, opening, or closing, call setlengths before calling
  * length or station. If insert called setlengths, manipulation would take
  * too long. So do a lot of inserts, then call setlengths.
@@ -702,68 +800,6 @@ void polyspiral::close()
       cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
     else
       cumLengths[0]=lengths[0];
-}
-
-void polyspiral::insert(xy newpoint,int pos)
-/* If there is one point after insertion and the polyspiral is closed:
- * Adds a line from the point to itself.
- * If there are two points after insertion and the polyspiral is open:
- * Adds a line from one point to the other.
- * If it's closed:
- * Adds two 180° arcs, making a circle.
- * If there are at least three points after insertion:
- * Updates the bearings of the new point and two adjacent points (unless
- * it is the first or last of an open polyspiral, in which case one) to
- * match an arc passing through three points, then updates the clothances
- * and curvatures of four consecutive spirals (unless the polyspiral is open
- * and the point is one of the first two or last two) to match the bearings.
- */
-{
-  bool wasopen;
-  int i,savepos,newBearing=0;
-  vector<xy>::iterator ptit,midit;
-  vector<int>::iterator arcit,brgit,d2it,mbrit;
-  vector<double>::iterator lenit,cloit,crvit;
-  wasopen=isopen();
-  if (pos<0 || pos>endpoints.size())
-    pos=endpoints.size();
-  if (bearings.size())
-    if (pos<=bearings.size()/2)
-      newBearing=bearings[pos];
-    else
-      newBearing=bearings[pos-1];
-  ptit=endpoints.begin()+pos;
-  brgit=bearings.begin()+pos;
-  savepos=pos;
-  pos--;
-  if (pos<0)
-    if (wasopen || endpoints.size()==0)
-      pos=0;
-    else
-      pos+=endpoints.size();
-  midit=midpoints.begin()+pos;
-  lenit=lengths.begin()+pos;
-  arcit=deltas.begin()+pos;
-  d2it=delta2s.begin()+pos;
-  mbrit=midbearings.begin()+pos;
-  cloit=clothances.begin()+pos;
-  crvit=curvatures.begin()+pos;
-  endpoints.insert(ptit,newpoint);
-  deltas.insert(arcit,0);
-  lengths.insert(lenit,1);
-  midpoints.insert(midit,newpoint);
-  bearings.insert(brgit,newBearing);
-  delta2s.insert(d2it,0);
-  midbearings.insert(mbrit,0);
-  curvatures.insert(crvit,0);
-  clothances.insert(cloit,0);
-  lenit=cumLengths.begin()+pos;
-  cumLengths.insert(lenit,0);
-  pos=savepos;
-  for (i=-1;i<2;i++)
-    setbear((pos+i+endpoints.size())%endpoints.size());
-  for (i=-1;i<3;i++)
-    setspiral((pos+i+lengths.size())%lengths.size());
 }
 
 void polyline::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
