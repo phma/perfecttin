@@ -538,6 +538,9 @@ void TinCanvas::prune1Contour()
 
 void TinCanvas::pruneContoursFinish()
 {
+  PostScript ps;
+  BoundRect br;
+  int i;
   switch (goal)
   {
     case SMOOTH_CONTOURS:
@@ -550,6 +553,15 @@ void TinCanvas::pruneContoursFinish()
   net.eraseEmptyContours();
   smoothContoursValid=true;
   update();
+  ps.open("contours.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.startpage();
+  br.include(&net);
+  ps.setscale(br);
+  for (i=0;i<net.contours.size();i++)
+    ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+  ps.endpage();
 }
 
 void TinCanvas::contoursCancel()
