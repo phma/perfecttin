@@ -949,10 +949,15 @@ void MainWindow::makeActions()
   contourMenu->addAction(selectContourIntervalAction);
   connect(selectContourIntervalAction,SIGNAL(triggered(bool)),canvas,SLOT(selectContourInterval()));
   roughContoursAction=new QAction(this);
-  //makeTinAction->setIcon(QIcon(":/roughcon.png"));
+  //roughContoursAction->setIcon(QIcon(":/roughcon.png"));
   roughContoursAction->setText(tr("Draw rough contours"));
   contourMenu->addAction(roughContoursAction);
   connect(roughContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(roughContours()));
+  pruneContoursAction=new QAction(this);
+  //pruneContoursAction->setIcon(QIcon(":/prunecon.png"));
+  pruneContoursAction->setText(tr("Prune contours"));
+  contourMenu->addAction(pruneContoursAction);
+  connect(pruneContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(pruneContours()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));

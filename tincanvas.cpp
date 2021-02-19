@@ -432,7 +432,7 @@ void TinCanvas::clearContourFlags()
 void TinCanvas::roughContours()
 {
   conterval=contourInterval.fineInterval();
-  conterval=contourInterval.tolerance();
+  tolerance=contourInterval.tolerance();
   if (goal==DONE)
   {
     goal=ROUGH_CONTOURS;
