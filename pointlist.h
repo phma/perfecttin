@@ -69,6 +69,7 @@ public:
   int size();
   void clearmarks();
   void clearTin();
+  void eraseEmptyContours();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
   // the following methods are in tin.cpp

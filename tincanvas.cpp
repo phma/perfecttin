@@ -547,6 +547,7 @@ void TinCanvas::pruneContoursFinish()
       break;
   }
   disconnect(timer,SIGNAL(timeout()),0,0);
+  net.eraseEmptyContours();
   smoothContoursValid=true;
   update();
 }

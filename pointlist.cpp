@@ -3,7 +3,7 @@
 /* pointlist.cpp - list of points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -63,6 +63,17 @@ void pointlist::clearmarks()
   map<int,edge>::iterator e;
   for (e=edges.begin();e!=edges.end();e++)
     e->second.clearmarks();
+}
+
+void pointlist::eraseEmptyContours()
+{
+  vector<polyspiral> nonempty;
+  int i;
+  for (i=0;i<contours.size();i++)
+    if (contours[i].size()>2 || contours[i].isopen())
+      nonempty.push_back(contours[i]);
+  nonempty.shrink_to_fit();
+  swap(contours,nonempty);
 }
 
 bool pointlist::checkTinConsistency()
