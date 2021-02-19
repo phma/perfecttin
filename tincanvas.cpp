@@ -432,6 +432,7 @@ void TinCanvas::clearContourFlags()
 void TinCanvas::roughContours()
 {
   conterval=contourInterval.fineInterval();
+  conterval=contourInterval.tolerance();
   if (goal==DONE)
   {
     goal=ROUGH_CONTOURS;
@@ -524,7 +525,7 @@ void TinCanvas::prune1Contour()
 {
   if (progInx<net.contours.size())
   {
-    //prune1contour(net,conterval,progInx);
+    prune1contour(net,tolerance,progInx);
     progressDialog->setValue(++progInx);
   }
   else

@@ -82,7 +82,7 @@ private:
   QProgressDialog *progressDialog;
   QTimer *timer;
   ContourIntervalDialog *ciDialog;
-  double conterval;
+  double conterval,tolerance;
   xy windowCenter,worldCenter;
   double scale;
   double lengthUnit;
