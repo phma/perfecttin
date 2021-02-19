@@ -531,7 +531,7 @@ void TinCanvas::prune1Contour()
   else
   {
     disconnect(timer,SIGNAL(timeout()),0,0);
-    connect(timer,SIGNAL(timeout()),this,SLOT(smoothContoursFinish()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(pruneContoursFinish()));
   }
   repaintSeldom();
 }
