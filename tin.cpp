@@ -568,7 +568,5 @@ array<double,2> pointlist::lohi(polyline p)
       tri=tri->nexttoward(p.getEndpoint(i+1));
     } while (tri && !tri->in(p.getEndpoint(i+1)));
   }
-  if (std::isinf(ret[0]) || std::isinf(ret[1]))
-    cout<<"inf\n";
   return ret;
 }

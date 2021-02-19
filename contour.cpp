@@ -383,13 +383,9 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   polyline change;
   double e=pl.contours[i].getElevation();
   origsz=sz=pl.contours[i].size();
-  if (sz>100)
-    cout<<"aoeu\n";
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
-    if (n==3 && sz==5)
-      cout<<"3/5\n";
     if (n || !pl.contours[i].isopen())
     {
       change.clear();
