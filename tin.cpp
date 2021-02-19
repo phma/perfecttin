@@ -558,13 +558,15 @@ array<double,2> pointlist::lohi(polyline p)
   for (i=0;i<sz;i++)
   {
     seg=p.getsegment(i);
+    if (!tri)
+      tri=findt(p.getEndpoint(i),true);
     do
     {
       tlohi=tri->lohi(seg);
       updlohi(ret,tlohi);
       borderTriangles.push_back(tri);
       tri=tri->nexttoward(p.getEndpoint(i+1));
-    } while (!tri->in(p.getEndpoint(i+1)));
+    } while (tri && !tri->in(p.getEndpoint(i+1)));
   }
   return ret;
 }
