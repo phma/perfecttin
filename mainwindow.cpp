@@ -3,7 +3,7 @@
 /* mainwindow.cpp - main window                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -230,6 +230,7 @@ void MainWindow::tick()
   if ((tstatus&0x3ffbfeff)==1048577*TH_PAUSE)
   { // Stage has completed: write files and go to next stage
     areadone=areaDone(stageTolerance,sqr(stageTolerance/tolerance)/density);
+    canvas->clearContourFlags();
     if (actionQueueEmpty() && tstatus==1048577*TH_PAUSE+TH_ASLEEP)
       if (writtenTolerance>stageTolerance)
       {
@@ -298,6 +299,7 @@ void MainWindow::tick()
     {
       clearCloud();
       net.clear();
+      canvas->clearContourFlags();
       noCloudArea();
     }
     else
@@ -336,6 +338,7 @@ void MainWindow::openFile()
     ta.opcode=ACT_READ_PTIN;
     ta.filename=fileName;
     enqueueAction(ta);
+    canvas->clearContourFlags();
   }
   delete fileDialog;
   fileDialog=nullptr;
@@ -710,6 +713,7 @@ void MainWindow::setColorScheme(int scheme)
 void MainWindow::clearCloud()
 {
   cloud.clear();
+  canvas->clearContourFlags();
   fileNames=lastFileName="";
   fileMsg->setText("");
   loadAction->setEnabled(true);

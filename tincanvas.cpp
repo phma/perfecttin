@@ -424,6 +424,11 @@ void TinCanvas::selectContourInterval()
   ciDialog->exec();
 }
 
+void TinCanvas::clearContourFlags()
+{
+  roughContoursValid=pruneContoursValid=smoothContoursValid=false;
+}
+
 void TinCanvas::roughContours()
 {
   conterval=contourInterval.fineInterval();
@@ -474,11 +479,13 @@ void TinCanvas::roughContoursFinish()
       progressDialog->reset();
       timer->stop();
       break;
+    case PRUNE_CONTOURS:
     case SMOOTH_CONTOURS:
-      connect(timer,SIGNAL(timeout()),this,SLOT(smoothContours()));
+      connect(timer,SIGNAL(timeout()),this,SLOT(pruneContours()));
       break;
   }
   roughContoursValid=true;
+  pruneContoursValid=false;
   smoothContoursValid=false;
   update();
   ps.open("contours.ps");
@@ -490,6 +497,57 @@ void TinCanvas::roughContoursFinish()
   for (i=0;i<net.contours.size();i++)
     ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
   ps.endpage();
+}
+
+void TinCanvas::pruneContours()
+{
+  if (goal==DONE)
+  {
+    goal=PRUNE_CONTOURS;
+    timer->start(0);
+    progressDialog->show();
+  }
+  progInx=0;
+  progressDialog->setRange(0,net.contours.size());
+  progressDialog->setValue(0);
+  progressDialog->setWindowTitle(tr("Drawing contours"));
+  progressDialog->setLabelText(tr("Pruning contours..."));
+  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  if (roughContoursValid && conterval==contourInterval.fineInterval())
+    connect(timer,SIGNAL(timeout()),this,SLOT(prune1Contour()));
+  else
+    connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
+}
+
+void TinCanvas::prune1Contour()
+{
+  if (progInx<net.contours.size())
+  {
+    //prune1contour(net,conterval,progInx);
+    progressDialog->setValue(++progInx);
+  }
+  else
+  {
+    disconnect(timer,SIGNAL(timeout()),0,0);
+    connect(timer,SIGNAL(timeout()),this,SLOT(smoothContoursFinish()));
+  }
+  repaintSeldom();
+}
+
+void TinCanvas::pruneContoursFinish()
+{
+  switch (goal)
+  {
+    case SMOOTH_CONTOURS:
+      goal=DONE;
+      progressDialog->reset();
+      timer->stop();
+      break;
+  }
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  smoothContoursValid=true;
+  update();
 }
 
 void TinCanvas::contoursCancel()

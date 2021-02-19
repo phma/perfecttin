@@ -35,7 +35,8 @@
 #define DONE 0
 #define MAKE_TIN 1
 #define ROUGH_CONTOURS 2
-#define SMOOTH_CONTOURS 3
+#define PRUNE_CONTOURS 3
+#define SMOOTH_CONTOURS 4
 
 #define SPLASH_TIME 60
 
@@ -60,9 +61,13 @@ public slots:
   void tick(); // 50 ms
   void startSplashScreen();
   void selectContourInterval();
+  void clearContourFlags();
   void roughContours();
   void rough1Contour();
   void roughContoursFinish();
+  void pruneContours();
+  void prune1Contour();
+  void pruneContoursFinish();
   void contoursCancel();
 protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -89,6 +94,7 @@ private:
   int elevHi,elevLo; // in contour interval unit
   std::array<double,2> tinlohi;
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
+  bool pruneContoursValid;
   bool smoothContoursValid;
   int penPos;
   int triangleNum;
