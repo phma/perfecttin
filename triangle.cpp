@@ -739,6 +739,7 @@ array<double,2> triangle::lohi(segment seg)
   segment side;
   array<double,2> ret;
   ret[0]=INFINITY;
+  ret[1]=-INFINITY;
   if (in(seg.getstart()))
     updlohi(ret,elevation(seg.getstart()));
   if (in(seg.getend()))

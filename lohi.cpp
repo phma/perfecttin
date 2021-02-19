@@ -34,6 +34,9 @@ void updlohi(array<double,2> &lh,double elev)
 
 void updlohi(array<double,2> &lh,const array<double,2> &elevs)
 {
-  updlohi(lh,elevs[0]);
-  updlohi(lh,elevs[1]);
+  if (elevs[0]<=elevs[1]) // Segment not in triangle results is {inf,-inf}
+  {
+    updlohi(lh,elevs[0]);
+    updlohi(lh,elevs[1]);
+  }
 }
