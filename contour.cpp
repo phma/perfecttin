@@ -203,14 +203,15 @@ vector<edge *> contstarts(pointlist &pts,double elev)
   //cout<<"Exterior edges:";
   for (io=0;io<2;io++)
     for (i=0;i<pts.edges.size();i++)
-      if (io==pts.edges[i].isinterior())
+    {
+      ep=&pts.edges[i];
+      if (io==ep->isinterior())
       {
-	tri=pts.edges[i].tria;
+	tri=ep->tria;
 	if (!tri)
-	  tri=pts.edges[i].trib;
+	  tri=ep->trib;
 	assert(tri);
 	//cout<<' '<<i;
-	ep=&pts.edges[i];
 	sd=tri->subdir(ep);
 	if (tri->crosses(sd,elev) && (io || tri->upleft(sd)))
 	{
@@ -218,6 +219,7 @@ vector<edge *> contstarts(pointlist &pts,double elev)
 	  ret.push_back(ep);
 	}
       }
+    }
   //cout<<endl;
   return ret;
 }
