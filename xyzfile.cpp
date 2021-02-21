@@ -36,4 +36,10 @@ using namespace std;
 void readXyzText(string fname)
 {
   ifstream xyzfile(fname);
+  string line;
+  while (xyzfile)
+  {
+    getline(xyzfile,line);
+    cloud.push_back(xyz(0,0,0));
+  }
 }
