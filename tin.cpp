@@ -35,6 +35,7 @@
 #include "random.h"
 #include "relprime.h"
 #include "lohi.h"
+#include "neighbor.h"
 
 #define THR 16777216
 //threshold for goodcenter to determine if a point is sufficiently
@@ -547,12 +548,13 @@ array<double,2> pointlist::lohi(polyline p)
  * outside the contour's tolerance. The polyline must be closed.
  */
 {
-  int i,sz=p.size();
+  int i,sz=p.size(),nPoints;
   array<double,2> ret;
   array<double,2> tlohi;
   triangle *tri=findt(p.getEndpoint(0));
   segment seg;
-  vector<triangle *> borderTriangles;
+  vector<triangle *> borderTriangles,overlapTriangles;
+  vector<point *> neighborPoints,insidePoints;
   ret[0]=INFINITY;
   ret[1]=-INFINITY;
   for (i=0;i<sz;i++)
@@ -568,5 +570,18 @@ array<double,2> pointlist::lohi(polyline p)
       tri=tri->nexttoward(p.getEndpoint(i+1));
     } while (tri && !tri->in(p.getEndpoint(i+1)));
   }
+  do
+  {
+    nPoints=insidePoints.size();
+    for (i=0;i<borderTriangles.size();i++)
+      overlapTriangles.push_back(borderTriangles[i]);
+    neighborPoints=pointNeighbors(overlapTriangles);
+    insidePoints.clear();
+    for (i=0;i<neighborPoints.size();i++)
+      if (p.in(*neighborPoints[i]))
+	insidePoints.push_back(neighborPoints[i]);
+  } while (nPoints!=insidePoints.size());
+  for (i=0;i<nPoints;i++)
+    updlohi(ret,insidePoints[i]->elev());
   return ret;
 }
