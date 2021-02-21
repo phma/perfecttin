@@ -357,9 +357,9 @@ void MainWindow::loadFile()
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->selectFile("");
 #ifdef Plytapus_FOUND
-  fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*)"));
+  fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*.xyz);;(*)"));
 #else
-  fileDialog->setNameFilter(tr("(*.las);;(*)"));
+  fileDialog->setNameFilter(tr("(*.las);;(*.xyz);;(*)"));
 #endif
   dialogResult=fileDialog->exec();
   if (dialogResult)

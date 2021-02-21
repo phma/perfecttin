@@ -3,7 +3,7 @@
 /* threads.h - multithreading                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -58,6 +58,7 @@
 
 #define RES_LOAD_PLY 1
 #define RES_LOAD_LAS 2
+#define RES_LOAD_XYZ 3
 
 struct ThreadAction
 {

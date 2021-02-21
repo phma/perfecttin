@@ -67,7 +67,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp b
                perfecttin.cpp ply.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
                segment.cpp spiral.cpp stl.cpp test.cpp
-               threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp)
+               threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cidialog.cpp cloud.cpp cogo.cpp
@@ -80,7 +80,7 @@ add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.c
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
                segment.cpp spiral.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tincanvas.cpp tintext.cpp triangle.cpp triop.cpp
-               unitbutton.cpp ${lib_resources} ${qm_files})
+               unitbutton.cpp xyzfile.cpp ${lib_resources} ${qm_files})
 add_executable(fuzzptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp fuzz.cpp landxml.cpp las.cpp ldecimal.cpp
@@ -89,7 +89,7 @@ add_executable(fuzzptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp bre
                ply.cpp point.cpp pointlist.cpp polyline.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp
                relprime.cpp rootfind.cpp segment.cpp spiral.cpp stl.cpp threads.cpp
-               tin.cpp tintext.cpp triangle.cpp triop.cpp)
+               tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
 add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp color.cpp dxf.cpp
                edgeop.cpp fileio.cpp landxml.cpp las.cpp ldecimal.cpp
@@ -99,7 +99,7 @@ add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp bre
                ps.cpp qindex.cpp quaternion.cpp random.cpp
                relprime.cpp rootfind.cpp segment.cpp spiral.cpp
                stl.cpp test.cpp testptin.cpp threads.cpp
-               tin.cpp tintext.cpp triangle.cpp triop.cpp)
+               tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_compile_definitions(perfecttin PUBLIC _USE_MATH_DEFINES)

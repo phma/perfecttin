@@ -29,6 +29,7 @@
 #include "boundrect.h"
 #include "octagon.h"
 #include "ply.h"
+#include "xyzfile.h"
 #include "ldecimal.h"
 #include "las.h"
 #include "threads.h"
@@ -232,7 +233,7 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
 }
 
 void writeStl(string outputFile,bool asc,double outUnit,int flags)
-/* Unlike the other export functions, setting outUnit to feed does not result
+/* Unlike the other export functions, setting outUnit to feet does not result
  * in an STL file in feet; the file is always in millimeters. Rather, it means
  * to prefer scales 1:x where x is divisible by 12. Also the flag does not mean
  * to write empty triangles, which must always be written in STL; rather
@@ -268,6 +269,12 @@ int readCloud(string &inputFile,double inUnit)
     }
     if (cloud.size()>already)
       ret=RES_LOAD_LAS;
+  }
+  if (cloud.size()==already)
+  {
+    readXyzText(inputFile);
+    if (cloud.size()>already)
+      ret=RES_LOAD_XYZ;
   }
   if (cloud.size()>already)
     cout<<"Read "<<cloud.size()-already<<" dots\n";
