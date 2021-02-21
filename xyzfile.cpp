@@ -22,6 +22,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <fstream>
+#include <cmath>
 #include "xyzfile.h"
 #include "cloud.h"
 using namespace std;
@@ -33,13 +34,57 @@ using namespace std;
  * a chemical element symbol (alphabetic, e.g. F or Ne).
  */
 
+xyz parseXyz(string line)
+{
+  double x=NAN,y=NAN,z=NAN;
+  size_t pos;
+  int i,ncomma;
+  vector<string> words;
+  while (line.length())
+  {
+    i=ncomma=0;
+    while (i<line.length())
+    {
+      if (line[i]==',' && ncomma)
+	break;
+      if (line[i]==',')
+	ncomma++;
+      if (line[i]!=',' && !isblank(line[i]))
+	break;
+      i++;
+    }
+    line.erase(0,i);
+    pos=line.find_first_of(" \t,");
+    words.push_back(line.substr(0,pos));
+    line.erase(0,pos);
+  }
+  if (words.size()>=3)
+  {
+    try
+    {
+      x=stod(words[0]);
+      y=stod(words[1]);
+      z=stod(words[2]);
+    }
+    catch (...)
+    {
+      x=y=z=NAN;
+    }
+  }
+  return xyz(x,y,z);
+}
+
 void readXyzText(string fname)
 {
   ifstream xyzfile(fname);
   string line;
+  xyz pnt;
   while (xyzfile)
   {
     getline(xyzfile,line);
-    cloud.push_back(xyz(0,0,0));
+    pnt=parseXyz(line);
+    if (pnt.isnan())
+      break;
+    cloud.push_back(pnt);
   }
 }
