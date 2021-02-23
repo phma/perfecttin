@@ -199,22 +199,22 @@ double CoordCheck::operator[](int n)
 {
   int n0=n,n1=n,n2=n,n3=n;
   int s0=1,s1=1,s2=1,s3=1;
-  if (n0>13)
+  if (n0>=13)
   {
     n0=13;
     s0=1-2*((count>>n)&1);
   }
-  if (n1>26)
+  if (n1>=26)
   {
     n1=26;
     s1=1-2*((count>>n)&1);
   }
-  if (n2>39)
+  if (n2>=39)
   {
     n2=39;
     s2=1-2*((count>>n)&1);
   }
-  if (n3>52)
+  if (n3>=52)
   {
     n3=52;
     s3=1-2*((count>>n)&1);
