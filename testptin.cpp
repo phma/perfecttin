@@ -3,7 +3,7 @@
 /* testptin.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -586,6 +586,32 @@ void testmanysum()
   //cout<<"Time in pairwisesum: "<<pairtime<<endl;
 }
 
+void testchecksum()
+{
+  CoordCheck *check;
+  unsigned n1,n2,i,less,more;
+  n1=rng.uirandom();
+  n2=rng.usrandom();
+  n2=(n2<<8)+(n1&255);
+  n1>>=8;
+  cout<<hex<<"n1="<<n1<<" n2="<<n2<<dec<<endl;
+  less=min(n1,n2);
+  more=max(n1,n2);
+  check=new CoordCheck;
+  for (i=0;i<less;i++)
+    *check<<0;
+  *check<<(i==n1)+2*(i==n2);
+  if (i<more)
+    i++;
+  for (i=0;i<more;i++)
+    *check<<0;
+  *check<<(i==n1)+2*(i==n2);
+  for (i=0;i<32;i++)
+    cout<<(*check)[i]<<' ';
+  cout<<endl;
+  delete check;
+}
+
 void testldecimal()
 {
   double d;
@@ -1091,6 +1117,8 @@ int main(int argc, char *argv[])
     testrelprime();
   if (shoulddo("manysum"))
     testmanysum(); // >2 s
+  if (shoulddo("checksum"))
+    testchecksum(); // >2 s
   if (shoulddo("ldecimal"))
     testldecimal();
   if (shoulddo("leastsquares"))
