@@ -68,6 +68,7 @@ private:
 public:
   CoordCheck();
   void clear();
+  void dump();
   CoordCheck& operator<<(double val);
   double operator[](int n);
   size_t getCount()

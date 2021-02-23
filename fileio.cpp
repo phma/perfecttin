@@ -63,6 +63,47 @@ void CoordCheck::clear()
   memset(stage4,0,sizeof(stage4));
 }
 
+void CoordCheck::dump()
+// For debugging the test, which shifts mostly 0s into it.
+{
+  int i,j;
+  for (i=0;i<15;i++)
+  {
+    cout<<"Stage 0["<<i<<"]\n";
+    for (j=0;j<8192;j++)
+      if (stage0[i][j])
+	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage0[i][j]<<endl;
+  }
+  for (i=0;i<28;i++)
+  {
+    cout<<"Stage 1["<<i<<"]\n";
+    for (j=0;j<8192;j++)
+      if (stage1[i][j])
+	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage1[i][j]<<endl;
+  }
+  for (i=0;i<41;i++)
+  {
+    cout<<"Stage 2["<<i<<"]\n";
+    for (j=0;j<8192;j++)
+      if (stage2[i][j])
+	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage2[i][j]<<endl;
+  }
+  for (i=0;i<54;i++)
+  {
+    cout<<"Stage 3["<<i<<"]\n";
+    for (j=0;j<8192;j++)
+      if (stage3[i][j])
+	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage3[i][j]<<endl;
+  }
+  for (i=0;i<65;i++)
+  {
+    cout<<"Stage 4["<<i<<"]\n";
+    for (j=0;j<4096;j++)
+      if (stage4[i][j])
+	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage4[i][j]<<endl;
+  }
+}
+
 CoordCheck& CoordCheck::operator<<(double val)
 {
   int i;
