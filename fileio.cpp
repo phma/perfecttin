@@ -67,35 +67,35 @@ void CoordCheck::dump()
 // For debugging the test, which shifts mostly 0s into it.
 {
   int i,j;
-  for (i=0;i<15;i++)
+  for (i=0;i<14;i++)
   {
     cout<<"Stage 0["<<i<<"]\n";
     for (j=0;j<8192;j++)
       if (stage0[i][j])
 	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage0[i][j]<<endl;
   }
-  for (i=0;i<28;i++)
+  for (i=0;i<27;i++)
   {
     cout<<"Stage 1["<<i<<"]\n";
     for (j=0;j<8192;j++)
       if (stage1[i][j])
 	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage1[i][j]<<endl;
   }
-  for (i=0;i<41;i++)
+  for (i=0;i<40;i++)
   {
     cout<<"Stage 2["<<i<<"]\n";
     for (j=0;j<8192;j++)
       if (stage2[i][j])
 	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage2[i][j]<<endl;
   }
-  for (i=0;i<54;i++)
+  for (i=0;i<53;i++)
   {
     cout<<"Stage 3["<<i<<"]\n";
     for (j=0;j<8192;j++)
       if (stage3[i][j])
 	cout<<"["<<j<<" ("<<hex<<j<<")]="<<dec<<stage3[i][j]<<endl;
   }
-  for (i=0;i<65;i++)
+  for (i=0;i<64;i++)
   {
     cout<<"Stage 4["<<i<<"]\n";
     for (j=0;j<4096;j++)
