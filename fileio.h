@@ -71,6 +71,7 @@ public:
   void dump();
   CoordCheck& operator<<(double val);
   double operator[](int n);
+  double wrongCheck(int n);
   size_t getCount()
   {
     return count;

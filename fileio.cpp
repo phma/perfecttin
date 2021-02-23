@@ -224,6 +224,38 @@ double CoordCheck::operator[](int n)
          pairwisesum(stage4[n],4096);
 }
 
+double CoordCheck::wrongCheck(int n)
+/* This is a bug that was in version 0.5.1 and earlier. It made the checksums
+ * 13th, 26th, 39th, and 52nd (counting from 0) garbage.
+ */
+{
+  int n0=n,n1=n,n2=n,n3=n;
+  int s0=1,s1=1,s2=1,s3=1;
+  if (n0>13)
+  {
+    n0=13;
+    s0=1-2*((count>>n)&1);
+  }
+  if (n1>26)
+  {
+    n1=26;
+    s1=1-2*((count>>n)&1);
+  }
+  if (n2>39)
+  {
+    n2=39;
+    s2=1-2*((count>>n)&1);
+  }
+  if (n3>52)
+  {
+    n3=52;
+    s3=1-2*((count>>n)&1);
+  }
+  return pairwisesum(stage0[n0],8192)*s0+pairwisesum(stage1[n1],8192)*s1+
+	 pairwisesum(stage2[n2],8192)*s2+pairwisesum(stage3[n3],8192)*s3+
+         pairwisesum(stage4[n],4096);
+}
+
 /* These functions are common to the command-line and GUI programs.
  * In the GUI program, file I/O is done by a thread, one at a time (except
  * that multiple formats of the same TIN may be output by different threads
