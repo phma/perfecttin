@@ -601,9 +601,8 @@ void testchecksum()
   for (i=0;i<less;i++)
     *check<<0;
   *check<<(i==n1)+2*(i==n2);
-  if (i<more)
-    i++;
-  for (i=0;i<more;i++)
+  i++;
+  for (;i<more;i++)
     *check<<0;
   *check<<(i==n1)+2*(i==n2);
   for (i=0;i<32;i++)
