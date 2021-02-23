@@ -44,7 +44,7 @@ Printer3dSize printer3d;
 
 PtinHeader::PtinHeader()
 {
-  conversionTime=tolRatio=density=numPoints=numConvexHull=numTriangles=0;
+  conversionTime=tolRatio=density=numPoints=numConvexHull=numTriangles=flags=0;
   tolerance=NAN;
 }
 
@@ -783,7 +783,12 @@ PtinHeader readPtin(std::string inputFile)
     {
       if (fabs(zcheck[i]-zCheck[i])>absToler+fabs(zCheck[i])/536870912)
 	// zCheck[i]/1e12 suffices for completed jobs, but is too tight for early checkpoint files.
-	header.tolRatio=PT_ZCHECK_FAIL;
+	if (fabs(zcheck[i]-zCheck.wrongCheck(i))>absToler+fabs(zCheck[i])/536870912)
+	  header.tolRatio=PT_ZCHECK_FAIL;
+	else // file was written by 0.5.1 or before, which had a checksum bug
+	  header.flags=header.flags|CHECKSUM_BUG;
+      else
+	;
     }
   }
   if (header.tolRatio>0 && header.tolerance>0)

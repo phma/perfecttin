@@ -44,6 +44,7 @@
  * Any other negative tolRatio value: file is corrupt.
  * tolRatio>0 but tolerance is NaN: file was incompletely written.
  */
+#define CHECKSUM_BUG 1
 
 extern Printer3dSize printer3d;
 
@@ -57,6 +58,7 @@ struct PtinHeader
   int numPoints;
   int numConvexHull;
   int numTriangles;
+  int flags;
 };
 
 class CoordCheck
