@@ -183,7 +183,7 @@ include(CPack)
 
 include(CTest)
 add_test(geom testptin area3 in)
-add_test(arith testptin relprime manysum)
+add_test(arith testptin relprime manysum checksum)
 add_test(random testptin random)
 add_test(matrix testptin matrix)
 add_test(leastsquares testptin leastsquares adjelev adjblock)
