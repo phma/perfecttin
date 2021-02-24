@@ -37,6 +37,7 @@
 #include "pointlist.h"
 #include "contour.h"
 #include "relprime.h"
+#include "manysum.h"
 #include "ldecimal.h"
 using namespace std;
 
@@ -374,6 +375,15 @@ void roughcontours(pointlist &pl,double conterval)
     rough1contour(pl,i*conterval);
 }
 
+double contourError(pointlist &pl,polyline &contour)
+{
+  int i;
+  vector<double> segError;
+  for (i=0;i<contour.size();i++)
+    segError.push_back(pl.contourError(contour.getsegment(i)));
+  return pairwisesum(segError);
+}
+
 void prune1contour(pointlist &pl,double tolerance,int i)
 /* Removes points from the ith contour, as long as it stays within tolerance.
  * If the resulting contour is closed and has only two points, it should be deleted.
@@ -385,6 +395,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   polyline change;
   double e=pl.contours[i].getElevation();
   origsz=sz=pl.contours[i].size();
+  cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
@@ -403,6 +414,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
+  cout<<" error after "<<contourError(pl,pl.contours[i])<<endl;
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
