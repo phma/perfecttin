@@ -384,6 +384,23 @@ double contourError(pointlist &pl,polyline &contour)
   return pairwisesum(segError);
 }
 
+double bendiness(xy a,xy b,xy c,double tolerance)
+/* Like contourError, this has dimensions of volume.
+ * You have the line segments ab and bc in a contour.
+ * Compute the area of the ellipse with foci at a and c passing through b,
+ * then multiply by the square of the tolerance divided by ac.
+ */
+{
+  double ab=dist(a,b),bc=dist(b,c),ac=dist(a,c);
+  double majorAxis,minorAxis,area;
+  majorAxis=ab+bc;
+  minorAxis=sqrt(sqr(majorAxis)-sqr(ac));
+  if (!(minorAxis>0)) // in case roundoff produces sqrt(neg)
+    minorAxis=0;
+  area=majorAxis*minorAxis*M_PI/4;
+  return area*sqr(tolerance)/ac;
+}
+
 void prune1contour(pointlist &pl,double tolerance,int i)
 /* Removes points from the ith contour, as long as it stays within tolerance.
  * If the resulting contour is closed and has only two points, it should be deleted.
