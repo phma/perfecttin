@@ -614,7 +614,12 @@ double pointlist::contourError(segment seg)
       }
     tri=tri->nexttoward(seg.getend());
   } while (tri && !tri->in(seg.getend()));
-  alongError[seg.length()]=tri->elevation(seg.getend())-seg.getend().elev();
+  /* If tri is null, seg is the end of an open contour whose endpoint is just
+   * outside the TIN because of roundoff error, and it already put the error
+   * in alongError because of the intersection.
+   */
+  if (tri)
+    alongError[seg.length()]=tri->elevation(seg.getend())-seg.getend().elev();
   for (it=alongError.begin();it!=alongError.end();++it)
   {
     /* e.g. You're at 5, error is 3. You were last at 4, error is 7.
