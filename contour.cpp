@@ -395,7 +395,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   polyline change;
   double e=pl.contours[i].getElevation();
   origsz=sz=pl.contours[i].size();
-  cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
+  //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
@@ -414,7 +414,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
-  cout<<" error after "<<contourError(pl,pl.contours[i])<<endl;
+  //cout<<" error after "<<contourError(pl,pl.contours[i])<<endl;
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
