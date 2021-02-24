@@ -594,9 +594,10 @@ double pointlist::contourError(segment seg)
   triangle *tri=findt(seg.getstart(),true);
   segment side[3];
   xy intpt;
-  double along;
+  double along,lastAlong=0,lastError=0;
   map<double,double> alongError;
   map<double,double>::iterator it;
+  vector<double> pieces;
   int i;
   alongError[0]=tri->elevation(seg.getstart())-seg.getstart().elev();
   do
@@ -613,5 +614,17 @@ double pointlist::contourError(segment seg)
       }
     tri=tri->nexttoward(seg.getend());
   } while (tri && !tri->in(seg.getend()));
-  return 0;
+  alongError[seg.length()]=tri->elevation(seg.getend())-seg.getend().elev();
+  for (it=alongError.begin();it!=alongError.end();++it)
+  {
+    /* e.g. You're at 5, error is 3. You were last at 4, error is 7.
+     * The square error goes from 9 to 49 and is 25 halfway through.
+     * Compute (5-4)*(9+100+49)/6=26+1/3.
+     */
+    pieces.push_back((it->first-lastAlong)*
+		     (sqr(lastError)+sqr(lastError+it->second)+sqr(it->second))/6);
+    lastAlong=it->first;
+    lastError=it->second;
+  }
+  return pairwisesum(pieces);
 }
