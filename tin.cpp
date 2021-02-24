@@ -585,3 +585,34 @@ array<double,2> pointlist::lohi(polyline p)
     updlohi(ret,insidePoints[i]->elev());
   return ret;
 }
+
+double pointlist::contourError(segment seg)
+/* Computes the integral along the segment of the square of the difference
+ * between the TIN's elevation and the segment's elevation. The return value
+ * has dimensions of volume. Used when smoothing contours.
+ */
+{
+  triangle *tri=findt(seg.getstart(),true);
+  segment side[3];
+  xy intpt;
+  double along;
+  map<double,double> alongError;
+  map<double,double>::iterator it;
+  int i;
+  alongError[0]=tri->elevation(seg.getstart())-seg.getstart().elev();
+  do
+  {
+    side[0]=tri->a->edg(tri)->getsegment();
+    side[1]=tri->b->edg(tri)->getsegment();
+    side[2]=tri->c->edg(tri)->getsegment();
+    for (i=0;i<3;i++)
+      if (intersection_type(seg,side[i])!=NOINT)
+      {
+	intpt=intersection(seg,side[i]);
+	along=dist(seg.getstart(),intpt);
+	alongError[along]=tri->elevation(intpt)-seg.elev(along);
+      }
+    tri=tri->nexttoward(seg.getend());
+  } while (tri && !tri->in(seg.getend()));
+  return 0;
+}
