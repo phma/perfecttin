@@ -543,7 +543,6 @@ array<double,2> pointlist::lohi()
 
 array<double,2> pointlist::lohi(polyline p)
 /* Returns the lowest and highest elevations on or within the polyline.
- * TODO get the points within the polyline
  * Used when pruning or smoothing a contour to avoid crossing a point that is
  * outside the contour's tolerance. The polyline must be closed.
  */
