@@ -30,10 +30,14 @@
 using namespace std;
 
 double pairwisesum(double *a,unsigned n)
+/* Adds up n numbers at a pairwise, for less roundoff error.
+ * i^(i+1) is 1 if i is even, 3 if i%4==1, 7 if i%8==3, etc.
+ * i^(i+8) is 8 if i%16==0, 24 if i%32==16, etc.
+ */
 {
   unsigned i,j,b;
   double sums[32],sum=0;
-  for (i=0;i+7<n;i+=8)
+  for (i=0;i+7<n;i+=8) // Add up groups of 8, leaving 0 to 7 numbers at the end
   {
     b=i^(i+8);
     if (b==8)
@@ -46,7 +50,7 @@ double pairwisesum(double *a,unsigned n)
       sums[j]=sums[j-1];
     }
   }
-  for (;i<n;i++)
+  for (;i<n;i++) // Add up the last 0 to 7 numbers
   {
     b=i^(i+1);
     if (b==1)
@@ -100,6 +104,27 @@ long double pairwisesum(long double *a,unsigned n)
       sum+=sums[i];
   return sum;
 }
+
+/* This is the original version of pairwisesum.
+ * This code is left here to show what the optimized version is trying
+ * to accomplish and as a reference for unit tests.
+ */
+#if 0
+double pairwisesum(double *a,unsigned n)
+// a is clobbered.
+{
+  unsigned i,j;
+  if (n)
+  {
+    for (i=1;i<n;i*=2)
+      for (j=0;j+i<n;j+=2*i)
+	a[j]+=a[j+i];
+    return a[0];
+  }
+  else
+    return 0;
+}
+#endif
 
 double pairwisesum(vector<double> &a)
 {
