@@ -434,8 +434,8 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   polyline change;
   double e=pl.contours[i].getElevation();
   origsz=sz=pl.contours[i].size();
-  cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
-  cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
+  //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
+  //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
@@ -454,8 +454,8 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
-  cout<<"        "<<i<<" error after "<<contourError(pl,pl.contours[i]);
-  cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
+  //cout<<"        "<<i<<" error after "<<contourError(pl,pl.contours[i]);
+  //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
