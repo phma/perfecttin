@@ -177,7 +177,7 @@ spiralarc polyspiral::getspiralarc(int i)
 
 xyz polyline::getEndpoint(int i)
 {
-  i%=endpoints.size();
+  i%=(signed)endpoints.size();
   if (i<0)
     i+=endpoints.size();
   return xyz(endpoints[i],elevation);
