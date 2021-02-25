@@ -401,6 +401,22 @@ double bendiness(xy a,xy b,xy c,double tolerance)
   return area*sqr(tolerance)/ac;
 }
 
+double totalBendiness(polyline &p,double tolerance)
+{
+  int first,last;
+  int i;
+  vector<double> bends;
+  if (p.isopen())
+    first=1; // The bendiness of the 0th endpoint is not defined.
+  else
+    first=0;
+  last=p.size()-1;
+  for (i=first;i<=last;i++)
+    bends.push_back(bendiness(p.getEndpoint(i-1),p.getEndpoint(i),
+			      p.getEndpoint(i+1),tolerance));
+  return pairwisesum(bends);
+}
+
 void prune1contour(pointlist &pl,double tolerance,int i)
 /* Removes points from the ith contour, as long as it stays within tolerance.
  * If the resulting contour is closed and has only two points, it should be deleted.
@@ -412,7 +428,8 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   polyline change;
   double e=pl.contours[i].getElevation();
   origsz=sz=pl.contours[i].size();
-  //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
+  cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
+  cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
@@ -431,7 +448,8 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
-  //cout<<" error after "<<contourError(pl,pl.contours[i])<<endl;
+  cout<<"        "<<i<<" error after "<<contourError(pl,pl.contours[i]);
+  cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
