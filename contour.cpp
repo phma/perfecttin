@@ -411,9 +411,15 @@ double totalBendiness(polyline &p,double tolerance)
   else
     first=0;
   last=p.size()-1;
+  if (first==0 && last<2) // Bendiness of 1- and 2- point closed contours is ∞ or NaN,
+    last=-1;		  // and they'll be deleted anyway.
   for (i=first;i<=last;i++)
+  {
     bends.push_back(bendiness(p.getEndpoint(i-1),p.getEndpoint(i),
 			      p.getEndpoint(i+1),tolerance));
+    if (!isfinite(bends.back()))
+      cout<<".\b";
+  }
   return pairwisesum(bends);
 }
 
