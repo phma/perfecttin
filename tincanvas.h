@@ -68,6 +68,9 @@ public slots:
   void pruneContours();
   void prune1Contour();
   void pruneContoursFinish();
+  void smoothContours();
+  void smooth1Contour();
+  void smoothContoursFinish();
   void contoursCancel();
 protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;

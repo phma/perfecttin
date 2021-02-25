@@ -541,6 +541,73 @@ void TinCanvas::pruneContoursFinish()
   PostScript ps;
   BoundRect br;
   int i;
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(pruneContoursFinish()));
+  switch (goal)
+  {
+    case PRUNE_CONTOURS:
+      goal=DONE;
+      progressDialog->reset();
+      timer->stop();
+      break;
+    case SMOOTH_CONTOURS:
+      connect(timer,SIGNAL(timeout()),this,SLOT(smoothContours()));
+      break;
+  }
+  net.eraseEmptyContours();
+  pruneContoursValid=true;
+  update();
+  ps.open("contours.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.startpage();
+  br.include(&net);
+  ps.setscale(br);
+  for (i=0;i<net.contours.size();i++)
+    ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+  ps.endpage();
+}
+
+void TinCanvas::smoothContours()
+{
+  if (goal==DONE)
+  {
+    goal=SMOOTH_CONTOURS;
+    timer->start(0);
+    progressDialog->show();
+  }
+  progInx=0;
+  progressDialog->setRange(0,net.contours.size());
+  progressDialog->setValue(0);
+  progressDialog->setWindowTitle(tr("Drawing contours"));
+  progressDialog->setLabelText(tr("Smoothing contours..."));
+  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  if (pruneContoursValid && conterval==contourInterval.fineInterval())
+    connect(timer,SIGNAL(timeout()),this,SLOT(smooth1Contour()));
+  else
+    connect(timer,SIGNAL(timeout()),this,SLOT(pruneContours()));
+}
+
+void TinCanvas::smooth1Contour()
+{
+  if (progInx<net.contours.size())
+  {
+    //smooth1contour(net,tolerance,progInx);
+    progressDialog->setValue(++progInx);
+  }
+  else
+  {
+    disconnect(timer,SIGNAL(timeout()),0,0);
+    connect(timer,SIGNAL(timeout()),this,SLOT(smoothContoursFinish()));
+  }
+  repaintSeldom();
+}
+
+void TinCanvas::smoothContoursFinish()
+{
+  PostScript ps;
+  BoundRect br;
+  int i;
   switch (goal)
   {
     case SMOOTH_CONTOURS:
@@ -550,7 +617,6 @@ void TinCanvas::pruneContoursFinish()
       break;
   }
   disconnect(timer,SIGNAL(timeout()),0,0);
-  net.eraseEmptyContours();
   smoothContoursValid=true;
   update();
   ps.open("contours.ps");
