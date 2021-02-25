@@ -590,8 +590,6 @@ void testchecksum()
   n2=rng.usrandom();
   n2=(n2<<8)+(n1&255);
   n1>>=8;
-  n1=8192;
-  n2=0x3ffe;
   cout<<hex<<"n1="<<n1<<" n2="<<n2<<dec<<endl;
   less=min(n1,n2);
   more=max(n1,n2);
@@ -603,7 +601,7 @@ void testchecksum()
   for (;i<more;i++)
     *check<<0;
   *check<<(i==n1)+2*(i==n2);
-  check->dump();
+  //check->dump();
   for (i=0;i<32;i++)
   {
     cout<<(*check)[i]<<' ';
