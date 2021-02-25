@@ -1115,9 +1115,9 @@ int main(int argc, char *argv[])
   if (shoulddo("relprime"))
     testrelprime();
   if (shoulddo("manysum"))
-    testmanysum(); // >2 s
+    testmanysum();
   if (shoulddo("checksum"))
-    testchecksum(); // >2 s
+    testchecksum(); // >1 s 3/4 of time
   if (shoulddo("ldecimal"))
     testldecimal();
   if (shoulddo("leastsquares"))
