@@ -592,7 +592,7 @@ void TinCanvas::smooth1Contour()
 {
   if (progInx<net.contours.size())
   {
-    //smooth1contour(net,tolerance,progInx);
+    smooth1contour(net,tolerance,progInx);
     progressDialog->setValue(++progInx);
   }
   else

@@ -458,6 +458,38 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
 }
 
+void smooth1contour(pointlist &pl,double tolerance,int i)
+{
+  static int n=0;
+  int j,sz,origsz;
+  array<double,2> lohiElev;
+  polyline change;
+  xy a,b,c; // current endpoints; b is the nth
+  xy p,q,r,s; // points to try changing the nth endpoint to
+  double e=pl.contours[i].getElevation();
+  origsz=sz=pl.contours[i].size();
+  for (j=0;j<sz;j++)
+  {
+    n=(n+relprime(sz))%sz;
+    if (n || !pl.contours[i].isopen())
+    {
+      a=pl.contours[i].getEndpoint(n-1);
+      b=pl.contours[i].getEndpoint(n);
+      c=pl.contours[i].getEndpoint(n+1);
+      p=(a+2*b)/3;
+      q=(2*b+c)/3;
+      r=(p+q)/2;
+      s=2*b-r;
+      if (false)
+      {
+	j=0;
+	pl.contours[i].erase(n);
+	sz--;
+      }
+    }
+  }
+}
+
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
 {
   int i;
