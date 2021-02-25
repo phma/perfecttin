@@ -953,11 +953,11 @@ void MainWindow::makeActions()
   roughContoursAction->setText(tr("Draw rough contours"));
   contourMenu->addAction(roughContoursAction);
   connect(roughContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(roughContours()));
-  pruneContoursAction=new QAction(this);
-  //pruneContoursAction->setIcon(QIcon(":/prunecon.png"));
-  pruneContoursAction->setText(tr("Prune contours"));
-  contourMenu->addAction(pruneContoursAction);
-  connect(pruneContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(pruneContours()));
+  smoothContoursAction=new QAction(this);
+  //smoothContoursAction->setIcon(QIcon(":/smoothcon.png"));
+  smoothContoursAction->setText(tr("Draw smooth contours"));
+  contourMenu->addAction(smoothContoursAction);
+  connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(pruneContours()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
