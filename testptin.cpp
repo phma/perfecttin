@@ -513,7 +513,6 @@ void testmanysum()
       summands.push_back(x);
     }
   }
-  ms.prune();
   forwardsum=ms.total();
   tassert(forwardsum==-negms.total());
   //starttime.start();
@@ -531,7 +530,6 @@ void testmanysum()
       summands.push_back(x);
     }
   }
-  ms.prune();
   backwardsum=ms.total();
   //starttime.start();
   pairbackwardsum=pairwisesum(summands);
@@ -555,7 +553,6 @@ void testmanysum()
     ms+=x;
     summands.push_back(x);
   }
-  ms.prune();
   forwardsum=ms.total();
   //starttime.start();
   pairforwardsum=pairwisesum(summands);
@@ -569,7 +566,6 @@ void testmanysum()
     ms+=x;
     summands.push_back(x);
   }
-  ms.prune();
   backwardsum=ms.total();
   //starttime.start();
   pairbackwardsum=pairwisesum(summands);
