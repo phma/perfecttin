@@ -500,6 +500,19 @@ void polyarc::replace(xy newpoint,int pos)
   lengths[pos]=getarc(pos).length();
 }
 
+void polyspiral::replace(xy newpoint,int pos)
+{
+  int i;
+  pos%=(signed)endpoints.size();
+  if (pos<0)
+    pos+=endpoints.size();
+  endpoints[pos]=newpoint;
+  for (i=-1;i<2;i++)
+    setbear((pos+i+endpoints.size())%endpoints.size());
+  for (i=-1;i<3;i++)
+    setspiral((pos+i+lengths.size())%lengths.size());
+}
+
 void polyline::erase(int pos)
 {
   int i;
