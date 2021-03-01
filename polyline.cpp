@@ -471,6 +471,22 @@ void polyspiral::insert(xy newpoint,int pos)
     setspiral((pos+i+lengths.size())%lengths.size());
 }
 
+void polyline::replace(xy newpoint,int pos)
+{
+  pos%=(signed)endpoints.size();
+  if (pos<0)
+    pos+=endpoints.size();
+  endpoints[pos]=newpoint;
+  if (pos>0)
+    lengths[pos-1]=dist(endpoints[pos-1],endpoints[pos]);
+  else if (!isopen())
+    lengths.back()=dist(endpoints.back(),endpoints[0]);
+  if (pos<endpoints.size()-1)
+    lengths[pos]=dist(endpoints[pos],endpoints[pos+1]);
+  else if (!isopen())
+    lengths[pos]=dist(endpoints[pos],endpoints[0]);
+}
+
 void polyline::erase(int pos)
 {
   int i;
