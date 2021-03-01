@@ -356,6 +356,7 @@ void rough1contour(pointlist &pl,double elev)
     {
       ctour=trace(cstarts[j],elev);
       ctour.dedup();
+      ctour.setlengths();
       pl.contours.push_back(ctour);
     }
 }
@@ -454,6 +455,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
+  pl.contours[i].setlengths();
   //cout<<"        "<<i<<" error after "<<contourError(pl,pl.contours[i]);
   //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
 }
@@ -488,6 +490,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
+  pl.contours[i].setlengths();
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
