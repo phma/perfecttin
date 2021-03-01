@@ -100,6 +100,7 @@ public:
   arc getarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
+  virtual void replace(xy newpoint,int pos);
   virtual void erase(int pos);
   void setdelta(int i,int delta);
   virtual void setlengths();

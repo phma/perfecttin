@@ -487,6 +487,19 @@ void polyline::replace(xy newpoint,int pos)
     lengths[pos]=dist(endpoints[pos],endpoints[0]);
 }
 
+void polyarc::replace(xy newpoint,int pos)
+{
+  pos%=(signed)endpoints.size();
+  if (pos<0)
+    pos+=endpoints.size();
+  endpoints[pos]=newpoint;
+  if (pos>0)
+    lengths[pos-1]=getarc(pos-1).length();
+  else if (!isopen())
+    lengths.back()=getarc(-1).length();
+  lengths[pos]=getarc(pos).length();
+}
+
 void polyline::erase(int pos)
 {
   int i;
