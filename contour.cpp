@@ -489,12 +489,17 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       q=(2*b+c)/3;
       r=(p+q)/2;
       s=2*b-r;
-      errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c);
-      errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c);
-      errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c);
+      errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
+		 +bendiness(a,b,c,tolerance);
+      errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
+		 +bendiness(a,q,c,tolerance);
+      errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
+		  +bendiness(a,p,c,tolerance);
       //errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
-      errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c);
-      errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c);
+      errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
+		    +bendiness(a,r,c,tolerance);
+      errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
+		 +bendiness(a,s,c,tolerance);
       errBest=errCurrent;
       if (errForward<errBest)
       {
