@@ -469,12 +469,13 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 {
   static int n=0;
   int j,sz,origsz;
+  int whichNew=0;
   array<double,2> lohiElev;
   polyline change;
   xy a,b,c; // current endpoints; b is the nth
   xy p,q,r,s; // points to try changing the nth endpoint to
   double e=pl.contours[i].getElevation();
-  double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier;
+  double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier,errBest;
   origsz=sz=pl.contours[i].size();
   for (j=0;j<sz;j++)
   {
@@ -491,14 +492,49 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c);
       errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c);
       errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c);
-      errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
+      //errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
       errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c);
       errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c);
-      if (false)
+      errBest=errCurrent;
+      if (errForward<errBest)
+      {
+	errBest=errForward;
+	whichNew=1;
+      }
+      if (errBackward<errBest)
+      {
+	errBest=errBackward;
+	whichNew=2;
+      }
+      // skip new segment for now
+      if (errStraighter<errBest)
+      {
+	errBest=errStraighter;
+	whichNew=4;
+      }
+      if (errBendier<errBest)
+      {
+	errBest=errBendier;
+	whichNew=5;
+      }
+      if (whichNew && (errCurrent-errBest)*16777216>errCurrent)
       {
 	j=0;
-	pl.contours[i].erase(n);
-	sz--;
+	switch (whichNew)
+	{
+	  case 1:
+	    pl.contours[i].replace(q,n);
+	    break;
+	  case 2:
+	    pl.contours[i].replace(p,n);
+	    break;
+	  case 4:
+	    pl.contours[i].replace(r,n);
+	    break;
+	  case 5:
+	    pl.contours[i].replace(s,n);
+	    break;
+	}
       }
     }
   }
