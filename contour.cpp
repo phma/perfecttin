@@ -385,6 +385,11 @@ double contourError(pointlist &pl,polyline &contour)
   return pairwisesum(segError);
 }
 
+double contourError(pointlist &pl,double elev,xy start,xy end)
+{
+  return pl.contourError(segment(xyz(start,elev),xyz(end,elev)));
+}
+
 double bendiness(xy a,xy b,xy c,double tolerance)
 /* Like contourError, this has dimensions of volume.
  * You have the line segments ab and bc in a contour.
@@ -469,6 +474,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   xy a,b,c; // current endpoints; b is the nth
   xy p,q,r,s; // points to try changing the nth endpoint to
   double e=pl.contours[i].getElevation();
+  double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier;
   origsz=sz=pl.contours[i].size();
   for (j=0;j<sz;j++)
   {
@@ -482,6 +488,12 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       q=(2*b+c)/3;
       r=(p+q)/2;
       s=2*b-r;
+      errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c);
+      errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c);
+      errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c);
+      errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
+      errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c);
+      errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c);
       if (false)
       {
 	j=0;
