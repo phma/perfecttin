@@ -767,7 +767,7 @@ void testsegment()
   cept=a.contourcept(2);
   tassert(std::isnan(cept));
   sta=a.station(200);
-  tassert(sta==xyz(120,160,31));
+  tassert(sta==xyz(120,160,4.6));
   tassert(std::isinf(a.radius(0)));
   tassert(a.curvature(0)==0);
   tassert(!isfinite(a.center().east()));
@@ -793,7 +793,7 @@ void testarc()
   tassert(fabs(a.diffarea()-(M_PI*sqr(500)/6-250*500*M_SQRT_3_4))<1e-4);
   sta=a.station(200);
   //printf("sta.x=%.17f sta.y=%.17f sta.z=%.17f \n",sta.east(),sta.north(),sta.elev());
-  tassert(dist(sta,xyz(163.553,112.7825,32.167))<0.001);
+  tassert(dist(sta,xyz(163.553,112.7825,4.5279))<0.001);
   //printf("arc radius %f\n",a.radius(1));
   tassert(fabs(a.radius(0)-500)<0.001);
   tassert(fabs(a.curvature(0)-0.002)<0.000001);
@@ -819,13 +819,13 @@ void testarc()
   b=arc(beg,sta,end);
   sta2=b.station(250);
   cout<<"arc3 "<<sta2.elev()<<endl;
-  tassert(sta2.elev()==10);
+  tassert(sta2.elev()==5);
   sta=xyz(200,150,10);
   b=arc(beg,sta,end);
   sta2=b.station(252.905);
   cout<<"arc3 "<<sta2.east()<<' '<<sta2.north()<<' '<<sta2.elev()<<endl;
   //cout<<dist(sta,sta2)<<endl;
-  tassert(dist(sta,sta2)<0.001);
+  tassert(dist(xy(sta),xy(sta2))<0.001);
   a=arc(beg1,end1,3);
   sta=a.station(10);
   sta1=a.station(15);
