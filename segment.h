@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -56,7 +56,6 @@ public:
   virtual bool operator==(const segment b) const;
   segment operator-() const;
   virtual double length() const;
-  std::vector<double> vextrema(bool withends);
   virtual void setdelta(int d,int s=0)
   {
   }

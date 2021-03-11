@@ -582,6 +582,424 @@ void testmanysum()
   //cout<<"Time in pairwisesum: "<<pairtime<<endl;
 }
 
+void testspiral()
+{
+  xy a,b,c,d,limitpoint;
+  int i,j,bearing,bearing2,lastbearing,curvebearing,diff,badcount;
+  double t,t2;
+  float segalo[]={-5.96875,-5.65625,-5.3125,-4.875,-4.5,-4,-3.5,-2.828125,-2,0,
+    2,2.828125,3.5,4,4.5,4.875,5.3125,5.65625,5.96875};
+  vector<xy> spoints;
+  vector<int> sbearings;
+  bezier3d a3d;
+  spiralarc sarc;
+  PostScript ps;
+  a=cornu(0);
+  tassert(a==xy(0,0));
+  ps.open("spiral.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1,degtobin(0));
+  //widen(10);
+  for (i=-120;i<121;i++)
+  {
+    b=cornu(t=i/20.);
+    if (i*i==14400)
+    {
+      limitpoint=b;
+      ps.dot(b);
+    }
+    else
+      if (i>-119)
+	ps.line2p(c,b);
+    //printf("spiral %f %f,%f %f\n",t,b.east(),b.north(),1/sqr(dist(b,limitpoint)));
+    if (i>=0)
+      spoints.push_back(b);
+    c=b;
+  }
+  for (i=1,badcount=0;i<119;i++)
+  {
+    curvebearing=ispiralbearing(i/20.,0,2);
+    bearing=dir(spoints[i-1],spoints[i+1]); // compute the difference between a chord of the spiral
+    diff=(curvebearing-bearing)&0x7fffffff; // and a tangent in the middle of the arc
+    diff|=(diff&0x40000000)<<1; // diff could be near 0° or 360°; this bit manipulation puts it near 0°
+    //printf("%3d diff=%d (%f')\n",i,diff,bintomin(diff));
+    badcount+=(diff<=-300000 || diff>=-250000); // diff is between -3'00" and -2'30" when the increment is 1/20
+  }
+  /* On i386 (Pentium), the last 12 bearings are off by up to 2°
+   * On x86_64 (both Intel Core and Intel Atom), they are all accurate.
+   * This is NOT explained by sizeof(long double), which is 12 bytes on i386
+   * and 16 bytes on x86_64; only 10 bytes are stored, and the rest is wasted.
+   * When computing cornu(-6), the fifth step is facpower*=36/5,
+   * where facpower is -419904 before and -3023308.8 after.
+   * On x86_64, facpower is 0xc014b887333333333333.
+   * On i386,   facpower is 0xc014b887333333333800.
+   * I checked this with 64-bit Linux, 64-bit DragonFly, and 32-bit DragonFly;
+   * it depends on the processor, not the operating system.
+   * The ARM on a Raspberry Pi does not have a distinct long double type
+   * and gets 14 bad bearings.
+   * Running under Valgrind, the program says there are 10 bad bearings.
+   */
+  printf("%d bad bearings out of 118\n",badcount);
+  tassert(badcount<=15);
+  for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
+  {
+    t=bintorad(bearing);
+    a=cornu(-sqrt(t));
+    b=cornu(sqrt(t+M_PI/2));
+    lastbearing=bearing;
+    bearing=dir(a,b);
+  }
+  ps.setcolor(0,0,1);
+  ps.line2p(a,b);
+  ps.endpage();
+  //b=cornu(1,1,1);
+  ps.startpage();
+  for (j=-3;j<=3;j++)
+  {
+    switch ((j+99)%3)
+    {
+      case 0:
+	ps.setcolor(1,0,0);
+	break;
+      case 1:
+	ps.setcolor(0,0.4,0);
+	break;
+      case 2:
+	ps.setcolor(0,0,1);
+	break;
+    }
+    for (i=-20;i<21;i++)
+    {
+      b=cornu(t=i/20.,2*j,2);
+      if (i>-20)
+      {
+	ps.line2p(c,b);
+	tassert(dist(c,b)>0.049 && dist(c,b)<=0.05);
+	//cout<<dist(c,b)<<' ';
+      }
+      c=b;
+    }
+    //cout<<endl;
+  }
+  ps.endpage();
+  //ps.startpage();
+  /* Compare cornu(t,curvature,clothance) with cornu(t).
+   * The code would draw a set of zero-length lines along a spiral.
+   * As these would result in a blank page, it's commented out.
+   */
+  a=cornu(sqrt(M_PI*2));
+  for (i=-20;i<21;i++)
+  {
+    b=cornu(i/20.,0,2);
+    c=cornu(i/20.);
+    //cout<<i<<' '<<dist(b,c)<<endl;
+    tassert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit
+    b=cornu(i/20.,sqrt(M_PI*8),2);
+    c=cornu(i/20.+sqrt(M_PI*2))-a;
+    //cout<<i<<' '<<dist(b,c)<<endl;
+    tassert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit
+    //ps.line2p(b,c);
+    b=cornu(i/20.,1,0);
+    c=xy(0,1);
+    //cout<<i<<' '<<dist(b,c)-1<<endl;
+    tassert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit
+  }
+  //ps.endpage();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1,0);
+  spoints.clear();
+  for (i=0;i<sizeof(segalo)/sizeof(segalo[0]);i++)
+  {
+    spoints.push_back(cornu(segalo[i]));
+    sbearings.push_back(ispiralbearing(segalo[i],0,2));
+  }
+  for (i=0;i<sizeof(segalo)/sizeof(segalo[0])-1;i++)
+  {
+    sarc=spiralarc(xyz(spoints[i],0),xyz(spoints[i+1],0));
+    sarc.setdelta(sbearings[i+1]-sbearings[i],sbearings[i+1]+sbearings[i]-2*dir(spoints[i],spoints[i+1]));
+    a3d+=sarc.approx3d(0.01);
+  }
+  ps.spline(a3d);
+  for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
+  {
+    t=bintorad(bearing);
+    a=cornu(-sqrt(t));
+    b=cornu(sqrt(t+M_PI/2));
+    lastbearing=bearing;
+    bearing=dir(a,b);
+  }
+  for (bearing2=i=0,lastbearing=1;i<100 && bearing2!=lastbearing;i++)
+  {
+    t2=bintorad(bearing2);
+    c=cornu(-sqrt(t2));
+    d=cornu(sqrt(t2+M_PI));
+    lastbearing=bearing2;
+    bearing2=dir(c,d);
+  }
+  ps.dot(limitpoint);
+  ps.dot(-limitpoint);
+  ps.setcolor(0,0,1);
+  ps.line2p(a,b);
+  //ps.line2p(c,d);
+  ps.endpage();
+  ps.trailer();
+  ps.close();
+  tassert(bearing==162105696);
+  tassert(bearing2==229309921);
+  cout<<"Barely curly spiralarc is from "<<ldecimal(-sqrt(t))<<" to "<<ldecimal(sqrt(t+M_PI/2))<<endl;
+  cout<<"Barely too curly spiralarc is from "<<ldecimal(-sqrt(t2))<<" to "<<ldecimal(sqrt(t2+M_PI))<<endl;
+}
+
+void testsegment()
+{
+  int i;
+  double cept;
+  vector<double> extrema;
+  xyz beg(0,0,3),end(300,400,7),sta;
+  segment a(beg,end),b,c;
+  tassert(a.length()==500);
+  tassert(a.chordlength()==500);
+  tassert(a.chordbearing()==316933406);
+  cept=a.contourcept(5);
+  cout<<"a crosses 5 at "<<cept<<"; a.elev()="<<a.elev(cept)<<endl;
+  tassert(fabs(a.elev(cept)-5)<1e-6);
+  cept=a.contourcept(2);
+  tassert(std::isnan(cept));
+  sta=a.station(200);
+  tassert(sta==xyz(120,160,31));
+  tassert(std::isinf(a.radius(0)));
+  tassert(a.curvature(0)==0);
+  tassert(!isfinite(a.center().east()));
+  tassert(a.diffarea()==0);
+  a.split(200,b,c);
+  tassert(dist(b.station(123),a.station(123))<0.001);
+  tassert(dist(c.station(200),a.station(400))<0.001);
+}
+
+void testarc()
+{
+  int i;
+  double xx;
+  vector<double> extrema;
+  xyz beg(0,0,3),end(300,400,7),beg1(0,-15,0),end1(0,15,0),sta,sta1,sta2;
+  xy ctr;
+  arc a(beg,end),b,c;
+  tassert(fabs(a.length()-500)<0.001);
+  tassert(a.chordlength()==500);
+  a.setdelta(degtobin(60));
+  tassert(fabs(a.length()-523.599)<0.001);
+  tassert(a.chordlength()==500);
+  tassert(fabs(a.diffarea()-(M_PI*sqr(500)/6-250*500*M_SQRT_3_4))<1e-4);
+  sta=a.station(200);
+  //printf("sta.x=%.17f sta.y=%.17f sta.z=%.17f \n",sta.east(),sta.north(),sta.elev());
+  tassert(dist(sta,xyz(163.553,112.7825,32.167))<0.001);
+  //printf("arc radius %f\n",a.radius(1));
+  tassert(fabs(a.radius(0)-500)<0.001);
+  tassert(fabs(a.curvature(0)-0.002)<0.000001);
+  //printf("arc center %f,%f\n",a.center().east(),a.center().north());
+  ctr=a.center();
+  //printf("distance %f\n",dist(xy(sta),ctr));
+  tassert(fabs(dist(xy(sta),ctr)-500)<0.001);
+  tassert(fabs(ctr.east()+196.410)<0.001);
+  tassert(fabs(ctr.north()-459.8075)<0.001);
+  a.split(200,b,c);
+  sta=a.station(200);
+  //printf("a.station %f,%f,%f\n",sta.east(),sta.north(),sta.elev());
+  sta=b.station(200);
+  printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
+  tassert(dist(b.station(123),a.station(123))<0.001);
+  tassert(dist(c.station(200),a.station(400))<0.001);
+  sta=xyz(150,200,5);
+  b=arc(beg,sta,end);
+  sta2=b.station(250);
+  cout<<"arc3 "<<sta2.elev()<<endl;
+  tassert(sta2.elev()==5);
+  sta=xyz(150,200,10);
+  b=arc(beg,sta,end);
+  sta2=b.station(250);
+  cout<<"arc3 "<<sta2.elev()<<endl;
+  tassert(sta2.elev()==10);
+  sta=xyz(200,150,10);
+  b=arc(beg,sta,end);
+  sta2=b.station(252.905);
+  cout<<"arc3 "<<sta2.east()<<' '<<sta2.north()<<' '<<sta2.elev()<<endl;
+  //cout<<dist(sta,sta2)<<endl;
+  tassert(dist(sta,sta2)<0.001);
+  a=arc(beg1,end1,3);
+  sta=a.station(10);
+  sta1=a.station(15);
+  sta2=a.station(20);
+  cout<<"arc4 "<<sta.east()<<' '<<sta.north()<<endl;
+  cout<<"arc4 "<<sta1.east()<<' '<<sta1.north()<<endl;
+  cout<<"arc4 "<<sta2.east()<<' '<<sta2.north()<<endl;
+  xx=(sta.east()+sta1.east()+sta2.east())/25;
+  tassert(xx>3.6e-9 && xx<3.7e-9);
+  tassert(rint(sta.east()/xx)==8);
+  tassert(rint(sta1.east()/xx)==9);
+  tassert(rint(sta2.east()/xx)==8);
+  a.setcurvature(0.01,0.01);
+  cout<<"setcurvature: radius="<<a.radius(0)<<endl;
+  tassert(abs(a.radius(0)-100)<0.0001);
+}
+
+void testspiralarc()
+{
+  int i,j,nfail;
+  double bear[3],len,begcur,endcur,arcarea,spiralarea;
+  vector<double> extrema;
+  xyz beg(0,0,3),end(300,400,7),sta,pi;
+  xyz begk(6024724080.6769285,135556291815.4817,0),endk(82597158811.140015,-1116177821.7897496,0);
+  xy ctr;
+  xy kmlpnt(-337.97179595901059,364.38542430496875);
+  arc kmlarc(begk,endk);
+  spiralarc a(beg,end),b(beg,0.001,0.001,end),c,arch[10];
+  spiralarc az0(xyz(189794.012,496960.750,0),1531654601,0,1145.229168e-6,60.96,0); // From a road in Arizona
+  spiralarc kmlspi;
+  arc aarc(beg,end);
+  bezier3d a3d;
+  PostScript ps;
+  BoundRect br;
+  kmlarc.setdelta(-1052617934);
+  // This arc arises in the KML test, and the program blew its stack when compiled with MSVC.
+  ps.open("spiralarc.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  tassert(fabs(a.length()-500)<0.001);
+  tassert(a.chordlength()==500);
+  cout<<b.length()<<' '<<b.curvature(200)<<endl;
+  tassert(fabs(b.length()-505.361)<0.001);
+  tassert(fabs(b.curvature(200)-0.001)<0.000001);
+  a._setdelta(degtobin(60),degtobin(60));
+  cout<<"chord bearing "<<bintodeg(a.chordbearing())<<endl;
+  cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
+  cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(250)))<<endl;
+  cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(500)))<<endl;
+  cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  a._fixends(1);
+  cout<<"new length "<<(len=a.length())<<endl;
+  cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
+  cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
+  cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
+  cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  a.setdelta(0,degtobin(254)); // this barely fails
+  a.setdelta(degtobin(26),degtobin(8));
+  cout<<"new length "<<(len=a.length())<<endl;
+  cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
+  cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
+  cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
+  cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  tassert(fabs(bear[2]-bear[0]-26)<1e-5);
+  tassert(fabs(bear[0]+bear[2]-2*bintodeg(a.chordbearing())-8)<1e-5);
+  cout<<"curvature at beg "<<a.curvature(0)<<endl;
+  cout<<"curvature at end "<<a.curvature(len)<<endl;
+  a.split(200,b,c);
+  sta=a.station(123);
+  printf("a.station %f,%f,%f\n",sta.east(),sta.north(),sta.elev());
+  sta=b.station(123);
+  printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
+  tassert(dist(b.station(123),a.station(123))<0.001);
+  tassert(dist(c.station(200),a.station(400))<0.001);
+  for (i=-20,nfail=0;i<=20;i++)
+  {
+    for (j=-20;j<=20;j++)
+    {
+      a.setcurvature(i/1000.,j/1000.);
+      if (a.valid())
+      {
+	tassert(fabs(a.curvature(0)-i/1000.)<1e-6);
+	tassert(fabs(a.curvature(a.length())-j/1000.)<1e-6);
+	cout<<'.';
+      }
+      else
+      {
+	nfail++;
+	cout<<' ';
+      }
+    }
+    cout<<endl;
+  }
+  cout<<"setcurvature: "<<nfail<<" failures"<<endl;
+  tassert(nfail>656 && nfail<1066);
+  a.setdelta(radtobin(0.01),0);
+  aarc.setdelta(radtobin(0.01),0);
+  cout<<"spiralarc "<<a.diffarea()<<" arc "<<aarc.diffarea()<<
+    ' '<<ldecimal(a.diffarea()/aarc.diffarea())<<endl;
+  a.setdelta(DEG60,0);
+  aarc.setdelta(DEG60,0);
+  cout<<"spiralarc "<<a.diffarea()<<" arc "<<aarc.diffarea()<<
+    ' '<<ldecimal(a.diffarea()/aarc.diffarea())<<endl;
+  tassert(fabs(a.diffarea()/aarc.diffarea()-1)<1e-10);
+  for (i=1;i<4;i++)
+  {
+    for (j=0;j<5;j++)
+    {
+      beg=xyz(cornu(-0.5,i*0.01,j*0.01),0);
+      end=xyz(cornu(0.5,i*0.01,j*0.01),0);
+      begcur=spiralcurvature(-0.5,i*0.01,j*0.01);
+      endcur=spiralcurvature(0.5,i*0.01,j*0.01);
+      c=spiralarc(beg,begcur,endcur,end);
+      tassert(fabs(c.length()-1)<1e-12);
+      spiralarea=c.diffarea();
+      if (j)
+        cout<<ldecimal(sqr(j*0.01)*(i*0.01)/(spiralarea-arcarea))<<' ';
+      else
+        arcarea=spiralarea;
+    }
+    cout<<endl;
+  }
+  ps.startpage();
+  ps.setscale(-10,-10,10,10,degtobin(0));
+  // Make something that resembles an Archimedean spiral
+  //arch[0]=spiralarc(xyz(-0.5,0,0),2.,2/3.,xyz(1.5,0,0));
+  arch[0]=spiralarc(xyz(-0.5,0,0),-DEG90,2.,2/3.,M_PI,0);
+  for (i=1;i<10;i++)
+    arch[i]=spiralarc(arch[i-1].getend(),arch[i-1].endbearing(),1/(i+0.5),1/(i+1.5),M_PI*(i+1),0);
+  for (i=0;i<10;i++)
+    a3d+=arch[i].approx3d(0.01);
+  ps.spline(a3d);
+  for (i=0;i<-10;i++)
+  {
+    if (i&1)
+      ps.setcolor(1,0,0);
+    else
+      ps.setcolor(0,0,1);
+    ps.spline(arch[i].approx3d(0.01));
+  }
+  cout<<"Archimedes-like spiral ended on "<<arch[9].getend().getx()<<','<<arch[9].getend().gety()<<endl;
+  tassert(dist(arch[9].getend(),xy(-0.752,-10.588))<0.001);
+  ps.endpage();
+  ps.startpage();
+  pi=xyz(az0.pointOfIntersection(),0);
+  br.clear();
+  br.include(az0.getstart());
+  br.include(az0.getend());
+  br.include(pi);
+  ps.setscale(br);
+  cout<<"Arizona spiral\nEndpoint: "<<az0.getend().getx()<<','<<az0.getend().gety()<<endl;
+  tassert(dist(az0.getend(),xy(189780.746,496901.254))<0.0007);
+  cout<<"Chord: "<<az0.chordlength()<<'<'<<bintodeg(az0.chordbearing())<<endl;
+  cout<<"Point of intersection: "<<ldecimal(pi.getx())<<','<<ldecimal(pi.gety())<<endl;
+  tassert(dist(pi,xy(189784.706,496921.187))<0.0007);
+  cout<<"Tangents: "<<az0.tangentLength(START)<<", "<<az0.tangentLength(END)<<endl;
+  tassert(fabs(az0.tangentLength(START)-40.643)<0.0007);
+  tassert(fabs(az0.tangentLength(END)-20.322)<0.0007);
+  ps.spline(az0.approx3d(0.001/ps.getscale()));
+  ps.line2p(az0.getstart(),pi);
+  ps.line2p(pi,az0.getend());
+  ps.endpage();
+  ps.trailer();
+  ps.close();
+  /* beardiff-delta=DEG360, which results in different code flow by MSVC than
+   * by GCC. The problem is that the spiralarc equivalent of this arc, when
+   * split by the code compiled by MSVC, produces NaN.
+   */
+  kmlspi=spiralarc(kmlarc);
+  cout<<"kmlpnt is "<<(kmlspi.in(kmlpnt)?"":"not ")<<"in kmlspi\n";
+  cout<<"kmlpnt is "<<(kmlarc.in(kmlpnt)?"":"not ")<<"in kmlarc\n";
+  tassert(!kmlarc.in(kmlpnt));
+}
+
 void testchecksum()
 {
   CoordCheck *check;
@@ -1116,6 +1534,14 @@ int main(int argc, char *argv[])
     testrelprime();
   if (shoulddo("manysum"))
     testmanysum();
+  if (shoulddo("segment"))
+    testsegment();
+  if (shoulddo("arc"))
+    testarc();
+  if (shoulddo("spiral"))
+    testspiral();
+  if (shoulddo("spiralarc"))
+    testspiralarc(); // 10.5 s
   if (shoulddo("checksum"))
     testchecksum(); // >1 s 3/4 of time
   if (shoulddo("ldecimal"))
