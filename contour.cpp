@@ -489,17 +489,50 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       q=(2*b+c)/3;
       r=(p+q)/2;
       s=2*b-r;
+      errForward=errBackward=errNewSeg=errStraighter=errBendier=INFINITY;
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
 		 +bendiness(a,b,c,tolerance);
-      errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
-		 +bendiness(a,q,c,tolerance);
-      errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
-		  +bendiness(a,p,c,tolerance);
-      //errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
-      errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
-		    +bendiness(a,r,c,tolerance);
-      errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
-		 +bendiness(a,s,c,tolerance);
+      change.clear();
+      change.insert(a);
+      change.insert(b);
+      change.insert(q);
+      lohiElev=pl.lohi(change);
+      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
+		   +bendiness(a,q,c,tolerance);
+      change.clear();
+      change.insert(c);
+      change.insert(b);
+      change.insert(p);
+      lohiElev=pl.lohi(change);
+      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
+		    +bendiness(a,p,c,tolerance);
+      //change.clear();
+      //change.insert(p);
+      //change.insert(b);
+      //change.insert(q);
+      //lohiElev=pl.lohi(change);
+      //if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	//errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
+      change.clear();
+      change.insert(a);
+      change.insert(b);
+      change.insert(c);
+      change.insert(r);
+      lohiElev=pl.lohi(change);
+      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
+		      +bendiness(a,r,c,tolerance);
+      change.clear();
+      change.insert(a);
+      change.insert(b);
+      change.insert(c);
+      change.insert(s);
+      lohiElev=pl.lohi(change);
+      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
+		   +bendiness(a,s,c,tolerance);
       errBest=errCurrent;
       if (errForward<errBest)
       {
