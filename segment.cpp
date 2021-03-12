@@ -204,7 +204,7 @@ bezier3d segment::approx3d(double precision)
     ret=bezier3d(start,sb,slope(),slope(),eb,end);
   else
   {
-    if (dist(xy(start),xy(end))>length())
+    if (start.isnan() || end.isnan() || dist(xy(start),xy(end))>length())
       cerr<<"approx3d: bogus spiralarc"<<endl;
     else
     {
