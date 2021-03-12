@@ -200,7 +200,7 @@ bezier3d segment::approx3d(double precision)
   else
     est=fabs(precision*2)+1;
   //cout<<"sb "<<bintodeg(sb)<<" eb "<<bintodeg(eb)<<" est "<<est<<endl;
-  if (est<=precision || std::isnan(length()))
+  if (est<=precision || !std::isfinite(length()))
     ret=bezier3d(start,sb,slope(),slope(),eb,end);
   else
   {
