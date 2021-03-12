@@ -439,9 +439,21 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   array<double,2> lohiElev;
   polyline change;
   double e=pl.contours[i].getElevation();
+  PostScript ps;
+  BoundRect br;
+  bool debugging=false;
   origsz=sz=pl.contours[i].size();
   //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
   //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
+  if (dist(pl.contours[i].getstart(),xyz(3533477.583,5383594.186,410))<0.002)
+    debugging=true; // This ground contour in pc_ex1 crosses a car after pruning.
+  if (debugging)
+  {
+    ps.open("prune.ps");
+    ps.setpaper(papersizes["A4 portrait"],0);
+    ps.prolog();
+    br.include(&pl);
+  }
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
@@ -458,6 +470,13 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	pl.contours[i].erase(n);
 	sz--;
       }
+    }
+    if (debugging)
+    {
+      ps.startpage();
+      ps.setscale(br);
+      ps.spline(pl.contours[i].approx3d(0.1/ps.getscale()));
+      ps.endpage();
     }
   }
   pl.contours[i].setlengths();
