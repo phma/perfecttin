@@ -471,7 +471,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	sz--;
       }
     }
-    if (debugging)
+    if (debugging && sz%100==0)
     {
       ps.startpage();
       ps.setscale(br);
