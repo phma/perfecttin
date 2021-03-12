@@ -496,7 +496,10 @@ void TinCanvas::roughContoursFinish()
   br.include(&net);
   ps.setscale(br);
   for (i=0;i<net.contours.size();i++)
+  {
+    ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
     ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+  }
   ps.endpage();
 }
 
@@ -563,7 +566,10 @@ void TinCanvas::pruneContoursFinish()
   br.include(&net);
   ps.setscale(br);
   for (i=0;i<net.contours.size();i++)
+  {
+    ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
     ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+  }
   ps.endpage();
 }
 
@@ -626,7 +632,10 @@ void TinCanvas::smoothContoursFinish()
   br.include(&net);
   ps.setscale(br);
   for (i=0;i<net.contours.size();i++)
+  {
+    ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
     ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+  }
   ps.endpage();
 }
 
