@@ -957,7 +957,7 @@ void MainWindow::makeActions()
   //smoothContoursAction->setIcon(QIcon(":/smoothcon.png"));
   smoothContoursAction->setText(tr("Draw smooth contours"));
   contourMenu->addAction(smoothContoursAction);
-  connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(smoothContours()));
+  connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(pruneContours()));
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
