@@ -429,6 +429,26 @@ double totalBendiness(polyline &p,double tolerance)
   return pairwisesum(bends);
 }
 
+void checkContour(pointlist &pl,polyline &contour,double tolerance)
+{
+  int i,j,ilen;
+  double len,along,err;
+  segment seg;
+  for (i=0;i<contour.size();i++)
+  {
+    seg=contour.getsegment(i);
+    len=seg.length();
+    ilen=lrint(len);
+    for (j=0;j<ilen;j++)
+    {
+      along=len*j/ilen;
+      err=pl.elevation(seg.station(along))-seg.elev(along);
+      if (fabs(err)>tolerance)
+	cout<<"Segment "<<i<<" of contour out of tolerance at station "<<along<<endl;
+    }
+  }
+}
+
 void prune1contour(pointlist &pl,double tolerance,int i)
 /* Removes points from the ith contour, as long as it stays within tolerance.
  * If the resulting contour is closed and has only two points, it should be deleted.
@@ -475,6 +495,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	  ps.setscale(br);
 	  ps.spline(pl.contours[i].approx3d(0.1/ps.getscale()));
 	  ps.endpage();
+	  checkContour(pl,pl.contours[i],tolerance);
 	}
       }
     }
