@@ -469,14 +469,14 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	j=0;
 	pl.contours[i].erase(n);
 	sz--;
+	if (debugging && sz<=7100)
+	{
+	  ps.startpage();
+	  ps.setscale(br);
+	  ps.spline(pl.contours[i].approx3d(0.1/ps.getscale()));
+	  ps.endpage();
+	}
       }
-    }
-    if (debugging && sz%100==0)
-    {
-      ps.startpage();
-      ps.setscale(br);
-      ps.spline(pl.contours[i].approx3d(0.1/ps.getscale()));
-      ps.endpage();
     }
   }
   pl.contours[i].setlengths();
