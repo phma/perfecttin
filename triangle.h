@@ -114,6 +114,7 @@ public:
   bool iscorner(point *v);
   point *otherCorner(point *v0,point *v1);
   triangle *nexttoward(xy pnt);
+  triangle *nextalong(segment seg);
   triangle *findt(xy pnt,bool clip=false);
   double area();
   double perimeter();

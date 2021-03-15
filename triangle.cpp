@@ -469,6 +469,54 @@ triangle *triangle::nexttoward(xy pnt)
    return nullptr;
 }
 
+const char nextalongTable[3][3][3]=
+{
+  7,4,4, 1,1,5, 1,1,1,
+  2,4,4, 2,0,4, 3,1,1,
+  2,6,4, 2,2,4, 2,2,7
+};
+
+triangle *triangle::nextalong(segment seg)
+/* Returns the next triangle along the segment.
+ * If the segment does not cross the triangle, tries to get back to the segment.
+ * Used when pruning contours.
+ */
+{
+  double p,q,r;
+  xy start=seg.getstart(),end=seg.getend();
+  double afoot,bfoot,cfoot,farthestfoot=0;
+  p=area3(*a,start,end);
+  q=area3(*b,start,end);
+  r=area3(*c,start,end);
+  switch (nextalongTable[sign(p)+1][sign(q)+1][sign(r)+1])
+  {
+    case 4:
+      return aneigh;
+    case 2:
+      return bneigh;
+    case 1:
+      return cneigh;
+    case 3:
+    case 5:
+    case 6:
+      return nexttoward(end);
+    case 7:
+      afoot=seg.closest(*a);
+      bfoot=seg.closest(*b);
+      cfoot=seg.closest(*c);
+      if (afoot>farthestfoot)
+	farthestfoot=afoot;
+      if (bfoot>farthestfoot)
+	farthestfoot=bfoot;
+      if (cfoot>farthestfoot)
+	farthestfoot=cfoot;
+      return nexttoward(seg.station(farthestfoot));
+    default:
+      cerr<<"can't happen: straight triangle in nextalong\n";
+      return nullptr;
+  }
+}
+
 triangle *triangle::findt(xy pnt,bool clip)
 {
   triangle *here,*there,*loopdet=nullptr;
