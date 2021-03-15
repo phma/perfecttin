@@ -85,6 +85,18 @@ private:
   int fineRatio,coarseRatio;
 };
 
+class DirtyTracker
+{
+public:
+  void init(int n);
+  bool isDirty(int n);
+  void markDirty(int n,int spread);
+  void markClean(int n);
+  void erase(int n);
+private:
+  std::vector<char> dirt;
+};
+
 float splitpoint(double leftclamp,double rightclamp,double tolerance);
 std::vector<edge *> contstarts(pointlist &pts,double elev);
 polyline trace(edge *edgep,double elev);

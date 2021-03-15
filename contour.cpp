@@ -34,6 +34,7 @@
  */
 #include <iostream>
 #include <cassert>
+#include <cstring>
 #include "pointlist.h"
 #include "contour.h"
 #include "relprime.h"
@@ -166,6 +167,46 @@ void ContourInterval::writeXml(ostream &ofile)
   ofile<<"\" fineRatio=\""<<fineRatio;
   ofile<<"\" coarseRatio=\""<<coarseRatio;
   ofile<<"\"/>"<<endl;
+}
+
+void DirtyTracker::init(int n)
+{
+  dirt.clear();
+  dirt.resize(n,1);
+}
+
+bool DirtyTracker::isDirty(int n)
+{
+  if (n>=0 && n<dirt.size())
+    return dirt[n];
+  else
+    return false;
+}
+
+void DirtyTracker::markDirty(int n,int spread)
+{
+  int i,start,end,sz=dirt.size();
+  start=n-spread;
+  if (start<0)
+    start+=sz;
+  end=start+2*spread;
+  for (i=start;sz && i<=end;i++)
+    dirt[i%sz]=1;
+}
+
+void DirtyTracker::markClean(int n)
+{
+  if (n>=0 && n<dirt.size())
+    dirt[n]=0;
+}
+
+void DirtyTracker::erase(int n)
+{
+  if (n>=0 && n<dirt.size())
+  {
+    memmove(&dirt[n],&dirt[n+1],dirt.size()-n-1);
+    dirt.pop_back();
+  }
 }
 
 float splitpoint(double leftclamp,double rightclamp,double tolerance)
