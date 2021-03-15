@@ -566,7 +566,7 @@ array<double,2> pointlist::lohi(polyline p)
       tlohi=tri->lohi(seg);
       updlohi(ret,tlohi);
       borderTriangles.push_back(tri);
-      tri=tri->nexttoward(p.getEndpoint(i+1));
+      tri=tri->nextalong(seg);
     } while (tri && !tri->in(p.getEndpoint(i+1)));
   }
   do
