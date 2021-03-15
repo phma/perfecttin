@@ -477,7 +477,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
-    if (n || !pl.contours[i].isopen())
+    if ((n || !pl.contours[i].isopen()) && pl.contours[i].size()>2)
     {
       if (debugging && sz==7068 && n==4362)
 	cout<<"Examining endpoint "<<n<<", about to clip car\n";
