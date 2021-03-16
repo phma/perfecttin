@@ -502,6 +502,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   double e=pl.contours[i].getElevation();
   PostScript ps;
   BoundRect br;
+  DirtyTracker dt;
   bool debugging=false;
   origsz=sz=pl.contours[i].size();
   //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
@@ -515,10 +516,11 @@ void prune1contour(pointlist &pl,double tolerance,int i)
     ps.prolog();
     br.include(&pl);
   }
+  dt.init(sz);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
-    if ((n || !pl.contours[i].isopen()) && pl.contours[i].size()>2)
+    if ((n || !pl.contours[i].isopen()) && pl.contours[i].size()>2 && dt.isDirty(n))
     {
       if (debugging && sz==7068 && n==4362)
 	cout<<"Examining endpoint "<<n<<", about to clip car\n";
@@ -527,9 +529,12 @@ void prune1contour(pointlist &pl,double tolerance,int i)
       change.insert(pl.contours[i].getEndpoint(n));
       change.insert(pl.contours[i].getEndpoint(n+1));
       lohiElev=pl.lohi(change);
+      dt.markClean(n); // It's been checked, no need to recheck
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
       {
 	j=0;
+	dt.markDirty(n,1);
+	dt.erase(n);
 	pl.contours[i].erase(n);
 	sz--;
 	if (debugging && sz<=7100)
