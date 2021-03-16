@@ -572,6 +572,7 @@ array<double,2> pointlist::lohi(polyline p)
   do
   {
     nPoints=insidePoints.size();
+    overlapTriangles=triangleNeighbors(insidePoints);
     for (i=0;i<borderTriangles.size();i++)
       overlapTriangles.push_back(borderTriangles[i]);
     neighborPoints=pointNeighbors(overlapTriangles);
