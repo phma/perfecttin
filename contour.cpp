@@ -503,27 +503,15 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   PostScript ps;
   BoundRect br;
   DirtyTracker dt;
-  bool debugging=false;
   origsz=sz=pl.contours[i].size();
   //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
   //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
-  if (dist(pl.contours[i].getstart(),xyz(3533477.583,5383594.186,410))<0.002)
-    debugging=true; // This ground contour in pc_ex1 crosses a car after pruning.
-  if (debugging)
-  {
-    ps.open("prune.ps");
-    ps.setpaper(papersizes["A4 portrait"],0);
-    ps.prolog();
-    br.include(&pl);
-  }
   dt.init(sz);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
     if ((n || !pl.contours[i].isopen()) && pl.contours[i].size()>2 && dt.isDirty(n))
     {
-      if (debugging && sz==7068 && n==4362)
-	cout<<"Examining endpoint "<<n<<", about to clip car\n";
       change.clear();
       change.insert(pl.contours[i].getEndpoint(n-1));
       change.insert(pl.contours[i].getEndpoint(n));
@@ -537,14 +525,6 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	dt.erase(n);
 	pl.contours[i].erase(n);
 	sz--;
-	if (debugging && sz<=7100)
-	{
-	  ps.startpage();
-	  ps.setscale(br);
-	  ps.spline(pl.contours[i].approx3d(0.1/ps.getscale()));
-	  ps.endpage();
-	  checkContour(pl,pl.contours[i],tolerance);
-	}
       }
     }
   }
