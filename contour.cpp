@@ -209,6 +209,13 @@ void DirtyTracker::erase(int n)
   }
 }
 
+void DirtyTracker::insert(int n)
+{
+  dirt.push_back(1);
+  memmove(&dirt[n+1],&dirt[n],dirt.size()-n-1);
+  dirt[n]=1;
+}
+
 float splitpoint(double leftclamp,double rightclamp,double tolerance)
 /* If the values at the clamp points indicate that the curve may be out of tolerance,
  * returns the point to split it at, as a fraction of the length. If not, returns 0.

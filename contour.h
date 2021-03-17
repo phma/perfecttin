@@ -93,6 +93,7 @@ public:
   void markDirty(int n,int spread);
   void markClean(int n);
   void erase(int n);
+  void insert(int n);
 private:
   std::vector<char> dirt;
 };
