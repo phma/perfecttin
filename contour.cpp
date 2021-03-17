@@ -548,11 +548,13 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   xy p,q,r,s; // points to try changing the nth endpoint to
   double e=pl.contours[i].getElevation();
   double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier,errBest;
+  DirtyTracker dt;
   origsz=sz=pl.contours[i].size();
+  dt.init(sz);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
-    if (n || !pl.contours[i].isopen())
+    if ((n || !pl.contours[i].isopen()) && dt.isDirty(n))
     {
       a=pl.contours[i].getEndpoint(n-1);
       b=pl.contours[i].getEndpoint(n);
@@ -606,6 +608,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
 		   +bendiness(a,s,c,tolerance);
       errBest=errCurrent;
+      dt.markClean(n); // It's been checked, no need to recheck
       whichNew=0;
       if (errForward<errBest)
       {
@@ -631,6 +634,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       if (whichNew && (errCurrent-errBest)*16777216>errCurrent)
       {
 	j=0;
+	dt.markDirty(n,1);
 	switch (whichNew)
 	{
 	  case 1:
