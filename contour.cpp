@@ -480,6 +480,8 @@ void checkContour(pointlist &pl,polyline &contour,double tolerance)
     seg=contour.getsegment(i);
     len=seg.length();
     ilen=lrint(len);
+    if (len<1e-6)
+      cout<<"Segment "<<i<<" of contour is microscopic\n";
     for (j=0;j<ilen;j++)
     {
       along=len*j/ilen;
@@ -646,6 +648,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
     }
   }
   pl.contours[i].setlengths();
+  checkContour(pl,pl.contours[i],tolerance);
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
