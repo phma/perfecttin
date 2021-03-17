@@ -541,7 +541,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 {
   static int n=0;
   int j,sz,origsz;
-  int whichNew=0;
+  int whichNew;
   array<double,2> lohiElev;
   polyline change;
   xy a,b,c; // current endpoints; b is the nth
@@ -606,6 +606,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
 		   +bendiness(a,s,c,tolerance);
       errBest=errCurrent;
+      whichNew=0;
       if (errForward<errBest)
       {
 	errBest=errForward;
