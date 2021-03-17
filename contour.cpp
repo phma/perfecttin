@@ -529,6 +529,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
     }
   }
   pl.contours[i].setlengths();
+  checkContour(pl,pl.contours[i],tolerance);
   //cout<<"        "<<i<<" error after "<<contourError(pl,pl.contours[i]);
   //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
 }
