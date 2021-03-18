@@ -21,12 +21,14 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+#include <boost/program_options.hpp>
 #include <iostream>
 #include <fstream>
 #include "csv.h"
 #include "point.h"
 #include "ldecimal.h"
 using namespace std;
+namespace po=boost::program_options;
 
 /* This program reads a CSV file which contains depth measurements of a body
  * of water, at two frequencies and thus at two layers of the bottom.
@@ -38,11 +40,37 @@ int main(int argc, char *argv[])
   string line;
   vector<string> parsedLine;
   xyz thePoint;
+  string inputFileName;
+  ifstream inputFile;
+  double maxSpread;
   int i;
+  bool validCmd=true;
   vector<xyz> pointColumn;
-  while (cin.good())
+  po::options_description generic("Options");
+  po::options_description hidden("Hidden options");
+  po::options_description cmdline_options;
+  po::positional_options_description p;
+  po::variables_map vm;
+  generic.add_options()
+    ("maxspread,s",po::value<double>(&maxSpread)->default_value(INFINITY,"inf"),"Maximum vertical spread");
+  hidden.add_options()
+    ("input",po::value<string>(&inputFileName),"Input file");
+  p.add("input",-1);
+  cmdline_options.add(generic).add(hidden);
+  try
   {
-    getline(cin,line);
+    po::store(po::command_line_parser(argc,argv).options(cmdline_options).positional(p).run(),vm);
+    po::notify(vm);
+  }
+  catch (exception &ex)
+  {
+    cerr<<ex.what()<<endl;
+    validCmd=false;
+  }
+  inputFile.open(inputFileName);
+  while (inputFile.good())
+  {
+    getline(inputFile,line);
     parsedLine=parsecsvline(line);
     if (parsedLine.size()>3)
     {
@@ -61,7 +89,7 @@ int main(int argc, char *argv[])
       pointColumn.push_back(thePoint);
     else
     {
-      if (pointColumn.size())
+      if (pointColumn.size()) // The points can occur in either order.
       {
 	cout<<"Elev";
 	for (i=0;i<pointColumn.size();i++)
