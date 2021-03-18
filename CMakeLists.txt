@@ -58,6 +58,13 @@ qt5_add_resources(lib_resources perfecttin.qrc)
 qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
+set(common_files adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp boundrect.cpp
+    carlsontin.cpp cloud.cpp cogo.cpp color.cpp csv.cpp dxf.cpp edgeop.cpp fileio.cpp
+    landxml.cpp las.cpp ldecimal.cpp leastsquares.cpp lohi.cpp manysum.cpp matrix.cpp
+    minquad.cpp neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp
+    qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp segment.cpp spiral.cpp
+    stl.cpp threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
+
 if (${Boost_FOUND})
 add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cloud.cpp cogo.cpp cogospiral.cpp color.cpp
@@ -68,17 +75,7 @@ add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp b
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
                segment.cpp spiral.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
-add_executable(dibathy adjelev.cpp angle.cpp arc.cpp
-	       bezier3d.cpp binio.cpp boundrect.cpp carlsontin.cpp
-	       cloud.cpp cogo.cpp color.cpp csv.cpp
-	       dibathy.cpp dxf.cpp edgeop.cpp fileio.cpp
-	       landxml.cpp las.cpp ldecimal.cpp leastsquares.cpp lohi.cpp
-	       manysum.cpp matrix.cpp minquad.cpp neighbor.cpp
-	       octagon.cpp ply.cpp point.cpp pointlist.cpp
-	       polyline.cpp ps.cpp qindex.cpp quaternion.cpp
-	       random.cpp relprime.cpp rootfind.cpp
-	       segment.cpp spiral.cpp stl.cpp threads.cpp
-	       tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
+add_executable(dibathy dibathy.cpp ${common_files})
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cidialog.cpp cloud.cpp cogo.cpp
