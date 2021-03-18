@@ -25,24 +25,53 @@
 #include <fstream>
 #include "csv.h"
 #include "point.h"
+#include "ldecimal.h"
 using namespace std;
 
 /* This program reads a CSV file which contains depth measurements of a body
- * of water, supposedly at two frequencies and thus at two layers of the bottom.
- * Neither of us, having looked at the file, has figured out how to tell
- * which points belong to which layer.
+ * of water, at two frequencies and thus at two layers of the bottom.
+ * The points are in pairs with the same xy coordinates and different elevations.
  */
 
 int main(int argc, char *argv[])
 {
   string line;
   vector<string> parsedLine;
+  xyz thePoint;
+  int i;
+  vector<xyz> pointColumn;
   while (cin.good())
   {
     getline(cin,line);
     parsedLine=parsecsvline(line);
-    if (parsedLine.size()>3) // Input is PNEZ..., output is XYZ, switch X and Y
-      cout<<parsedLine[2]<<' '<<parsedLine[1]<<' '<<parsedLine[3]<<' '<<endl;
+    if (parsedLine.size()>3)
+    {
+      try
+      { // Input is PNEZ..., output is XYZ, switch X and Z
+	thePoint=xyz(stod(parsedLine[2]),stod(parsedLine[1]),stod(parsedLine[3]));
+      }
+      catch (...)
+      {
+	thePoint=nanxyz;
+      }
+    }
+    else
+      thePoint=nanxyz;
+    if (pointColumn.size() && xy(thePoint)==xy(pointColumn[0]))
+      pointColumn.push_back(thePoint);
+    else
+    {
+      if (pointColumn.size())
+      {
+	cout<<"Elev";
+	for (i=0;i<pointColumn.size();i++)
+	  cout<<' '<<ldecimal(pointColumn[i].elev());
+	cout<<endl;
+      }
+      pointColumn.clear();
+      if (thePoint.isfinite())
+	pointColumn.push_back(thePoint);
+    }
   }
   return 0;
 }
