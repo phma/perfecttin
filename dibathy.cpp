@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include "csv.h"
+#include "point.h"
 using namespace std;
 
 /* This program reads a CSV file which contains depth measurements of a body

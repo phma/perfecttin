@@ -68,6 +68,17 @@ add_executable(perfecttin adjelev.cpp angle.cpp arc.cpp binio.cpp bezier3d.cpp b
                qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp
                segment.cpp spiral.cpp stl.cpp test.cpp
                threads.cpp tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
+add_executable(dibathy adjelev.cpp angle.cpp arc.cpp
+	       bezier3d.cpp binio.cpp boundrect.cpp carlsontin.cpp
+	       cloud.cpp cogo.cpp color.cpp csv.cpp
+	       dibathy.cpp dxf.cpp edgeop.cpp fileio.cpp
+	       landxml.cpp las.cpp ldecimal.cpp leastsquares.cpp lohi.cpp
+	       manysum.cpp matrix.cpp minquad.cpp neighbor.cpp
+	       octagon.cpp ply.cpp point.cpp pointlist.cpp
+	       polyline.cpp ps.cpp qindex.cpp quaternion.cpp
+	       random.cpp relprime.cpp rootfind.cpp
+	       segment.cpp spiral.cpp stl.cpp threads.cpp
+	       tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp brevno.cpp
 	       boundrect.cpp carlsontin.cpp cidialog.cpp cloud.cpp cogo.cpp
@@ -100,10 +111,11 @@ add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp bre
                relprime.cpp rootfind.cpp segment.cpp spiral.cpp
                stl.cpp test.cpp testptin.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
-add_executable(dibathy csv.cpp dibathy.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_compile_definitions(perfecttin PUBLIC _USE_MATH_DEFINES)
+target_link_libraries(dibathy ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_compile_definitions(dibathy PUBLIC _USE_MATH_DEFINES)
 endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${CMAKE_THREAD_LIBS_INIT} Qt5::Widgets Qt5::Core)
 target_link_libraries(fuzzptin ${CMAKE_THREAD_LIBS_INIT})
@@ -114,6 +126,7 @@ target_compile_definitions(perfecttin-gui PUBLIC _USE_MATH_DEFINES)
 if (${Plytapus_FOUND})
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${Plytapus_LIBRARY})
+target_link_libraries(dibathy ${Plytapus_LIBRARY})
 endif (${Boost_FOUND})
 target_link_libraries(perfecttin-gui ${Plytapus_LIBRARY})
 target_link_libraries(fuzzptin ${Plytapus_LIBRARY})
