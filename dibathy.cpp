@@ -66,6 +66,8 @@ int main(int argc, char *argv[])
 	cout<<"Elev";
 	for (i=0;i<pointColumn.size();i++)
 	  cout<<' '<<ldecimal(pointColumn[i].elev());
+	if (pointColumn.size()>1)
+	  cout<<((pointColumn[0].elev()>pointColumn[1].elev())?" >":" <");
 	cout<<endl;
       }
       pointColumn.clear();
