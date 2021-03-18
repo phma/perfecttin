@@ -100,6 +100,7 @@ add_executable(testptin adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp bre
                relprime.cpp rootfind.cpp segment.cpp spiral.cpp
                stl.cpp test.cpp testptin.cpp threads.cpp
                tin.cpp tintext.cpp triangle.cpp triop.cpp xyzfile.cpp)
+add_executable(dibathy csv.cpp dibathy.cpp)
 if (${Boost_FOUND})
 target_link_libraries(perfecttin ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_compile_definitions(perfecttin PUBLIC _USE_MATH_DEFINES)
