@@ -229,10 +229,11 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread)
     localClipHigh=clipHigh;
   if (localClipLow<clipLow)
     localClipLow=clipLow;
-  if (localClipHigh>pointClipHigh && nearPoints.size()>pnt.size())
+  if (localClipHigh>pointClipHigh && pointClipHigh>=localClipLow && nearPoints.size()>pnt.size())
     localClipHigh=pointClipHigh;
-  if (localClipLow<pointClipLow && nearPoints.size()>pnt.size())
+  if (localClipLow<pointClipLow && pointClipLow<=localClipHigh && nearPoints.size()>pnt.size())
     localClipLow=pointClipLow;
+  assert(ndots==0 || localClipHigh>=localClipLow);
   for (k=0;k<pnt.size();k++)
   {
     if (std::isfinite(x[k]) && fabs(x[k])<16384 && ndots)
