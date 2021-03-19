@@ -21,10 +21,10 @@
  * and Lesser General Public License along with PerfectTIN. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#include <fstream>
 #include <cmath>
 #include "xyzfile.h"
 #include "cloud.h"
+#include "ldecimal.h"
 using namespace std;
 
 /* There is no specification for XYZ point cloud files. They are plain text,
@@ -87,4 +87,9 @@ void readXyzText(string fname)
       break;
     cloud.push_back(pnt);
   }
+}
+
+void writeXyzTextDot(ofstream &file,xyz dot)
+{
+  file<<ldecimal(dot.getx())<<' '<<ldecimal(dot.gety())<<' '<<ldecimal(dot.getz())<<'\n';
 }

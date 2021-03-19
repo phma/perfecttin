@@ -25,7 +25,9 @@
 #include <iostream>
 #include <fstream>
 #include "csv.h"
+#include "fileio.h"
 #include "point.h"
+#include "xyzfile.h"
 #include "ldecimal.h"
 using namespace std;
 namespace po=boost::program_options;
@@ -40,8 +42,9 @@ int main(int argc, char *argv[])
   string line;
   vector<string> parsedLine;
   xyz thePoint;
-  string inputFileName;
+  string inputFileName,baseFileName;
   ifstream inputFile;
+  ofstream highFile,lowFile,rejectFile;
   double maxSpread;
   int i;
   bool validCmd=true;
@@ -67,8 +70,20 @@ int main(int argc, char *argv[])
     cerr<<ex.what()<<endl;
     validCmd=false;
   }
-  inputFile.open(inputFileName);
-  while (inputFile.good())
+  if (inputFileName.length())
+  {
+    inputFile.open(inputFileName);
+    baseFileName=noExt(inputFileName);
+    highFile.open(baseFileName+"-high.xyz");
+    lowFile.open(baseFileName+"-low.xyz");
+    rejectFile.open(baseFileName+"-reject.xyz");
+  }
+  else
+  {
+    validCmd=false;
+    cerr<<"Usage: dibathy [options] file\n";
+  }
+  while (validCmd && inputFile.good())
   {
     getline(inputFile,line);
     parsedLine=parsecsvline(line);
@@ -97,6 +112,24 @@ int main(int argc, char *argv[])
 	if (pointColumn.size()>1)
 	  cout<<((pointColumn[0].elev()>pointColumn[1].elev())?" >":" <");
 	cout<<endl;
+	if (pointColumn.size()==2)
+	{
+	  if (pointColumn[0].elev()>pointColumn[1].elev())
+	    swap(pointColumn[0],pointColumn[1]);
+	  if (pointColumn[1].elev()-pointColumn[0].elev()>maxSpread)
+	  {
+	    writeXyzTextDot(rejectFile,pointColumn[0]);
+	    writeXyzTextDot(rejectFile,pointColumn[1]);
+	  }
+	  else
+	  {
+	    writeXyzTextDot(lowFile,pointColumn[0]);
+	    writeXyzTextDot(highFile,pointColumn[1]);
+	  }
+	}
+	else
+	  for (i=0;i<pointColumn.size();i++)
+	    writeXyzTextDot(rejectFile,pointColumn[i]);
       }
       pointColumn.clear();
       if (thePoint.isfinite())

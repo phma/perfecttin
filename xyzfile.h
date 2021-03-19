@@ -22,5 +22,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <string>
+#include <fstream>
+#include "point.h"
 
 void readXyzText(std::string fname);
+void writeXyzTextDot(std::ofstream &file,xyz dot);
