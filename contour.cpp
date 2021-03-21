@@ -442,7 +442,8 @@ double bendiness(xy a,xy b,xy c,double tolerance)
 /* Like contourError, this has dimensions of volume.
  * You have the line segments ab and bc in a contour.
  * Compute the area of the ellipse with foci at a and c passing through b,
- * then multiply by the square of the tolerance divided by the reciprocal sum.
+ * then multiply by the square of the tolerance divided by the reciprocal sum
+ * and add a term to keep segments from getting too short.
  */
 {
   double ab=dist(a,b),bc=dist(b,c),ac=dist(a,c);
@@ -453,7 +454,7 @@ double bendiness(xy a,xy b,xy c,double tolerance)
   if (!(minorAxis>0)) // in case roundoff produces sqrt(neg)
     minorAxis=0;
   area=majorAxis*minorAxis*M_PI/4;
-  return area*sqr(tolerance)/recipSum;
+  return (area*sqr(tolerance)+sqr(sqr(tolerance)))/recipSum;
 }
 
 double totalBendiness(polyline &p,double tolerance)
