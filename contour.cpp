@@ -589,13 +589,14 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
 	errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
 		    +bendiness(a,p,c,tolerance);
-      //change.clear();
-      //change.insert(p);
-      //change.insert(b);
-      //change.insert(q);
-      //lohiElev=pl.lohi(change);
-      //if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	//errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c);
+      change.clear();
+      change.insert(p);
+      change.insert(b);
+      change.insert(q);
+      lohiElev=pl.lohi(change);
+      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c)
+		  +bendiness(a,p,q,tolerance)+bendiness(p,q,c,tolerance);
       change.clear();
       change.insert(a);
       change.insert(b);
@@ -627,7 +628,11 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	errBest=errBackward;
 	whichNew=2;
       }
-      // skip new segment for now
+      if (errNewSeg<errBest)
+      {
+	errBest=errNewSeg;
+	whichNew=3;
+      }
       if (errStraighter<errBest)
       {
 	errBest=errStraighter;
@@ -649,6 +654,12 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	    break;
 	  case 2:
 	    pl.contours[i].replace(p,n);
+	    break;
+	  case 3:
+	    pl.contours[i].replace(q,n);
+	    pl.contours[i].insert(p,n);
+	    dt.insert(n);
+	    sz++;
 	    break;
 	  case 4:
 	    pl.contours[i].replace(r,n);
