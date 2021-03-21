@@ -644,7 +644,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	errBest=errBendier;
 	whichNew=5;
       }
-      if (whichNew && (errCurrent-errBest)*16777216>errCurrent)
+      if (whichNew && (errCurrent-errBest)*256>errCurrent)
       {
 	j=0;
 	dt.markDirty(n,1);
