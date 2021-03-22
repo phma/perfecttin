@@ -559,8 +559,6 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   double e=pl.contours[i].getElevation();
   double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier,errBest;
   DirtyTracker dt;
-  if (i==3)
-    cout<<"three\n";
   origsz=sz=pl.contours[i].size();
   dt.init(sz);
   for (j=0;j<sz;j++)
@@ -673,7 +671,6 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	    pl.contours[i].replace(s,n);
 	    break;
 	}
-	//checkContour(pl,pl.contours[i],tolerance);
       }
     }
   }
