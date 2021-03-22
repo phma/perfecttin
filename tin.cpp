@@ -541,13 +541,13 @@ array<double,2> pointlist::lohi()
   return ret;
 }
 
-array<double,2> pointlist::lohi(polyline p)
+array<double,2> pointlist::lohi(polyline p,double tolerance)
 /* Returns the lowest and highest elevations on or within the polyline.
  * Used when pruning or smoothing a contour to avoid crossing a point that is
  * outside the contour's tolerance. The polyline must be closed.
  */
 {
-  int i,sz=p.size(),nPoints;
+  int i,sz=p.size(),nPoints=0;
   array<double,2> ret;
   array<double,2> tlohi;
   triangle *tri=findt(p.getEndpoint(0));
@@ -556,7 +556,7 @@ array<double,2> pointlist::lohi(polyline p)
   vector<point *> neighborPoints,insidePoints;
   ret[0]=INFINITY;
   ret[1]=-INFINITY;
-  for (i=0;i<sz;i++)
+  for (i=0;i<sz && ret[1]-ret[0]<2*tolerance;i++)
   {
     seg=p.getsegment(i);
     if (!tri)
@@ -569,18 +569,19 @@ array<double,2> pointlist::lohi(polyline p)
       tri=tri->nextalong(seg);
     } while (tri && !tri->in(p.getEndpoint(i+1)));
   }
-  do
-  {
-    nPoints=insidePoints.size();
-    overlapTriangles=triangleNeighbors(insidePoints);
-    for (i=0;i<borderTriangles.size();i++)
-      overlapTriangles.push_back(borderTriangles[i]);
-    neighborPoints=pointNeighbors(overlapTriangles);
-    insidePoints.clear();
-    for (i=0;i<neighborPoints.size();i++)
-      if (p.in(*neighborPoints[i]))
-	insidePoints.push_back(neighborPoints[i]);
-  } while (nPoints!=insidePoints.size());
+  if (ret[1]-ret[0]<2*tolerance)
+    do
+    {
+      nPoints=insidePoints.size();
+      overlapTriangles=triangleNeighbors(insidePoints);
+      for (i=0;i<borderTriangles.size();i++)
+	overlapTriangles.push_back(borderTriangles[i]);
+      neighborPoints=pointNeighbors(overlapTriangles);
+      insidePoints.clear();
+      for (i=0;i<neighborPoints.size();i++)
+	if (p.in(*neighborPoints[i]))
+	  insidePoints.push_back(neighborPoints[i]);
+    } while (nPoints!=insidePoints.size());
   for (i=0;i<nPoints;i++)
     updlohi(ret,insidePoints[i]->elev());
   return ret;
