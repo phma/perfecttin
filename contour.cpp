@@ -491,7 +491,7 @@ void checkContour(pointlist &pl,polyspiral &contour,double tolerance)
     ilen=lrint(len);
     if (len<1e-6)
       cout<<"Segment "<<i<<" of contour is microscopic\n";
-    if (len!=dist(seg.getstart(),seg.getend()))
+    if (fabs(len-dist(seg.getstart(),seg.getend()))>1e-6)
       cout<<"Segment "<<i<<" of contour has wrong length\n";
     for (j=0;j<ilen;j++)
     {
