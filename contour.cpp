@@ -671,6 +671,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	    pl.contours[i].replace(s,n);
 	    break;
 	}
+	checkContour(pl,pl.contours[i],tolerance);
       }
     }
   }
