@@ -479,14 +479,14 @@ double totalBendiness(polyline &p,double tolerance)
   return pairwisesum(bends);
 }
 
-void checkContour(pointlist &pl,polyline &contour,double tolerance)
+void checkContour(pointlist &pl,polyspiral &contour,double tolerance)
 {
   int i,j,ilen;
   double len,along,err;
-  segment seg;
+  spiralarc seg;
   for (i=0;i<contour.size();i++)
   {
-    seg=contour.getsegment(i);
+    seg=contour.getspiralarc(i);
     len=seg.length();
     ilen=lrint(len);
     if (len<1e-6)

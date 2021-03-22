@@ -105,7 +105,7 @@ polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
 void rough1contour(pointlist &pl,double elev);
 void roughcontours(pointlist &pl,double conterval);
-void checkContour(pointlist &pl,polyline &contour,double tolerance);
+void checkContour(pointlist &pl,polyspiral &contour,double tolerance);
 void prune1contour(pointlist &pl,double tolerance,int i);
 void smooth1contour(pointlist &pl,double tolerance,int i);
 void smoothcontours(pointlist &pl,double conterval,bool spiral=true,bool log=false);
