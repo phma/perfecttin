@@ -635,6 +635,7 @@ void TinCanvas::smoothContoursFinish()
   {
     ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
     ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+    checkContour(net,net.contours[i],tolerance);
   }
   ps.endpage();
 }
