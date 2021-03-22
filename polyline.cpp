@@ -318,10 +318,7 @@ void polyline::insert(xy newpoint,int pos)
     cumLengths.insert(lenit,0);
   pos--;
   if (pos<0)
-    if (wasopen)
-      pos=0;
-    else
-      pos+=endpoints.size();
+    pos=0;
   for (i=0;i<2;i++)
   {
     if (pos+1<endpoints.size())
@@ -362,10 +359,7 @@ void polyarc::insert(xy newpoint,int pos)
     cumLengths.insert(lenit,0);
   pos--;
   if (pos<0)
-    if (wasopen)
-      pos=0;
-    else
-      pos+=endpoints.size();
+    pos=0;
   savepos=pos;
   for (i=0;i<2;i++)
   {
@@ -442,10 +436,7 @@ void polyspiral::insert(xy newpoint,int pos)
   savepos=pos;
   pos--;
   if (pos<0)
-    if (wasopen || endpoints.size()==0)
-      pos=0;
-    else
-      pos+=endpoints.size();
+    pos=0;
   midit=midpoints.begin()+pos;
   lenit=lengths.begin()+pos;
   arcit=deltas.begin()+pos;
