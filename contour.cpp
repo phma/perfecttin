@@ -577,38 +577,43 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
 		 +bendiness(a,b,c,tolerance);
       change.clear();
-      change.insert(a);
-      change.insert(b);
-      change.insert(q);
-      lohiElev=pl.lohi(change,tolerance);
-      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
-		   +bendiness(a,q,c,tolerance);
-      change.clear();
-      change.insert(c);
-      change.insert(b);
-      change.insert(p);
-      lohiElev=pl.lohi(change,tolerance);
-      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
-		    +bendiness(a,p,c,tolerance);
-      change.clear();
       change.insert(p);
       change.insert(b);
       change.insert(q);
       lohiElev=pl.lohi(change,tolerance);
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+      {
 	errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c)
 		  +bendiness(a,p,q,tolerance)+bendiness(p,q,c,tolerance);
-      change.clear();
-      change.insert(a);
-      change.insert(b);
-      change.insert(c);
-      change.insert(r);
-      lohiElev=pl.lohi(change,tolerance);
-      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
-		      +bendiness(a,r,c,tolerance);
+	/* The change polyline for errNewSeg is inside the change polylines for
+	 * errForward, errBackward, and errStraighter.
+	 */
+	change.clear();
+	change.insert(a);
+	change.insert(b);
+	change.insert(q);
+	lohiElev=pl.lohi(change,tolerance);
+	if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	  errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
+		    +bendiness(a,q,c,tolerance);
+	change.clear();
+	change.insert(c);
+	change.insert(b);
+	change.insert(p);
+	lohiElev=pl.lohi(change,tolerance);
+	if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	  errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
+		      +bendiness(a,p,c,tolerance);
+	change.clear();
+	change.insert(a);
+	change.insert(b);
+	change.insert(c);
+	change.insert(r);
+	lohiElev=pl.lohi(change,tolerance);
+	if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
+	  errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
+			+bendiness(a,r,c,tolerance);
+      }
       change.clear();
       change.insert(a);
       change.insert(b);
