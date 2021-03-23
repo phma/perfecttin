@@ -581,6 +581,9 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       change.insert(p);
       change.insert(b);
       change.insert(q);
+      /* Most of the time is spent computing lohi. The change for new segment
+       * is the shortest of the changes, so it takes the least time.
+       */
       lohiElev=pl.lohi(change,tolerance);
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
       {
@@ -593,37 +596,54 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	change.insert(a);
 	change.insert(b);
 	change.insert(q);
-	lohiElev=pl.lohi(change,tolerance);
-	if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	  errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
-		    +bendiness(a,q,c,tolerance);
+	errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
+		   +bendiness(a,q,c,tolerance);
+	if (errForward<errNewSeg && errForward<errCurrent)
+	{
+	  lohiElev=pl.lohi(change,tolerance);
+	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	    errForward=INFINITY;
+	}
 	change.clear();
 	change.insert(c);
 	change.insert(b);
 	change.insert(p);
-	lohiElev=pl.lohi(change,tolerance);
-	if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	  errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
-		      +bendiness(a,p,c,tolerance);
+	errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
+		    +bendiness(a,p,c,tolerance);
+	if (errBackward<errNewSeg && errBackward<errCurrent)
+	{
+	  lohiElev=pl.lohi(change,tolerance);
+	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	    errBackward=INFINITY;
+	}
 	change.clear();
 	change.insert(a);
 	change.insert(b);
 	change.insert(c);
 	change.insert(r);
-	lohiElev=pl.lohi(change,tolerance);
-	if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	  errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
-			+bendiness(a,r,c,tolerance);
+	errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
+		      +bendiness(a,r,c,tolerance);
+	if (errStraighter<errNewSeg && errStraighter<errCurrent)
+	{
+	  lohiElev=pl.lohi(change,tolerance);
+	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	    errStraighter=INFINITY;
+	}
       }
       change.clear();
       change.insert(a);
       change.insert(b);
       change.insert(c);
       change.insert(s);
-      lohiElev=pl.lohi(change,tolerance);
-      if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
-	errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
-		   +bendiness(a,s,c,tolerance);
+      errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
+		 +bendiness(a,s,c,tolerance);
+      if (errBendier<errNewSeg && errBendier<errCurrent && errBendier<errStraighter
+	  && errBendier<errForward && errBendier<errBackward)
+      {
+	lohiElev=pl.lohi(change,tolerance);
+	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	  errBendier=INFINITY;
+      }
       errBest=errCurrent;
       dt.markClean(n); // It's been checked, no need to recheck
       whichNew=0;
