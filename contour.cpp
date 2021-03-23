@@ -550,7 +550,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 void smooth1contour(pointlist &pl,double tolerance,int i)
 {
   static int n=0;
-  int j,sz,origsz;
+  int j,sz,origsz,tries=0,ops=0;
   int whichNew;
   array<double,2> lohiElev;
   polyline change;
@@ -566,6 +566,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
     n=(n+relprime(sz))%sz;
     if ((n || !pl.contours[i].isopen()) && dt.isDirty(n))
     {
+      tries++;
       a=pl.contours[i].getEndpoint(n-1);
       b=pl.contours[i].getEndpoint(n);
       c=pl.contours[i].getEndpoint(n+1);
@@ -654,6 +655,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       if (whichNew && (errCurrent-errBest)*256>errCurrent)
       {
 	j=0;
+	ops++;
 	dt.markDirty(n,1);
 	switch (whichNew)
 	{
@@ -679,6 +681,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
+  cout<<"Contour "<<i<<", "<<origsz<<" at start, "<<sz<<" at end, "<<tries<<" tries, "<<ops<<" operations\n";
   pl.contours[i].setlengths();
   checkContour(pl,pl.contours[i],tolerance);
 }
