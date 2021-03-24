@@ -38,7 +38,10 @@
 #define TH_RUN 1
 #define TH_PAUSE 2
 #define TH_WAIT 3
-#define TH_STOP 4
+#define TH_ROUGH 4
+#define TH_PRUNE 5
+#define TH_SMOOTH 6
+#define TH_STOP 7
 #define TH_ASLEEP 256
 
 // These are used to tell thread 0 to do things while threads are in wait state,
@@ -72,6 +75,12 @@ struct ThreadAction
    */
   int result;
   PtinHeader ptinResult;
+};
+
+struct ContourTask
+{
+  int num;
+  int size;
 };
 
 extern std::shared_mutex adjLog;
