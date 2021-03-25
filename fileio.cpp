@@ -42,6 +42,12 @@ using namespace std;
 CoordCheck zCheck;
 Printer3dSize printer3d;
 
+const double verticalOffset=0;
+/* The vertical offset is added to all points' elevations for debugging
+ * the checksums. It is also added to the checksums in a way that depends
+ * on the total number of dots. When not debugging, set it to 0.
+ */
+
 PtinHeader::PtinHeader()
 {
   conversionTime=tolRatio=density=numPoints=numConvexHull=numTriangles=flags=0;
@@ -394,7 +400,7 @@ xyz readPoint(istream &file)
   double x,y,z;
   x=readledouble(file);
   y=readledouble(file);
-  z=readledouble(file);
+  z=readledouble(file)+verticalOffset;
   return xyz(x,y,z);
 }
 
