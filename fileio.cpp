@@ -630,6 +630,8 @@ PtinHeader readPtin(std::string inputFile)
   bool readingStarted=false;
   double high=-INFINITY,low=INFINITY;
   double absToler;
+  double checkVerticalOffset;
+  uint64_t verticalAffect,mask;
   vector<double> zcheck;
   zCheck.clear();
   header=readPtinHeader(ptinFile);
@@ -774,7 +776,21 @@ PtinHeader readPtin(std::string inputFile)
     clipLow=2*low-high;
     n=ptinFile.get()&255;
     for (i=0;i<n;i++)
-      zcheck.push_back(readledouble(ptinFile));
+    {
+      /* The vertical offset affects the checksums like this:
+       * 0: +0 +1 +0 +1 +0 +1 +0 +1 +0 +1 +0 +1 +0 +1 +0 +1 +0 ...
+       * 1: +0 +1 +2 +1 +0 +1 +2 +1 +0 +1 +2 +1 +0 +1 +2 +1 +0 ...
+       * 2: +0 +1 +2 +3 +4 +3 +2 +1 +0 +1 +2 +3 +4 +3 +2 +1 +0 ...
+       * 3: +0 +1 +2 +3 +4 +5 +6 +7 +8 +7 +6 +5 +4 +3 +2 +1 +0 ...
+       * where the numbers of dots start with 0.
+       */
+      mask=((uint64_t)1<<(i+1))-1;
+      if (zCheck.getCount()&(mask+1))
+	verticalAffect=mask+1-(mask&zCheck.getCount());
+      else
+	verticalAffect=mask&zCheck.getCount();
+      zcheck.push_back(readledouble(ptinFile)+verticalAffect*verticalOffset);
+    }
     if (n==0)
       zcheck.push_back(0);
     while (zcheck.size()<64)
