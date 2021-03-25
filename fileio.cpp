@@ -784,7 +784,7 @@ PtinHeader readPtin(std::string inputFile)
        * 3: +0 +1 +2 +3 +4 +5 +6 +7 +8 +7 +6 +5 +4 +3 +2 +1 +0 ...
        * where the numbers of dots start with 0.
        */
-      mask=((uint64_t)1<<(i+1))-1;
+      mask=((uint64_t)1<<i)-1;
       if (zCheck.getCount()&(mask+1))
 	verticalAffect=mask+1-(mask&zCheck.getCount());
       else
