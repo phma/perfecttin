@@ -107,12 +107,12 @@ int main(int argc, char *argv[])
     {
       if (pointColumn.size()) // The points can occur in either order.
       {
-	cout<<"Elev";
+	/*cout<<"Elev";
 	for (i=0;i<pointColumn.size();i++)
 	  cout<<' '<<ldecimal(pointColumn[i].elev());
 	if (pointColumn.size()>1)
 	  cout<<((pointColumn[0].elev()>pointColumn[1].elev())?" >":" <");
-	cout<<endl;
+	cout<<endl;*/
 	if (pointColumn.size()==2)
 	{
 	  if (pointColumn[0].elev()>pointColumn[1].elev())
