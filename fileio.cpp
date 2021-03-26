@@ -798,8 +798,8 @@ PtinHeader readPtin(std::string inputFile)
     absToler=header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536;
     for (i=0;i<n;i++)
     {
-      //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<(zcheck[i]-zCheck[i]);
-      //cout<<' '<<absToler+fabs(zCheck[i])/536870912<<endl;
+      cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<(zcheck[i]-zCheck[i]);
+      cout<<' '<<absToler+fabs(zCheck[i])/536870912<<endl;
     }
     for (i=0;i<64;i++)
     {
