@@ -95,6 +95,7 @@ private:
   int goal;
   int progInx; // used in progress bar loops
   int elevHi,elevLo; // in contour interval unit
+  int totalContourSegments;
   std::array<double,2> tinlohi;
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
   bool pruneContoursValid;
