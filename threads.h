@@ -90,6 +90,7 @@ extern int opcount,trianglesToPaint;
 extern int currentAction;
 extern std::chrono::steady_clock clk;
 extern int mtxSquareSize;
+extern int contourSegmentsDone;
 
 void poolEdges(std::vector<edge *> edges,int thread);
 void poolTriangles(std::vector<triangle *> triangles,int thread);
@@ -103,6 +104,8 @@ double busyFraction();
 bool livelock(double areadone,double rmsadj);
 void startThreads(int n);
 void joinThreads();
+void enqueuePrune(ContourTask task);
+void enqueueSmooth(ContourTask task);
 void enqueueAdjust(AdjustBlockTask task);
 AdjustBlockTask dequeueAdjust();
 bool adjustQueueEmpty();

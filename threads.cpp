@@ -3,7 +3,7 @@
 /* threads.cpp - multithreading                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -49,6 +49,7 @@ mutex bucketMutex;
 mutex startMutex;
 mutex opTimeMutex;
 mutex blockTaskMutex;
+mutex contourMutex;
 
 int threadCommand;
 bool stageAlmostDone;
@@ -64,8 +65,10 @@ queue<AdjustBlockTask> adjustTaskQueue;
 queue<DealBlockTask> dealTaskQueue;
 queue<BoundBlockTask> boundTaskQueue;
 queue<ErrorBlockTask> errorTaskQueue;
+queue<ContourTask> pruneQueue,smoothQueue;
 int currentAction;
 int mtxSquareSize;
+int contourSegmentsDone;
 Unifiro<triangle *> trianglePool;
 Unifiro<edge *> edgePool;
 
@@ -246,6 +249,48 @@ void joinThreads()
   int i;
   for (i=0;i<threads.size();i++)
     threads[i].join();
+}
+
+void enqueuePrune(ContourTask task)
+{
+  contourMutex.lock();
+  pruneQueue.push(task);
+  contourMutex.unlock();
+}
+
+ContourTask dequeuePrune()
+{
+  ContourTask ret;
+  ret.num=ret.size=-1;
+  contourMutex.lock();
+  if (pruneQueue.size())
+  {
+    ret=pruneQueue.front();
+    pruneQueue.pop();
+  }
+  contourMutex.unlock();
+  return ret;
+}
+
+void enqueueSmooth(ContourTask task)
+{
+  contourMutex.lock();
+  smoothQueue.push(task);
+  contourMutex.unlock();
+}
+
+ContourTask dequeueSmooth()
+{
+  ContourTask ret;
+  ret.num=ret.size=-1;
+  contourMutex.lock();
+  if (smoothQueue.size())
+  {
+    ret=smoothQueue.front();
+    smoothQueue.pop();
+  }
+  contourMutex.unlock();
+  return ret;
 }
 
 void enqueueAdjust(AdjustBlockTask task)
