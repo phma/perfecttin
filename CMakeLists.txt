@@ -59,7 +59,8 @@ qt5_add_translation(qm_files perfecttin_en.ts perfecttin_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
 set(common_files adjelev.cpp angle.cpp arc.cpp bezier3d.cpp binio.cpp boundrect.cpp
-    carlsontin.cpp cloud.cpp cogo.cpp color.cpp csv.cpp dxf.cpp edgeop.cpp fileio.cpp
+    carlsontin.cpp cloud.cpp cogo.cpp color.cpp contour.cpp
+    csv.cpp dxf.cpp edgeop.cpp fileio.cpp
     landxml.cpp las.cpp ldecimal.cpp leastsquares.cpp lohi.cpp manysum.cpp matrix.cpp
     minquad.cpp neighbor.cpp octagon.cpp ply.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp
     qindex.cpp quaternion.cpp random.cpp relprime.cpp rootfind.cpp segment.cpp spiral.cpp
@@ -70,7 +71,7 @@ add_executable(perfecttin perfecttin.cpp test.cpp ${common_files})
 add_executable(dibathy dibathy.cpp ${common_files})
 endif (${Boost_FOUND})
 add_executable(perfecttin-gui cidialog.cpp configdialog.cpp
-	       contour.cpp csaction.cpp gui.cpp lissajous.cpp
+	       csaction.cpp gui.cpp lissajous.cpp
 	       mainwindow.cpp tincanvas.cpp unitbutton.cpp
 	       ${common_files} ${lib_resources} ${qm_files})
 add_executable(fuzzptin fuzz.cpp ${common_files})

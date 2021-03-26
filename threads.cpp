@@ -35,6 +35,7 @@
 #include "unifiro.h"
 #include "relprime.h"
 #include "manysum.h"
+#include "contour.h"
 #include "carlsontin.h"
 #include "landxml.h"
 #include "brevno.h"
@@ -725,6 +726,7 @@ void TinThread::operator()(int thread)
   edge *edg;
   triangle *tri;
   ThreadAction act;
+  ContourTask ctr;
   logStartThread();
   startMutex.lock();
   if (threadStatus.size()!=thread)
@@ -911,6 +913,37 @@ void TinThread::operator()(int thread)
 	default:
 	  sleep(thread);
       }
+    }
+    if (threadCommand==TH_ROUGH)
+    {
+      if (threadStatus[thread]!=TH_ROUGH)
+	logThreadStatus(TH_ROUGH);
+      threadStatus[thread]=TH_ROUGH;
+    }
+    if (threadCommand==TH_PRUNE)
+    {
+      if (threadStatus[thread]!=TH_PRUNE)
+	logThreadStatus(TH_PRUNE);
+      threadStatus[thread]=TH_PRUNE;
+    }
+    if (threadCommand==TH_SMOOTH)
+    {
+      if (threadStatus[thread]!=TH_SMOOTH)
+	logThreadStatus(TH_SMOOTH);
+      threadStatus[thread]=TH_SMOOTH;
+      ctr=dequeueSmooth();
+      if (ctr.num>=0 && ctr.num<net.contours.size() && ctr.size>0)
+      {
+	cr::time_point<cr::steady_clock> timeStart=clk.now();
+	smooth1contour(net,ctr.tolerance,ctr.num);
+	contourMutex.lock();
+	contourSegmentsDone+=ctr.size;
+	contourMutex.unlock();
+	cr::nanoseconds elapsed=clk.now()-timeStart;
+	updateOpTime(elapsed);
+      }
+      else
+	sleep(thread);
     }
   }
   logThreadStatus(TH_STOP);

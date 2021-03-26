@@ -81,6 +81,7 @@ struct ContourTask
 {
   int num;
   int size;
+  double tolerance;
 };
 
 extern std::shared_mutex adjLog;
