@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
   {
     validCmd=false;
     cerr<<"Usage: dibathy [options] file\n";
+    cerr<<generic;
   }
   while (validCmd && inputFile.good())
   {
