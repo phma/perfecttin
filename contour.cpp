@@ -549,7 +549,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 
 void smooth1contour(pointlist &pl,double tolerance,int i)
 {
-  static int n=0;
+  int n=0;
   int j,sz,origsz,tries=0,ops=0;
   int whichNew;
   array<double,2> lohiElev;

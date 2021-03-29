@@ -606,12 +606,14 @@ void TinCanvas::smoothContours()
 	ctr.num=i;
 	ctr.size=net.contours[i].size();
 	cout<<ctr.num<<' '<<ctr.size<<endl;
+	enqueueSmooth(ctr);
       }
     lastSizeRange=sizeRange;
     sizeRange=relprime(sizeRange);
     if (sizeRange==1)
       sizeRange=0;
   }
+  waitForThreads(TH_SMOOTH);
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
@@ -624,8 +626,9 @@ void TinCanvas::smooth1Contour()
 {
   if (progInx<net.contours.size())
   {
-    smooth1contour(net,tolerance,progInx);
-    progressDialog->setValue(++progInx);
+    //smooth1contour(net,tolerance,progInx);
+    //progressDialog->setValue(++progInx);
+    ++progInx;
   }
   else
   {
