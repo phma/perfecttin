@@ -278,6 +278,10 @@ void MainWindow::tick()
       }
     else;
   }
+  if ((tstatus&0x3ffbfeff)==1048577*TH_SMOOTH)
+  {
+    doneBar->setValue(lrint((double)contourSegmentsDone/canvas->totalContourSegments*16777216));
+  }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   { // Conversion is running: check whether stage is complete
     areadone=areaDone(stageTolerance,sqr(stageTolerance/tolerance)/density);
