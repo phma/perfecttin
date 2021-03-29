@@ -581,7 +581,7 @@ void TinCanvas::smoothContours()
   {
     goal=SMOOTH_CONTOURS;
     timer->start(50);
-    progressDialog->show();
+    //progressDialog->show();
   }
   progInx=0;
   contourSegmentsDone=totalContourSegments=0;
@@ -605,7 +605,6 @@ void TinCanvas::smoothContours()
       {
 	ctr.num=i;
 	ctr.size=net.contours[i].size();
-	cout<<ctr.num<<' '<<ctr.size<<endl;
 	enqueueSmooth(ctr);
       }
     lastSizeRange=sizeRange;

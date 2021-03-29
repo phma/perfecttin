@@ -701,7 +701,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       }
     }
   }
-  cout<<"Contour "<<i<<", "<<origsz<<" at start, "<<sz<<" at end, "<<tries<<" tries, "<<ops<<" operations\n";
+  //cout<<"Contour "<<i<<", "<<origsz<<" at start, "<<sz<<" at end, "<<tries<<" tries, "<<ops<<" operations\n";
   pl.contours[i].setlengths();
   checkContour(pl,pl.contours[i],tolerance);
 }
