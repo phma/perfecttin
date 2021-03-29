@@ -580,7 +580,7 @@ void TinCanvas::smoothContours()
   if (goal==DONE)
   {
     goal=SMOOTH_CONTOURS;
-    timer->start(0);
+    timer->start(50);
     progressDialog->show();
   }
   progInx=0;
@@ -613,18 +613,20 @@ void TinCanvas::smoothContours()
     if (sizeRange==1)
       sizeRange=0;
   }
-  waitForThreads(TH_SMOOTH);
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
+  {
+    waitForThreads(TH_SMOOTH);
     connect(timer,SIGNAL(timeout()),this,SLOT(smooth1Contour()));
+  }
   else
     connect(timer,SIGNAL(timeout()),this,SLOT(pruneContours()));
 }
 
 void TinCanvas::smooth1Contour()
 {
-  if (progInx<net.contours.size())
+  if (contourSegmentsDone<totalContourSegments)
   {
     //smooth1contour(net,tolerance,progInx);
     //progressDialog->setValue(++progInx);
