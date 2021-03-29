@@ -655,6 +655,7 @@ void TinCanvas::smoothContoursFinish()
   disconnect(timer,SIGNAL(timeout()),0,0);
   smoothContoursValid=true;
   update();
+  setThreadCommand(TH_WAIT);
   ps.open("contours.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
