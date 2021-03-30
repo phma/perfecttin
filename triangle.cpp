@@ -203,7 +203,7 @@ void triangle::setError(double tolerance)
 	tempVError=results[i].vError;
   }
   else
-    for (i=0;i<dots.size() && tempVError<tolerance;i++)
+    for (i=0;i<dots.size() && (tempVError<tolerance || i<9);i++)
     {
       err1=fabs(dots[i].elev()-elevation(dots[i]));
       if (err1>tempVError)
