@@ -3,7 +3,7 @@
 /* fileio.h - file I/O                                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -45,6 +45,8 @@
  * tolRatio>0 but tolerance is NaN: file was incompletely written.
  */
 #define CHECKSUM_BUG 1
+#define CHECKSUM_DIV1 65536
+#define CHECKSUM_DIV2 536870912
 
 extern Printer3dSize printer3d;
 

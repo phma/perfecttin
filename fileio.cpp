@@ -795,18 +795,18 @@ PtinHeader readPtin(std::string inputFile)
       zcheck.push_back(0);
     while (zcheck.size()<64)
       zcheck.push_back(zcheck.back());
-    absToler=header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/65536;
+    absToler=header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/CHECKSUM_DIV1;
     //cout<<"absToler="<<absToler<<endl;
     for (i=0;i<n;i++)
     {
       //cout<<i<<' '<<zcheck[i]<<' '<<zCheck[i]<<' '<<(zcheck[i]-zCheck[i]);
-      //cout<<' '<<absToler+fabs(zCheck[i])/536870912<<endl;
+      //cout<<' '<<absToler+fabs(zCheck[i])/CHECKSUM_DIV2<<endl;
     }
     for (i=0;i<64;i++)
     {
-      if (fabs(zcheck[i]-zCheck[i])>absToler+fabs(zCheck[i])/536870912)
+      if (fabs(zcheck[i]-zCheck[i])>absToler+fabs(zCheck[i])/CHECKSUM_DIV2)
 	// zCheck[i]/1e12 suffices for completed jobs, but is too tight for early checkpoint files.
-	if (fabs(zcheck[i]-zCheck.wrongCheck(i))>absToler+fabs(zCheck[i])/536870912)
+	if (fabs(zcheck[i]-zCheck.wrongCheck(i))>absToler+fabs(zCheck[i])/CHECKSUM_DIV2)
 	  header.tolRatio=PT_ZCHECK_FAIL;
 	else // file was written by 0.5.1 or before, which had a checksum bug
 	  header.flags=header.flags|CHECKSUM_BUG;

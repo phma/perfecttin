@@ -319,7 +319,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
     sidec=tri->b->edg(tri);
     assert(sidea && sideb && sidec);
     spl=shouldSplit(tri,tolerance,minArea);
-    if (std::isfinite(tri->vError) && tri->vError>tolerance*256/65536/FLT_EPSILON)
+    if (std::isfinite(tri->vError) && tri->vError>tolerance*256/CHECKSUM_DIV1/FLT_EPSILON)
       largeVertical=true;
   }
   if (gotLock1 && (qtr=shouldQuarter(tri,tolerance,minArea)))
