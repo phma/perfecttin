@@ -318,6 +318,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
     sideb=tri->a->edg(tri);
     sidec=tri->b->edg(tri);
     assert(sidea && sideb && sidec);
+    spl=shouldSplit(tri,tolerance,minArea);
     if (std::isfinite(tri->vError) && tri->vError>tolerance*256/65536/FLT_EPSILON)
       largeVertical=true;
   }
@@ -336,7 +337,7 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
       logAdjustment(adjustElev(triNeigh,corners,thread));
     }
   }
-  if (gotLock1 && !qtr && (spl=shouldSplit(tri,tolerance,minArea)))
+  if (gotLock1 && !qtr && spl)
   {
     triNeigh=triangleNeighbors(corners);
     gotLock2=lockTriangles(thread,triNeigh);
