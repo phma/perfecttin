@@ -85,6 +85,7 @@ struct ContourTask
 };
 
 extern std::shared_mutex adjLog;
+extern bool largeVertical; // set if z checksum is likely to be out of tolerance
 extern double stageTolerance,minArea;
 extern double opTime;
 extern int opcount,trianglesToPaint;

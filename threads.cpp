@@ -54,6 +54,7 @@ mutex contourMutex;
 
 int threadCommand;
 bool stageAlmostDone;
+bool largeVertical; // set if z checksum is likely to be out of tolerance
 vector<thread> threads;
 vector<int> threadStatus; // Bit 8 indicates whether the thread is sleeping.
 vector<double> sleepTime,sleepFraction;

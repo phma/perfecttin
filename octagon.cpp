@@ -3,7 +3,7 @@
 /* octagon.cpp - bound the points with an octagon     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -101,6 +101,7 @@ double makeOctagon()
   vector<point *> cornerPointers;
   int i,j,n,h,sz,triDots;
   triangle *tri;
+  largeVertical=false;
   net.clear();
   net.triangles[0]; // Create a dummy triangle so that the GUI says "Making octagon"
   net.conversionTime=time(nullptr);

@@ -3,7 +3,7 @@
 /* triop.cpp - triangle operation                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cfloat>
 #include "neighbor.h"
 #include "adjelev.h"
 #include "octagon.h"
@@ -317,6 +318,8 @@ int triop(triangle *tri,double tolerance,double minArea,int thread)
     sideb=tri->a->edg(tri);
     sidec=tri->b->edg(tri);
     assert(sidea && sideb && sidec);
+    if (std::isfinite(tri->vError) && tri->vError>tolerance*256/65536/FLT_EPSILON)
+      largeVertical=true;
   }
   if (gotLock1 && (qtr=shouldQuarter(tri,tolerance,minArea)))
   {
