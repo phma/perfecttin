@@ -36,6 +36,8 @@
 #include "test.h"
 #include "tin.h"
 #include "dxf.h"
+#include "xyzfile.h"
+#include "cloud.h"
 #include "stl.h"
 #include "angle.h"
 #include "pointlist.h"
@@ -1493,6 +1495,18 @@ void teststl()
   ps.close();
 }
 
+void testoutlier()
+// Generates point clouds with outliers.
+{
+  int i;
+  ofstream file("outlier.xyz");
+  setsurface(RUGAE);
+  aster(4096);
+  cloud.push_back(xyz(0,0,-1024));
+  for (i=0;i<cloud.size();i++)
+    writeXyzTextDot(file,cloud[i]);
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -1562,6 +1576,8 @@ int main(int argc, char *argv[])
     testquarter();
   if (shoulddo("stl"))
     teststl();
+  if (shoulddo("outlier"))
+    testoutlier();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }
