@@ -54,6 +54,7 @@ signals:
   void lengthUnitChanged(double unit);
   void colorSchemeChanged(int scheme);
   void noCloudArea();
+  void verticalOutlier();
   void gotResult(ThreadAction ta);
 public slots:
   void tick();
@@ -79,6 +80,7 @@ public slots:
   void clearCloud();
   void configure();
   void msgNoCloudArea();
+  void msgVerticalOutlier();
   void handleResult(ThreadAction ta);
   void aboutProgram();
   void aboutQt();
@@ -89,7 +91,7 @@ private:
   double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
-  bool conversionStopped,showingResult,exportEmpty;
+  bool conversionStopped,showingResult,exportEmpty,lastLargeVertical;
   double tolerance,density,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;

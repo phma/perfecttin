@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
+  connect(this,SIGNAL(verticalOutlier()),this,SLOT(msgVerticalOutlier()));
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
   connect(canvas,SIGNAL(splashScreenStarted()),this,SLOT(disableMenuSplash()));
   connect(canvas,SIGNAL(splashScreenFinished()),this,SLOT(enableMenuSplash()));
@@ -318,6 +319,14 @@ void MainWindow::tick()
       stopAction->setEnabled(true);
     }
   }
+  if (largeVertical)
+  {
+    if (!lastLargeVertical)
+      verticalOutlier();
+    lastLargeVertical=true;
+  }
+  else
+    lastLargeVertical=false;
   writeBufLog();
 }
 
@@ -734,6 +743,11 @@ void MainWindow::configure()
 void MainWindow::msgNoCloudArea()
 {
   msgBox->warning(this,tr("PerfectTIN"),tr("Point cloud no area"));
+}
+
+void MainWindow::msgVerticalOutlier()
+{
+  msgBox->warning(this,tr("PerfectTIN"),tr("Vertical outlier"));
 }
 
 void MainWindow::handleResult(ThreadAction ta)
