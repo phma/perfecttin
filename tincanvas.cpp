@@ -590,32 +590,33 @@ void TinCanvas::smoothContours()
   progressDialog->setValue(0);
   progressDialog->setWindowTitle(tr("Drawing contours"));
   progressDialog->setLabelText(tr("Smoothing contours..."));
-  for (i=sizeRange=0;i<net.contours.size();i++)
-  {
-    if (net.contours[i].size()>sizeRange)
-      sizeRange=net.contours[i].size();
-    totalContourSegments+=net.contours[i].size();
-  }
-  sizeRange++;
-  lastSizeRange=sizeRange;
-  while (sizeRange)
-  {
-    for (i=0;i<net.contours.size();i++)
-      if (net.contours[i].size()>=sizeRange && net.contours[i].size()<lastSizeRange)
-      {
-	ctr.num=i;
-	ctr.size=net.contours[i].size();
-	enqueueSmooth(ctr);
-      }
-    lastSizeRange=sizeRange;
-    sizeRange=relprime(sizeRange);
-    if (sizeRange==1)
-      sizeRange=0;
-  }
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
   {
+    setThreadCommand(TH_SMOOTH);
+    for (i=sizeRange=0;i<net.contours.size();i++)
+    {
+      if (net.contours[i].size()>sizeRange)
+	sizeRange=net.contours[i].size();
+      totalContourSegments+=net.contours[i].size();
+    }
+    sizeRange++;
+    lastSizeRange=sizeRange;
+    while (sizeRange)
+    {
+      for (i=0;i<net.contours.size();i++)
+	if (net.contours[i].size()>=sizeRange && net.contours[i].size()<lastSizeRange)
+	{
+	  ctr.num=i;
+	  ctr.size=net.contours[i].size();
+	  enqueueSmooth(ctr);
+	}
+      lastSizeRange=sizeRange;
+      sizeRange=relprime(sizeRange);
+      if (sizeRange==1)
+	sizeRange=0;
+    }
     waitForThreads(TH_SMOOTH);
     connect(timer,SIGNAL(timeout()),this,SLOT(smooth1Contour()));
   }
