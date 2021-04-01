@@ -926,6 +926,19 @@ void TinThread::operator()(int thread)
       if (threadStatus[thread]!=TH_PRUNE)
 	logThreadStatus(TH_PRUNE);
       threadStatus[thread]=TH_PRUNE;
+      ctr=dequeuePrune();
+      if (ctr.num>=0 && ctr.num<net.contours.size() && ctr.size>0)
+      {
+	cr::time_point<cr::steady_clock> timeStart=clk.now();
+	prune1contour(net,ctr.tolerance,ctr.num);
+	contourMutex.lock();
+	contourSegmentsDone+=ctr.size;
+	contourMutex.unlock();
+	cr::nanoseconds elapsed=clk.now()-timeStart;
+	updateOpTime(elapsed);
+      }
+      else
+	sleep(thread);
     }
     if (threadCommand==TH_SMOOTH)
     {
