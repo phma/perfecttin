@@ -279,7 +279,9 @@ void MainWindow::tick()
       }
     else;
   }
-  if ((tstatus&0x3ffbfeff)==1048577*TH_SMOOTH)
+  if ((tstatus&0x3ffbfeff)==1048577*TH_ROUGH ||
+      (tstatus&0x3ffbfeff)==1048577*TH_PRUNE ||
+      (tstatus&0x3ffbfeff)==1048577*TH_SMOOTH)
   {
     doneBar->setValue(lrint((double)contourSegmentsDone/canvas->totalContourSegments*16777216));
   }
