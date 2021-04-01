@@ -508,7 +508,7 @@ void prune1contour(pointlist &pl,double tolerance,int i)
  * If the resulting contour is closed and has only two points, it should be deleted.
  */
 {
-  static int n=0;
+  int n=0;
   int j,sz,origsz;
   array<double,2> lohiElev;
   polyline change;
