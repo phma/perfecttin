@@ -505,13 +505,17 @@ void TinCanvas::roughContoursFinish()
 
 void TinCanvas::pruneContours()
 {
+  int i,sizeRange,lastSizeRange;
+  ContourTask ctr;
   if (goal==DONE)
   {
     goal=PRUNE_CONTOURS;
     timer->start(0);
-    progressDialog->show();
+    //progressDialog->show();
   }
   progInx=0;
+  contourSegmentsDone=totalContourSegments=0;
+  ctr.tolerance=tolerance;
   progressDialog->setRange(0,net.contours.size());
   progressDialog->setValue(0);
   progressDialog->setWindowTitle(tr("Drawing contours"));
@@ -519,17 +523,44 @@ void TinCanvas::pruneContours()
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (roughContoursValid && conterval==contourInterval.fineInterval())
+  {
+    setThreadCommand(TH_PRUNE);
+    for (i=sizeRange=0;i<net.contours.size();i++)
+    {
+      if (net.contours[i].size()>sizeRange)
+	sizeRange=net.contours[i].size();
+      totalContourSegments+=net.contours[i].size();
+    }
+    sizeRange++;
+    lastSizeRange=sizeRange;
+    while (sizeRange)
+    {
+      for (i=0;i<net.contours.size();i++)
+	if (net.contours[i].size()>=sizeRange && net.contours[i].size()<lastSizeRange)
+	{
+	  ctr.num=i;
+	  ctr.size=net.contours[i].size();
+	  enqueuePrune(ctr);
+	}
+      lastSizeRange=sizeRange;
+      sizeRange=relprime(sizeRange);
+      if (sizeRange==1)
+	sizeRange=0;
+    }
+    waitForThreads(TH_PRUNE);
     connect(timer,SIGNAL(timeout()),this,SLOT(prune1Contour()));
+  }
   else
     connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
 }
 
 void TinCanvas::prune1Contour()
 {
-  if (progInx<net.contours.size())
+  if (contourSegmentsDone<totalContourSegments)
   {
-    prune1contour(net,tolerance,progInx);
-    progressDialog->setValue(++progInx);
+    //prune1contour(net,tolerance,progInx);
+    //progressDialog->setValue(++progInx);
+    ++progInx;
   }
   else
   {
