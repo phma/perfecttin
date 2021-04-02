@@ -184,7 +184,7 @@ double makeOctagon()
   for (i=0;i<8;i++)
   {
     corners[i]=intersection(cossin(i*DEG45-ori)*bounds[i],(i+2)*DEG45-ori,cossin((i+1)*DEG45-ori)*bounds[(i+1)%8],(i+3)*DEG45-ori);
-    net.addpoint(i+1,point(corners[i],0));
+    net.addpoint(i+1,point(corners[i],(i&1)?low:high));
   }
   for (i=0;i<7;i++)
   {
