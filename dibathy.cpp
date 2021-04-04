@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
   double maxSpread,interpLength;
   int i;
   bool validCmd=true;
+  bool oneLayer=false;
   vector<xyz> pointColumn;
   po::options_description generic("Options");
   po::options_description hidden("Hidden options");
@@ -56,7 +57,8 @@ int main(int argc, char *argv[])
   po::variables_map vm;
   generic.add_options()
     ("maxspread,s",po::value<double>(&maxSpread)->default_value(INFINITY,"inf"),"Maximum vertical spread")
-    ("interpolate,i",po::value<double>(&interpLength)->default_value(INFINITY,"inf"),"Interpolate between points");
+    ("interpolate,i",po::value<double>(&interpLength)->default_value(INFINITY,"inf"),"Interpolate between points")
+    ("one-layer,o","One layer");
   hidden.add_options()
     ("input",po::value<string>(&inputFileName),"Input file");
   p.add("input",-1);
@@ -65,6 +67,8 @@ int main(int argc, char *argv[])
   {
     po::store(po::command_line_parser(argc,argv).options(cmdline_options).positional(p).run(),vm);
     po::notify(vm);
+    if (vm.count("one-layer"))
+      oneLayer=true;
   }
   catch (exception &ex)
   {
