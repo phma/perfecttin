@@ -79,9 +79,14 @@ int main(int argc, char *argv[])
   {
     inputFile.open(inputFileName);
     baseFileName=noExt(inputFileName);
-    highFile.open(baseFileName+"-high.xyz");
-    lowFile.open(baseFileName+"-low.xyz");
-    rejectFile.open(baseFileName+"-reject.xyz");
+    if (oneLayer)
+      rejectFile.open(baseFileName+".xyz");
+    else
+    {
+      highFile.open(baseFileName+"-high.xyz");
+      lowFile.open(baseFileName+"-low.xyz");
+      rejectFile.open(baseFileName+"-reject.xyz");
+    }
   }
   else
   {
@@ -118,7 +123,7 @@ int main(int argc, char *argv[])
 	if (pointColumn.size()>1)
 	  cout<<((pointColumn[0].elev()>pointColumn[1].elev())?" >":" <");
 	cout<<endl;*/
-	if (pointColumn.size()==2)
+	if (pointColumn.size()==2 && !oneLayer)
 	{
 	  if (pointColumn[0].elev()>pointColumn[1].elev())
 	    swap(pointColumn[0],pointColumn[1]);
