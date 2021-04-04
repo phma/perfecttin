@@ -24,6 +24,7 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include "csv.h"
 #include "fileio.h"
 #include "point.h"
@@ -36,6 +37,17 @@ namespace po=boost::program_options;
  * of water, at two frequencies and thus at two layers of the bottom.
  * The points are in pairs with the same xy coordinates and different elevations.
  */
+
+vector<xyz> interpolate(xyz begin,xyz end,double length)
+{
+  vector<xyz> ret;
+  int i,n=lrint(dist(xy(begin),xy(end))/length);
+  if (length<=0)
+    n=0;
+  for (i=1;i<n;i++)
+    ret.push_back((begin*(n-i)+end*i)/n);
+  return ret;
+}
 
 int main(int argc, char *argv[])
 {
