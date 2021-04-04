@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
   string inputFileName,baseFileName;
   ifstream inputFile;
   ofstream highFile,lowFile,rejectFile;
-  double maxSpread;
+  double maxSpread,interpLength;
   int i;
   bool validCmd=true;
   vector<xyz> pointColumn;
@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
   po::positional_options_description p;
   po::variables_map vm;
   generic.add_options()
-    ("maxspread,s",po::value<double>(&maxSpread)->default_value(INFINITY,"inf"),"Maximum vertical spread");
+    ("maxspread,s",po::value<double>(&maxSpread)->default_value(INFINITY,"inf"),"Maximum vertical spread")
+    ("interpolate,i",po::value<double>(&interpLength)->default_value(INFINITY,"inf"),"Interpolate between points");
   hidden.add_options()
     ("input",po::value<string>(&inputFileName),"Input file");
   p.add("input",-1);
