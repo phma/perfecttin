@@ -42,18 +42,26 @@ vector<xyz> interpolate(xyz begin,xyz end,double length)
 {
   vector<xyz> ret;
   int i,n=lrint(dist(xy(begin),xy(end))/length);
-  if (length<=0)
+  if (length<=0 || isnan(length))
     n=0;
   for (i=1;i<n;i++)
     ret.push_back((begin*(n-i)+end*i)/n);
   return ret;
 }
 
+void writeDots(ofstream &file,vector<xyz> dots)
+{
+  int i;
+  for (i=0;i<dots.size();i++)
+    writeXyzTextDot(file,dots[i]);
+}
+
 int main(int argc, char *argv[])
 {
   string line;
   vector<string> parsedLine;
-  xyz thePoint;
+  xyz thePoint,lastHigh=nanxyz,lastLow=nanxyz,lastReject=nanxyz;
+  xyz firstHigh=nanxyz,firstLow=nanxyz,firstReject=nanxyz;
   string inputFileName,baseFileName;
   ifstream inputFile;
   ofstream highFile,lowFile,rejectFile;
@@ -73,6 +81,8 @@ int main(int argc, char *argv[])
    *   greater than 1.5 times this, points are interpolated between them at
    *   approximately this distance, including between the last and the first.
    *   Useful for perimeter shots. Applies to each point of a vertical pair.
+   *   Points rejected because they're too far apart are not interpolated,
+   *   but points rejected because they're not paired are interpolated.
    * one-layer: Ignores vertical pairing; puts all points into one file.
    */
   generic.add_options()
@@ -154,18 +164,41 @@ int main(int argc, char *argv[])
 	  }
 	  else
 	  {
+	    writeDots(lowFile,interpolate(lastLow,pointColumn[0],interpLength));
+	    writeDots(highFile,interpolate(lastHigh,pointColumn[1],interpLength));
 	    writeXyzTextDot(lowFile,pointColumn[0]);
 	    writeXyzTextDot(highFile,pointColumn[1]);
+	    lastLow=pointColumn[0];
+	    lastHigh=pointColumn[1];
+	    if (firstLow.isnan())
+	      firstLow=pointColumn[0];
+	    if (firstHigh.isnan())
+	      firstHigh=pointColumn[1];
 	  }
 	}
 	else
 	  for (i=0;i<pointColumn.size();i++)
+	  {
+	    writeDots(rejectFile,interpolate(lastReject,pointColumn[i],interpLength));
 	    writeXyzTextDot(rejectFile,pointColumn[i]);
+	    lastReject=pointColumn[i];
+	    if (firstReject.isnan())
+	      firstReject=pointColumn[i];
+	  }
       }
       pointColumn.clear();
       if (thePoint.isfinite())
 	pointColumn.push_back(thePoint);
     }
+  }
+  if (validCmd)
+  {
+    if (!oneLayer)
+    {
+      writeDots(lowFile,interpolate(lastLow,firstLow,interpLength));
+      writeDots(highFile,interpolate(lastHigh,firstHigh,interpLength));
+    }
+    writeDots(rejectFile,interpolate(lastReject,firstReject,interpLength));
   }
   return 0;
 }
