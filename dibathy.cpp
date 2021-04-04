@@ -55,6 +55,14 @@ int main(int argc, char *argv[])
   po::options_description cmdline_options;
   po::positional_options_description p;
   po::variables_map vm;
+  /* maxspread: If the vertical distance between two points at the same xy
+   *   coordinates is greater than this, they are thrown into the reject file.
+   * interpolate: If the horizontal distance between two successive points is
+   *   greater than 1.5 times this, points are interpolated between them at
+   *   approximately this distance, including between the last and the first.
+   *   Useful for perimeter shots. Applies to each point of a vertical pair.
+   * one-layer: Ignores vertical pairing; puts all points into one file.
+   */
   generic.add_options()
     ("maxspread,s",po::value<double>(&maxSpread)->default_value(INFINITY,"inf"),"Maximum vertical spread")
     ("interpolate,i",po::value<double>(&interpLength)->default_value(INFINITY,"inf"),"Interpolate between points")
