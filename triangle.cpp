@@ -90,6 +90,10 @@ triangle::triangle()
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
   vError=INFINITY;
+  peri=sarea=0;
+  memset(gradmat,0,sizeof(gradmat));
+  flags=0;
+  aElev=bElev=cElev=0;
 }
 
 bool triangle::ptValid()
