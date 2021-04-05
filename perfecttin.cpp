@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 	  tolerance=ptinHeader.tolerance;
 	  density=ta.ptinResult.density;
 	  stageTolerance=tolerance*ptinHeader.tolRatio;
-	  minArea=sqr(stageTolerance/tolerance)/density;
+	  minArea=sqr(stageTolerance/tolerance)/densify/density;
 	  resizeBuckets(1);
 	  if (ptinHeader.tolRatio>1 &&
 	      extension(noExt(inputFiles[i]))=="."+to_string(ptinHeader.tolRatio))
@@ -387,7 +387,7 @@ int main(int argc, char *argv[])
       stageTolerance=tolerance;
       while (stageTolerance<areadone[0])
 	stageTolerance*=2;
-      minArea=sqr(stageTolerance/tolerance)/density;
+      minArea=sqr(stageTolerance/tolerance)/densify/density;
     }
     if (!done)
     {

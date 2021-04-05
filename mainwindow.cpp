@@ -316,7 +316,7 @@ void MainWindow::tick()
       stageTolerance=tolerance;
       while (stageTolerance*2<tolerance*toleranceRatio)
 	stageTolerance*=2;
-      minArea=sqr(stageTolerance/tolerance)/density;
+      minArea=sqr(stageTolerance/tolerance)/densify/density;
       setThreadCommand(TH_RUN);
       stopAction->setEnabled(true);
     }
@@ -772,7 +772,7 @@ void MainWindow::handleResult(ThreadAction ta)
 	tolerance=ta.ptinResult.tolerance;
 	density=ta.ptinResult.density;
 	stageTolerance=writtenTolerance=tolerance*ta.ptinResult.tolRatio;
-	minArea=sqr(stageTolerance/tolerance)/density;
+	minArea=sqr(stageTolerance/tolerance)/densify/density;
 	saveFileName=noExt(ta.filename);
 	if (ta.ptinResult.tolRatio>1)
 	{

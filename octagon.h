@@ -3,7 +3,7 @@
 /* octagon.h - bound the points with an octagon       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -45,6 +45,7 @@ struct BoundBlockTask
 
 extern pointlist net;
 extern double clipLow,clipHigh;
+extern double densify;
 extern std::array<double,2> areadone;
 extern Colorize colorize;
 void setMutexArea(double area);
