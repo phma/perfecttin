@@ -51,6 +51,21 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   timer=new QTimer(this);
   goal=DONE;
   triangleNum=splashScreenTime=dartAngle=ballAngle=0;
+  state=TH_WAIT;
+  totalContourSegments=0;
+  memset(contourColor,0,sizeof(contourColor));
+  memset(contourLineType,0,sizeof(contourLineType));
+  memset(contourThickness,0,sizeof(contourThickness));
+  conterval=tolerance=0;
+  scale=1;
+  lengthUnit=1;
+  maxScaleSize=scaleSize=0;
+  progInx=0;
+  elevHi=elevLo=0;
+  roughContoursValid=pruneContoursValid=smoothContoursValid=false;
+  penPos=0;
+  lastOpcount=opcount=0;
+  lastntri=0;
 }
 
 void TinCanvas::repaintSeldom()
