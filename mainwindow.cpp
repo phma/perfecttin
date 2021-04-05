@@ -64,7 +64,11 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   doneBar->setRange(0,16777216);
   busyBar->setRange(0,16777216);
   lpfBusyFraction=0;
-  density=0;
+  density=tolerance=0;
+  lastTolerance=lastStageTolerance=writtenTolerance=0;
+  lastState=TH_WAIT;
+  lastNumDots=lastNumTriangles=lastNumEdges=0;
+  density=lastDensity=0;
   conversionStopped=false;
   showingResult=false;
   toolbar=new QToolBar(this);
