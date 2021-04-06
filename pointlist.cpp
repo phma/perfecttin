@@ -43,6 +43,8 @@ void pointlist::clear()
   points.clear();
   revpoints.clear();
   convexHull.clear();
+  edgePool.clear();
+  trianglePool.clear();
   wingEdge.unlock();
 }
 

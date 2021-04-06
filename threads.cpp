@@ -71,8 +71,6 @@ queue<ContourTask> pruneQueue,smoothQueue;
 int currentAction;
 int mtxSquareSize;
 int contourSegmentsDone;
-Unifiro<triangle *> trianglePool;
-Unifiro<edge *> edgePool;
 
 cr::steady_clock clk;
 vector<int> cleanBuckets;
@@ -93,20 +91,14 @@ void poolEdges(vector<edge *> edges,int thread)
 {
   int i;
   for (i=0;stageAlmostDone && i<edges.size();i++)
-    edgePool.enqueue(edges[i],thread);
+    net.edgePool.enqueue(edges[i],thread);
 }
 
 void poolTriangles(vector<triangle *> triangles,int thread)
 {
   int i;
   for (i=0;stageAlmostDone && i<triangles.size();i++)
-    trianglePool.enqueue(triangles[i],thread);
-}
-
-void clearPools()
-{
-  edgePool.clear();
-  trianglePool.clear();
+    net.trianglePool.enqueue(triangles[i],thread);
 }
 
 void markBucketClean(int bucket)
@@ -754,8 +746,8 @@ void TinThread::operator()(int thread)
       {
 	if (thread)
 	{
-	  edg=edgePool.dequeue();
-	  tri=trianglePool.dequeue();
+	  edg=net.edgePool.dequeue();
+	  tri=net.trianglePool.dequeue();
 	}
 	else
 	{

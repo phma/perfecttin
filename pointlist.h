@@ -36,6 +36,7 @@
 #include "qindex.h"
 #include "polyline.h"
 #include "contour.h"
+#include "unifiro.h"
 
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;
@@ -56,6 +57,8 @@ public:
   std::vector<polyspiral> contours;
   qindex qinx;
   std::vector<point*> convexHull;
+  Unifiro<triangle *> trianglePool;
+  Unifiro<edge *> edgePool;
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
   void addpoint(int numb,point pnt,bool overwrite=false);

@@ -96,7 +96,6 @@ extern int contourSegmentsDone;
 
 void poolEdges(std::vector<edge *> edges,int thread);
 void poolTriangles(std::vector<triangle *> triangles,int thread);
-void clearPools();
 void markBucketClean(int bucket);
 void markBucketDirty(int bucket);
 bool allBucketsClean();
