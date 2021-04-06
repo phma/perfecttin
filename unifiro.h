@@ -61,5 +61,12 @@ public:
     }
     m.unlock();
   }
+  void clear()
+  {
+    m.lock();
+    uni.clear();
+    firo.clear();
+    m.unlock();
+  }
 };
 #endif

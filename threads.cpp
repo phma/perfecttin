@@ -103,6 +103,12 @@ void poolTriangles(vector<triangle *> triangles,int thread)
     trianglePool.enqueue(triangles[i],thread);
 }
 
+void clearPools()
+{
+  edgePool.clear();
+  trianglePool.clear();
+}
+
 void markBucketClean(int bucket)
 {
   bucketMutex.lock();
