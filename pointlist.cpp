@@ -35,6 +35,8 @@ const bool loudTinConsistency=false;
 void pointlist::clear()
 {
   wingEdge.lock();
+  qinx.clear();
+  contours.clear();
   triangles.clear();
   revtriangles.clear();
   edges.clear();
