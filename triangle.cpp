@@ -93,7 +93,7 @@ triangle::triangle()
   peri=sarea=0;
   memset(gradmat,0,sizeof(gradmat));
   flags=0;
-  aElev=bElev=cElev=0;
+  aElev=bElev=cElev=NAN;
 }
 
 bool triangle::ptValid()
