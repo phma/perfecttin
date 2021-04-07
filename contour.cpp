@@ -434,7 +434,9 @@ void rough1contour(pointlist &pl,double elev,int thread)
       ctour=trace(cstarts[j],elev,thread);
       ctour.dedup();
       ctour.setlengths();
+      pl.wingEdge.lock();
       pl.contours.push_back(ctour);
+      pl.wingEdge.unlock();
     }
 }
 

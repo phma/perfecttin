@@ -939,10 +939,7 @@ void TinThread::operator()(int thread)
       if (threadStatus[thread]!=TH_ROUGH)
 	logThreadStatus(TH_ROUGH);
       threadStatus[thread]=TH_ROUGH;
-      if (thread==0)        // Only one thread draws rough contours,
-	ctr=dequeueRough(); // because marking edges is not thread-safe.
-      else
-	ctr.size=0;
+      ctr=dequeueRough();
       if (isfinite(ctr.elevation) && ctr.size>0)
       {
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
