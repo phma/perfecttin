@@ -300,8 +300,8 @@ void clearmarks(int thread)
 {
   int i;
   markMutex.lock();
-  for (i=1;i<=thread;i++)
-    if (i>marks.size())
+  for (i=0;i<=thread;i++)
+    if (i+1>marks.size())
       marks.push_back(set<edge *>());
   marks[thread].clear();
   markMutex.unlock();
