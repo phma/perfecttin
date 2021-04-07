@@ -82,6 +82,7 @@ struct ContourTask
   int num;
   int size;
   double tolerance;
+  double elevation;
 };
 
 extern std::shared_mutex adjLog;

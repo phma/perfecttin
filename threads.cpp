@@ -67,7 +67,7 @@ queue<AdjustBlockTask> adjustTaskQueue;
 queue<DealBlockTask> dealTaskQueue;
 queue<BoundBlockTask> boundTaskQueue;
 queue<ErrorBlockTask> errorTaskQueue;
-queue<ContourTask> pruneQueue,smoothQueue;
+queue<ContourTask> roughQueue,pruneQueue,smoothQueue;
 int currentAction;
 int mtxSquareSize;
 int contourSegmentsDone;
@@ -249,6 +249,27 @@ void joinThreads()
   int i;
   for (i=0;i<threads.size();i++)
     threads[i].join();
+}
+
+void enqueueRough(ContourTask task)
+{
+  contourMutex.lock();
+  roughQueue.push(task);
+  contourMutex.unlock();
+}
+
+ContourTask dequeueRough()
+{
+  ContourTask ret;
+  ret.num=ret.size=-1;
+  contourMutex.lock();
+  if (roughQueue.size())
+  {
+    ret=roughQueue.front();
+    roughQueue.pop();
+  }
+  contourMutex.unlock();
+  return ret;
 }
 
 void enqueuePrune(ContourTask task)
