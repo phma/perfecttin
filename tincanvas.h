@@ -83,7 +83,6 @@ private:
   unsigned short contourColor[20];
   short contourLineType[3];
   unsigned short contourThickness[3];
-  QProgressDialog *progressDialog;
   QTimer *timer;
   ContourIntervalDialog *ciDialog;
   double conterval,tolerance;

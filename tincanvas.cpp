@@ -45,8 +45,6 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setMinimumSize(40,30);
-  progressDialog=new QProgressDialog(this);
-  progressDialog->reset();
   ciDialog=new ContourIntervalDialog(this);
   timer=new QTimer(this);
   goal=DONE;
@@ -454,7 +452,6 @@ void TinCanvas::roughContours()
   {
     goal=ROUGH_CONTOURS;
     timer->start(0);
-    progressDialog->show();
   }
   if (net.triangles.size())
     tinlohi=net.lohi();
@@ -462,11 +459,6 @@ void TinCanvas::roughContours()
   elevLo=floor(tinlohi[0]/conterval);
   elevHi=ceil(tinlohi[1]/conterval);
   progInx=elevLo;
-  progressDialog->setRange(elevLo,elevHi);
-  progressDialog->setValue(progInx);
-  progressDialog->setWindowTitle(tr("Drawing contours"));
-  progressDialog->setLabelText(tr("Drawing rough contours..."));
-  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   setThreadCommand(TH_ROUGH);
   totalContourSegments=elevHi-elevLo+1;
@@ -485,7 +477,6 @@ void TinCanvas::rough1Contour()
 {
   if (contourSegmentsDone<totalContourSegments)
   {
-    //progressDialog->setValue(++progInx);
     ++progInx;
   }
   else
@@ -506,7 +497,6 @@ void TinCanvas::roughContoursFinish()
   {
     case ROUGH_CONTOURS:
       goal=DONE;
-      progressDialog->reset();
       timer->stop();
       break;
     case PRUNE_CONTOURS:
@@ -540,16 +530,10 @@ void TinCanvas::pruneContours()
   {
     goal=PRUNE_CONTOURS;
     timer->start(0);
-    //progressDialog->show();
   }
   progInx=0;
   contourSegmentsDone=totalContourSegments=0;
   ctr.tolerance=tolerance;
-  progressDialog->setRange(0,net.contours.size());
-  progressDialog->setValue(0);
-  progressDialog->setWindowTitle(tr("Drawing contours"));
-  progressDialog->setLabelText(tr("Pruning contours..."));
-  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (roughContoursValid && conterval==contourInterval.fineInterval())
   {
@@ -587,8 +571,6 @@ void TinCanvas::prune1Contour()
 {
   if (contourSegmentsDone<totalContourSegments)
   {
-    //prune1contour(net,tolerance,progInx);
-    //progressDialog->setValue(++progInx);
     ++progInx;
   }
   else
@@ -609,7 +591,6 @@ void TinCanvas::pruneContoursFinish()
   {
     case PRUNE_CONTOURS:
       goal=DONE;
-      progressDialog->reset();
       timer->stop();
       break;
     case SMOOTH_CONTOURS:
@@ -641,16 +622,10 @@ void TinCanvas::smoothContours()
   {
     goal=SMOOTH_CONTOURS;
     timer->start(50);
-    //progressDialog->show();
   }
   progInx=0;
   contourSegmentsDone=totalContourSegments=0;
   ctr.tolerance=tolerance;
-  progressDialog->setRange(0,net.contours.size());
-  progressDialog->setValue(0);
-  progressDialog->setWindowTitle(tr("Drawing contours"));
-  progressDialog->setLabelText(tr("Smoothing contours..."));
-  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
   {
@@ -689,7 +664,6 @@ void TinCanvas::smooth1Contour()
   if (contourSegmentsDone<totalContourSegments)
   {
     //smooth1contour(net,tolerance,progInx);
-    //progressDialog->setValue(++progInx);
     ++progInx;
   }
   else
@@ -709,7 +683,6 @@ void TinCanvas::smoothContoursFinish()
   {
     case SMOOTH_CONTOURS:
       goal=DONE;
-      progressDialog->reset();
       timer->stop();
       break;
   }
@@ -735,7 +708,6 @@ void TinCanvas::smoothContoursFinish()
 void TinCanvas::contoursCancel()
 {
   goal=DONE;
-  progressDialog->reset();
   timer->stop();
   disconnect(timer,SIGNAL(timeout()),0,0);
   update();
