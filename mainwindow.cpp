@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
   connect(canvas,SIGNAL(splashScreenStarted()),this,SLOT(disableMenuSplash()));
   connect(canvas,SIGNAL(splashScreenFinished()),this,SLOT(enableMenuSplash()));
+  connect(canvas,SIGNAL(contourDrawingFinished()),this,SLOT(refreshNumTriangles()));
   doneBar=new QProgressBar(this);
   busyBar=new QProgressBar(this);
   doneBar->setRange(0,16777216);
@@ -191,6 +192,7 @@ void MainWindow::tick()
     }
     lastNumDots=numDots;
     lastNumTriangles=numTriangles;
+    lastNumEdges=numEdges;
     if (numDots && numTriangles && numTriangles<8)
     /* Reading a .ptin file can make numDots small (like 3) as it puts dots that
      * were pushed over an edge by roundoff error into cloud, while numTriangles
@@ -288,6 +290,18 @@ void MainWindow::tick()
       (tstatus&0x3ffbfeff)==1048577*TH_SMOOTH)
   {
     doneBar->setValue(lrint((double)contourSegmentsDone/canvas->totalContourSegments*16777216));
+    switch ((tstatus&0x3ffbfeff)/1048577)
+    {
+      case TH_ROUGH:
+	dotTriangleMsg->setText(tr("Drawing rough contours"));
+	break;
+      case TH_PRUNE:
+	dotTriangleMsg->setText(tr("Pruning contours"));
+	break;
+      case TH_SMOOTH:
+	dotTriangleMsg->setText(tr("Smoothing contours"));
+	break;
+    }
   }
   if ((tstatus&0x3ffbfeff)==1048577*TH_RUN)
   { // Conversion is running: check whether stage is complete
@@ -334,6 +348,11 @@ void MainWindow::tick()
   else
     lastLargeVertical=false;
   writeBufLog();
+}
+
+void MainWindow::refreshNumTriangles()
+{
+  lastNumDots=lastNumEdges=lastNumTriangles=-1;
 }
 
 void MainWindow::openFile()

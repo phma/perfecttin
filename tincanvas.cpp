@@ -498,6 +498,7 @@ void TinCanvas::roughContoursFinish()
     case ROUGH_CONTOURS:
       goal=DONE;
       timer->stop();
+      contourDrawingFinished();
       break;
     case PRUNE_CONTOURS:
     case SMOOTH_CONTOURS:
@@ -592,6 +593,7 @@ void TinCanvas::pruneContoursFinish()
     case PRUNE_CONTOURS:
       goal=DONE;
       timer->stop();
+      contourDrawingFinished();
       break;
     case SMOOTH_CONTOURS:
       connect(timer,SIGNAL(timeout()),this,SLOT(smoothContours()));
@@ -684,6 +686,7 @@ void TinCanvas::smoothContoursFinish()
     case SMOOTH_CONTOURS:
       goal=DONE;
       timer->stop();
+      contourDrawingFinished();
       break;
   }
   disconnect(timer,SIGNAL(timeout()),0,0);

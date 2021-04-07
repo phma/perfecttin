@@ -54,6 +54,7 @@ public:
 signals:
   void splashScreenStarted();
   void splashScreenFinished();
+  void contourDrawingFinished();
 public slots:
   void sizeToFit();
   void setSize();
