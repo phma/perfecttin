@@ -276,17 +276,17 @@ vector<edge *> contstarts(pointlist &pts,double elev)
   return ret;
 }
 
-void mark(edge *ep)
+void mark(edge *ep,int thread)
 {
   ep->mark(0);
 }
 
-bool ismarked(edge *ep)
+bool ismarked(edge *ep,int thread)
 {
   return ep->ismarked(0);
 }
 
-polyline trace(edge *edgep,double elev)
+polyline trace(edge *edgep,double elev,int thread)
 // Traces the contour that starts where edge *edgep crosses elevation elev.
 {
   polyline ret(elev);
@@ -299,7 +299,7 @@ polyline trace(edge *edgep,double elev)
   ntri=edgep->trib;
   if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
     tri=ntri;
-  mark(edgep);
+  mark(edgep,thread);
   firstcept=lastcept=tri->contourcept(tri->subdir(edgep),elev);
   if (firstcept.isnan())
   {
@@ -373,7 +373,7 @@ polyline trace(edge *edgep,double elev)
     }
     else
     {
-      wasmarked=ismarked(edgep);
+      wasmarked=ismarked(edgep,thread);
       if (!wasmarked)
       {
 	thiscept=tri->contourcept(tri->subdir(edgep),elev);
@@ -385,7 +385,7 @@ polyline trace(edge *edgep,double elev)
         }
 	lastcept=thiscept;
       }
-      mark(edgep);
+      mark(edgep,thread);
       ntri=edgep->othertri(tri);
     }
     if (ntri)
@@ -396,7 +396,7 @@ polyline trace(edge *edgep,double elev)
   return ret;
 }
 
-void rough1contour(pointlist &pl,double elev)
+void rough1contour(pointlist &pl,double elev,int thread)
 /* Draws all contours at elevation elev. Rough contours are just a horizontal
  * slice through the TIN; pruning and smoothing simplify the contours while
  * keeping them within the tolerance.
@@ -408,9 +408,9 @@ void rough1contour(pointlist &pl,double elev)
   cstarts=contstarts(pl,elev);
   pl.clearmarks();
   for (j=0;j<cstarts.size();j++)
-    if (!ismarked(cstarts[j]))
+    if (!ismarked(cstarts[j],thread))
     {
-      ctour=trace(cstarts[j],elev);
+      ctour=trace(cstarts[j],elev,thread);
       ctour.dedup();
       ctour.setlengths();
       pl.contours.push_back(ctour);
@@ -429,7 +429,7 @@ void roughcontours(pointlist &pl,double conterval)
   pl.contours.clear();
   tinlohi=pl.lohi();
   for (i=floor(tinlohi[0]/conterval);i<=ceil(tinlohi[1]/conterval);i++)
-    rough1contour(pl,i*conterval);
+    rough1contour(pl,i*conterval,0);
 }
 
 double contourError(pointlist &pl,polyline &contour)

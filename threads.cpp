@@ -946,7 +946,7 @@ void TinThread::operator()(int thread)
       if (isfinite(ctr.elevation) && ctr.size>0)
       {
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
-	rough1contour(net,ctr.elevation);
+	rough1contour(net,ctr.elevation,thread);
 	contourMutex.lock();
 	contourSegmentsDone+=ctr.size;
 	contourMutex.unlock();
