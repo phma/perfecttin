@@ -446,6 +446,8 @@ void TinCanvas::clearContourFlags()
 
 void TinCanvas::roughContours()
 {
+  int i;
+  ContourTask ctr;
   conterval=contourInterval.fineInterval();
   tolerance=contourInterval.tolerance();
   if (goal==DONE)
@@ -466,19 +468,31 @@ void TinCanvas::roughContours()
   progressDialog->setLabelText(tr("Drawing rough contours..."));
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
+  setThreadCommand(TH_ROUGH);
+  totalContourSegments=elevHi-elevLo+1;
+  for (i=elevLo;i<=elevHi;i++)
+    {
+      ctr.num=i;
+      ctr.size=1;
+      ctr.elevation=i*conterval;
+      enqueueRough(ctr);
+    }
+  waitForThreads(TH_ROUGH);
   connect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
 }
 
 void TinCanvas::rough1Contour()
 {
-  rough1contour(net,progInx*conterval);
-  if (++progInx>elevHi)
+  if (contourSegmentsDone<totalContourSegments)
+  {
+    //progressDialog->setValue(++progInx);
+    ++progInx;
+  }
+  else
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
     connect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
   }
-  else
-    progressDialog->setValue(progInx);
   repaintSeldom();
 }
 

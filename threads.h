@@ -107,6 +107,7 @@ double busyFraction();
 bool livelock(double areadone,double rmsadj);
 void startThreads(int n);
 void joinThreads();
+void enqueueRough(ContourTask task);
 void enqueuePrune(ContourTask task);
 void enqueueSmooth(ContourTask task);
 void enqueueAdjust(AdjustBlockTask task);
