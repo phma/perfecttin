@@ -243,6 +243,9 @@ float splitpoint(double leftclamp,double rightclamp,double tolerance)
 }
 
 vector<edge *> contstarts(pointlist &pts,double elev)
+/* Returns a list of all exterior edges where a contour at that elevation starts,
+ * followed by all interior edges which cross that elevation.
+ */
 {
   vector<edge *> ret;
   edge *ep;
@@ -284,6 +287,7 @@ bool ismarked(edge *ep)
 }
 
 polyline trace(edge *edgep,double elev)
+// Traces the contour that starts where edge *edgep crosses elevation elev.
 {
   polyline ret(elev);
   int subedge,subnext,i;
@@ -393,6 +397,10 @@ polyline trace(edge *edgep,double elev)
 }
 
 void rough1contour(pointlist &pl,double elev)
+/* Draws all contours at elevation elev. Rough contours are just a horizontal
+ * slice through the TIN; pruning and smoothing simplify the contours while
+ * keeping them within the tolerance.
+ */
 {
   vector<edge *> cstarts;
   polyline ctour;
