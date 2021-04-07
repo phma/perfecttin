@@ -35,6 +35,7 @@
 #include <iostream>
 #include <cassert>
 #include <cstring>
+#include <deque>
 #include "pointlist.h"
 #include "contour.h"
 #include "relprime.h"
@@ -50,6 +51,9 @@ float splittab[65]=
   0.2945,0.2990,0.3038,0.3088,0.3141,0.3198,0.3258,0.3320,0.3386,0.3454,0.3527,0.3605,0.3687,
   0.3773,0.3862,0.3955,0.4053,0.4153,0.4256,0.4362,0.4469,0.4577,0.4684,0.4792,0.4897,0.5000
 };
+
+shared_mutex markMutex;
+deque<set<edge *> > marks;
 
 ContourInterval::ContourInterval()
 {
@@ -278,12 +282,29 @@ vector<edge *> contstarts(pointlist &pts,double elev)
 
 void mark(edge *ep,int thread)
 {
-  ep->mark(0);
+  markMutex.lock_shared();
+  marks[thread].insert(ep);
+  markMutex.unlock_shared();
 }
 
 bool ismarked(edge *ep,int thread)
 {
-  return ep->ismarked(0);
+  bool ret;
+  markMutex.lock_shared();
+  ret=marks[thread].count(ep);
+  markMutex.unlock_shared();
+  return ret;
+}
+
+void clearmarks(int thread)
+{
+  int i;
+  markMutex.lock();
+  for (i=1;i<=thread;i++)
+    if (i>marks.size())
+      marks.push_back(set<edge *>());
+  marks[thread].clear();
+  markMutex.unlock();
 }
 
 polyline trace(edge *edgep,double elev,int thread)
@@ -406,7 +427,7 @@ void rough1contour(pointlist &pl,double elev,int thread)
   polyline ctour;
   int j;
   cstarts=contstarts(pl,elev);
-  pl.clearmarks();
+  clearmarks(thread);
   for (j=0;j<cstarts.size();j++)
     if (!ismarked(cstarts[j],thread))
     {
