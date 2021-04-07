@@ -40,7 +40,7 @@ using namespace std;
 
 pointlist net;
 double clipLow,clipHigh;
-double densify=100;
+double densify=1;
 array<double,2> areadone={0,0};
 double mtxSquareSide;
 Colorize colorize;

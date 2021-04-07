@@ -160,7 +160,7 @@ bool triangle::inTolerance(double tolerance,double minArea)
  * •has all dots within tolerance (without actually checking them all).
  */
 {
-  return dots.size()<3 ||
+  return dots.size()<9 ||
          sarea<3*minArea ||
          ((fabs(aElev-a->elev())+fabs(bElev-b->elev()))+
 	  (fabs(cElev-c->elev())+vError))<tolerance;
