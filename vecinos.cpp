@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
   bool validCmd=true;
   bool oneLayer=false;
   map<int,xyz> pointList;
+  map<int,xyz>::iterator j;
   po::options_description generic("Options");
   po::options_description hidden("Hidden options");
   po::options_description cmdline_options;
@@ -107,6 +108,14 @@ int main(int argc, char *argv[])
   }
   if (validCmd)
   {
+    if (pointList.count(pointNum))
+    {
+      for (j=pointList.begin();j!=pointList.end();++j)
+	if (dist(xy(j->second),xy(pointList[pointNum]))<=distance)
+	  cout<<j->first<<endl;
+    }
+    else
+      cerr<<"No point numbered "<<pointNum<<" in "<<inputFileName<<endl;
   }
   return 0;
 }
