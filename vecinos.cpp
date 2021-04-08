@@ -51,7 +51,8 @@ int main(int argc, char *argv[])
   int i;
   int pointNum,thePointNum;
   bool validCmd=true;
-  bool oneLayer=false;
+  bool inDisk=false;
+  int rangeStart,rangeEnd;
   map<int,xyz> pointList;
   map<int,xyz>::iterator j;
   po::options_description generic("Options");
@@ -112,7 +113,20 @@ int main(int argc, char *argv[])
     {
       for (j=pointList.begin();j!=pointList.end();++j)
 	if (dist(xy(j->second),xy(pointList[pointNum]))<=distance)
-	  cout<<j->first<<endl;
+	{
+	  if (!inDisk)
+	    rangeStart=j->first;
+	  inDisk=true;
+	  rangeEnd=j->first;
+	}
+	else
+	{
+	  if (inDisk)
+	    cout<<rangeStart<<':'<<rangeEnd<<endl;
+	  inDisk=false;
+	}
+	if (inDisk)
+	  cout<<rangeStart<<':'<<rangeEnd<<endl;
     }
     else
       cerr<<"No point numbered "<<pointNum<<" in "<<inputFileName<<endl;
