@@ -73,6 +73,7 @@ struct ThreadAction
   std::string filename;
   int flags;
   /* Bit 0: write empty triangles when exporting TIN
+   * Bit 1: write only triangles that are inside the boundary
    */
   int result;
   PtinHeader ptinResult;

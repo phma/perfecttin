@@ -501,7 +501,7 @@ void MainWindow::exportDxfTxt()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=true;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
@@ -529,7 +529,7 @@ void MainWindow::exportDxfBin()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=false;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
@@ -557,7 +557,7 @@ void MainWindow::exportPlyTxt()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=true;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_PLY;
     enqueueAction(ta);
@@ -585,7 +585,7 @@ void MainWindow::exportPlyBin()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=false;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_PLY;
     enqueueAction(ta);
@@ -669,7 +669,7 @@ void MainWindow::exportTinTxt()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.filename=fileName;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.opcode=ACT_WRITE_TIN;
     enqueueAction(ta);
   }
@@ -696,7 +696,7 @@ void MainWindow::exportCarlsonTin()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.filename=fileName;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.opcode=ACT_WRITE_CARLSON_TIN;
     enqueueAction(ta);
   }
@@ -723,7 +723,7 @@ void MainWindow::exportLandXml()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.filename=fileName;
-    ta.flags=exportEmpty;
+    ta.flags=exportEmpty+2*onlyInBoundary;
     ta.opcode=ACT_WRITE_LANDXML;
     enqueueAction(ta);
   }
@@ -1088,6 +1088,7 @@ void MainWindow::readSettings()
   tolerance=settings.value("tolerance",0.1).toDouble();
   lengthUnit=settings.value("lengthUnit",1).toDouble();
   exportEmpty=settings.value("exportEmpty",false).toBool();
+  onlyInBoundary=true; //TODO add to config
   colorize.setScheme(settings.value("colorScheme",CS_GRADIENT).toInt());
   printer3d.shape=settings.value("3dprinter/shape",1).toUInt();
   printer3d.x=settings.value("3dprinter/length",300).toDouble();

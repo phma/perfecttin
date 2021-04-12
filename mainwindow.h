@@ -93,7 +93,7 @@ private:
   double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
-  bool conversionStopped,showingResult,exportEmpty,lastLargeVertical;
+  bool conversionStopped,showingResult,exportEmpty,onlyInBoundary,lastLargeVertical;
   double tolerance,density,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
