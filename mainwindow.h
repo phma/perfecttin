@@ -3,7 +3,7 @@
 /* mainwindow.h - main window                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -63,6 +63,7 @@ public slots:
   void setUnit(double lu);
   void openFile();
   void loadFile();
+  void loadBoundary();
   void disableMenuSplash();
   void enableMenuSplash();
   void exportDxfTxt();
@@ -104,7 +105,7 @@ private:
   QMenu *fileMenu,*viewMenu,*contourMenu,*settingsMenu,*helpMenu,*exportMenu,*colorMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg,*densityMsg;
   QProgressBar *doneBar,*busyBar;
-  QAction *openAction,*loadAction,*convertAction,*clearAction;
+  QAction *openAction,*loadAction,*loadBoundaryAction,*convertAction,*clearAction;
   QAction *exportAction,*stopAction,*resumeAction,*exitAction;
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;

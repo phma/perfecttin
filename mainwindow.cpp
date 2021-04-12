@@ -425,6 +425,40 @@ void MainWindow::loadFile()
   fileDialog=nullptr;
 }
 
+void MainWindow::loadBoundary()
+{
+  int dialogResult;
+  QStringList files;
+  int i;
+  string fileName;
+  ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Load Clipping Boundary"));
+  fileDialog->setFileMode(QFileDialog::ExistingFiles);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+  fileDialog->selectFile("");
+#ifdef Plytapus_FOUND
+  fileDialog->setNameFilter(tr("(*.las);;(*.ply);;(*.xyz);;(*)"));
+#else
+  fileDialog->setNameFilter(tr("(*.las);;(*.xyz);;(*)"));
+#endif
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    for (i=0;i<files.size();i++)
+    {
+      fileName=files[i].toStdString();
+      ta.opcode=ACT_LOADBDY;
+      ta.filename=fileName;
+      ta.param1=lengthUnit;
+      enqueueAction(ta);
+    }
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
+}
+
 void MainWindow::disableMenuSplash()
 /* Disable menu during splash screen, so that the user can't mess up
  * the TIN that the splash screen shows.
@@ -901,9 +935,14 @@ void MainWindow::makeActions()
   connect(openAction,SIGNAL(triggered(bool)),this,SLOT(openFile()));
   loadAction=new QAction(this);
   loadAction->setIcon(QIcon::fromTheme("document-open"));
-  loadAction->setText(tr("Load"));
+  loadAction->setText(tr("Load cloud"));
   fileMenu->addAction(loadAction);
   connect(loadAction,SIGNAL(triggered(bool)),this,SLOT(loadFile()));
+  loadBoundaryAction=new QAction(this);
+  loadBoundaryAction->setIcon(QIcon::fromTheme("document-open"));
+  loadBoundaryAction->setText(tr("Load boundary"));
+  fileMenu->addAction(loadBoundaryAction);
+  connect(loadBoundaryAction,SIGNAL(triggered(bool)),this,SLOT(loadBoundary()));
   convertAction=new QAction(this);
   convertAction->setIcon(QIcon::fromTheme("document-save-as"));
   convertAction->setText(tr("Convert"));

@@ -24,6 +24,7 @@
 #include <queue>
 #include "threads.h"
 #include "angle.h"
+#include "cloud.h"
 #include "edgeop.h"
 #include "triop.h"
 #include "adjelev.h"
@@ -747,6 +748,7 @@ void TinThread::operator()(int thread)
   triangle *tri;
   ThreadAction act;
   ContourTask ctr;
+  vector<xyz> tempCloud;
   logStartThread();
   startMutex.lock();
   if (threadStatus.size()!=thread)
@@ -814,6 +816,10 @@ void TinThread::operator()(int thread)
 	  cerr<<"Can't load a file in pause state\n";
 	  unsleep(thread);
 	  break;
+	case ACT_LOADBDY:
+	  cerr<<"Can't load a boundary in pause state\n";
+	  unsleep(thread);
+	  break;
 	case ACT_READ_PTIN:
 	  cerr<<"Can't open file in pause state\n";
 	  unsleep(thread);
@@ -877,6 +883,21 @@ void TinThread::operator()(int thread)
 	case ACT_LOAD:
 	  net.clear();
 	  act.result=readCloud(act.filename,act.param1);
+	  enqueueResult(act);
+	  unsleep(thread);
+	  break;
+	case ACT_LOADBDY:
+	  swap(cloud,tempCloud);
+	  act.result=readCloud(act.filename,act.param1);
+	  swap(cloud,tempCloud);
+	  if (act.result)
+	  {
+	    int i;
+	    net.boundary.clear();
+	    for (i=0;i<tempCloud.size();i++)
+	      net.boundary.insert(tempCloud[i]);
+	    net.boundary.setlengths();
+	  }
 	  enqueueResult(act);
 	  unsleep(thread);
 	  break;

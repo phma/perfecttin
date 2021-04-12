@@ -55,6 +55,7 @@ public:
    * when a vector is resized.
    */
   std::vector<polyspiral> contours;
+  polyline boundary;
   qindex qinx;
   std::vector<point*> convexHull;
   Unifiro<triangle *> trianglePool;

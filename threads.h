@@ -58,6 +58,7 @@
 #define ACT_QINDEX 10
 #define ACT_WRITE_PLY 11
 #define ACT_WRITE_STL 12
+#define ACT_LOADBDY 13
 
 #define RES_LOAD_PLY 1
 #define RES_LOAD_LAS 2
