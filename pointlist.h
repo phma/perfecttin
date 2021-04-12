@@ -69,6 +69,7 @@ public:
   double distanceToHull(xy pnt);
   bool validConvexHull();
   std::vector<int> valencyHistogram();
+  bool shouldWrite(int n,int flags);
   void clear();
   int size();
   void clearmarks();

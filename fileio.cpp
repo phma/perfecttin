@@ -327,7 +327,7 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())
-      if (net.triangles[i].dots.size() || (flags&1))
+      if (net.shouldWrite(i,flags))
 	insertTriangle(dxfCodes,net.triangles[i],outUnit);
       else;
     else

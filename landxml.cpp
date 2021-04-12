@@ -3,7 +3,7 @@
 /* landxml.cpp - output TIN in LandXML                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -81,7 +81,7 @@ void writeLandXml(string outputFile,double outUnit,int flags)
   }
   xmlFile<<"</Pnts><Faces>\n";
   for (i=0;i<net.triangles.size();i++)
-    if ((flags&1) || net.triangles[i].dots.size())
+    if (net.shouldWrite(i,flags))
     {
       xmlFile<<"<F>";
       xmlFile<<net.revpoints[net.triangles[i].a]<<' ';

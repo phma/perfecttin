@@ -372,6 +372,20 @@ vector<int> pointlist::valencyHistogram()
   return ret;
 }
 
+bool pointlist::shouldWrite(int n,int flags)
+/* Called from a function that exports a TIN (except in STL format) to export
+ * some of the triangles. The flags come from a ThreadAction (see threads.h).
+ * If bit 0 is set, write empty triangles.
+ * If bit 1 is set and there is a boundary, write only triangles whose centroid
+ * is in the boundary.
+ */
+{
+  bool ret=triangles[n].dots.size() || (flags&1);
+  if (boundary.size() && (flags&2))
+    ret=ret && boundary.in(triangles[n].centroid());
+  return ret;
+}
+
 void pointlist::makeqindex()
 {
   vector<xy> plist;

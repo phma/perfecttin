@@ -3,7 +3,7 @@
 /* ply.cpp - polygon files                            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -117,7 +117,7 @@ void writePly(string filename,bool asc,double outUnit,int flags)
   plyUnit=outUnit;
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())
-      if (net.triangles[i].dots.size() || (flags&1))
+      if (net.shouldWrite(i,flags))
 	trianglesToWrite.push_back(&net.triangles[i]);
       else;
     else

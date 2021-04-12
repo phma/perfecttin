@@ -3,7 +3,7 @@
 /* tintext.cpp - output TIN in text file              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -41,10 +41,10 @@ void writeTinText(string outputFile,double outUnit,int flags)
     tinFile<<ldecimal(net.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
   }
   for (i=0;i<net.triangles.size();i++)
-    nTrianglesToWrite+=((flags&1) || net.triangles[i].dots.size());
+    nTrianglesToWrite+=(net.shouldWrite(i,flags));
   tinFile<<"TRI "<<nTrianglesToWrite<<endl;
   for (i=0;i<net.triangles.size();i++)
-    if ((flags&1) || net.triangles[i].dots.size())
+    if (net.shouldWrite(i,flags))
     {
       tinFile<<net.revpoints[net.triangles[i].a]<<' ';
       tinFile<<net.revpoints[net.triangles[i].b]<<' ';

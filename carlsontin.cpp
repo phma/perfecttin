@@ -3,7 +3,7 @@
 /* carlsontin.cpp - output TIN in Carlson DTM format  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ void writeCarlsonTin(string outputFile,double outUnit,int flags)
   }
   for (i=0;i<net.triangles.size();i++)
   {
-    if (net.triangles[i].dots.size() || (flags&1))
+    if (net.shouldWrite(i,flags))
     {
       writeleshort(tinFile,CA_TRIANGLE);
       writeleint(tinFile,net.revpoints[net.triangles[i].a]);
