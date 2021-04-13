@@ -738,9 +738,34 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   octagon<<QPointF(ballPos.getx()+4.14,ballPos.gety()+10);
   octagon<<QPointF(ballPos.getx()-4.14,ballPos.gety()+10);
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()+4.14);
+  roughCurve.moveTo(-9.515,5.942);
+  roughCurve.lineTo(-6.979,7.479);
+  roughCurve.lineTo(-4.328,6.019);
+  roughCurve.lineTo(-1.638,6.288);
+  roughCurve.lineTo(0.129,8.862);
+  roughCurve.lineTo(2.934,6.364);
+  roughCurve.lineTo(6.315,7.287);
+  roughCurve.lineTo(9.274,4.674);
+  roughCurve.lineTo(7.122,2.637);
+  roughCurve.lineTo(8.967,-0.398);
+  roughCurve.lineTo(8.582,-4.087);
+  roughCurve.lineTo(5.701,-4.317);
+  roughCurve.lineTo(6.046,-7.199);
+  roughCurve.lineTo(3.703,-8.313);
+  roughCurve.lineTo(0.206,-7.814);
+  roughCurve.lineTo(-0.447,-9.735);
+  roughCurve.lineTo(-4.366,-9.082);
+  roughCurve.lineTo(-2.945,-7.007);
+  roughCurve.lineTo(-7.248,-5.47);
+  roughCurve.lineTo(-8.247,-2.78);
+  roughCurve.lineTo(-6.902,-0.398);
+  roughCurve.lineTo(-9.246,0.832);
+  roughCurve.lineTo(-7.94,2.868);
+  roughCurve.closeSubpath();
+  roughCurve.translate(ballPos.getx(),ballPos.gety());
   pruneCurve.moveTo(-9.515,5.942);
   pruneCurve.lineTo(6.315,7.287);
-  pruneCurve.lineTo(8.967,-3.98);
+  pruneCurve.lineTo(8.967,-0.398);
   pruneCurve.lineTo(3.703,-8.313);
   pruneCurve.lineTo(-4.366,-9.082);
   pruneCurve.closeSubpath();
@@ -765,6 +790,10 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.drawChord(square,lrint(bintodeg(ballAngle+DEG180)*16),2880);
       break;
     case TH_ROUGH:
+      painter.setPen(Qt::red);
+      painter.setBrush(Qt::NoBrush);
+      painter.drawPath(roughCurve);
+      break;
     case TH_PRUNE:
       painter.setPen(Qt::red);
       painter.setBrush(Qt::NoBrush);
