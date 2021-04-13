@@ -738,6 +738,13 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   octagon<<QPointF(ballPos.getx()+4.14,ballPos.gety()+10);
   octagon<<QPointF(ballPos.getx()-4.14,ballPos.gety()+10);
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()+4.14);
+  pruneCurve.moveTo(-9.515,5.942);
+  pruneCurve.lineTo(6.315,7.287);
+  pruneCurve.lineTo(8.967,-3.98);
+  pruneCurve.lineTo(3.703,-8.313);
+  pruneCurve.lineTo(-4.366,-9.082);
+  pruneCurve.closeSubpath();
+  pruneCurve.translate(ballPos.getx(),ballPos.gety());
   smoothCurve.moveTo(-6.642,6.426);
   smoothCurve.cubicTo(-2.808,8.64,2.808,8.64,6.642,6.426);
   smoothCurve.cubicTo(7.92,5.688,8.856,4.068,8.856,2.592);
@@ -759,6 +766,10 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       break;
     case TH_ROUGH:
     case TH_PRUNE:
+      painter.setPen(Qt::red);
+      painter.setBrush(Qt::NoBrush);
+      painter.drawPath(pruneCurve);
+      break;
     case TH_SMOOTH:
       painter.setPen(Qt::red);
       painter.setBrush(Qt::NoBrush);
