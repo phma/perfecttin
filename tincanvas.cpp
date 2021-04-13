@@ -727,6 +727,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   QRectF pupil(ballPos.getx()-2,ballPos.gety()-2,4,4);
   QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
   QPolygonF octagon;
+  QPainterPath smoothCurve;
   double x0,x1,y;
   paintTime.start();
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()-4.14);
@@ -737,6 +738,14 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   octagon<<QPointF(ballPos.getx()+4.14,ballPos.gety()+10);
   octagon<<QPointF(ballPos.getx()-4.14,ballPos.gety()+10);
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()+4.14);
+  smoothCurve.moveTo(-6.15,5.95);
+  smoothCurve.lineTo(6.15,5.95);
+  smoothCurve.lineTo(8.2,2.4);
+  smoothCurve.lineTo(2.05,-8.25);
+  smoothCurve.lineTo(-2.05,-8.25);
+  smoothCurve.lineTo(-8.2,2.4);
+  smoothCurve.lineTo(-6.15,5.95);
+  smoothCurve.translate(ballPos.getx(),ballPos.gety());
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
   switch (state)
@@ -747,6 +756,13 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.drawChord(square,lrint(bintodeg(ballAngle)*16),2880);
       painter.setBrush(Qt::blue);
       painter.drawChord(square,lrint(bintodeg(ballAngle+DEG180)*16),2880);
+      break;
+    case TH_ROUGH:
+    case TH_PRUNE:
+    case TH_SMOOTH:
+      painter.setPen(Qt::red);
+      painter.setBrush(Qt::NoBrush);
+      painter.drawPath(smoothCurve);
       break;
     case -ACT_WRITE_DXF:
     case -ACT_WRITE_TIN:
