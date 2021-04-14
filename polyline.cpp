@@ -47,6 +47,21 @@ int midarcdir(xy a,xy b,xy c)
   return dir(a,b)+dir(b,c)-dir(a,c);
 }
 
+int count1(unsigned int num)
+{
+  num=(num&0x55555555)+((num&0xaaaaaaaa)>>1);
+  num=(num&0x33333333)+((num&0xcccccccc)>>2);
+  num=(num&0x0f0f0f0f)+((num&0xf0f0f0f0)>>4);
+  num=(num&0x00ff00ff)+((num&0xff00ff00)>>8);
+  num=(num&0x0000ffff)+((num&0xffff0000)>>16);
+  return num;
+}
+
+int signParity(unsigned int num)
+{
+  return 2-2*(count1(num)&1);
+}
+
 polyline::polyline()
 {
   elevation=0;
@@ -1056,4 +1071,18 @@ void crspace(ofstream &ofile,int i)
     ofile<<' ';
   else if (i)
     ofile<<endl;
+}
+
+unsigned int polyline::checksum()
+/* This computes bearings, so the number may differ slightly between platforms,
+ * such as Linux and BSD, because of roundoff error or M_PIl. See angle.h.
+ */
+{
+  unsigned int ret=0;
+  int i,esz=endpoints.size(),lsz=lengths.size();
+  for (i=0;i<esz;i++)
+    ret+=signParity(i)*dir(xy(0,0),endpoints[i]);
+  for (i=0;i<lsz;i++)
+    ret+=signParity(i)*dir(endpoints[i],endpoints[(i+1)%esz]);
+  return ret;
 }
