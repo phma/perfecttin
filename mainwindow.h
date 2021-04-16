@@ -66,6 +66,7 @@ public slots:
   void loadBoundary();
   void disableMenuSplash();
   void enableMenuSplash();
+  void endisableMenu();
   void exportDxfTxt();
   void exportDxfBin();
   void exportPlyTxt();

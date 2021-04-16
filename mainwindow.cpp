@@ -482,6 +482,16 @@ void MainWindow::enableMenuSplash()
   stopAction->setEnabled(false);
 }
 
+void MainWindow::endisableMenu()
+{
+  openAction->setEnabled(true);
+  loadAction->setEnabled(true);
+  convertAction->setEnabled(false);
+  exportMenu->setEnabled(false);
+  clearAction->setEnabled(false);
+  stopAction->setEnabled(false);
+}
+
 void MainWindow::exportDxfTxt()
 {
   int dialogResult;
