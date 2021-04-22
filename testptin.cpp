@@ -1560,6 +1560,8 @@ int main(int argc, char *argv[])
     testchecksum(); // >1 s 3/4 of time
   if (shoulddo("ldecimal"))
     testldecimal();
+  if (shoulddo("integertrig"))
+    testintegertrig();
   if (shoulddo("leastsquares"))
     testleastsquares();
   if (shoulddo("adjelev"))
