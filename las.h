@@ -3,7 +3,7 @@
 /* las.h - laser point cloud files                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 
 #include <string>
 #include <iostream>
+#include <map>
 #include "point.h"
 
 struct LasPoint
@@ -87,6 +88,7 @@ private:
   unsigned int nExtendedVariableLength;
   size_t nPoints[16]; // [0] is total; [1]..[15] are each return
   size_t readPos,extReadPos;
+  std::map<int,int> classHisto;
 public:
   LasHeader();
   ~LasHeader();

@@ -3,7 +3,7 @@
 /* las.cpp - laser point cloud files                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -119,6 +119,7 @@ void LasHeader::open(std::string fileName)
   if (lasfile)
     close();
   lasfile=new ifstream(fileName,ios::binary);
+  classHisto.clear();
   magicBytes=readbeint(*lasfile);
   if (magicBytes==0x4c415346)
   {
@@ -308,6 +309,7 @@ LasPoint LasHeader::readPoint(size_t num)
   ret.location=xyz(xOffset+xScale*xInt,yOffset+yScale*yInt,zOffset+zScale*zInt);
   if (!lasfile->good())
     throw -1;
+  classHisto[ret.classification]++;
   return ret;
 }
 
