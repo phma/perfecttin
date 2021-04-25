@@ -388,10 +388,7 @@ void readLas(string fileName)
   for (i=0;i<header.numberPoints();i++)
   {
     pnt=header.readPoint(i);
-    //if (i%1000000==0)
-      //cout<<"return "<<pnt.returnNum<<" of "<<pnt.nReturns<<endl;
-    //if (pnt.returnNum==0)
-      //cout<<"returnNum=0\n";
-    cloud.push_back(pnt.location);
+    if (pnt.classification==2 || pnt.classification==0)
+      cloud.push_back(pnt.location);
   }
 }
