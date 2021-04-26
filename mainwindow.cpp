@@ -412,6 +412,7 @@ void MainWindow::loadFile()
       fileName=files[i].toStdString();
       ta.opcode=ACT_LOAD;
       ta.filename=fileName;
+      ta.flags=0; // ground point flag
       ta.param1=lengthUnit;
       enqueueAction(ta);
       if (fileNames.length())
@@ -451,6 +452,7 @@ void MainWindow::loadBoundary()
       fileName=files[i].toStdString();
       ta.opcode=ACT_LOADBDY;
       ta.filename=fileName;
+      ta.flags=0;
       ta.param1=lengthUnit;
       enqueueAction(ta);
     }
