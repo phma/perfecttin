@@ -369,7 +369,7 @@ VariableLengthRecord LasHeader::readExtRecord()
   return ret;
 }
 
-void readLas(string fileName)
+void readLas(string fileName,int flags)
 {
   size_t i;
   LasHeader header;
@@ -388,7 +388,7 @@ void readLas(string fileName)
   for (i=0;i<header.numberPoints();i++)
   {
     pnt=header.readPoint(i);
-    if (pnt.classification==2)
+    if (pnt.classification==2 || (flags&4)==0) // Read only ground points if bit 2 is set
       cloud.push_back(pnt.location);
   }
 }

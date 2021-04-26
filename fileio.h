@@ -88,7 +88,7 @@ std::string baseName(std::string fileName);
 void deleteFile(std::string fileName);
 void writeDxf(std::string outputFile,bool asc,double outUnit,int flags);
 void writeStl(std::string outputFile,bool asc,double outUnit,int flags);
-int readCloud(std::string &inputFile,double inUnit);
+int readCloud(std::string &inputFile,double inUnit,int flags);
 void writePoint(std::ostream &file,xyz pnt);
 xyz readPoint(std::istream &file);
 void writePtin(std::string outputFile,int tolRatio,double tolerance,double density);

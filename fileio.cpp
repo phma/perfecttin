@@ -356,7 +356,7 @@ void writeStl(string outputFile,bool asc,double outUnit,int flags)
     writeStlBinary(stlFile,stltri);
 }
 
-int readCloud(string &inputFile,double inUnit)
+int readCloud(string &inputFile,double inUnit,int flags)
 {
   int i,already=cloud.size(),ret=0;
   readPly(inputFile);
@@ -366,7 +366,7 @@ int readCloud(string &inputFile,double inUnit)
   {
     try
     {
-      readLas(inputFile);
+      readLas(inputFile,flags);
     }
     catch (...)
     {

@@ -103,4 +103,4 @@ public:
   VariableLengthRecord readExtRecord();
 };
 
-void readLas(std::string fileName);
+void readLas(std::string fileName,int flags);

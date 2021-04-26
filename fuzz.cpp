@@ -3,7 +3,7 @@
 /* fuzz.cpp - fuzzing main program                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   if (command=="readPtin")
     header=readPtin(file);
   if (command=="readCloud")
-    readCloud(file,1);
+    readCloud(file,1,0);
   exitStatus=0;
   cout<<header.tolRatio<<"×"<<header.tolerance<<endl;
   sz=net.edges.size();

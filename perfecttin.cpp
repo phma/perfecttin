@@ -3,7 +3,7 @@
 /* perfecttin.cpp - main program                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
 	else
 	{
 	  already=cloud.size();
-	  readCloud(inputFiles[i],inUnit);
+	  readCloud(inputFiles[i],inUnit,0);
 	  if (already!=cloud.size())
 	    pointCloudsLoaded++;
 	}

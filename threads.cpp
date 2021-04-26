@@ -882,13 +882,13 @@ void TinThread::operator()(int thread)
       {
 	case ACT_LOAD:
 	  net.clear();
-	  act.result=readCloud(act.filename,act.param1);
+	  act.result=readCloud(act.filename,act.param1,act.flags);
 	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_LOADBDY:
 	  swap(cloud,tempCloud);
-	  act.result=readCloud(act.filename,act.param1);
+	  act.result=readCloud(act.filename,act.param1,act.flags);
 	  swap(cloud,tempCloud);
 	  if (act.result)
 	  {

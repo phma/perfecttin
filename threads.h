@@ -74,6 +74,7 @@ struct ThreadAction
   int flags;
   /* Bit 0: write empty triangles when exporting TIN
    * Bit 1: write only triangles that are inside the boundary
+   * Bit 2: read only ground points from LAS file
    */
   int result;
   PtinHeader ptinResult;
