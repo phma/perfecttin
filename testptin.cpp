@@ -1507,6 +1507,163 @@ void testoutlier()
     writeXyzTextDot(file,cloud[i]);
 }
 
+xy intersection(polyline &p,xy start,xy end)
+/* Given start and end, of which one is in p and the other is out,
+ * returns a point on p. It can't use Brent's method because p.in
+ * gives no clue about distance. It uses bisection.
+ */
+{
+  xy mid;
+  double sin,min,ein;
+  sin=p.in(start);
+  ein=p.in(end);
+  min=9;
+  while (fabs(min)>=0.75 || fabs(min)<=0.25)
+  {
+    mid=(start+end)/2;
+    min=p.in(mid);
+    if (dist(start,mid)==0 || dist(mid,end)==0)
+      break;
+    if (fabs(sin-min)>fabs(min-ein))
+    {
+      end=mid;
+      ein=min;
+    }
+    else if (fabs(sin-min)<fabs(min-ein))
+    {
+      start=mid;
+      sin=min;
+    }
+    else
+      break;
+  }
+  return mid;
+}
+
+void testpolyline()
+{
+  int i;
+  polyline p;
+  polyarc q;
+  polyspiral r;
+  PostScript ps;
+  xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
+  xy e(3,0),f(3.5,0.5),g(0,4),mid;
+  /* a: near centroid; b: center of circle, midpoint of hypot;
+   * c and d: on opposite sites of b; e: corner;
+   * f and g: other points on circle
+   */
+  cout<<"testpolyline"<<endl;
+  ps.open("polyline.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  r.smooth(); // sets the curvy flag
+  bendlimit=DEG180+7;
+  p.insert(xy(0,0));
+  q.insert(xy(0,0));
+  r.insert(xy(0,0));
+  p.insert(xy(3,0));
+  q.insert(xy(3,0));
+  r.insert(xy(3,0));
+  p.setlengths();
+  q.setlengths();
+  r.setlengths();
+  cout<<p.length()<<' '<<r.length()<<endl;
+  tassert(p.length()==6);
+  tassert(fabs(r.length()-3*M_PI)<1e-6);
+  p.insert(xy(3,4));
+  q.insert(xy(3,4));
+  r.insert(xy(3,4));
+  p.setlengths();
+  cout<<p.length()<<endl;
+  tassert(p.length()==12);
+  q.setlengths();
+  tassert(q.length()==12);
+  tassert(q.area()==6);
+  r.setlengths();
+  tassert(fabs(r.length()-5*M_PI)<1e-6);
+  q.open();
+  tassert(q.length()==7);
+  tassert(std::isnan(q.area()));
+  q.close();
+  q.setlengths();
+  tassert(q.length()==12);
+  q.setdelta(0,439875013);
+  q.setdelta(1,633866811);
+  q.setdelta(2,1073741824);
+  q.setlengths();
+  /* Total area of circle is 19.6350. Of this,
+   * 6.0000 is in the triangle,
+   * 9.8175 is on the 5 side,
+   * 2.7956 is on the 4 side, and
+   * 1.0219 is on the 3 side.
+   */
+  cout<<"testpolyline: area of circle is "<<q.area()<<" (arc), "<<r.area()<<" (spiral)"<<endl;
+  tassert(fabs(q.length()-M_PI*5)<0.0005);
+  tassert(fabs(q.area()-M_PI*6.25)<0.0005);
+  tassert(fabs(r.length()-M_PI*5)<0.0005);
+  tassert(fabs(r.area()-M_PI*6.25)<0.0005);
+  ps.startpage();
+  ps.setscale(-1,-0.5,4,4.5);
+  ps.spline(p.approx3d(0.001));
+  ps.spline(q.approx3d(0.001));
+  ps.spline(r.approx3d(0.001));
+  ps.endpage();
+  cout<<q.getarc(0).center().north()<<endl;
+  cout<<q.length()<<endl;
+  cout<<"p: a "<<p.in(a)<<" b "<<p.in(b)<<" c "<<p.in(c)<<" d "<<p.in(d)
+    <<" e "<<p.in(e)<<" f "<<p.in(f)<<" g "<<p.in(g)<<endl;
+  tassert(p.in(a)==1);
+  tassert(p.in(b)==0.5);
+  tassert(p.in(c)==1);
+  tassert(p.in(d)==0);
+  tassert(p.in(e)==0.25);
+  tassert(p.in(f)==0);
+  tassert(p.in(g)==0);
+  cout<<"q: a "<<q.in(a)<<" b "<<q.in(b)<<" c "<<q.in(c)<<" d "<<q.in(d)
+    <<" e "<<q.in(e)<<" f "<<q.in(f)<<" g "<<q.in(g)<<endl;
+  tassert(q.in(a)==1);
+  tassert(q.in(b)==1);
+  tassert(q.in(c)==1);
+  tassert(q.in(d)==1);
+  tassert(q.in(e)==0.5);
+  mid=intersection(q,b,2*f-b);
+  cout<<"q x b-f ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(f,mid)<1e-8);
+  mid=intersection(q,b,2*g-b);
+  cout<<"q x b-g ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(g,mid)<1e-8);
+  cout<<"r: a "<<r.in(a)<<" b "<<r.in(b)<<" c "<<r.in(c)<<" d "<<r.in(d)
+    <<" e "<<r.in(e)<<" f "<<r.in(f)<<" g "<<r.in(g)<<endl;
+  tassert(r.in(a)==1);
+  tassert(r.in(b)==1);
+  tassert(r.in(c)==1);
+  tassert(r.in(d)==1);
+  tassert(r.in(e)==0.5);
+  mid=intersection(r,b,2*f-b);
+  cout<<"r x b-f ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(f,mid)<1e-8);
+  mid=intersection(r,b,2*g-b);
+  cout<<"r x b-g ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(g,mid)<1e-8);
+  bendlimit=DEG120;
+  r=polyspiral();
+  for (i=0;i<600;i++)
+  {
+    r.insert(cossin(i*0xfc1ecd6));
+    if (i==0)
+      r.open();
+  }
+  r.smooth();
+  r.setlengths();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1);
+  ps.spline(r.approx3d(0.001));
+  ps.endpage();
+  for (i=0;i<r.length();i++)
+    tassert(fabs(r.station(i).length()-1)<1e-15);
+}
+
 bool shoulddo(string testname)
 {
   int i;
@@ -1578,6 +1735,8 @@ int main(int argc, char *argv[])
     testquarter();
   if (shoulddo("stl"))
     teststl();
+  if (shoulddo("polyline"))
+    testpolyline();
   if (shoulddo("outlier"))
     testoutlier();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
