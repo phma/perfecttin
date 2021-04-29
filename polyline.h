@@ -110,6 +110,7 @@ public:
   virtual double in(xy point);
   virtual xyz station(double along);
   virtual double area();
+  virtual unsigned int checksum();
 };
 
 class polyspiral: public polyarc
@@ -143,6 +144,7 @@ public:
   virtual xyz station(double along);
   virtual double area();
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
+  virtual unsigned int checksum();
 };
 
 #endif

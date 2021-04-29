@@ -1086,3 +1086,38 @@ unsigned int polyline::checksum()
     ret+=signParity(i)*dir(endpoints[i],endpoints[(i+1)%esz]);
   return ret;
 }
+
+unsigned int polyarc::checksum()
+{
+  unsigned int ret=0;
+  int i,esz=endpoints.size(),lsz=lengths.size();
+  for (i=0;i<esz;i++)
+    ret+=signParity(i)*dir(xy(0,0),endpoints[i]);
+  for (i=0;i<lsz;i++)
+  {
+    ret+=signParity(i)*dir(endpoints[i],endpoints[(i+1)%esz]);
+    ret+=signParity(i)*deltas[i];
+  }
+  return ret;
+}
+
+unsigned int polyspiral::checksum()
+{
+  unsigned int ret=0;
+  int i,esz=endpoints.size(),lsz=lengths.size();
+  for (i=0;i<esz;i++)
+  {
+    ret+=signParity(i)*dir(xy(0,0),endpoints[i]);
+    ret+=signParity(i)*bearings[i];
+  }
+  for (i=0;i<lsz;i++)
+  {
+    ret-=signParity(i)*dir(endpoints[i],endpoints[(i+1)%esz]);
+    ret+=signParity(i)*(deltas[i]+delta2s[i]+2*midbearings[i]);
+    /* The midbearings of a polyspiral copied from a polyline are the same as
+     * the dir from one endpoint to the next, so 2*midbearings[i]-dir(
+     * endpoints[i],endpoints[i+1] is equal to dir(endpoints[i],endpoints[i+1].
+     */
+  }
+  return ret;
+}
