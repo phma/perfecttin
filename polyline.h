@@ -25,6 +25,7 @@
 #define POLYLINE_H
 
 #include <vector>
+#include <fstream>
 #include "point.h"
 #include "point.h"
 #include "arc.h"
@@ -86,6 +87,7 @@ public:
   virtual double area();
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual unsigned int checksum();
+  virtual void write(std::ostream &file);
 };
 
 class polyarc: public polyline

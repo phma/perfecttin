@@ -1547,6 +1547,7 @@ void testpolyline()
   polyarc q;
   polyspiral r;
   PostScript ps;
+  ofstream polyfile("polyline.dat");
   xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
   xy e(3,0),f(3.5,0.5),g(0,4),mid;
   /* a: near centroid; b: center of circle, midpoint of hypot;
@@ -1606,6 +1607,9 @@ void testpolyline()
   cout<<"checksums: p "<<hex<<p.checksum()<<" q "<<q.checksum()<<" r "<<r.checksum()<<dec<<endl;
   tassert(abs(foldangle(p.checksum()-q.checksum()))>1000);
   tassert(abs(foldangle(q.checksum()-r.checksum()))<10);
+  p.write(polyfile);
+  q.write(polyfile);
+  r.write(polyfile);
   ps.startpage();
   ps.setscale(-1,-0.5,4,4.5);
   ps.spline(p.approx3d(0.001));

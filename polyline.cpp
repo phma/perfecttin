@@ -34,6 +34,7 @@
 #include <iostream>
 #include "polyline.h"
 #include "manysum.h"
+#include "binio.h"
 #include "relprime.h"
 #include "ldecimal.h"
 using namespace std;
@@ -1119,4 +1120,21 @@ unsigned int polyspiral::checksum()
      */
   }
   return ret;
+}
+
+void polyline::write(ostream &file)
+{
+  int i;
+  writeledouble(file,elevation);
+  writeleint(file,endpoints.size());
+  for (i=0;i<endpoints.size();i++)
+  {
+    writeledouble(file,endpoints[i].getx());
+    writeledouble(file,endpoints[i].gety());
+  }
+  writeleint(file,lengths.size());
+  for (i=0;i<lengths.size();i++)
+    writeledouble(file,lengths[i]);
+  writeleint(file,0); // deltas
+  writeleint(file,0); // delta2s
 }
