@@ -1108,7 +1108,6 @@ unsigned int polyspiral::checksum()
   for (i=0;i<esz;i++)
   {
     ret+=signParity(i)*dir(xy(0,0),endpoints[i]);
-    ret+=signParity(i)*bearings[i];
   }
   for (i=0;i<lsz;i++)
   {
