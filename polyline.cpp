@@ -59,7 +59,7 @@ int count1(unsigned int num)
 
 int signParity(unsigned int num)
 {
-  return 2-2*(count1(num)&1);
+  return 1-2*(count1(num)&1);
 }
 
 polyline::polyline()
