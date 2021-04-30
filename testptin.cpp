@@ -1604,6 +1604,8 @@ void testpolyline()
   tassert(fabs(r.length()-M_PI*5)<0.0005);
   tassert(fabs(r.area()-M_PI*6.25)<0.0005);
   cout<<"checksums: p "<<hex<<p.checksum()<<" q "<<q.checksum()<<" r "<<r.checksum()<<dec<<endl;
+  tassert(abs(foldangle(p.checksum()-q.checksum()))>1000);
+  tassert(abs(foldangle(q.checksum()-r.checksum()))<10);
   ps.startpage();
   ps.setscale(-1,-0.5,4,4.5);
   ps.spline(p.approx3d(0.001));
