@@ -478,8 +478,8 @@ const int ptinHeaderFormat=0x00000028;
 
 /* Format of contour lines:
  * 0000		This is a group of contour lines
- * 0008		Length of the label
- * double	Label of this group of contour lines (the contour interval)
+ * 0010		Length of the label
+ * double*2	Label of this group of contour lines (the contour interval and tolerance)
  * 0000		Each contour is a 2D polyline with elevation
  * uint32	Number of contours
  * Format of one contour:
