@@ -113,6 +113,7 @@ public:
   virtual xyz station(double along);
   virtual double area();
   virtual unsigned int checksum();
+  virtual void write(std::ostream &file);
 };
 
 class polyspiral: public polyarc
