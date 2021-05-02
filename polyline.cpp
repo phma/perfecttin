@@ -1161,3 +1161,31 @@ void polyarc::write(ostream &file)
     writeleint(file,deltas[i]);
   writeleint(file,0); // delta2s
 }
+
+void polyspiral::write(ostream &file)
+{
+  int i;
+  int lenDelta;
+  writeledouble(file,elevation);
+  writeleint(file,endpoints.size());
+  for (i=0;i<endpoints.size();i++)
+  {
+    writeledouble(file,endpoints[i].getx());
+    writeledouble(file,endpoints[i].gety());
+  }
+  writeleint(file,lengths.size());
+  for (i=0;i<lengths.size();i++)
+    writeledouble(file,lengths[i]);
+  for (i=lenDelta=0;i<deltas.size();i++)
+    if (deltas[i])
+      lenDelta=i+1;
+  writeleint(file,lenDelta);
+  for (i=0;i<lenDelta;i++)
+    writeleint(file,deltas[i]);
+  for (i=lenDelta=0;i<delta2s.size();i++)
+    if (delta2s[i])
+      lenDelta=i+1;
+  writeleint(file,lenDelta);
+  for (i=0;i<lenDelta;i++)
+    writeleint(file,delta2s[i]);
+}
