@@ -484,6 +484,7 @@ const int ptinHeaderFormat=0x00000028;
  * uint32	Number of contours
  * Format of one contour:
  * double	Elevation
+ * byte		Curvy bit
  * uint32	Number of endpoints
  * double*2n	Endpoints
  * uint32	Number of lengths

@@ -1126,6 +1126,7 @@ void polyline::write(ostream &file)
 {
   int i;
   writeledouble(file,elevation);
+  file.put(0); // curvy
   writeleint(file,endpoints.size());
   for (i=0;i<endpoints.size();i++)
   {
@@ -1144,6 +1145,7 @@ void polyarc::write(ostream &file)
   int i;
   int lenDelta;
   writeledouble(file,elevation);
+  file.put(0); // curvy
   writeleint(file,endpoints.size());
   for (i=0;i<endpoints.size();i++)
   {
@@ -1167,6 +1169,7 @@ void polyspiral::write(ostream &file)
   int i;
   int lenDelta;
   writeledouble(file,elevation);
+  file.put(curvy);
   writeleint(file,endpoints.size());
   for (i=0;i<endpoints.size();i++)
   {
