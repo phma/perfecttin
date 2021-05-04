@@ -1543,11 +1543,12 @@ xy intersection(polyline &p,xy start,xy end)
 void testpolyline()
 {
   int i;
-  polyline p;
-  polyarc q;
-  polyspiral r;
+  polyline p,p1;
+  polyarc q,q1;
+  polyspiral r,r1;
   PostScript ps;
   ofstream polyfile("polyline.dat");
+  ifstream readfile;
   xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
   xy e(3,0),f(3.5,0.5),g(0,4),mid;
   /* a: near centroid; b: center of circle, midpoint of hypot;
@@ -1669,6 +1670,10 @@ void testpolyline()
   ps.endpage();
   for (i=0;i<r.length();i++)
     tassert(fabs(r.station(i).length()-1)<1e-15);
+  polyfile.close();
+  readfile.open("polyline.dat");
+  p1.read(readfile);
+  tassert(p1.area()==p.area());
 }
 
 bool shoulddo(string testname)

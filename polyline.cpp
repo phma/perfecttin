@@ -1216,7 +1216,7 @@ void polyline::read(istream &file)
       valid=false;
   }
   sz=readleint(file);
-  if (sz<endpoints.size()-1 || sz>endpoints.size())
+  if (sz<(signed)endpoints.size()-1 || sz>endpoints.size())
     valid=false;
   for (i=0;valid && i<sz;i++)
   {
