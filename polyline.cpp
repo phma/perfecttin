@@ -1192,3 +1192,47 @@ void polyspiral::write(ostream &file)
   for (i=0;i<lenDelta;i++)
     writeleint(file,delta2s[i]);
 }
+
+void polyline::read(istream &file)
+{
+  int i,sz;
+  double x,y;
+  bool valid=true;
+  clear();
+  elevation=readledouble(file);
+  file.get(); // curvy
+  sz=readleint(file);
+  if (sz<0)
+  {
+    valid=false;
+    sz=0;
+  }
+  for (i=0;valid && i<sz;i++)
+  {
+    x=readledouble(file);
+    y=readledouble(file);
+    endpoints.push_back(xy(x,y));
+    if (!file.good())
+      valid=false;
+  }
+  sz=readleint(file);
+  if (sz<endpoints.size()-1 || sz>endpoints.size())
+    valid=false;
+  for (i=0;valid && i<sz;i++)
+  {
+    lengths.push_back(readledouble(file));
+    if (!file.good())
+      valid=false;
+  }
+  sz=readleint(file); // deltas
+  if (sz)
+    valid=false;
+  sz=readleint(file); // delta2s
+  if (sz)
+    valid=false;
+  if (!valid)
+  {
+    clear();
+    throw -1;
+  }
+}
