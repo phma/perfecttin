@@ -115,6 +115,7 @@ public:
   virtual double area();
   virtual unsigned int checksum();
   virtual void write(std::ostream &file);
+  virtual void read(std::istream &file);
 };
 
 class polyspiral: public polyarc

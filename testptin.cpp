@@ -1674,6 +1674,8 @@ void testpolyline()
   readfile.open("polyline.dat");
   p1.read(readfile);
   tassert(p1.area()==p.area());
+  q1.read(readfile);
+  tassert(q1.area()==q.area());
 }
 
 bool shoulddo(string testname)
