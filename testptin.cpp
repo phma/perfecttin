@@ -1654,6 +1654,14 @@ void testpolyline()
   mid=intersection(r,b,2*g-b);
   cout<<"r x b-g ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
   tassert(dist(g,mid)<1e-8);
+  polyfile.close();
+  readfile.open("polyline.dat");
+  p1.read(readfile);
+  tassert(p1.area()==p.area());
+  q1.read(readfile);
+  tassert(q1.area()==q.area());
+  r1.read(readfile);
+  tassert(r1.area()==r.area());
   bendlimit=DEG120;
   r=polyspiral();
   for (i=0;i<600;i++)
@@ -1670,14 +1678,6 @@ void testpolyline()
   ps.endpage();
   for (i=0;i<r.length();i++)
     tassert(fabs(r.station(i).length()-1)<1e-15);
-  polyfile.close();
-  readfile.open("polyline.dat");
-  p1.read(readfile);
-  tassert(p1.area()==p.area());
-  q1.read(readfile);
-  tassert(q1.area()==q.area());
-  r1.read(readfile);
-  tassert(r1.area()==r.area());
 }
 
 bool shoulddo(string testname)
