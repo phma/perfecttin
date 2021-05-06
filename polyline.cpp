@@ -1251,7 +1251,12 @@ void polyline::read(istream &file)
   sz=readleint(file); // delta2s
   if (sz)
     valid=false;
-  if (!valid)
+  if (valid)
+  {
+    cumLengths.resize(lengths.size());
+    setlengths();
+  }
+  else
   {
     clear();
     throw -1;
@@ -1303,7 +1308,12 @@ void polyarc::read(istream &file)
   sz=readleint(file); // delta2s
   if (sz)
     valid=false;
-  if (!valid)
+  if (valid)
+  {
+    cumLengths.resize(lengths.size());
+    setlengths();
+  }
+  else
   {
     clear();
     throw -1;
@@ -1377,6 +1387,8 @@ void polyspiral::read(istream &file)
       setbear(i);
     for (i=0;i<lengths.size();i++)
       setreadspiral(i);
+    cumLengths.resize(lengths.size());
+    setlengths();
   }
   else
   {
