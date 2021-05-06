@@ -151,6 +151,7 @@ public:
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual unsigned int checksum();
   virtual void write(std::ostream &file);
+  virtual void read(std::istream &file);
 };
 
 #endif

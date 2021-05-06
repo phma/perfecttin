@@ -1676,6 +1676,8 @@ void testpolyline()
   tassert(p1.area()==p.area());
   q1.read(readfile);
   tassert(q1.area()==q.area());
+  r1.read(readfile);
+  tassert(r1.area()==r.area());
 }
 
 bool shoulddo(string testname)

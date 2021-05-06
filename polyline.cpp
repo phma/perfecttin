@@ -1288,3 +1288,63 @@ void polyarc::read(istream &file)
     throw -1;
   }
 }
+
+void polyspiral::read(istream &file)
+{
+  int i,sz;
+  double x,y;
+  bool valid=true;
+  clear();
+  elevation=readledouble(file);
+  file.get(); // curvy
+  sz=readleint(file);
+  if (sz<0)
+  {
+    valid=false;
+    sz=0;
+  }
+  for (i=0;valid && i<sz;i++)
+  {
+    x=readledouble(file);
+    y=readledouble(file);
+    endpoints.push_back(xy(x,y));
+    if (!file.good())
+      valid=false;
+  }
+  sz=readleint(file);
+  if (sz<(signed)endpoints.size()-1 || sz>endpoints.size())
+    valid=false;
+  for (i=0;valid && i<sz;i++)
+  {
+    lengths.push_back(readledouble(file));
+    if (!file.good())
+      valid=false;
+  }
+  sz=readleint(file);
+  if (sz<0 || sz>lengths.size())
+    valid=false;
+  for (i=0;valid && i<sz;i++)
+  {
+    deltas.push_back(readleint(file));
+    if (!file.good())
+      valid=false;
+  }
+  while (deltas.size()<lengths.size())
+    deltas.push_back(0);
+  sz=readleint(file);
+  if (sz<0 || sz>lengths.size())
+    valid=false;
+  for (i=0;valid && i<sz;i++)
+  {
+    delta2s.push_back(readleint(file));
+    if (!file.good())
+      valid=false;
+  }
+  while (delta2s.size()<lengths.size())
+    delta2s.push_back(0);
+  if (!valid)
+  {
+    clear();
+    throw -1;
+  }
+}
