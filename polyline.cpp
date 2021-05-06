@@ -1056,6 +1056,27 @@ void polyspiral::setspiral(int i)
   clothances[i]=s.clothance();
 }
 
+void polyspiral::setreadspiral(int i)
+{
+  int j,d1,d2;
+  spiralarc s;
+  j=i+1;
+  if (j>=endpoints.size())
+    j=0;
+  s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
+  d1=deltas[i];
+  d2=delta2s[i];
+  s.setdelta(d1,d2);
+  if (std::isnan(s.length()))
+    s.setdelta(0,0);
+  if (lengths[i]==0)
+    cerr<<"length["<<i<<"]=0"<<endl;
+  midbearings[i]=s.bearing(lengths[i]/2);
+  midpoints[i]=s.station(lengths[i]/2);
+  curvatures[i]=s.curvature(lengths[i]/2);
+  clothances[i]=s.clothance();
+}
+
 void polyspiral::smooth()
 {
   int i;
@@ -1296,7 +1317,10 @@ void polyspiral::read(istream &file)
   bool valid=true;
   clear();
   elevation=readledouble(file);
-  file.get(); // curvy
+  i=file.get();
+  if (i>1)
+    valid=false;
+  curvy=i>0;
   sz=readleint(file);
   if (sz<0)
   {
@@ -1342,7 +1366,19 @@ void polyspiral::read(istream &file)
   }
   while (delta2s.size()<lengths.size())
     delta2s.push_back(0);
-  if (!valid)
+  if (valid)
+  {
+    bearings.resize(endpoints.size());
+    midbearings.resize(lengths.size());
+    midpoints.resize(lengths.size());
+    curvatures.resize(lengths.size());
+    clothances.resize(lengths.size());
+    for (i=0;i<bearings.size();i++)
+      setbear(i);
+    for (i=0;i<lengths.size();i++)
+      setreadspiral(i);
+  }
+  else
   {
     clear();
     throw -1;

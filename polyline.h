@@ -140,6 +140,7 @@ public:
   void setbear(int i);
   void setbear(int i,int bear);
   void setspiral(int i);
+  void setreadspiral(int i);
   void smooth();
   //void setdelta(int i,int delta);
   virtual void setlengths();
