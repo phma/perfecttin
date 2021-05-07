@@ -165,6 +165,15 @@ int ContourInterval::contourType(double elev)
   return ret;
 }
 
+bool operator<(const ContourInterval &l,const ContourInterval &r)
+// For a map from ContourInterval to collections of contours
+{
+  if (l.interval==r.interval)
+    return l.relativeTolerance<r.relativeTolerance;
+  else
+    return l.interval<r.interval;
+}
+
 void ContourInterval::writeXml(ostream &ofile)
 {
   ofile<<"<ContourInterval interval=\""<<ldecimal(interval);

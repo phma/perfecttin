@@ -79,6 +79,7 @@ public:
   void setIntervalRatios(double i,int f,int c);
   std::string valueString(double unit,bool precise=false);
   int contourType(double elev);
+  friend bool operator<(const ContourInterval &l,const ContourInterval &r);
   void writeXml(std::ostream &ofile);
 private:
   double interval,relativeTolerance;
