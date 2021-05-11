@@ -596,8 +596,10 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   polyline change;
   xy a,b,c; // current endpoints; b is the nth
   xy p,q,r,s; // points to try changing the nth endpoint to
+  xy z; // endpoint before a or after c
   double e=pl.contours[i].getElevation();
   double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier,errBest;
+  double bendZ;
   DirtyTracker dt;
   origsz=sz=pl.contours[i].size();
   dt.init(sz);
@@ -683,6 +685,36 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	lohiElev=pl.lohi(change,tolerance);
 	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	  errBendier=INFINITY;
+      }
+      if (n>1 || !pl.contours[i].isopen())
+      {
+	z=pl.contours[i].getEndpoint(n-2);
+	bendZ=bendiness(z,a,b,tolerance);
+	errCurrent+=bendZ;
+	bendZ=bendiness(z,a,p,tolerance);
+	errNewSeg+=bendZ;
+	errBackward+=bendZ;
+	bendZ=bendiness(z,a,q,tolerance);
+	errForward+=bendZ;
+	bendZ=bendiness(z,a,r,tolerance);
+	errStraighter+=bendZ;
+	bendZ=bendiness(z,a,s,tolerance);
+	errBendier+=bendZ;
+      }
+      if (n<sz-2 || !pl.contours[i].isopen())
+      {
+	z=pl.contours[i].getEndpoint(n+2);
+	bendZ=bendiness(b,c,z,tolerance);
+	errCurrent+=bendZ;
+	bendZ=bendiness(p,c,z,tolerance);
+	errBackward+=bendZ;
+	bendZ=bendiness(q,c,z,tolerance);
+	errNewSeg+=bendZ;
+	errForward+=bendZ;
+	bendZ=bendiness(r,c,z,tolerance);
+	errStraighter+=bendZ;
+	bendZ=bendiness(s,c,z,tolerance);
+	errBendier+=bendZ;
       }
       errBest=errCurrent;
       dt.markClean(n); // It's been checked, no need to recheck
