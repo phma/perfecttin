@@ -3,7 +3,7 @@
 /* adjelev.cpp - adjust elevations of points          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -37,6 +37,22 @@ using namespace std;
 
 vector<adjustRecord> adjustmentLog;
 size_t adjLogSz=0;
+map<time_t,map<int,int> > blockHistoLog;
+mutex blockHistoMutex;
+
+void logBlockSize(int sz)
+/* Logs the sizes of adjust blocks to get an idea of how much GPU processing
+ * would speed it up.
+ */
+{
+  if (BLOCK_HISTO_TIME)
+  {
+    time_t now=(time(nullptr)/BLOCK_HISTO_TIME)*BLOCK_HISTO_TIME;
+    blockHistoMutex.lock();
+    blockHistoLog[now][sz]++;
+    blockHistoMutex.unlock();
+  }
+}
 
 void checkIntElev(vector<point *> corners)
 /* Check whether any of the elevations is an integer.
@@ -165,6 +181,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread)
     }
   else
   {
+    logBlockSize(ndots);
     a.resize(ndots,pnt.size());
     /* Clip the adjusted elevations to the interval from the lowest dot to the
     * highest dot, and from the second lowest point to the second highest point,
@@ -291,6 +308,7 @@ void computeAdjustBlock(AdjustBlockTask &task)
   AdjustBlockResult &result=*task.result;
   result.high=-INFINITY;
   result.low=INFINITY;
+  logBlockSize(task.numDots);
   for (j=0;j<task.pnt.size();j++)
     if (task.pnt[j]==task.tri->a || task.pnt[j]==task.tri->b || task.pnt[j]==task.tri->c)
     {
