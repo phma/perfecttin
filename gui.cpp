@@ -3,7 +3,7 @@
 /* gui.cpp - GUI main program                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
   exitStatus=app.exec();
   waitForThreads(TH_STOP);
   writeBufLog();
+  writeBlockSizeLog();
   joinThreads();
   return exitStatus;
 }

@@ -3,7 +3,7 @@
 /* adjelev.cpp - adjust elevations of points          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2021 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -330,6 +330,23 @@ void computeAdjustBlock(AdjustBlockTask &task)
   result.mtmPart=mt.transmult();
   result.mtvPart=mt*vmat;
   result.ready=true;
+}
+
+void writeBlockSizeLog()
+{
+  if (blockHistoLog.size())
+  {
+    ofstream logFile("blockhisto.log");
+    map<time_t,map<int,int> >::iterator i;
+    map<int,int>::iterator j;
+    for (i=blockHistoLog.begin();i!=blockHistoLog.end();++i)
+    {
+      logFile<<i->first<<':';
+      for (j=i->second.begin();j!=i->second.end();++j)
+	logFile<<" ("<<j->first<<','<<j->second<<')';
+      logFile<<endl;
+    }
+  }
 }
 
 void logAdjustment(adjustRecord rec)

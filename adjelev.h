@@ -3,7 +3,7 @@
 /* adjelev.h - adjust elevations of points            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -32,8 +32,8 @@
  * For GPU programming, it should be a multiple of eight times the number of
  * cores that execute the same kernel.
  */
-#define BLOCK_HISTO_TIME 60
-// in seconds
+#define BLOCK_HISTO_TIME 4
+// in seconds, the amount of real time that is shown as one frame
 
 struct adjustRecord
 {
@@ -63,6 +63,7 @@ struct AdjustBlockTask
 std::vector<int> blockSizes(int total);
 adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt,int thread);
 void computeAdjustBlock(AdjustBlockTask &task);
+void writeBlockSizeLog();
 void logAdjustment(adjustRecord rec);
 double rmsAdjustment();
 bool isLoose(point &pnt);
