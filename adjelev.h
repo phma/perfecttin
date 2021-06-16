@@ -32,7 +32,7 @@
  * For GPU programming, it should be a multiple of eight times the number of
  * cores that execute the same kernel.
  */
-#define BLOCK_HISTO_TIME 4
+#define BLOCK_HISTO_TIME 0
 // in seconds, the amount of real time that is shown as one frame
 
 struct adjustRecord
