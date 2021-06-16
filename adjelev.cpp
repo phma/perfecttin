@@ -37,6 +37,7 @@ using namespace std;
 
 vector<adjustRecord> adjustmentLog;
 size_t adjLogSz=0;
+double martenFactor=0;
 map<time_t,map<int,int> > blockHistoLog;
 mutex blockHistoMutex;
 
@@ -63,6 +64,20 @@ void checkIntElev(vector<point *> corners)
   for (i=0;i<corners.size();i++)
     if (frac(corners[i]->elev())==0)
       cout<<"Point "<<net.revpoints[corners[i]]<<" elevation "<<corners[i]->elev()<<endl;
+}
+
+double marten(double d)
+/* This function name needs to be changed. It refers to the Marten trucking
+ * company, whose side shows a bird (martin, not marten!) that flies
+ * horizontally and then veers upward.
+ */
+{
+  if (martenFactor)
+  {
+    d/=martenFactor;
+    d=(d/(1-exp(-d)))*martenFactor;
+  }
+  return d;
 }
 
 vector<int> blockSizes(int total)
@@ -194,7 +209,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread)
       {
 	for (k=0;k<pnt.size();k++)
 	  a[ndots][k]=tri[i]->areaCoord(tri[i]->dots[j],pnt[k]);
-	b.push_back(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j]));
+	b.push_back(marten(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j])));
 	if (tri[i]->dots[j].elev()>localHigh)
 	  localHigh=tri[i]->dots[j].elev();
 	if (tri[i]->dots[j].elev()<localLow)
@@ -319,7 +334,7 @@ void computeAdjustBlock(AdjustBlockTask &task)
   {
     for (k=0;k<cx.size();k++)
       m[ndots][cx[k]]=task.tri->areaCoord(task.tri->dots[j],cp[k]);
-    v.push_back(task.tri->dots[j].elev()-task.tri->elevation(task.tri->dots[j]));
+    v.push_back(marten(task.tri->dots[j].elev()-task.tri->elevation(task.tri->dots[j])));
     if (task.tri->dots[j].elev()>result.high)
       result.high=task.tri->dots[j].elev();
     if (task.tri->dots[j].elev()<result.low)

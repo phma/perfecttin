@@ -91,6 +91,7 @@ protected:
   void closeEvent(QCloseEvent *event) override;
 private:
   int lastNumDots,lastNumTriangles,lastNumEdges;
+  int traceHiLo; // -1, 0, or 1
   double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas

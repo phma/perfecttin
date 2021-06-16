@@ -35,6 +35,8 @@
 #define BLOCK_HISTO_TIME 0
 // in seconds, the amount of real time that is shown as one frame
 
+extern double martenFactor;
+
 struct adjustRecord
 {
   bool validMatrix;
