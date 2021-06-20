@@ -265,7 +265,7 @@ void MainWindow::tick()
 	{
 	  stageTolerance/=2;
 	  minArea/=4;
-	  martenFactor=traceHiLo*stageTolerance;
+	  swishFactor=traceHiLo*stageTolerance;
 	  setThreadCommand(TH_RUN);
 	}
 	else // conversion is finished
@@ -337,7 +337,7 @@ void MainWindow::tick()
       while (stageTolerance*2<tolerance*toleranceRatio)
 	stageTolerance*=2;
       minArea=sqr(stageTolerance/tolerance)/densify/density;
-      martenFactor=traceHiLo*stageTolerance;
+      swishFactor=traceHiLo*stageTolerance;
       setThreadCommand(TH_RUN);
       stopAction->setEnabled(true);
     }
@@ -764,7 +764,7 @@ void MainWindow::startConversion()
     saveFileName=files[0].toStdString();
     if (extension(saveFileName)==".ptin")
       saveFileName=noExt(saveFileName);
-    martenFactor=0;
+    swishFactor=0;
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
     clearLog();
