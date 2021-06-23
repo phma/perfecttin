@@ -240,7 +240,7 @@ void dealDots(int thread,triangle *tri0,triangle *tri1,triangle *tri2,triangle *
       j=(j+x)%results.size();
     }
   }
-  else
+  else // less than TASK_STEP_SIZE*3 dots in a triangle
   {
     for (p2=1;p2<=tri0->dots.size();p2*=2);
     if (p2>tri0->dots.size())
@@ -337,7 +337,7 @@ point *bend(edge *e,int thread)
     net.edges[newEdgeNum+1].tria=&net.triangles[newTriNum];
     net.insertHullPoint(pnt,e->a);
   }
-  else
+  else // e is clockwise around the TIN
   {
     net.triangles[newTriNum].b=e->a;
     net.triangles[newTriNum].c=e->b;
@@ -525,7 +525,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	  }
 	}
       }
-      else
+      else // less than TASK_STEP_SIZE*3 dots in a triangle
 	for (i=0;i<2;i++)
 	  for (j=0;j<triab[i]->dots.size();j++)
 	  {
@@ -546,7 +546,7 @@ bool shouldFlip(edge *e,double tolerance,double minArea,int thread)
 	      (tempPointlist[thread].edges[5].length()+tempPointlist[thread].edges[7].length());
 	elev5=tempPointlist[thread].points[5].elev();
       }
-      else
+      else // invalid matrix
 	elev13=elev24=elev5=0;
       if (elev13==elev24)
 	crit1=0;
@@ -616,8 +616,8 @@ int edgeop(edge *e,double tolerance,double minArea,int thread)
 	did=true;
       }
     }
-    else;
-  else
+    else; // shouldn't flip
+  else // e is an outer edge; bend it?
     if (gotLock1 && shouldBend(e,tolerance,minArea))
     {
       triNeigh=triangleNeighbors(corners);
