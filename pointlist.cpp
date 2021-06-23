@@ -45,6 +45,7 @@ void pointlist::clear()
   convexHull.clear();
   edgePool.clear();
   trianglePool.clear();
+  swishFactor=0;
   wingEdge.unlock();
 }
 

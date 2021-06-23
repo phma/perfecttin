@@ -37,7 +37,6 @@ using namespace std;
 
 vector<adjustRecord> adjustmentLog;
 size_t adjLogSz=0;
-double swishFactor=0;
 map<time_t,map<int,int> > blockHistoLog;
 mutex blockHistoMutex;
 
@@ -72,10 +71,10 @@ double swish(double d)
  * passes through the origin.
  */
 {
-  if (swishFactor)
+  if (net.swishFactor)
   {
-    d/=swishFactor;
-    d=(d/(1-exp(-d)))*swishFactor;
+    d/=net.swishFactor;
+    d=(d/(1-exp(-d)))*net.swishFactor;
   }
   return d;
 }

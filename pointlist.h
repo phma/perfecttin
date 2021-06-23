@@ -60,6 +60,7 @@ public:
   std::vector<point*> convexHull;
   Unifiro<triangle *> trianglePool;
   Unifiro<edge *> edgePool;
+  double swishFactor; // for tracing top or bottom of a point cloud
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
   void addpoint(int numb,point pnt,bool overwrite=false);
