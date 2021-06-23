@@ -1136,7 +1136,7 @@ void test1adjelev(const double data[],int nData,double elevInt)
       cout<<"point not in any triangle\n";
   }
   resizeBuckets(1);
-  adjustElev(tri4,point5,-1);
+  adjustElev(tri4,point5,-1,0);
   for (i=1;i<=5;i++)
     cout<<ldecimal(net.points[i].getx())<<','<<ldecimal(net.points[i].gety())<<','<<ldecimal(net.points[i].getz())<<'\n';
   tassert(fabs(net.points[5].getz()-elevInt)<0.001);

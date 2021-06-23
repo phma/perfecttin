@@ -55,13 +55,14 @@ struct AdjustBlockTask
   triangle *tri;
   std::vector<point *> pnt;
   xyz *dots;
+  double swishFactor;
   int numDots;
   int thread;
   AdjustBlockResult *result;
 };
 
 std::vector<int> blockSizes(int total);
-adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt,int thread);
+adjustRecord adjustElev(std::vector<triangle *> tri,std::vector<point *> pnt,int thread,double swishFactor);
 void computeAdjustBlock(AdjustBlockTask &task);
 void writeBlockSizeLog();
 void logAdjustment(adjustRecord rec);

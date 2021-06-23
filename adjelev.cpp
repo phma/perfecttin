@@ -109,7 +109,7 @@ vector<int> blockSizes(int total)
   return ret;
 }
 
-adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread)
+adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread,double swishFactor)
 /* Adjusts the points by least squares to fit all the dots in the triangles.
  * The triangles should be all those that have at least one corner in
  * the list of points. Corners of triangles which are not in pnt will not
@@ -162,6 +162,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread)
 	tasks.back().pnt=pnt;
 	tasks.back().dots=&tri[i]->dots[triDots];
 	tasks.back().numDots=blkSizes[j];
+	tasks.back().swishFactor=swishFactor;
 	tasks.back().thread=thread;
 	triDots+=blkSizes[j];
       }
