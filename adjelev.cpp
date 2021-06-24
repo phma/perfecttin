@@ -65,16 +65,16 @@ void checkIntElev(vector<point *> corners)
       cout<<"Point "<<net.revpoints[corners[i]]<<" elevation "<<corners[i]->elev()<<endl;
 }
 
-double swish(double d)
+double swish(double d,double swishFactor)
 /* This function is used to trace the high points or the low points of a cloud
  * instead of averaging all of them. It is asymptotic to y=0 and y=x and
  * passes through the origin.
  */
 {
-  if (net.swishFactor)
+  if (swishFactor)
   {
-    d/=net.swishFactor;
-    d=(d/(1-exp(-d)))*net.swishFactor;
+    d/=swishFactor;
+    d=(d/(1-exp(-d)))*swishFactor;
   }
   return d;
 }
@@ -209,7 +209,7 @@ adjustRecord adjustElev(vector<triangle *> tri,vector<point *> pnt,int thread,do
       {
 	for (k=0;k<pnt.size();k++)
 	  a[ndots][k]=tri[i]->areaCoord(tri[i]->dots[j],pnt[k]);
-	b.push_back(swish(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j])));
+	b.push_back(swish(tri[i]->dots[j].elev()-tri[i]->elevation(tri[i]->dots[j]),swishFactor));
 	if (tri[i]->dots[j].elev()>localHigh)
 	  localHigh=tri[i]->dots[j].elev();
 	if (tri[i]->dots[j].elev()<localLow)
@@ -334,7 +334,7 @@ void computeAdjustBlock(AdjustBlockTask &task)
   {
     for (k=0;k<cx.size();k++)
       m[ndots][cx[k]]=task.tri->areaCoord(task.tri->dots[j],cp[k]);
-    v.push_back(swish(task.tri->dots[j].elev()-task.tri->elevation(task.tri->dots[j])));
+    v.push_back(swish(task.tri->dots[j].elev()-task.tri->elevation(task.tri->dots[j]),task.swishFactor));
     if (task.tri->dots[j].elev()>result.high)
       result.high=task.tri->dots[j].elev();
     if (task.tri->dots[j].elev()<result.low)
