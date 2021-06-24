@@ -74,7 +74,7 @@ double swish(double d,double swishFactor)
   if (swishFactor)
   {
     d/=swishFactor;
-    d=(d/(1-exp(-d)))*swishFactor;
+    d=(d/(1+exp(-d)))*swishFactor;
   }
   return d;
 }
