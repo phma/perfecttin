@@ -744,6 +744,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	errBest=errBendier;
 	whichNew=5;
       }
+      assert(isfinite(errBest) && errBest>=0);
       if (whichNew && (errCurrent-errBest)*16>errCurrent)
       {
 	j=0;
