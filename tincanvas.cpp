@@ -434,6 +434,7 @@ void TinCanvas::setLengthUnit(double unit)
 void TinCanvas::selectContourInterval()
 {
   ciDialog->set(&contourInterval,lengthUnit);
+  net.setCurrentContours(contourInterval);
   ciDialog->exec();
 }
 
@@ -448,6 +449,7 @@ void TinCanvas::roughContours()
   ContourTask ctr;
   conterval=contourInterval.fineInterval();
   tolerance=contourInterval.tolerance();
+  net.setCurrentContours(contourInterval);
   if (goal==DONE)
   {
     goal=ROUGH_CONTOURS;
