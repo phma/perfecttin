@@ -54,6 +54,7 @@ float splittab[65]=
 
 shared_mutex markMutex;
 deque<set<edge *> > marks;
+int newHisto[6]={0,0,0,0,0,0};
 
 ContourInterval::ContourInterval()
 {
@@ -745,6 +746,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	whichNew=5;
       }
       assert(isfinite(errBest) && errBest>=0);
+      ++newHisto[whichNew];
       if (whichNew && (errCurrent-errBest)*16>errCurrent)
       {
 	j=0;
