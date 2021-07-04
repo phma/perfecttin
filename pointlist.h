@@ -55,6 +55,7 @@ public:
    * when a vector is resized.
    */
   std::vector<polyspiral> contours;
+  std::vector<polyspiral> *currentContours;
   polyline boundary;
   qindex qinx;
   std::vector<point*> convexHull;
@@ -75,6 +76,7 @@ public:
   int size();
   void clearmarks();
   void clearTin();
+  void setCurrentContours(ContourInterval &ci);
   void eraseEmptyContours();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);

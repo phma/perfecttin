@@ -46,6 +46,7 @@ void pointlist::clear()
   edgePool.clear();
   trianglePool.clear();
   swishFactor=0;
+  currentContours=nullptr;
   wingEdge.unlock();
 }
 
@@ -68,6 +69,14 @@ void pointlist::clearmarks()
   map<int,edge>::iterator e;
   for (e=edges.begin();e!=edges.end();e++)
     e->second.clearmarks();
+}
+
+void pointlist::setCurrentContours(ContourInterval &ci)
+/* Selects which contours are currently being worked on (traced, pruned, etc.).
+ * If a set of contours with this contour interval does not exist, creates it.
+ */
+{
+  currentContours=&contours;
 }
 
 void pointlist::eraseEmptyContours()
