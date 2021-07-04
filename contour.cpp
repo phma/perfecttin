@@ -444,7 +444,7 @@ void rough1contour(pointlist &pl,double elev,int thread)
       ctour.dedup();
       ctour.setlengths();
       pl.wingEdge.lock();
-      pl.contours.push_back(ctour);
+      (*pl.currentContours).push_back(ctour);
       pl.wingEdge.unlock();
     }
 }
@@ -458,7 +458,7 @@ void roughcontours(pointlist &pl,double conterval)
 {
   array<double,2> tinlohi;
   int i;
-  pl.contours.clear();
+  (*pl.currentContours).clear();
   tinlohi=pl.lohi();
   for (i=floor(tinlohi[0]/conterval);i<=ceil(tinlohi[1]/conterval);i++)
     rough1contour(pl,i*conterval,0);
@@ -552,23 +552,23 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   int j,sz,origsz;
   array<double,2> lohiElev;
   polyline change;
-  double e=pl.contours[i].getElevation();
+  double e=(*pl.currentContours)[i].getElevation();
   PostScript ps;
   BoundRect br;
   DirtyTracker dt;
-  origsz=sz=pl.contours[i].size();
-  //cout<<"Contour "<<i<<" error before "<<contourError(pl,pl.contours[i]);
-  //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
+  origsz=sz=(*pl.currentContours)[i].size();
+  //cout<<"Contour "<<i<<" error before "<<contourError(pl,(*pl.currentContours)[i]);
+  //cout<<" bendiness "<<totalBendiness((*pl.currentContours)[i],tolerance)<<endl;
   dt.init(sz);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
-    if ((n || !pl.contours[i].isopen()) && pl.contours[i].size()>2 && dt.isDirty(n))
+    if ((n || !(*pl.currentContours)[i].isopen()) && (*pl.currentContours)[i].size()>2 && dt.isDirty(n))
     {
       change.clear();
-      change.insert(pl.contours[i].getEndpoint(n-1));
-      change.insert(pl.contours[i].getEndpoint(n));
-      change.insert(pl.contours[i].getEndpoint(n+1));
+      change.insert((*pl.currentContours)[i].getEndpoint(n-1));
+      change.insert((*pl.currentContours)[i].getEndpoint(n));
+      change.insert((*pl.currentContours)[i].getEndpoint(n+1));
       lohiElev=pl.lohi(change,tolerance);
       dt.markClean(n); // It's been checked, no need to recheck
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
@@ -576,15 +576,15 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	j=0;
 	dt.markDirty(n,1);
 	dt.erase(n);
-	pl.contours[i].erase(n);
+	(*pl.currentContours)[i].erase(n);
 	sz--;
       }
     }
   }
-  pl.contours[i].setlengths();
-  checkContour(pl,pl.contours[i],tolerance);
-  //cout<<"        "<<i<<" error after "<<contourError(pl,pl.contours[i]);
-  //cout<<" bendiness "<<totalBendiness(pl.contours[i],tolerance)<<endl;
+  (*pl.currentContours)[i].setlengths();
+  checkContour(pl,(*pl.currentContours)[i],tolerance);
+  //cout<<"        "<<i<<" error after "<<contourError(pl,(*pl.currentContours)[i]);
+  //cout<<" bendiness "<<totalBendiness((*pl.currentContours)[i],tolerance)<<endl;
 }
 
 void smooth1contour(pointlist &pl,double tolerance,int i)
@@ -597,21 +597,21 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   xy a,b,c; // current endpoints; b is the nth
   xy p,q,r,s; // points to try changing the nth endpoint to
   xy z; // endpoint before a or after c
-  double e=pl.contours[i].getElevation();
+  double e=(*pl.currentContours)[i].getElevation();
   double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier,errBest;
   double bendZ;
   DirtyTracker dt;
-  origsz=sz=pl.contours[i].size();
+  origsz=sz=(*pl.currentContours)[i].size();
   dt.init(sz);
   for (j=0;j<sz;j++)
   {
     n=(n+relprime(sz))%sz;
-    if ((n || !pl.contours[i].isopen()) && dt.isDirty(n))
+    if ((n || !(*pl.currentContours)[i].isopen()) && dt.isDirty(n))
     {
       tries++;
-      a=pl.contours[i].getEndpoint(n-1);
-      b=pl.contours[i].getEndpoint(n);
-      c=pl.contours[i].getEndpoint(n+1);
+      a=(*pl.currentContours)[i].getEndpoint(n-1);
+      b=(*pl.currentContours)[i].getEndpoint(n);
+      c=(*pl.currentContours)[i].getEndpoint(n+1);
       p=(a+2*b)/3;
       q=(2*b+c)/3;
       r=(p+q)/2;
@@ -686,9 +686,9 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	  errBendier=INFINITY;
       }
-      if (n>1 || !pl.contours[i].isopen())
+      if (n>1 || !(*pl.currentContours)[i].isopen())
       {
-	z=pl.contours[i].getEndpoint(n-2);
+	z=(*pl.currentContours)[i].getEndpoint(n-2);
 	bendZ=bendiness(z,a,b,tolerance);
 	errCurrent+=bendZ;
 	bendZ=bendiness(z,a,p,tolerance);
@@ -701,9 +701,9 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	bendZ=bendiness(z,a,s,tolerance);
 	errBendier+=bendZ;
       }
-      if (n<sz-2 || !pl.contours[i].isopen())
+      if (n<sz-2 || !(*pl.currentContours)[i].isopen())
       {
-	z=pl.contours[i].getEndpoint(n+2);
+	z=(*pl.currentContours)[i].getEndpoint(n+2);
 	bendZ=bendiness(b,c,z,tolerance);
 	errCurrent+=bendZ;
 	bendZ=bendiness(p,c,z,tolerance);
@@ -752,30 +752,30 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	switch (whichNew)
 	{
 	  case 1:
-	    pl.contours[i].replace(q,n);
+	    (*pl.currentContours)[i].replace(q,n);
 	    break;
 	  case 2:
-	    pl.contours[i].replace(p,n);
+	    (*pl.currentContours)[i].replace(p,n);
 	    break;
 	  case 3:
-	    pl.contours[i].replace(q,n);
-	    pl.contours[i].insert(p,n);
+	    (*pl.currentContours)[i].replace(q,n);
+	    (*pl.currentContours)[i].insert(p,n);
 	    dt.insert(n);
 	    sz++;
 	    break;
 	  case 4:
-	    pl.contours[i].replace(r,n);
+	    (*pl.currentContours)[i].replace(r,n);
 	    break;
 	  case 5:
-	    pl.contours[i].replace(s,n);
+	    (*pl.currentContours)[i].replace(s,n);
 	    break;
 	}
       }
     }
   }
   //cout<<"Contour "<<i<<", "<<origsz<<" at start, "<<sz<<" at end, "<<tries<<" tries, "<<ops<<" operations\n";
-  pl.contours[i].setlengths();
-  checkContour(pl,pl.contours[i],tolerance);
+  (*pl.currentContours)[i].setlengths();
+  checkContour(pl,(*pl.currentContours)[i],tolerance);
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
@@ -798,9 +798,9 @@ void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
     ps.setpaper(papersizes["A4 portrait"],0);
     ps.prolog();
   }
-  for (i=0;i<pl.contours.size();i++)
+  for (i=0;i<(*pl.currentContours).size();i++)
   {
-    cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<i*conterval<<" \r";
+    cout<<"smoothcontours "<<i<<'/'<<(*pl.currentContours).size()<<" elev "<<i*conterval<<" \r";
     cout.flush();
   }
   if (log)
