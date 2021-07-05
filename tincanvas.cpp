@@ -457,7 +457,7 @@ void TinCanvas::roughContours()
   }
   if (net.triangles.size())
     tinlohi=net.lohi();
-  net.contours.clear();
+  (*net.currentContours).clear();
   elevLo=floor(tinlohi[0]/conterval);
   elevHi=ceil(tinlohi[1]/conterval);
   progInx=elevLo;
@@ -517,10 +517,10 @@ void TinCanvas::roughContoursFinish()
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
-  for (i=0;i<net.contours.size();i++)
+  for (i=0;i<(*net.currentContours).size();i++)
   {
-    ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
-    ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+    ps.comment("Contour "+to_string(i)+" Elevation "+to_string((*net.currentContours)[i].getElevation()));
+    ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
   }
   ps.endpage();
 }
@@ -541,21 +541,21 @@ void TinCanvas::pruneContours()
   if (roughContoursValid && conterval==contourInterval.fineInterval())
   {
     setThreadCommand(TH_PRUNE);
-    for (i=sizeRange=0;i<net.contours.size();i++)
+    for (i=sizeRange=0;i<(*net.currentContours).size();i++)
     {
-      if (net.contours[i].size()>sizeRange)
-	sizeRange=net.contours[i].size();
-      totalContourSegments+=net.contours[i].size();
+      if ((*net.currentContours)[i].size()>sizeRange)
+	sizeRange=(*net.currentContours)[i].size();
+      totalContourSegments+=(*net.currentContours)[i].size();
     }
     sizeRange++;
     lastSizeRange=sizeRange;
     while (sizeRange)
     {
-      for (i=0;i<net.contours.size();i++)
-	if (net.contours[i].size()>=sizeRange && net.contours[i].size()<lastSizeRange)
+      for (i=0;i<(*net.currentContours).size();i++)
+	if ((*net.currentContours)[i].size()>=sizeRange && (*net.currentContours)[i].size()<lastSizeRange)
 	{
 	  ctr.num=i;
-	  ctr.size=net.contours[i].size();
+	  ctr.size=(*net.currentContours)[i].size();
 	  enqueuePrune(ctr);
 	}
       lastSizeRange=sizeRange;
@@ -610,10 +610,10 @@ void TinCanvas::pruneContoursFinish()
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
-  for (i=0;i<net.contours.size();i++)
+  for (i=0;i<(*net.currentContours).size();i++)
   {
-    ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
-    ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
+    ps.comment("Contour "+to_string(i)+" Elevation "+to_string((*net.currentContours)[i].getElevation()));
+    ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
   }
   ps.endpage();
 }
@@ -634,21 +634,21 @@ void TinCanvas::smoothContours()
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
   {
     setThreadCommand(TH_SMOOTH);
-    for (i=sizeRange=0;i<net.contours.size();i++)
+    for (i=sizeRange=0;i<(*net.currentContours).size();i++)
     {
-      if (net.contours[i].size()>sizeRange)
-	sizeRange=net.contours[i].size();
-      totalContourSegments+=net.contours[i].size();
+      if ((*net.currentContours)[i].size()>sizeRange)
+	sizeRange=(*net.currentContours)[i].size();
+      totalContourSegments+=(*net.currentContours)[i].size();
     }
     sizeRange++;
     lastSizeRange=sizeRange;
     while (sizeRange)
     {
-      for (i=0;i<net.contours.size();i++)
-	if (net.contours[i].size()>=sizeRange && net.contours[i].size()<lastSizeRange)
+      for (i=0;i<(*net.currentContours).size();i++)
+	if ((*net.currentContours)[i].size()>=sizeRange && (*net.currentContours)[i].size()<lastSizeRange)
 	{
 	  ctr.num=i;
-	  ctr.size=net.contours[i].size();
+	  ctr.size=(*net.currentContours)[i].size();
 	  enqueueSmooth(ctr);
 	}
       lastSizeRange=sizeRange;
@@ -701,11 +701,11 @@ void TinCanvas::smoothContoursFinish()
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
-  for (i=0;i<net.contours.size();i++)
+  for (i=0;i<(*net.currentContours).size();i++)
   {
-    ps.comment("Contour "+to_string(i)+" Elevation "+to_string(net.contours[i].getElevation()));
-    ps.spline(net.contours[i].approx3d(0.1/ps.getscale()));
-    checkContour(net,net.contours[i],tolerance);
+    ps.comment("Contour "+to_string(i)+" Elevation "+to_string((*net.currentContours)[i].getElevation()));
+    ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
+    checkContour(net,(*net.currentContours)[i],tolerance);
   }
   ps.endpage();
 }

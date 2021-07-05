@@ -76,18 +76,18 @@ void pointlist::setCurrentContours(ContourInterval &ci)
  * If a set of contours with this contour interval does not exist, creates it.
  */
 {
-  currentContours=&contours;
+  currentContours=&contours[ci];
 }
 
 void pointlist::eraseEmptyContours()
 {
   vector<polyspiral> nonempty;
   int i;
-  for (i=0;i<contours.size();i++)
-    if (contours[i].size()>2 || contours[i].isopen())
-      nonempty.push_back(contours[i]);
+  for (i=0;i<(*currentContours).size();i++)
+    if ((*currentContours)[i].size()>2 || (*currentContours)[i].isopen())
+      nonempty.push_back((*currentContours)[i]);
   nonempty.shrink_to_fit();
-  swap(contours,nonempty);
+  swap((*currentContours),nonempty);
 }
 
 bool pointlist::checkTinConsistency()

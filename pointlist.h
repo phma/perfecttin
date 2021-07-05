@@ -54,7 +54,7 @@ public:
    * point to edges, and the pointers would be messed up by moving memory
    * when a vector is resized.
    */
-  std::vector<polyspiral> contours;
+  std::map<ContourInterval,std::vector<polyspiral> > contours;
   std::vector<polyspiral> *currentContours;
   polyline boundary;
   qindex qinx;

@@ -980,7 +980,7 @@ void TinThread::operator()(int thread)
 	logThreadStatus(TH_PRUNE);
       threadStatus[thread]=TH_PRUNE;
       ctr=dequeuePrune();
-      if (ctr.num>=0 && ctr.num<net.contours.size() && ctr.size>0)
+      if (ctr.num>=0 && ctr.num<(*net.currentContours).size() && ctr.size>0)
       {
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
 	prune1contour(net,ctr.tolerance,ctr.num);
@@ -999,7 +999,7 @@ void TinThread::operator()(int thread)
 	logThreadStatus(TH_SMOOTH);
       threadStatus[thread]=TH_SMOOTH;
       ctr=dequeueSmooth();
-      if (ctr.num>=0 && ctr.num<net.contours.size() && ctr.size>0)
+      if (ctr.num>=0 && ctr.num<(*net.currentContours).size() && ctr.size>0)
       {
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
 	smooth1contour(net,ctr.tolerance,ctr.num);
