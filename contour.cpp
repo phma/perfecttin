@@ -594,12 +594,13 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   int j,sz,origsz,tries=0,ops=0;
   int whichNew;
   array<double,2> lohiElev;
-  polyline change;
+  polyline changeNewSeg,changeBackward,changeForward,changeStraighter,changeBendier;
   xy a,b,c; // current endpoints; b is the nth
   xy p,q,r,s; // points to try changing the nth endpoint to
   xy z; // endpoint before a or after c
   double e=(*pl.currentContours)[i].getElevation();
-  double errCurrent,errForward,errBackward,errNewSeg,errStraighter,errBendier,errBest;
+  double errCurrent,errForward,errBackward,errNewSeg;
+  double errStraighter,errBendier,errBest;
   double bendZ;
   DirtyTracker dt;
   origsz=sz=(*pl.currentContours)[i].size();
@@ -622,14 +623,14 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       errForward=errBackward=errNewSeg=errStraighter=errBendier=INFINITY;
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
 		 +bendiness(a,b,c,tolerance);
-      change.clear();
-      change.insert(p);
-      change.insert(b);
-      change.insert(q);
+      changeNewSeg.clear();
+      changeNewSeg.insert(p);
+      changeNewSeg.insert(b);
+      changeNewSeg.insert(q);
       /* Most of the time is spent computing lohi. The change for new segment
        * is the shortest of the changes, so it takes the least time.
        */
-      lohiElev=pl.lohi(change,tolerance);
+      lohiElev=pl.lohi(changeNewSeg,tolerance);
       if (lohiElev[0]>=e-tolerance && lohiElev[1]<=e+tolerance)
       {
 	errNewSeg=contourError(pl,e,a,p)+contourError(pl,e,p,q)+contourError(pl,e,q,c)
@@ -637,55 +638,55 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	/* The change polyline for errNewSeg is inside the change polylines for
 	 * errForward, errBackward, and errStraighter.
 	 */
-	change.clear();
-	change.insert(a);
-	change.insert(b);
-	change.insert(q);
+	changeForward.clear();
+	changeForward.insert(a);
+	changeForward.insert(b);
+	changeForward.insert(q);
 	errForward=contourError(pl,e,a,q)+contourError(pl,e,q,c)
 		   +bendiness(a,q,c,tolerance);
 	if (errForward<errNewSeg && errForward<errCurrent)
 	{
-	  lohiElev=pl.lohi(change,tolerance);
+	  lohiElev=pl.lohi(changeForward,tolerance);
 	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	    errForward=INFINITY;
 	}
-	change.clear();
-	change.insert(c);
-	change.insert(b);
-	change.insert(p);
+	changeBackward.clear();
+	changeBackward.insert(c);
+	changeBackward.insert(b);
+	changeBackward.insert(p);
 	errBackward=contourError(pl,e,a,p)+contourError(pl,e,p,c)
 		    +bendiness(a,p,c,tolerance);
 	if (errBackward<errNewSeg && errBackward<errCurrent)
 	{
-	  lohiElev=pl.lohi(change,tolerance);
+	  lohiElev=pl.lohi(changeBackward,tolerance);
 	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	    errBackward=INFINITY;
 	}
-	change.clear();
-	change.insert(a);
-	change.insert(b);
-	change.insert(c);
-	change.insert(r);
+	changeStraighter.clear();
+	changeStraighter.insert(a);
+	changeStraighter.insert(b);
+	changeStraighter.insert(c);
+	changeStraighter.insert(r);
 	errStraighter=contourError(pl,e,a,r)+contourError(pl,e,r,c)
 		      +bendiness(a,r,c,tolerance);
 	if (errStraighter<errNewSeg && errStraighter<errCurrent)
 	{
-	  lohiElev=pl.lohi(change,tolerance);
+	  lohiElev=pl.lohi(changeStraighter,tolerance);
 	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	    errStraighter=INFINITY;
 	}
       }
-      change.clear();
-      change.insert(a);
-      change.insert(b);
-      change.insert(c);
-      change.insert(s);
+      changeBendier.clear();
+      changeBendier.insert(a);
+      changeBendier.insert(b);
+      changeBendier.insert(c);
+      changeBendier.insert(s);
       errBendier=contourError(pl,e,a,s)+contourError(pl,e,s,c)
 		 +bendiness(a,s,c,tolerance);
       if (errBendier<errNewSeg && errBendier<errCurrent && errBendier<errStraighter
 	  && errBendier<errForward && errBendier<errBackward)
       {
-	lohiElev=pl.lohi(change,tolerance);
+	lohiElev=pl.lohi(changeBendier,tolerance);
 	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	  errBendier=INFINITY;
       }
