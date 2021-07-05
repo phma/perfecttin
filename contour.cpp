@@ -602,6 +602,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   double errCurrent,errForward,errBackward,errNewSeg;
   double errStraighter,errBendier,errBest;
   double bendZ;
+  bool chkForward,chkBackward,chkStraighter,chkBendier;
   DirtyTracker dt;
   origsz=sz=(*pl.currentContours)[i].size();
   dt.init(sz);
@@ -621,6 +622,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       if (dist(s,xy(193835.15803076193,442392.24354723527))<1e-6)
 	cout<<"aoeu\n";
       errForward=errBackward=errNewSeg=errStraighter=errBendier=INFINITY;
+      chkForward=chkBackward=chkStraighter=chkBendier=false;
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
 		 +bendiness(a,b,c,tolerance);
       changeNewSeg.clear();
@@ -647,6 +649,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	if (errForward<errNewSeg && errForward<errCurrent)
 	{
 	  lohiElev=pl.lohi(changeForward,tolerance);
+	  chkForward=true;
 	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	    errForward=INFINITY;
 	}
@@ -659,6 +662,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	if (errBackward<errNewSeg && errBackward<errCurrent)
 	{
 	  lohiElev=pl.lohi(changeBackward,tolerance);
+	  chkBackward=true;
 	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	    errBackward=INFINITY;
 	}
@@ -672,6 +676,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	if (errStraighter<errNewSeg && errStraighter<errCurrent)
 	{
 	  lohiElev=pl.lohi(changeStraighter,tolerance);
+	  chkStraighter=true;
 	  if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	    errStraighter=INFINITY;
 	}
@@ -687,6 +692,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	  && errBendier<errForward && errBendier<errBackward)
       {
 	lohiElev=pl.lohi(changeBendier,tolerance);
+	chkBendier=true;
 	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
 	  errBendier=INFINITY;
       }
@@ -719,6 +725,30 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	errStraighter+=bendZ;
 	bendZ=bendiness(s,c,z,tolerance);
 	errBendier+=bendZ;
+      }
+      if (!chkBackward && errBackward<errCurrent)
+      {
+	lohiElev=pl.lohi(changeBackward,tolerance);
+	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	  errBackward=INFINITY;
+      }
+      if (!chkForward && errForward<errCurrent)
+      {
+	lohiElev=pl.lohi(changeForward,tolerance);
+	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	  errForward=INFINITY;
+      }
+      if (!chkStraighter && errStraighter<errCurrent)
+      {
+	lohiElev=pl.lohi(changeStraighter,tolerance);
+	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	  errStraighter=INFINITY;
+      }
+      if (!chkBendier && errBendier<errCurrent)
+      {
+	lohiElev=pl.lohi(changeBendier,tolerance);
+	if (lohiElev[0]<e-tolerance || lohiElev[1]>e+tolerance)
+	  errBendier=INFINITY;
       }
       errBest=errCurrent;
       dt.markClean(n); // It's been checked, no need to recheck
