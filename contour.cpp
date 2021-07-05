@@ -617,6 +617,8 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       q=(2*b+c)/3;
       r=(p+q)/2;
       s=2*b-r;
+      if (dist(s,xy(193835.15803076193,442392.24354723527))<1e-6)
+	cout<<"aoeu\n";
       errForward=errBackward=errNewSeg=errStraighter=errBendier=INFINITY;
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
 		 +bendiness(a,b,c,tolerance);
@@ -770,6 +772,8 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	    (*pl.currentContours)[i].replace(r,n);
 	    break;
 	  case 5:
+	    if (fabs(pl.elevation(s)-e)>tolerance)
+	      cout<<"Replacing point out of tolerance\n";
 	    (*pl.currentContours)[i].replace(s,n);
 	    break;
 	}
