@@ -619,8 +619,6 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
       q=(2*b+c)/3;
       r=(p+q)/2;
       s=2*b-r;
-      if (dist(s,xy(193835.15803076193,442392.24354723527))<1e-6)
-	cout<<"aoeu\n";
       errForward=errBackward=errNewSeg=errStraighter=errBendier=INFINITY;
       chkForward=chkBackward=chkStraighter=chkBendier=false;
       errCurrent=contourError(pl,e,a,b)+contourError(pl,e,b,c)
