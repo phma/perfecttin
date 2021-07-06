@@ -484,38 +484,39 @@ triangle *triangle::nextalong(segment &seg)
 /* Returns the next triangle along the segment.
  * If the segment does not cross the triangle, tries to get back to the segment.
  * Used when pruning contours.
+ * If seg is an arc or spiralarc and intersects a side twice, may miss
+ * a triangle.
  */
 {
   double p,q,r;
-  xy start=seg.getstart(),end=seg.getend();
-  double afoot,bfoot,cfoot,farthestfoot=0;
-  p=area3(*a,start,end);
-  q=area3(*b,start,end);
-  r=area3(*c,start,end);
+  xy fwdpnt,backpnt;
+  double close=seg.closest(centroid(),INFINITY,true);
+  //if (!isfinite(close))
+    //close=seg.length()/2;
+  double fwd=close+peri/2,back=close-peri/2;
+  if (back<0 && fwd>=0)
+    back=0;
+  if (fwd>seg.length() && back<=seg.length())
+    fwd=seg.length();
+  fwdpnt=seg.station(fwd);
+  backpnt=seg.station(back);
+  p=area3(*a,backpnt,fwdpnt);
+  q=area3(*b,backpnt,fwdpnt);
+  r=area3(*c,backpnt,fwdpnt);
   switch (nextalongTable[sign(p)+1][sign(q)+1][sign(r)+1])
   {
-    case 4:
+    case 4: // seg exits side a
       return aneigh;
-    case 2:
+    case 2: // seg exits side b
       return bneigh;
-    case 1:
+    case 1: // seg exits side c
       return cneigh;
-    case 3:
-    case 5:
-    case 6:
-      return nexttoward(end);
-    case 7:
-      afoot=seg.closest(*a);
-      bfoot=seg.closest(*b);
-      cfoot=seg.closest(*c);
-      if (afoot>farthestfoot)
-	farthestfoot=afoot;
-      if (bfoot>farthestfoot)
-	farthestfoot=bfoot;
-      if (cfoot>farthestfoot)
-	farthestfoot=cfoot;
-      return nexttoward(seg.station(farthestfoot));
-    default:
+    case 3: // seg exits vertex A
+    case 5: // seg exits vertex B
+    case 6: // seg exits vertex C
+    case 7: // triangle is entirely on one side of seg
+      return nexttoward(fwdpnt);
+    default: // all three vertices are on seg
       cerr<<"can't happen: straight triangle in nextalong\n";
       return nullptr;
   }
