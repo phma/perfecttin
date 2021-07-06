@@ -41,6 +41,12 @@
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;
 
+struct ContourPiece
+{
+  spiralarc s;
+  std::vector<triangle *> tris;
+};
+
 class pointlist
 {
 public:
@@ -64,6 +70,8 @@ public:
   double swishFactor; // for tracing top or bottom of a point cloud
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
+  std::map<int,std::vector<ContourPiece> > contourPieces;
+  std::mutex pieceMutex;
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1,int thread=-1);
   void insertHullPoint(point *newpnt,point *prec);
