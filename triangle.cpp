@@ -480,7 +480,7 @@ const char nextalongTable[3][3][3]=
   2,6,4, 2,2,4, 2,2,7
 };
 
-triangle *triangle::nextalong(segment seg)
+triangle *triangle::nextalong(segment &seg)
 /* Returns the next triangle along the segment.
  * If the segment does not cross the triangle, tries to get back to the segment.
  * Used when pruning contours.
