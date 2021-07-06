@@ -90,6 +90,52 @@ void pointlist::eraseEmptyContours()
   swap((*currentContours),nonempty);
 }
 
+void pointlist::insertContourPiece(spiralarc s)
+{
+  ContourPiece piece;
+  int i;
+  int inx=3*s.bearing(s.length()/2)-s.chordbearing();
+  vector<ContourPiece> *pcList;
+  triangle *tri=findt(s.getstart());
+  bool found=false;
+  piece.s=s;
+  piece.tris.push_back(tri);
+  while (tri && !tri->in(s.getend()))
+  {
+    tri=tri->nextalong(s);
+    piece.tris.push_back(tri);
+  }
+  pieceMutex.lock();
+  pcList=&contourPieces[inx];
+  for (i=0;i<pcList->size();i++)
+    if ((*pcList)[i].s==s)
+      found=true;
+  if (!found)
+    pcList->push_back(piece);
+  pieceMutex.unlock();
+}
+
+void pointlist::deleteContourPiece(spiralarc s)
+{
+  ContourPiece piece;
+  int i;
+  int inx=3*s.bearing(s.length()/2)-s.chordbearing();
+  vector<ContourPiece> *pcList;
+  int found=-1;
+  pieceMutex.lock();
+  pcList=&contourPieces[inx];
+  for (i=0;i<pcList->size();i++)
+    if ((*pcList)[i].s==s)
+      found=i;
+  if (found>=0)
+  {
+    piece=(*pcList)[i];
+    swap((*pcList)[i],pcList->back());
+    pcList->resize(pcList->size()-1);
+  }
+  pieceMutex.unlock();
+}
+
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;
