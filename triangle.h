@@ -94,6 +94,7 @@ public:
   std::vector<xyz> dots;
   int flags;
   double aElev,bElev,cElev,vError;
+  std::vector<int> crossingPieces; // contours that cross triangle; see pointlist::contourPieces
   triangle();
   bool ptValid();
   void setneighbor(triangle *neigh);
