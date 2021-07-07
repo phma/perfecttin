@@ -1451,6 +1451,8 @@ void testcontour()
   double areaBefore,areaAfter;
   int i;
   int dots3before,dots3after,dots6,dots7;
+  double rimElev;
+  ContourInterval ci(1,3,false); // 10 m
   vector<triangle *> tri;
   vector<point *> pnt;
   PostScript ps;
@@ -1477,6 +1479,14 @@ void testcontour()
   adjustElev(tri,pnt,-1,0);
   for (i=1;i<=net.points.size();i++)
     cout<<i<<' '<<net.points[i].elev()<<endl;
+  /* Point 1 is the lowest, at 17.4 m, followed by 3 and 7, at 25.9 m.
+   * The rest are around 34 to 37 m.
+   */
+  rimElev=(net.points[1].elev()+net.points[3].elev()+net.points[7].elev())/3;
+  cout<<"rimElev "<<rimElev<<endl;
+  ci.setRelativeTolerance(1/3.);
+  net.setCurrentContours(ci);
+  roughcontours(net,ci.mediumInterval());
   drawNet(ps);
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {
