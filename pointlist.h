@@ -89,6 +89,7 @@ public:
   void deleteContourPiece(spiralarc s);
   void insertPieces(polyspiral ctour);
   void deletePieces(polyspiral ctour);
+  void statsPieces();
   void eraseEmptyContours();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);

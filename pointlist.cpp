@@ -139,6 +139,25 @@ void pointlist::deletePieces(polyspiral ctour)
     deleteContourPiece(ctour.getspiralarc(i));
 }
 
+void pointlist::statsPieces()
+{
+  map<int,vector<ContourPiece> >::iterator i;
+  vector<int> histo;
+  int j,total=0;
+  for (i=contourPieces.begin();i!=contourPieces.end();++i)
+  {
+    while (histo.size()<=i->second.size())
+      histo.push_back(0);
+    histo[i->second.size()]++;
+  }
+  for (j=0;j<histo.size();j++)
+  {
+    cout<<histo[j]<<" buckets with "<<j<<" pieces\n";
+    total+=j*histo[j];
+  }
+  cout<<"total "<<contourPieces.size()<<" buckets, "<<total<<" pieces\n";
+}
+
 void pointlist::eraseEmptyContours()
 {
   vector<polyspiral> nonempty;

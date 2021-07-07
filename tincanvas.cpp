@@ -523,6 +523,7 @@ void TinCanvas::roughContoursFinish()
     ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
   }
   ps.endpage();
+  net.statsPieces();
 }
 
 void TinCanvas::pruneContours()
@@ -616,6 +617,8 @@ void TinCanvas::pruneContoursFinish()
     ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
   }
   ps.endpage();
+  cout<<"Should be "<<totalContourSegments<<endl;
+  net.statsPieces();
 }
 
 void TinCanvas::smoothContours()
@@ -708,6 +711,8 @@ void TinCanvas::smoothContoursFinish()
     checkContour(net,(*net.currentContours)[i],tolerance);
   }
   ps.endpage();
+  cout<<"Should be "<<totalContourSegments<<endl;
+  net.statsPieces();
 }
 
 void TinCanvas::contoursCancel()
