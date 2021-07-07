@@ -1451,6 +1451,8 @@ void testcontour()
   double areaBefore,areaAfter;
   int i;
   int dots3before,dots3after,dots6,dots7;
+  vector<triangle *> tri;
+  vector<point *> pnt;
   PostScript ps;
   ps.open("contour.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -1466,6 +1468,15 @@ void testcontour()
   split(&net.triangles[3],-1);
   split(&net.triangles[2],-1);
   flip(&net.edges[3],-1);
+  flip(&net.edges[2],-1);
+  flip(&net.edges[4],-1);
+  for (i=1;i<=net.points.size();i++)
+    pnt.push_back(&net.points[i]);
+  for (i=0;i<net.triangles.size();i++)
+    tri.push_back(&net.triangles[i]);
+  adjustElev(tri,pnt,-1,0);
+  for (i=1;i<=net.points.size();i++)
+    cout<<i<<' '<<net.points[i].elev()<<endl;
   drawNet(ps);
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {
