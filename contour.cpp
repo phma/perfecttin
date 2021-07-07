@@ -447,6 +447,7 @@ void rough1contour(pointlist &pl,double elev,int thread)
       pl.wingEdge.lock();
       (*pl.currentContours).push_back(ctour);
       pl.wingEdge.unlock();
+      pl.insertPieces(ctour);
     }
 }
 
@@ -577,7 +578,10 @@ void prune1contour(pointlist &pl,double tolerance,int i)
 	j=0;
 	dt.markDirty(n,1);
 	dt.erase(n);
+	pl.deleteContourPiece((*pl.currentContours)[i].getspiralarc(n));
+	pl.deleteContourPiece((*pl.currentContours)[i].getspiralarc(n-1));
 	(*pl.currentContours)[i].erase(n);
+	pl.insertContourPiece((*pl.currentContours)[i].getspiralarc(n-1));
 	sz--;
       }
     }
@@ -783,6 +787,8 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	j=0;
 	ops++;
 	dt.markDirty(n,1);
+	pl.deleteContourPiece((*pl.currentContours)[i].getspiralarc(n));
+	pl.deleteContourPiece((*pl.currentContours)[i].getspiralarc(n-1));
 	switch (whichNew)
 	{
 	  case 1:
@@ -795,6 +801,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	    (*pl.currentContours)[i].replace(q,n);
 	    (*pl.currentContours)[i].insert(p,n);
 	    dt.insert(n);
+	    pl.insertContourPiece((*pl.currentContours)[i].getspiralarc(n+1));
 	    sz++;
 	    break;
 	  case 4:
@@ -806,6 +813,8 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
 	    (*pl.currentContours)[i].replace(s,n);
 	    break;
 	}
+	pl.insertContourPiece((*pl.currentContours)[i].getspiralarc(n));
+	pl.insertContourPiece((*pl.currentContours)[i].getspiralarc(n-1));
       }
     }
   }

@@ -85,9 +85,11 @@ public:
   void clearmarks();
   void clearTin();
   void setCurrentContours(ContourInterval &ci);
-  void eraseEmptyContours();
   void insertContourPiece(spiralarc s);
   void deleteContourPiece(spiralarc s);
+  void insertPieces(polyspiral ctour);
+  void deletePieces(polyspiral ctour);
+  void eraseEmptyContours();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
   // the following methods are in tin.cpp
