@@ -109,6 +109,9 @@ void drawNet(PostScript &ps)
       for (j=0;j<net.triangles[i].dots.size();j++)
 	ps.dot(net.triangles[i].dots[j]);
   }
+  if (net.currentContours)
+    for (i=0;i<net.currentContours->size();i++)
+      ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
   ps.endpage();
 }
 
