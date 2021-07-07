@@ -1446,6 +1446,40 @@ void testquarter()
   ps.close();
 }
 
+void testcontour()
+{
+  double areaBefore,areaAfter;
+  int i;
+  int dots3before,dots3after,dots6,dots7;
+  PostScript ps;
+  ps.open("contour.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  setsurface(CIRPAR);
+  aster(1500);
+  makeOctagon();
+  drawNet(ps);
+  for (areaBefore=i=0;i<net.triangles.size();i++)
+    areaBefore+=net.triangles[i].sarea;
+  dots3before=net.triangles[3].dots.size();
+  cout<<"Before: "<<dots3before<<" dots in 3\n";
+  split(&net.triangles[3],-1);
+  split(&net.triangles[2],-1);
+  flip(&net.edges[3],-1);
+  drawNet(ps);
+  for (areaAfter=i=0;i<net.triangles.size();i++)
+  {
+    tassert(net.triangles[i].sarea>1);
+    areaAfter+=net.triangles[i].sarea;
+  }
+  dots3after=net.triangles[3].dots.size();
+  dots6=net.triangles[6].dots.size();
+  dots7=net.triangles[7].dots.size();
+  cout<<"After: "<<dots3after<<" dots in 3 "<<dots6<<" dots in 6 "<<dots7<<" dots in 7\n";
+  cout<<"Area "<<areaBefore<<" before, "<<areaAfter<<" after\n";
+  ps.close();
+}
+
 void test1stl(PostScript &ps,string name)
 {
   int i;
@@ -1749,6 +1783,8 @@ int main(int argc, char *argv[])
     testsplit();
   if (shoulddo("quarter"))
     testquarter();
+  if (shoulddo("contour"))
+    testcontour();
   if (shoulddo("stl"))
     teststl();
   if (shoulddo("polyline"))
