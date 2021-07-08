@@ -592,6 +592,13 @@ void prune1contour(pointlist &pl,double tolerance,int i)
   //cout<<" bendiness "<<totalBendiness((*pl.currentContours)[i],tolerance)<<endl;
 }
 
+void prunecontours(pointlist &pl,double tolerance)
+{
+  int i;
+  for (i=0;i<(*pl.currentContours).size();i++)
+    prune1contour(pl,tolerance,i);
+}
+
 void smooth1contour(pointlist &pl,double tolerance,int i)
 {
   int n=0;
@@ -823,34 +830,9 @@ void smooth1contour(pointlist &pl,double tolerance,int i)
   checkContour(pl,(*pl.currentContours)[i],tolerance);
 }
 
-void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
+void smoothcontours(pointlist &pl,double tolerance)
 {
   int i;
-  PostScript ps;
-  double we,ea,so,no;
-  ofstream logfile;
-  we=pl.dirbound(0);
-  so=pl.dirbound(DEG90);
-  ea=-pl.dirbound(DEG180);
-  no=-pl.dirbound(DEG270);
-  //we=443479;
-  //so=164112;
-  //ea=443486;
-  //no=164119;
-  if (log)
-  {
-    ps.open("smoothcontours.ps");
-    ps.setpaper(papersizes["A4 portrait"],0);
-    ps.prolog();
-  }
   for (i=0;i<(*pl.currentContours).size();i++)
-  {
-    cout<<"smoothcontours "<<i<<'/'<<(*pl.currentContours).size()<<" elev "<<i*conterval<<" \r";
-    cout.flush();
-  }
-  if (log)
-  {
-    ps.trailer();
-    ps.close();
-  }
+    smooth1contour(pl,tolerance,i);
 }
