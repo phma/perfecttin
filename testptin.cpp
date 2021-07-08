@@ -96,6 +96,7 @@ void drawNet(PostScript &ps)
   int i,j;
   double slope,r,g,b;
   xy gradient;
+  map<int,vector<ContourPiece> >::iterator k;
   ps.startpage();
   br.include(&net);
   ps.setscale(br);
@@ -112,6 +113,10 @@ void drawNet(PostScript &ps)
   if (net.currentContours)
     for (i=0;i<net.currentContours->size();i++)
       ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
+  ps.setcolor(0,0.7,0);
+  for (k=net.contourPieces.begin();k!=net.contourPieces.end();++k)
+    for (i=0;i<k->second.size();i++)
+      ps.spline(k->second[i].s.approx3d(0.1/ps.getscale()));
   ps.endpage();
 }
 
