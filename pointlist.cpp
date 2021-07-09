@@ -99,6 +99,8 @@ void pointlist::insertContourPiece(spiralarc s)
   for (i=0;i<pcList->size();i++)
     if ((*pcList)[i].s==s)
       found=true;
+  cout<<"Insert ("<<s.getstart().getx()<<','<<s.getstart().gety()<<")-(";
+  cout<<s.getend().getx()<<','<<s.getend().gety()<<") Found "<<found<<endl;
   if (!found)
     pcList->push_back(piece);
   pieceMutex.unlock();
@@ -116,6 +118,8 @@ void pointlist::deleteContourPiece(spiralarc s)
   for (i=0;i<pcList->size();i++)
     if ((*pcList)[i].s==s)
       found=i;
+  cout<<"Delete ("<<s.getstart().getx()<<','<<s.getstart().gety()<<")-(";
+  cout<<s.getend().getx()<<','<<s.getend().gety()<<") Found "<<found<<endl;
   if (found>=0)
   {
     piece=(*pcList)[found];
