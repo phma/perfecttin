@@ -1457,7 +1457,7 @@ void testquarter()
 void testcontour()
 {
   double areaBefore,areaAfter;
-  int i;
+  int i,totalPieces=0;
   int dots3before,dots3after,dots6,dots7;
   double rimElev;
   ContourInterval ci(1,3,false); // 10 m
@@ -1501,6 +1501,9 @@ void testcontour()
   net.eraseEmptyContours();
   smoothcontours(net,ci.tolerance());
   drawNet(ps);
+  for (i=0;i<net.currentContours->size();i++)
+    totalPieces+=(*net.currentContours)[i].size();
+  tassert(totalPieces==net.statsPieces());
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {
     tassert(net.triangles[i].sarea>1);
