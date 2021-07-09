@@ -1498,6 +1498,9 @@ void testcontour()
   drawNet(ps);
   prunecontours(net,ci.tolerance());
   drawNet(ps);
+  net.eraseEmptyContours();
+  smoothcontours(net,ci.tolerance());
+  drawNet(ps);
   for (areaAfter=i=0;i<net.triangles.size();i++)
   {
     tassert(net.triangles[i].sarea>1);
