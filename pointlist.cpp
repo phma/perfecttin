@@ -82,11 +82,13 @@ void pointlist::setCurrentContours(ContourInterval &ci)
 void pointlist::insertContourPiece(spiralarc s)
 {
   ContourPiece piece;
-  int i;
-  int inx=3*s.bearing(s.length()/2)-s.chordbearing();
+  int i,mb=s.bearing(s.length()/2),cb=s.chordbearing();
+  int inx;
   vector<ContourPiece> *pcList;
   triangle *tri=findt(s.getstart());
   bool found=false;
+  mb=cb+foldangle(mb-cb);
+  inx=3*mb-cb;
   piece.s=s;
   piece.tris.push_back(tri);
   while (tri && !tri->in(s.getend()))
@@ -109,10 +111,12 @@ void pointlist::insertContourPiece(spiralarc s)
 void pointlist::deleteContourPiece(spiralarc s)
 {
   ContourPiece piece;
-  int i;
-  int inx=3*s.bearing(s.length()/2)-s.chordbearing();
+  int i,mb=s.bearing(s.length()/2),cb=s.chordbearing();
+  int inx;
   vector<ContourPiece> *pcList;
   int found=-1;
+  mb=cb+foldangle(mb-cb);
+  inx=3*mb-cb;
   pieceMutex.lock();
   pcList=&contourPieces[inx];
   for (i=0;i<pcList->size();i++)
