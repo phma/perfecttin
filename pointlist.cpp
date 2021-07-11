@@ -32,6 +32,11 @@ using namespace std;
 
 const bool loudTinConsistency=false;
 
+int lhash(segment s)
+{
+  return (int)llrint(4294967296*log(s.length()));
+}
+
 void pointlist::clear()
 {
   wingEdge.lock();
@@ -88,7 +93,7 @@ void pointlist::insertContourPiece(spiralarc s)
   triangle *tri=findt(s.getstart());
   bool found=false;
   mb=cb+foldangle(mb-cb);
-  inx=3*mb-cb;
+  inx=lhash(s);
   piece.s=s;
   piece.tris.push_back(tri);
   while (tri && !tri->in(s.getend()))
@@ -116,7 +121,7 @@ void pointlist::deleteContourPiece(spiralarc s)
   vector<ContourPiece> *pcList;
   int found=-1;
   mb=cb+foldangle(mb-cb);
-  inx=3*mb-cb;
+  inx=lhash(s);
   pieceMutex.lock();
   pcList=&contourPieces[inx];
   for (i=0;i<pcList->size();i++)
