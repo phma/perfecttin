@@ -130,6 +130,8 @@ void pointlist::deleteContourPiece(spiralarc s)
     swap((*pcList)[found],pcList->back());
     pcList->resize(pcList->size()-1);
   }
+  else
+    cout<<"Not found\n";
   pieceMutex.unlock();
 }
 
