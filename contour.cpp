@@ -545,7 +545,7 @@ void checkContour(pointlist &pl,polyspiral &contour,double tolerance)
   }
 }
 
-void prune1contour(pointlist &pl,double tolerance,int i)
+void prune1contour(pointlist &pl,double tolerance,int i,int thread)
 /* Removes points from the ith contour, as long as it stays within tolerance.
  * If the resulting contour is closed and has only two points, it should be deleted.
  */
@@ -596,10 +596,10 @@ void prunecontours(pointlist &pl,double tolerance)
 {
   int i;
   for (i=0;i<(*pl.currentContours).size();i++)
-    prune1contour(pl,tolerance,i);
+    prune1contour(pl,tolerance,i,0);
 }
 
-void smooth1contour(pointlist &pl,double tolerance,int i)
+void smooth1contour(pointlist &pl,double tolerance,int i,int thread)
 {
   int n=0;
   int j,sz,origsz,tries=0,ops=0;
@@ -834,5 +834,5 @@ void smoothcontours(pointlist &pl,double tolerance)
 {
   int i;
   for (i=0;i<(*pl.currentContours).size();i++)
-    smooth1contour(pl,tolerance,i);
+    smooth1contour(pl,tolerance,i,0);
 }

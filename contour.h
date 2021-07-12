@@ -106,8 +106,8 @@ polyline intrace(triangle *tri,double elev);
 void rough1contour(pointlist &pl,double elev,int thread);
 void roughcontours(pointlist &pl,double conterval);
 void checkContour(pointlist &pl,polyspiral &contour,double tolerance);
-void prune1contour(pointlist &pl,double tolerance,int i);
+void prune1contour(pointlist &pl,double tolerance,int i,int thread);
 void prunecontours(pointlist &pl,double tolerance);
-void smooth1contour(pointlist &pl,double tolerance,int i);
+void smooth1contour(pointlist &pl,double tolerance,int i,int thread);
 void smoothcontours(pointlist &pl,double tolerance);
 #endif

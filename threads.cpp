@@ -983,7 +983,7 @@ void TinThread::operator()(int thread)
       if (ctr.num>=0 && ctr.num<(*net.currentContours).size() && ctr.size>0)
       {
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
-	prune1contour(net,ctr.tolerance,ctr.num);
+	prune1contour(net,ctr.tolerance,ctr.num,thread);
 	contourMutex.lock();
 	contourSegmentsDone+=ctr.size;
 	contourMutex.unlock();
@@ -1002,7 +1002,7 @@ void TinThread::operator()(int thread)
       if (ctr.num>=0 && ctr.num<(*net.currentContours).size() && ctr.size>0)
       {
 	cr::time_point<cr::steady_clock> timeStart=clk.now();
-	smooth1contour(net,ctr.tolerance,ctr.num);
+	smooth1contour(net,ctr.tolerance,ctr.num,thread);
 	contourMutex.lock();
 	contourSegmentsDone+=ctr.size;
 	contourMutex.unlock();
