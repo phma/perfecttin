@@ -91,7 +91,8 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
   int i;
   int inx;
   vector<ContourPiece> *pcList;
-  triangle *tri=findt(s.getstart());
+  // clip is true in case the piece starts just outside the TIN because of roundoff
+  triangle *tri=findt(s.getstart(),true);
   bool found=false;
   inx=lhash(s);
   piece.s=s;
