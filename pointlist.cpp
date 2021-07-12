@@ -84,7 +84,7 @@ void pointlist::setCurrentContours(ContourInterval &ci)
   currentContours=&contours[ci];
 }
 
-void pointlist::insertContourPiece(spiralarc s)
+void pointlist::insertContourPiece(spiralarc s,int thread)
 {
   ContourPiece piece;
   int i;
@@ -112,7 +112,7 @@ void pointlist::insertContourPiece(spiralarc s)
   pieceMutex.unlock();
 }
 
-void pointlist::deleteContourPiece(spiralarc s)
+void pointlist::deleteContourPiece(spiralarc s,int thread)
 {
   ContourPiece piece;
   int i;
@@ -138,18 +138,18 @@ void pointlist::deleteContourPiece(spiralarc s)
   pieceMutex.unlock();
 }
 
-void pointlist::insertPieces(polyspiral ctour)
+void pointlist::insertPieces(polyspiral ctour,int thread)
 {
   int i;
   for (i=0;i<ctour.size();i++)
-    insertContourPiece(ctour.getspiralarc(i));
+    insertContourPiece(ctour.getspiralarc(i),thread);
 }
 
-void pointlist::deletePieces(polyspiral ctour)
+void pointlist::deletePieces(polyspiral ctour,int thread)
 {
   int i;
   for (i=0;i<ctour.size();i++)
-    deleteContourPiece(ctour.getspiralarc(i));
+    deleteContourPiece(ctour.getspiralarc(i),thread);
 }
 
 int pointlist::statsPieces()
@@ -180,7 +180,7 @@ void pointlist::eraseEmptyContours()
     if ((*currentContours)[i].size()>2 || (*currentContours)[i].isopen())
       nonempty.push_back((*currentContours)[i]);
     else
-      deletePieces((*currentContours)[i]);
+      deletePieces((*currentContours)[i],-1);
   nonempty.shrink_to_fit();
   swap((*currentContours),nonempty);
 }

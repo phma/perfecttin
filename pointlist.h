@@ -85,10 +85,10 @@ public:
   void clearmarks();
   void clearTin();
   void setCurrentContours(ContourInterval &ci);
-  void insertContourPiece(spiralarc s);
-  void deleteContourPiece(spiralarc s);
-  void insertPieces(polyspiral ctour);
-  void deletePieces(polyspiral ctour);
+  void insertContourPiece(spiralarc s,int thread);
+  void deleteContourPiece(spiralarc s,int thread);
+  void insertPieces(polyspiral ctour,int thread);
+  void deletePieces(polyspiral ctour,int thread);
   int statsPieces();
   void eraseEmptyContours();
   bool checkTinConsistency();
