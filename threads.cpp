@@ -596,38 +596,41 @@ bool lockTriangles(int thread,vector<int> triangles)
 {
   bool ret=true;
   int i;
-  int origSz;
+  int origSz=0;
   set<int> lockSet=whichLocks(triangles);
   set<int>::iterator j;
   for (j=lockSet.begin();j!=lockSet.end();++j)
     triMutex[*j].lock();
-  origSz=heldTriangles[thread].size();
-  for (i=0;ret && i<triangles.size();i++)
+  if (thread>=0)
   {
-    if (triangles[i]>=triangleHolders.size())
+    origSz=heldTriangles[thread].size();
+    for (i=0;ret && i<triangles.size();i++)
     {
-      holderMutex.lock();
-      if (triangles[i]>=triangleHolders.size()) // in case another thread resizes it
-        triangleHolders.resize(triangles[i]+1,-1);
-      holderMutex.unlock();
+      if (triangles[i]>=triangleHolders.size())
+      {
+	holderMutex.lock();
+	if (triangles[i]>=triangleHolders.size()) // in case another thread resizes it
+	  triangleHolders.resize(triangles[i]+1,-1);
+	holderMutex.unlock();
+      }
+      holderMutex.lock_shared();
+      heldTriangles[thread].push_back(triangles[i]);
+      if (triangleHolders[triangles[i]]>=(signed)heldTriangles.size())
+      {
+	cerr<<"triangleHolders["<<triangles[i]<<"] contains garbage\n";
+	triangleHolders[triangles[i]]=-1;
+      }
+      if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
+	ret=false;
+      holderMutex.unlock_shared();
     }
+    if (!ret)
+      heldTriangles[thread].resize(origSz);
     holderMutex.lock_shared();
-    heldTriangles[thread].push_back(triangles[i]);
-    if (triangleHolders[triangles[i]]>=(signed)heldTriangles.size())
-    {
-      cerr<<"triangleHolders["<<triangles[i]<<"] contains garbage\n";
-      triangleHolders[triangles[i]]=-1;
-    }
-    if (triangleHolders[triangles[i]]>=0 && triangleHolders[triangles[i]]!=thread)
-      ret=false;
+    for (i=0;ret && i<triangles.size();i++)
+      triangleHolders[triangles[i]]=thread;
     holderMutex.unlock_shared();
   }
-  if (!ret)
-    heldTriangles[thread].resize(origSz);
-  holderMutex.lock_shared();
-  for (i=0;ret && i<triangles.size();i++)
-    triangleHolders[triangles[i]]=thread;
-  holderMutex.unlock_shared();
   for (j=lockSet.begin();j!=lockSet.end();++j)
     triMutex[*j].unlock();
   return ret;
