@@ -27,6 +27,7 @@
 #include "pointlist.h"
 #include "ldecimal.h"
 #include "threads.h"
+#include "triop.h"
 
 using namespace std;
 
@@ -94,11 +95,13 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
   bool found=false;
   inx=lhash(s);
   piece.s=s;
-  piece.tris.push_back(tri);
+  if (tri)
+    piece.tris.push_back(tri);
   while (tri && !tri->in(s.getend()))
   {
     tri=tri->nextalong(s);
-    piece.tris.push_back(tri);
+    if (tri)
+      piece.tris.push_back(tri);
   }
   pieceMutex.lock();
   pcList=&contourPieces[inx];
@@ -110,12 +113,17 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
   if (!found)
     pcList->push_back(piece);
   pieceMutex.unlock();
+  while (!lockTriangles(thread,piece.tris))
+    sleep(thread);
+  for (i=0;i<piece.tris.size();i++)
+    piece.tris[i]->crossingPieces.push_back(inx);
+  unlockTriangles(thread);
 }
 
 void pointlist::deleteContourPiece(spiralarc s,int thread)
 {
   ContourPiece piece;
-  int i;
+  int i,j;
   int inx;
   vector<ContourPiece> *pcList;
   int found=-1;
@@ -136,6 +144,19 @@ void pointlist::deleteContourPiece(spiralarc s,int thread)
   //else
     //cout<<"Not found\n";
   pieceMutex.unlock();
+  if (pcList->size())
+  { // This may leave some crossingPieces in case of hash collisions.
+    while (!lockTriangles(thread,piece.tris))
+      sleep(thread);
+    for (i=0;i<piece.tris.size();i++)
+      for (j=0;j<piece.tris[i]->crossingPieces.size();j++)
+	if (piece.tris[i]->crossingPieces[j]==inx)
+	{
+	  swap(piece.tris[i]->crossingPieces[j],piece.tris[i]->crossingPieces.back());
+	  piece.tris[i]->crossingPieces.resize(piece.tris[i]->crossingPieces.size()-1);
+	}
+    unlockTriangles(thread);
+  }
 }
 
 void pointlist::insertPieces(polyspiral ctour,int thread)

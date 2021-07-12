@@ -1774,6 +1774,8 @@ bool shoulddo(string testname)
 int main(int argc, char *argv[])
 {
   int i;
+  mtxSquareSize=6; // for one thread
+  heldTriangles.resize(1);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   if (shoulddo("sizeof"))

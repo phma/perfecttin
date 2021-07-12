@@ -97,6 +97,7 @@ extern int currentAction;
 extern std::chrono::steady_clock clk;
 extern int mtxSquareSize;
 extern int contourSegmentsDone;
+extern std::vector<std::vector<int> > heldTriangles;
 
 void poolEdges(std::vector<edge *> edges,int thread);
 void poolTriangles(std::vector<triangle *> triangles,int thread);
