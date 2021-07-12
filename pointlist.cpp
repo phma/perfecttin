@@ -144,7 +144,7 @@ void pointlist::deleteContourPiece(spiralarc s,int thread)
   //else
     //cout<<"Not found\n";
   pieceMutex.unlock();
-  if (pcList->size())
+  if (!pcList->size())
   { // This may leave some crossingPieces in case of hash collisions.
     while (!lockTriangles(thread,piece.tris))
       sleep(thread);
