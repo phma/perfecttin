@@ -65,8 +65,9 @@ public:
   polyline boundary;
   qindex qinx;
   std::vector<point*> convexHull;
-  Unifiro<triangle *> trianglePool;
+  Unifiro<triangle *> trianglePool,trianglePaint;
   Unifiro<edge *> edgePool;
+  Unifiro<uintptr_t> pieceDraw;
   double swishFactor; // for tracing top or bottom of a point cloud
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
