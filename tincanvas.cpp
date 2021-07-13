@@ -118,12 +118,13 @@ void TinCanvas::tick()
   int i,sz,timeLimit;
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
+  int trianglesPainted=0;
   double splashElev;
   uintptr_t pieceInx;
   vector<ContourPiece> pieces;
   bezier3d b3d;
   Color color;
-  triangle *tri=nullptr;
+  triangle *tri=(triangle *)5;
   xy gradient,A,B,C;
   xy dartCorners[4];
   xy leftTickmark,rightTickmark,tickmark;
@@ -264,16 +265,19 @@ void TinCanvas::tick()
   }
   // Paint some triangles in the TIN in colors depending on their gradient or elevation.
   painter.setPen(Qt::NoPen);
-  for (;trianglesToPaint && elapsed<cr::milliseconds(timeLimit);trianglesToPaint--)
+  while (tri && elapsed<cr::milliseconds(timeLimit))
   {
-    net.wingEdge.lock_shared();
-    if (++triangleNum>=net.triangles.size())
-      triangleNum=0;
-    if (triangleNum<net.triangles.size())
-      tri=&net.triangles[triangleNum];
-    else
-      tri=nullptr;
-    net.wingEdge.unlock_shared();
+    tri=net.trianglePaint.dequeue();
+    if (!tri && trianglesToPaint)
+    {
+      net.wingEdge.lock_shared();
+      if (++triangleNum>=net.triangles.size())
+	triangleNum=0;
+      if (triangleNum<net.triangles.size())
+	tri=&net.triangles[triangleNum];
+      trianglesToPaint--;
+      net.wingEdge.unlock_shared();
+    }
     if (tri && tri->a)
     {
       net.wingEdge.lock_shared();
@@ -282,6 +286,7 @@ void TinCanvas::tick()
       B=*tri->b;
       C=*tri->c;
       net.wingEdge.unlock_shared();
+      ++trianglesPainted;
       color=colorize(tri);
       if (splashScreenTime)
 	color.mix(white,1-(double)splashScreenTime/SPLASH_TIME);
@@ -311,7 +316,7 @@ void TinCanvas::tick()
   }
   if (lastntri && !net.triangles.size())
     frameBuffer.fill();
-  if (tri && !trianglesToPaint)
+  if (trianglesPainted && !trianglesToPaint)
     update();
   //if (elapsed>cr::milliseconds(50))
     //cout<<"tick got stuck\n";
