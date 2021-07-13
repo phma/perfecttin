@@ -119,6 +119,9 @@ void TinCanvas::tick()
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
   double splashElev;
+  uintptr_t pieceInx;
+  vector<ContourPiece> pieces;
+  bezier3d b3d;
   Color color;
   triangle *tri=nullptr;
   xy gradient,A,B,C;
@@ -135,6 +138,8 @@ void TinCanvas::tick()
   QPainter painter(&frameBuffer);
   QBrush brush;
   QPen pen;
+  QPainterPath path;
+  vector<xyz> beziseg;
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.setPen(Qt::NoPen);
   brush.setStyle(Qt::SolidPattern);
@@ -235,12 +240,30 @@ void TinCanvas::tick()
     scaleText=ldecimal(scaleSize/lengthUnit,scaleSize/lengthUnit/10)+((lengthUnit==1)?" m":" ft");
     painter.drawText(textBox,Qt::AlignCenter,QString::fromStdString(scaleText));
   }
-  painter.setPen(Qt::NoPen);
-  // Paint some triangles in the TIN in colors depending on their gradient or elevation.
   if (state==TH_WAIT || state==TH_PAUSE)
     timeLimit=45;
   else
     timeLimit=20;
+  // Draw contour pieces on previously painted triangles.
+  painter.setPen(Qt::darkGreen);
+  while (elapsed<cr::milliseconds(timeLimit))
+  {
+    pieceInx=(uintptr_t)net.pieceDraw.dequeue();
+    if (pieceInx==0)
+      break;
+    pieces=net.getContourPieces((int)pieceInx);
+    for (i=0;i<pieces.size();i++)
+    {
+      b3d=pieces[i].s.approx3d(1/scale);
+      path=QPainterPath();
+      beziseg=b3d[0];
+      path.moveTo(worldToWindow(beziseg[0]));
+      path.cubicTo(worldToWindow(beziseg[1]),worldToWindow(beziseg[2]),worldToWindow(beziseg[3]));
+      painter.drawPath(path);
+    }
+  }
+  // Paint some triangles in the TIN in colors depending on their gradient or elevation.
+  painter.setPen(Qt::NoPen);
   for (;trianglesToPaint && elapsed<cr::milliseconds(timeLimit);trianglesToPaint--)
   {
     net.wingEdge.lock_shared();

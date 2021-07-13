@@ -160,6 +160,15 @@ void pointlist::deleteContourPiece(spiralarc s,int thread)
   }
 }
 
+vector<ContourPiece> pointlist::getContourPieces(int inx)
+{
+  vector<ContourPiece> ret;
+  pieceMutex.lock();
+  ret=contourPieces[inx];
+  pieceMutex.unlock();
+  return ret;
+}
+
 void pointlist::insertPieces(polyspiral ctour,int thread)
 {
   int i;

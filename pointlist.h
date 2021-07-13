@@ -67,7 +67,7 @@ public:
   std::vector<point*> convexHull;
   Unifiro<triangle *> trianglePool,trianglePaint;
   Unifiro<edge *> edgePool;
-  Unifiro<uintptr_t> pieceDraw;
+  Unifiro<void *> pieceDraw;
   double swishFactor; // for tracing top or bottom of a point cloud
   time_t conversionTime; // Time when conversion starts, used to identify checkpoint files
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
@@ -88,6 +88,7 @@ public:
   void setCurrentContours(ContourInterval &ci);
   void insertContourPiece(spiralarc s,int thread);
   void deleteContourPiece(spiralarc s,int thread);
+  std::vector<ContourPiece> getContourPieces(int inx);
   void insertPieces(polyspiral ctour,int thread);
   void deletePieces(polyspiral ctour,int thread);
   int statsPieces();
