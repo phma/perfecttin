@@ -122,6 +122,7 @@ void TinCanvas::tick()
   double splashElev;
   uintptr_t pieceInx;
   vector<ContourPiece> pieces;
+  vector<int> crossingPieces;
   bezier3d b3d;
   Color color;
   triangle *tri=(triangle *)5;
@@ -285,6 +286,7 @@ void TinCanvas::tick()
       A=*tri->a;
       B=*tri->b;
       C=*tri->c;
+      crossingPieces=tri->crossingPieces;
       net.wingEdge.unlock_shared();
       ++trianglesPainted;
       color=colorize(tri);
@@ -295,6 +297,8 @@ void TinCanvas::tick()
       polygon=QPolygon();
       polygon<<worldToWindow(A)<<worldToWindow(B)<<worldToWindow(C);
       painter.drawConvexPolygon(polygon);
+      for (i=0;i<crossingPieces.size();i++)
+	net.pieceDraw.enqueue((void *)(crossingPieces[i]+4294967296),0);
     }
     elapsed=clk.now()-timeStart;
   }
