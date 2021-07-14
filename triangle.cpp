@@ -494,6 +494,8 @@ triangle *triangle::nextalong(segment &seg)
   //if (!isfinite(close))
     //close=seg.length()/2;
   double fwd=close+peri/2,back=close-peri/2;
+  if (fabs(seg.length()-0.43191926744782239)<1e-9)
+    cout<<"i=2945\n";
   if (back<0 && fwd>=0)
     back=0;
   if (fwd>seg.length() && back<=seg.length())
