@@ -119,6 +119,8 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
   for (i=0;i<piece.tris.size();i++)
     piece.tris[i]->crossingPieces.push_back(inx);
   unlockTriangles(thread);
+  for (i=0;i<piece.tris.size();i++)
+    net.trianglePaint.enqueue(piece.tris[i],thread);
 }
 
 void pointlist::deleteContourPiece(spiralarc s,int thread)
@@ -158,6 +160,8 @@ void pointlist::deleteContourPiece(spiralarc s,int thread)
 	}
     unlockTriangles(thread);
   }
+  for (i=0;i<piece.tris.size();i++)
+    net.trianglePaint.enqueue(piece.tris[i],thread);
 }
 
 vector<ContourPiece> pointlist::getContourPieces(int inx)
