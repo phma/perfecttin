@@ -547,7 +547,7 @@ array<double,2> pointlist::lohi(polyline p,double tolerance)
  * outside the contour's tolerance. The polyline must be closed.
  */
 {
-  int i,sz=p.size(),nPoints=0;
+  int i,segiter,sz=p.size(),nPoints=0;
   array<double,2> ret;
   array<double,2> tlohi;
   triangle *tri=findt(p.getEndpoint(0));
@@ -561,12 +561,17 @@ array<double,2> pointlist::lohi(polyline p,double tolerance)
     seg=p.getsegment(i);
     if (!tri)
       tri=findt(p.getEndpoint(i),true);
+    segiter=0;
     do
     {
       tlohi=tri->lohi(seg);
       updlohi(ret,tlohi);
       borderTriangles.push_back(tri);
       tri=tri->nextalong(seg);
+      segiter++;
+      if (segiter>4 &&
+	  borderTriangles.back()==borderTriangles[borderTriangles.size()-3])
+	tri=nullptr;
     } while (tri && !tri->in(p.getEndpoint(i+1)));
   }
   if (ret[1]-ret[0]<2*tolerance)

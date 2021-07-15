@@ -88,7 +88,7 @@ void pointlist::setCurrentContours(ContourInterval &ci)
 void pointlist::insertContourPiece(spiralarc s,int thread)
 {
   ContourPiece piece;
-  int i;
+  int i=0;
   int inx;
   vector<ContourPiece> *pcList;
   // clip is true in case the piece starts just outside the TIN because of roundoff
@@ -103,6 +103,9 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
     tri=tri->nextalong(s);
     if (tri)
       piece.tris.push_back(tri);
+    i++;
+    if (i>4 && piece.tris.back()==piece.tris[piece.tris.size()-3])
+      tri=nullptr;
   }
   pieceMutex.lock();
   pcList=&contourPieces[inx];
