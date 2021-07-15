@@ -496,10 +496,10 @@ triangle *triangle::nextalong(segment &seg)
   double fwd=close+peri/2,back=close-peri/2;
   if (fabs(seg.length()-0.19726387991375091)<1e-9)
     cout<<"i=1572\n";
-  if (back<0 && fwd>=0)
-    back=0;
-  if (fwd>seg.length() && back<=seg.length())
-    fwd=seg.length();
+  //if (back<0 && fwd>=0)
+    //back=0;
+  //if (fwd>seg.length() && back<=seg.length())
+    //fwd=seg.length();
   fwdpnt=seg.station(fwd);
   backpnt=seg.station(back);
   p=area3(*a,backpnt,fwdpnt);
