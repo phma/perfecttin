@@ -483,9 +483,17 @@ const char nextalongTable[3][3][3]=
 triangle *triangle::nextalong(segment &seg)
 /* Returns the next triangle along the segment.
  * If the segment does not cross the triangle, tries to get back to the segment.
- * Used when pruning contours.
+ * Used when pruning and smoothing contours.
  * If seg is an arc or spiralarc and intersects a side twice, may miss
  * a triangle.
+ *
+ * During the pruning phase, all segment endpoints are on TIN edges, and it
+ * often happens that a segment collinearly overlaps two or more edges.
+ * This can result in nextalong returning triangle ploni for almoni, and
+ * almoni for ploni, and if the segment's endpoint lies on their common edge
+ * but appears, because of roundoff, to be in neither triangle, the result
+ * is an infinite loop. This loop is broken in pointlist::lohi and
+ * pointlist::insertContourPiece.
  */
 {
   double p,q,r,pqr;
@@ -494,12 +502,6 @@ triangle *triangle::nextalong(segment &seg)
   //if (!isfinite(close))
     //close=seg.length()/2;
   double fwd=close+peri/2,back=close-peri/2;
-  if (fabs(seg.length()-0.19726387991375091)<1e-9)
-    cout<<"i=1572\n";
-  //if (back<0 && fwd>=0)
-    //back=0;
-  //if (fwd>seg.length() && back<=seg.length())
-    //fwd=seg.length();
   fwdpnt=seg.station(fwd);
   backpnt=seg.station(back);
   p=area3(*a,backpnt,fwdpnt);
