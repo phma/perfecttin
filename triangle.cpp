@@ -488,7 +488,7 @@ triangle *triangle::nextalong(segment &seg)
  * a triangle.
  */
 {
-  double p,q,r;
+  double p,q,r,pqr;
   xy fwdpnt,backpnt;
   double close=seg.closest(centroid(),INFINITY,true);
   //if (!isfinite(close))
@@ -505,6 +505,13 @@ triangle *triangle::nextalong(segment &seg)
   p=area3(*a,backpnt,fwdpnt);
   q=area3(*b,backpnt,fwdpnt);
   r=area3(*c,backpnt,fwdpnt);
+  pqr=fabs(p)+fabs(q)+fabs(r);
+  if (fabs(p)<pqr/1e9)
+    p=0;
+  if (fabs(q)<pqr/1e9)
+    q=0;
+  if (fabs(r)<pqr/1e9)
+    r=0;
   if (close>=seg.length() && dist(centroid(),(xy)seg.getend())>peri/2)
     return nullptr; // we've gone too far
   switch (nextalongTable[sign(p)+1][sign(q)+1][sign(r)+1])
