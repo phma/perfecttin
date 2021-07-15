@@ -505,6 +505,8 @@ triangle *triangle::nextalong(segment &seg)
   p=area3(*a,backpnt,fwdpnt);
   q=area3(*b,backpnt,fwdpnt);
   r=area3(*c,backpnt,fwdpnt);
+  if (close>=seg.length() && dist(centroid(),(xy)seg.getend())>peri/2)
+    return nullptr; // we've gone too far
   switch (nextalongTable[sign(p)+1][sign(q)+1][sign(r)+1])
   {
     case 4: // seg exits side a
