@@ -587,6 +587,7 @@ void prune1contour(pointlist &pl,double tolerance,int i,int thread)
     }
   }
   (*pl.currentContours)[i].setlengths();
+  (*pl.currentContours)[i].shrink_to_fit();
   checkContour(pl,(*pl.currentContours)[i],tolerance);
   //cout<<"        "<<i<<" error after "<<contourError(pl,(*pl.currentContours)[i]);
   //cout<<" bendiness "<<totalBendiness((*pl.currentContours)[i],tolerance)<<endl;
@@ -840,6 +841,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i,int thread)
   }
   //cout<<"Contour "<<i<<", "<<origsz<<" at start, "<<sz<<" at end, "<<tries<<" tries, "<<ops<<" operations\n";
   (*pl.currentContours)[i].setlengths();
+  (*pl.currentContours)[i].shrink_to_fit();
   checkContour(pl,(*pl.currentContours)[i],tolerance);
 }
 

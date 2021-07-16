@@ -65,6 +65,7 @@ public:
     return elevation;
   }
   virtual void clear();
+  virtual void shrink_to_fit();
   bool isopen();
   int size();
   segment getsegment(int i);
@@ -101,6 +102,7 @@ public:
   explicit polyarc(double e);
   polyarc(polyline &p);
   virtual void clear();
+  virtual void shrink_to_fit();
   arc getarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
@@ -132,6 +134,7 @@ public:
   explicit polyspiral(double e);
   polyspiral(polyline &p);
   virtual void clear();
+  virtual void shrink_to_fit();
   spiralarc getspiralarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);

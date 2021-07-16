@@ -155,6 +155,35 @@ void polyspiral::clear()
   curvatures.clear();
 }
 
+void polyline::shrink_to_fit()
+{
+  endpoints.shrink_to_fit();
+  lengths.shrink_to_fit();
+  cumLengths.shrink_to_fit();
+}
+
+void polyarc::shrink_to_fit()
+{
+  endpoints.shrink_to_fit();
+  lengths.shrink_to_fit();
+  cumLengths.shrink_to_fit();
+  deltas.shrink_to_fit();
+}
+
+void polyspiral::shrink_to_fit()
+{
+  endpoints.shrink_to_fit();
+  lengths.shrink_to_fit();
+  cumLengths.shrink_to_fit();
+  deltas.shrink_to_fit();
+  delta2s.shrink_to_fit();
+  bearings.shrink_to_fit();
+  midbearings.shrink_to_fit();
+  midpoints.shrink_to_fit();
+  clothances.shrink_to_fit();
+  curvatures.shrink_to_fit();
+}
+
 bool polyline::isopen()
 {
   return endpoints.size()>lengths.size();
