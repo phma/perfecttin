@@ -609,6 +609,8 @@ void smooth1contour(pointlist &pl,double tolerance,int i,int thread)
   xy a,b,c; // current endpoints; b is the nth
   xy p,q,r,s; // points to try changing the nth endpoint to
   xy z; // endpoint before a or after c
+  xy bg,pg,qg; // gradient at b,p,q
+  double graddiff,pqperi,f;
   double e=(*pl.currentContours)[i].getElevation();
   double errCurrent,errForward,errBackward,errNewSeg;
   double errStraighter,errBendier,errBest;
@@ -628,6 +630,17 @@ void smooth1contour(pointlist &pl,double tolerance,int i,int thread)
       c=(*pl.currentContours)[i].getEndpoint(n+1);
       p=(a+2*b)/3;
       q=(2*b+c)/3;
+      bg=pl.gradient(b);
+      pg=pl.gradient(p);
+      qg=pl.gradient(q);
+      graddiff=dist(bg,pg)+dist(pg,qg)+dist(qg,bg);
+      pqperi=dist(b,p)+dist(p,q)+dist(q,b);
+      f=2*tolerance/pqperi/graddiff;
+      /*if (f<1/3.)
+      {
+	p=a*f+b*(1/f);
+	q=b*(1-f)+c*f;
+      }*/
       r=(p+q)/2;
       s=2*b-r;
       errForward=errBackward=errNewSeg=errStraighter=errBendier=INFINITY;
