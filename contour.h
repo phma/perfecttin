@@ -103,6 +103,7 @@ float splitpoint(double leftclamp,double rightclamp,double tolerance);
 std::vector<edge *> contstarts(pointlist &pts,double elev);
 polyline trace(edge *edgep,double elev);
 polyline intrace(triangle *tri,double elev);
+double bendiness(xy a,xy b,xy c,double tolerance);
 void rough1contour(pointlist &pl,double elev,int thread);
 void roughcontours(pointlist &pl,double conterval);
 void checkContour(pointlist &pl,polyspiral &contour,double tolerance);
