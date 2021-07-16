@@ -325,6 +325,7 @@ void TinCanvas::tick()
   //if (elapsed>cr::milliseconds(50))
     //cout<<"tick got stuck\n";
   lastntri=net.triangles.size();
+  net.nipPieces();
 }
 
 void TinCanvas::startSplashScreen()

@@ -85,12 +85,25 @@ void pointlist::setCurrentContours(ContourInterval &ci)
   currentContours=&contours[ci];
 }
 
-void pointlist::nipPieces()
+void pointlist::nipPiece()
 // Call only when pieceMutex is locked.
 {
   ++pieceInx;
   if (contourPieces.count(pieceInx) && contourPieces[pieceInx].size()==0)
     contourPieces.erase(pieceInx);
+}
+
+void pointlist::nipPieces()
+// If called 20 times a second, this clears all empty hash buckets in a day.
+{
+  int i,j;
+  for (i=0;i<35;i++)
+  {
+    pieceMutex.lock();
+    for (j=0;j<71;j++)
+      nipPiece();
+    pieceMutex.unlock();
+  }
 }
 
 void pointlist::insertContourPiece(spiralarc s,int thread)
@@ -124,7 +137,7 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
   //cout<<s.getend().getx()<<','<<s.getend().gety()<<") Found "<<found<<endl;
   if (!found)
     pcList->push_back(piece);
-  nipPieces();
+  nipPiece();
   pieceMutex.unlock();
   while (!lockTriangles(thread,piece.tris))
     sleep(thread);
@@ -158,7 +171,7 @@ void pointlist::deleteContourPiece(spiralarc s,int thread)
   }
   //else
     //cout<<"Not found\n";
-  nipPieces();
+  nipPiece();
   pieceMutex.unlock();
   if (!pcList->size())
   { // This may leave some crossingPieces in case of hash collisions.

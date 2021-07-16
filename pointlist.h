@@ -94,6 +94,7 @@ public:
   void insertContourPiece(spiralarc s,int thread);
   void deleteContourPiece(spiralarc s,int thread);
   std::vector<ContourPiece> getContourPieces(int inx);
+  void nipPieces();
   void insertPieces(polyspiral ctour,int thread);
   void deletePieces(polyspiral ctour,int thread);
   int statsPieces();
@@ -101,7 +102,7 @@ public:
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
 private:
-  void nipPieces();
+  void nipPiece();
   // the following methods are in tin.cpp
   void dumpedges();
   void dumpnext_ps(PostScript &ps);
