@@ -73,6 +73,7 @@ public:
   std::shared_mutex wingEdge; // Lock this while changing pointers in the winged edge structure.
   std::map<int,std::vector<ContourPiece> > contourPieces;
   std::mutex pieceMutex;
+  int pieceInx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1,int thread=-1);
   void insertHullPoint(point *newpnt,point *prec);
@@ -99,8 +100,9 @@ public:
   void eraseEmptyContours();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
-  // the following methods are in tin.cpp
 private:
+  void nipPieces();
+  // the following methods are in tin.cpp
   void dumpedges();
   void dumpnext_ps(PostScript &ps);
 public:
