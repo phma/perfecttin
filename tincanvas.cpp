@@ -114,6 +114,15 @@ void TinCanvas::sizeToFit()
 }
 
 void TinCanvas::tick()
+/* This method, which is called at 20 Hz, updates the display and moves
+ * the ball, octagon, closed curve, or invisible thing (depending on what
+ * the program is doing) around. Occasionally it freezes. I stopped the
+ * program during a freeze and found that the main thread was in lowlevellock.c
+ * in the destructor of a vector in tick, which had 42 elements, while the only
+ * active worker thread was appending a triangle pointer to a vector of 8
+ * pointers. This is not enough to jank it for a few seconds, so most likely
+ * Qt was doing something that locked it.
+ */
 {
   int i,sz,timeLimit;
   int thisOpcount=opcount;
