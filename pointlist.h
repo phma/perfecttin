@@ -81,6 +81,10 @@ public:
   bool validConvexHull();
   std::vector<int> valencyHistogram();
   bool shouldWrite(int n,int flags);
+  void updateqindex();
+  double elevation(xy location);
+  xy gradient(xy location);
+  double dirbound(int angle);
   void clear();
   int size();
   void clearmarks();
@@ -103,11 +107,8 @@ public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
   void maketriangles();
   void makeqindex();
-  void updateqindex();
   void makeEdges();
   double totalEdgeLength();
-  double elevation(xy location);
-  double dirbound(int angle);
   std::array<double,2> lohi();
   std::array<double,2> lohi(polyline p,double tolerance);
   double contourError(segment seg);

@@ -559,7 +559,17 @@ double pointlist::elevation(xy location)
   if (t)
     return t->elevation(location);
   else
-    return nan("");
+    return NAN;
+}
+
+xy pointlist::gradient(xy location)
+{
+  triangle *t;
+  t=qinx.findt(location);
+  if (t)
+    return t->gradient(location);
+  else
+    return nanxy;
 }
 
 double pointlist::dirbound(int angle)
