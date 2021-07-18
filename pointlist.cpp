@@ -82,7 +82,12 @@ void pointlist::setCurrentContours(ContourInterval &ci)
  * If a set of contours with this contour interval does not exist, creates it.
  */
 {
+  int i;
+  for (i=0;currentContours && i<currentContours->size();i++)
+    deletePieces((*currentContours)[i],-1);
   currentContours=&contours[ci];
+  for (i=0;currentContours && i<currentContours->size();i++)
+    insertPieces((*currentContours)[i],-1);
 }
 
 void pointlist::nipPiece()
