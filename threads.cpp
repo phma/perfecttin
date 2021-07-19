@@ -228,7 +228,7 @@ void startThreads(int n)
   threadCommand=TH_WAIT;
   openThreadLog();
   logStartThread();
-  heldTriangles.resize(n);
+  heldTriangles.resize(n+1); // main thread has to lock triangles to draw contours
   sleepTime.resize(n);
   sleepFraction.resize(n);
   opTime=0;
