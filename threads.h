@@ -142,6 +142,7 @@ void unlockTriangles(int thread);
 void clearTriangleLocks();
 void setThreadCommand(int newStatus);
 int getThreadStatus();
+int numThreads();
 void waitForThreads(int newStatus);
 void waitForQueueEmpty();
 

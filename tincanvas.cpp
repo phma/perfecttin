@@ -29,6 +29,7 @@
 #include "relprime.h"
 #include "angle.h"
 #include "color.h"
+#include "triop.h"
 #include "threads.h"
 #include "ldecimal.h"
 
@@ -132,6 +133,7 @@ void TinCanvas::tick()
   uintptr_t pieceInx;
   vector<ContourPiece> pieces;
   vector<int> crossingPieces;
+  vector<triangle *> triPtr;
   bezier3d b3d;
   Color color;
   triangle *tri=(triangle *)5;
@@ -295,8 +297,12 @@ void TinCanvas::tick()
       A=*tri->a;
       B=*tri->b;
       C=*tri->c;
-      crossingPieces=tri->crossingPieces;
       net.wingEdge.unlock_shared();
+      triPtr.clear();
+      triPtr.push_back(tri);
+      while (!lockTriangles(numThreads(),triPtr));
+      crossingPieces=tri->crossingPieces;
+      unlockTriangles(numThreads());
       ++trianglesPainted;
       color=colorize(tri);
       if (splashScreenTime)

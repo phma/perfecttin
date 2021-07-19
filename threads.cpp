@@ -709,6 +709,11 @@ int getThreadStatus()
   return (threadCommand<<20)|((minStatus^maxStatus)<<10)|(minStatus&0x3ff);
 }
 
+int numThreads()
+{
+  return threadStatus.size();
+}
+
 void setMinArea(double area)
 {
   minArea=area;
