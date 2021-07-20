@@ -301,9 +301,12 @@ void TinCanvas::tick()
       net.wingEdge.unlock_shared();
       triPtr.clear();
       triPtr.push_back(tri);
-      while (!lockTriangles(numThreads(),triPtr));
-      crossingPieces=tri->crossingPieces;
-      unlockTriangles(numThreads());
+      if (net.currentContours && net.currentContours->size())
+      {
+	while (!lockTriangles(numThreads(),triPtr));
+	crossingPieces=tri->crossingPieces;
+	unlockTriangles(numThreads());
+      }
       ++trianglesPainted;
       color=colorize(tri);
       if (splashScreenTime)
