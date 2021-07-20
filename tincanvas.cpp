@@ -424,6 +424,11 @@ void TinCanvas::setSize()
     update();
   }
   setScalePos();
+  repaintAllTriangles();
+}
+
+void TinCanvas::repaintAllTriangles()
+{
   trianglesToPaint=3*net.triangles.size();
   /* It takes three coats of paint to color the framebuffer well
    * after it has been cleared to white.
@@ -558,7 +563,7 @@ void TinCanvas::roughContoursFinish()
   roughContoursValid=true;
   pruneContoursValid=false;
   smoothContoursValid=false;
-  update();
+  repaintAllTriangles();
   ps.open("contours.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
@@ -652,7 +657,7 @@ void TinCanvas::pruneContoursFinish()
   }
   net.eraseEmptyContours();
   pruneContoursValid=true;
-  update();
+  repaintAllTriangles();
   ps.open("contours.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
@@ -744,7 +749,7 @@ void TinCanvas::smoothContoursFinish()
   }
   disconnect(timer,SIGNAL(timeout()),0,0);
   smoothContoursValid=true;
-  update();
+  repaintAllTriangles();
   setThreadCommand(TH_WAIT);
   ps.open("contours.ps");
   ps.setpaper(papersizes["A4 portrait"],0);

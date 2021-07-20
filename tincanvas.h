@@ -59,6 +59,7 @@ public slots:
   void sizeToFit();
   void setSize();
   void setLengthUnit(double unit);
+  void repaintAllTriangles();
   void setScalePos();
   void tick(); // 50 ms
   void startSplashScreen();
