@@ -487,8 +487,9 @@ void TinCanvas::setLengthUnit(double unit)
 void TinCanvas::selectContourInterval()
 {
   ciDialog->set(&contourInterval,lengthUnit);
-  net.setCurrentContours(contourInterval);
   ciDialog->exec();
+  net.setCurrentContours(contourInterval);
+  repaintAllTriangles();
 }
 
 void TinCanvas::clearContourFlags()
