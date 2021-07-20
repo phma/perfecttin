@@ -22,6 +22,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <QPainter>
+#include <QGuiApplication>
 #include <cmath>
 #include "tincanvas.h"
 #include "boundrect.h"
@@ -487,9 +488,17 @@ void TinCanvas::setLengthUnit(double unit)
 void TinCanvas::selectContourInterval()
 {
   ciDialog->set(&contourInterval,lengthUnit);
-  ciDialog->exec();
-  net.setCurrentContours(contourInterval);
-  repaintAllTriangles();
+  if (ciDialog->exec())
+  {
+    QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    /* setCurrentContours deletes all the pieces of the old contours and
+     * inserts all the pieces of the new contours. This takes a noticeable
+     * time, after which all triangles have to be repainted.
+     */
+    net.setCurrentContours(contourInterval);
+    QGuiApplication::restoreOverrideCursor();
+    repaintAllTriangles();
+  }
 }
 
 void TinCanvas::clearContourFlags()
