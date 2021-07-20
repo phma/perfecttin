@@ -614,6 +614,7 @@ void testclosest()
   double close,close15,minquick,d,d15;
   PostScript ps;
   net.clear();
+  cloud.clear();
   aster(1000);
   ps.open("closest.ps");
   ps.prolog();
@@ -627,14 +628,14 @@ void testclosest()
      */
     ps.setscale(-32,-32,32,32,0);
     cout<<"Curvature*length at start "<<ldecimal(a.curvature(0)*a.length())<<", at end "<<ldecimal(a.curvature(a.length())*a.length())<<endl;
-    for (j=1;j<=1000;j++)
+    for (j=0;j<1000;j++)
     {
-      close=a.closest(net.points[j],INFINITY);
-      close15=a.closest(net.points[j],15);
+      close=a.closest(cloud[j],INFINITY);
+      close15=a.closest(cloud[j],15);
       if (close!=close15)
       {
-	d=dist(net.points[j],a.station(close));
-	d15=dist(net.points[j],a.station(close15));
+	d=dist(cloud[j],a.station(close));
+	d15=dist(cloud[j],a.station(close15));
 	if (minquick>d)
 	  minquick=d;
       }
@@ -642,7 +643,7 @@ void testclosest()
 	close=close15;
       if (isfinite(close))
       {
-	ang=a.bearing(close)-atan2i(net.points[j]-a.station(close));
+	ang=a.bearing(close)-atan2i(cloud[j]-a.station(close));
 	ang=(ang&(DEG180-1))-DEG90;
 	if (abs(ang)>10)
 	  if (close==0 || close==a.length())
@@ -651,7 +652,7 @@ void testclosest()
 	    ps.setcolor(1,0,0);
 	else
 	  ps.setcolor(0,0,0);
-	ps.line2p(net.points[j],a.station(close));
+	ps.line2p(cloud[j],a.station(close));
       }
     }
     ps.endpage();
