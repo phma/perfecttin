@@ -592,6 +592,76 @@ void testmanysum()
   //cout<<"Time in pairwisesum: "<<pairtime<<endl;
 }
 
+void testclosest()
+{
+  xyz beg(-30,0,0),end(30,0,0);
+  spiralarc a(beg,end);
+  int d1[]={0,DEG60,170891318,0,85445658};
+  int d2[]={0,0,0,DEG60,28512070};
+  /* 170891318 is 0.5 radian rounded down. 0.5 radian is 170891318.9.
+   * The circular arc is started in closest with 3 points if its delta
+   * is less than 0.5 radian. From 0.5 to 1.5 radians it is started
+   * with 4 points.
+   * 
+   * 0: straight line
+   * 1: 60° arc
+   * 2: 0.5 radian arc, the most an arc can bend and still start with 3 points
+   * 3: 60° spiralarc
+   * 4: The most a spiralarc straight at one end can bend and still start with 3 points
+   */
+  int i,j,ang;
+  bool showinaccurate=false;
+  double close,close15,minquick,d,d15;
+  PostScript ps;
+  net.clear();
+  aster(1000);
+  ps.open("closest.ps");
+  ps.prolog();
+  for (i=0;i<5;i++)
+  {
+    a.setdelta(d1[i],d2[i]);
+    ps.startpage();
+    minquick=INFINITY;
+    /* minquick is the minimum distance that it calculates quickly and inaccurately.
+     * It should be greater than closesofar, which is 15.
+     */
+    ps.setscale(-32,-32,32,32,0);
+    cout<<"Curvature*length at start "<<ldecimal(a.curvature(0)*a.length())<<", at end "<<ldecimal(a.curvature(a.length())*a.length())<<endl;
+    for (j=1;j<=1000;j++)
+    {
+      close=a.closest(net.points[j],INFINITY);
+      close15=a.closest(net.points[j],15);
+      if (close!=close15)
+      {
+	d=dist(net.points[j],a.station(close));
+	d15=dist(net.points[j],a.station(close15));
+	if (minquick>d)
+	  minquick=d;
+      }
+      if (showinaccurate)
+	close=close15;
+      if (isfinite(close))
+      {
+	ang=a.bearing(close)-atan2i(net.points[j]-a.station(close));
+	ang=(ang&(DEG180-1))-DEG90;
+	if (abs(ang)>10)
+	  if (close==0 || close==a.length())
+	    ps.setcolor(0,0,1);
+	  else
+	    ps.setcolor(1,0,0);
+	else
+	  ps.setcolor(0,0,0);
+	ps.line2p(net.points[j],a.station(close));
+      }
+    }
+    ps.endpage();
+    cout<<"Minimum distance that is calculated inaccurately is "<<minquick<<endl;
+    tassert(minquick>15);
+  }
+  ps.trailer();
+  ps.close();
+}
+
 void testspiral()
 {
   xy a,b,c,d,limitpoint;
@@ -1800,6 +1870,8 @@ int main(int argc, char *argv[])
     testspiral();
   if (shoulddo("spiralarc"))
     testspiralarc(); // 10.5 s
+  if (shoulddo("closest"))
+    testclosest();
   if (shoulddo("checksum"))
     testchecksum(); // >1 s 3/4 of time
   if (shoulddo("ldecimal"))
