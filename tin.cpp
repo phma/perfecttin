@@ -556,11 +556,17 @@ array<double,2> pointlist::lohi(polyline p,double tolerance)
   vector<point *> neighborPoints,insidePoints;
   ret[0]=INFINITY;
   ret[1]=-INFINITY;
+  /* Trace the polyline in both directions. During pruning, segments of the
+   * polyline are often collinear with sides of the triangle. nextalong in this
+   * case follows the right side of the segment. The segment may appear,
+   * because of roundoff, to be in only the triangle on one side. Tracing
+   * in both directions gets the triangles on both sides.
+   */
   for (i=0;i<sz && ret[1]-ret[0]<2*tolerance;i++)
   {
     seg=p.getsegment(i);
     if (!tri)
-      tri=findt(p.getEndpoint(i),true);
+      tri=findt(seg.getstart(),true);
     segiter=0;
     do
     {
@@ -572,7 +578,25 @@ array<double,2> pointlist::lohi(polyline p,double tolerance)
       if (segiter>4 &&
 	  borderTriangles.back()==borderTriangles[borderTriangles.size()-3])
 	tri=nullptr;
-    } while (tri && !tri->in(p.getEndpoint(i+1)));
+    } while (tri && !tri->in(seg.getend()));
+  }
+  for (i=sz-1;i>=0 && ret[1]-ret[0]<2*tolerance;i--)
+  {
+    seg=-p.getsegment(i);
+    if (!tri)
+      tri=findt(seg.getstart(),true);
+    segiter=0;
+    do
+    {
+      tlohi=tri->lohi(seg);
+      updlohi(ret,tlohi);
+      borderTriangles.push_back(tri);
+      tri=tri->nextalong(seg);
+      segiter++;
+      if (segiter>4 &&
+	  borderTriangles.back()==borderTriangles[borderTriangles.size()-3])
+	tri=nullptr;
+    } while (tri && !tri->in(seg.getend()));
   }
   if (ret[1]-ret[0]<2*tolerance)
     do
