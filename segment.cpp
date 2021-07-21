@@ -73,6 +73,12 @@ double segment::length() const
   return dist(xy(start),xy(end));
 }
 
+double segment::epsilon() const
+{
+  return sqrt((sqr(start.getx())+sqr(start.gety())+
+	       end.getx()+sqr(end.gety()))/2)*DBL_EPSILON;
+}
+
 double segment::elev(double along) const
 {
   return start.elev()+(end.elev()-start.elev())*along/length();
@@ -326,7 +332,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       closetime++;
 #endif
     }
-    if (lastclosedist>closedist)
+    if (lastclosedist>closedist+epsilon()/16)
       angtoler=1;
     else
       angtoler*=TOLERMULT;

@@ -56,6 +56,7 @@ public:
   virtual bool operator==(const segment b) const;
   segment operator-() const;
   virtual double length() const;
+  virtual double epsilon() const;
   virtual void setdelta(int d,int s=0)
   {
   }
