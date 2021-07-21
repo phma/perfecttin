@@ -336,8 +336,6 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       angtoler=1;
     else
       angtoler*=TOLERMULT;
-    if (angtoler>2000 && stdist.size()>1000000)
-      cout<<angtoler<<" angtoler\n";
   } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar && !((closest==0 && isinsector(dir(topoint,start)-startbearing(),0xf00ff00f)) || (closest==len && isinsector(dir(topoint,end)-endbearing(),0x0ff00ff0))));
   endangle=DEG90;
   if (closest==0)
