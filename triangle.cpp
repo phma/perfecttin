@@ -504,6 +504,15 @@ triangle *triangle::nextalong(segment &seg)
   double fwd=close+peri/2,back=close-peri/2;
   fwdpnt=seg.station(fwd);
   backpnt=seg.station(back);
+  if (fwdpnt.isnan() || backpnt.isnan())
+  {
+    /* This happens when putting a piece in contourPieces. The piece is a
+     * 1 mm or shorter spiralarc with nonzero clothance (I don't know why)
+     * and the triangle is larger (perimeter 16.3 m for example).
+     */
+    fwdpnt=seg.getend();
+    backpnt=seg.getstart();
+  }
   p=area3(*a,backpnt,fwdpnt);
   q=area3(*b,backpnt,fwdpnt);
   r=area3(*c,backpnt,fwdpnt);
