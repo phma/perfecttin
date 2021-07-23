@@ -3,7 +3,7 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -72,6 +72,7 @@ public:
   {
     return len;
   }
+  virtual double epsilon() const;
   virtual int bearing(double along) const
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);

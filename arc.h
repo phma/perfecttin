@@ -3,7 +3,7 @@
 /* arc.h - horizontal circular arcs                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -69,6 +69,7 @@ public:
   }
   virtual double in(xy pnt);
   double length() const;
+  virtual double epsilon() const;
   virtual xyz station(double along) const;
   virtual int bearing(double along) const;
   virtual xy center();

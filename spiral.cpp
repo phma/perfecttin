@@ -3,7 +3,7 @@
 /* spiral.cpp - Cornu or Euler spirals                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -287,6 +287,11 @@ spiralarc spiralarc::operator-() const
 {
   spiralarc ret(end,mid,start,midbear+DEG180,-cur,clo,len);
   return ret;
+}
+
+double spiralarc::epsilon() const
+{
+  return sqrt((sqr(mid.getx())+sqr(mid.gety())+sqr(len))/1.5)*DBL_EPSILON;
 }
 
 double spiralarc::in(xy pnt)

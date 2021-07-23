@@ -76,7 +76,7 @@ double segment::length() const
 double segment::epsilon() const
 {
   return sqrt((sqr(start.getx())+sqr(start.gety())+
-	       end.getx()+sqr(end.gety()))/2)*DBL_EPSILON;
+	       sqr(end.getx())+sqr(end.gety()))/2)*DBL_EPSILON;
 }
 
 double segment::elev(double along) const
