@@ -68,7 +68,7 @@ public:
   virtual double tangentLength(int which);
   virtual double diffarea();
   spiralarc operator-() const;
-  double length() const
+  virtual double length() const
   {
     return len;
   }

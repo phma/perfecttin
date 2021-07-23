@@ -68,7 +68,7 @@ public:
     return 0;
   }
   virtual double in(xy pnt);
-  double length() const;
+  virtual double length() const;
   virtual double epsilon() const;
   virtual xyz station(double along) const;
   virtual int bearing(double along) const;
