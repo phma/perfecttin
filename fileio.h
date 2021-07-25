@@ -38,6 +38,8 @@
 #define PT_EDGE_MISMATCH -8
 #define PT_DOT_OUTSIDE -9
 #define PT_ZCHECK_FAIL -10
+#define PT_CONTOUR_ERROR -11
+#define PT_UNKNOWN_GROUP -12
 /* Unknown header format: file was written by a newer version of PerfectTIN.
  * Not ptin file: file is not a PerfectTIN file.
  * Count mismatch: file is not a PerfectTIN file.
@@ -47,6 +49,8 @@
 #define CHECKSUM_BUG 1
 #define CHECKSUM_DIV1 65536
 #define CHECKSUM_DIV2 536870912
+
+#define GRP_CONTOUR 0
 
 extern Printer3dSize printer3d;
 

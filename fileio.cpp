@@ -828,6 +828,17 @@ PtinHeader readPtin(std::string inputFile)
     }
   }
   if (header.tolRatio>0 && header.tolerance>0)
+    for (i=0;i<header.numGroups;i++)
+    {
+      switch (readleshort(ptinFile))
+      {
+	case GRP_CONTOUR:
+	  break;
+	default:
+	  header.tolRatio=PT_UNKNOWN_GROUP;
+      }
+    }
+  if (header.tolRatio>0 && header.tolerance>0)
   {
     setMutexArea(pairwisesum(areas));
     net.makeEdges();
