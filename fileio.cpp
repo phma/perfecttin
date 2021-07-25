@@ -572,6 +572,7 @@ PtinHeader readPtinHeader(istream &inputFile)
 	ret.numPoints=readleint(inputFile);
 	ret.numConvexHull=readleint(inputFile);
 	ret.numTriangles=readleint(inputFile);
+	ret.numGroups=0;
 	break;
       case 0x00000028:
 	ret.conversionTime=readlelong(inputFile);
@@ -581,6 +582,17 @@ PtinHeader readPtinHeader(istream &inputFile)
 	ret.numPoints=readleint(inputFile);
 	ret.numConvexHull=readleint(inputFile);
 	ret.numTriangles=readleint(inputFile);
+	ret.numGroups=0;
+	break;
+      case 0x0000002c:
+	ret.conversionTime=readlelong(inputFile);
+	ret.tolRatio=readleint(inputFile);
+	ret.tolerance=readledouble(inputFile);
+	ret.density=readledouble(inputFile);
+	ret.numPoints=readleint(inputFile);
+	ret.numConvexHull=readleint(inputFile);
+	ret.numTriangles=readleint(inputFile);
+	ret.numGroups=readleint(inputFile);
 	break;
       default:
 	ret.tolRatio=PT_UNKNOWN_HEADER_FORMAT;
