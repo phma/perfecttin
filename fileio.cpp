@@ -493,7 +493,7 @@ const int ptinHeaderFormat=0x00000028;
  * int32*n	Deltas (final zeros omitted)
  * uint32	Number of delta2s
  * int32*n	Delta2s (final zeros omitted)
- * TBD		Checksums
+ * uint32	Checksum
  */
 
 void writePtin(string outputFile,int tolRatio,double tolerance,double density)
