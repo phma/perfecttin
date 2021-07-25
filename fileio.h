@@ -60,6 +60,7 @@ struct PtinHeader
   int numPoints;
   int numConvexHull;
   int numTriangles;
+  int numGroups;
   int flags;
 };
 
