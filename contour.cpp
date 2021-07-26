@@ -118,9 +118,20 @@ void ContourInterval::setInterval(double unit,int icode,bool fine)
 }
 
 void ContourInterval::setIntervalRatios(double i,int f,int c)
-// For restoring settings when program starts
-// TODO: if c==0, set c to 4 or 5 depending on i
+/* For restoring settings when program starts and reading contour intervals
+ * from a file. If i is 5*10**n meters or feet and c==0, c=4, else c=5.
+ */
 {
+  double logmod;
+  if (i>0 && c==0)
+  {
+    logmod=log10(i)*2;
+    logmod-=floor(logmod);
+    if (logmod>0.3 && logmod<0.5)
+      c=4;
+    else
+      c=5;
+  }
   if (i>0 && f>0 && f<10 && c>0 && c<10)
   {
     interval=i;
