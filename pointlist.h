@@ -90,6 +90,7 @@ public:
   int size();
   void clearmarks();
   void clearTin();
+  void unsetCurrentContours();
   void setCurrentContours(ContourInterval &ci);
   void insertContourPiece(spiralarc s,int thread);
   void deleteContourPiece(spiralarc s,int thread);

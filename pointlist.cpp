@@ -77,6 +77,14 @@ void pointlist::clearmarks()
     e->second.clearmarks();
 }
 
+void pointlist::unsetCurrentContours()
+{
+  int i;
+  for (i=0;currentContours && i<currentContours->size();i++)
+    deletePieces((*currentContours)[i],-1);
+  currentContours=nullptr;
+}
+
 void pointlist::setCurrentContours(ContourInterval &ci)
 /* Selects which contours are currently being worked on (traced, pruned, etc.).
  * If a set of contours with this contour interval does not exist, creates it.
