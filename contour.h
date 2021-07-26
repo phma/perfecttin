@@ -51,23 +51,23 @@ class ContourInterval
 public:
   ContourInterval();
   ContourInterval(double unit,int icode,bool fine);
-  double fineInterval()
+  double fineInterval() const
   {
     return interval;
   };
-  double mediumInterval()
+  double mediumInterval() const
   {
     return interval*fineRatio;
   };
-  double coarseInterval()
+  double coarseInterval() const
   {
     return interval*fineRatio*coarseRatio;
   };
-  double tolerance()
+  double tolerance() const
   {
     return interval*fineRatio*relativeTolerance;
   };
-  double getRelativeTolerance()
+  double getRelativeTolerance() const
   {
     return relativeTolerance;
   };

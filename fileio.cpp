@@ -457,7 +457,7 @@ void writeTriangle(ostream &file,triangle *tri)
     writelefloat(file,NAN);
 }
 
-const int ptinHeaderFormat=0x00000028;
+const int ptinHeaderFormat=0x0000002c;
 /* ptinHeaderFormat counts all bytes after the header format itself and before
  * the start of points. The low two bytes are the count of bytes; the high
  * two bytes are used to disambiguate between header formats that have
@@ -503,6 +503,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
  */
 {
   int i,n;
+  map<ContourInterval,std::vector<polyspiral> >::iterator j;
   xyz pnt;
   triangle *tri;
   ofstream checkFile(outputFile,ios::binary);
@@ -520,6 +521,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   writeleint(checkFile,net.points.size());
   writeleint(checkFile,net.convexHull.size());
   writeleint(checkFile,net.triangles.size());
+   writeleint(checkFile,net.contours.size());
   for (i=1;i<=net.points.size();i++)
   {
     net.wingEdge.lock_shared();
@@ -548,6 +550,20 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   checkFile.put(zcheck.size());
   for (i=0;i<zcheck.size();i++)
     writeledouble(checkFile,zcheck[i]);
+  for (j=net.contours.begin();j!=net.contours.end();++j)
+  {
+    writeleshort(checkFile,GRP_CONTOUR);
+    writeleshort(checkFile,16);
+    writeledouble(checkFile,j->first.mediumInterval());
+    writeledouble(checkFile,j->first.getRelativeTolerance());
+    writeleshort(checkFile,GRPTYPE_POLY);
+    writeleint(checkFile,j->second.size());
+    for (i=0;i<j->second.size();i++)
+    {
+      j->second[i].write(checkFile);
+      writeleint(checkFile,j->second[i].checksum());
+    }
+  }
   checkFile.flush();
   checkFile.seekp(24,ios::beg);
   writeledouble(checkFile,tolerance);
