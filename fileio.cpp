@@ -657,6 +657,7 @@ PtinHeader readPtin(std::string inputFile)
     resizeBuckets(1);
   if (header.tolRatio>0 && header.tolerance>0)
   {
+    net.unsetCurrentContours();
     net.clear();
     cloud.clear();
     readingStarted=true;
@@ -877,6 +878,8 @@ PtinHeader readPtin(std::string inputFile)
       else
 	tri->dots.push_back(cloud[i]);
     }
+    if (ci.mediumInterval()>0)
+      net.setCurrentContours(ci);
   }
   else if (readingStarted)
     net.clear();
