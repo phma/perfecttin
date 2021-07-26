@@ -636,6 +636,7 @@ PtinHeader readPtin(std::string inputFile)
   PtinHeader header;
   int i,j,m,n,a,b,c;
   int edgeCheck=0;
+  int nContours;
   vector<int> convexHull;
   vector<double> areas,sqrOffsets;
   triangle *tri;
@@ -644,8 +645,12 @@ PtinHeader readPtin(std::string inputFile)
   double high=-INFINITY,low=INFINITY;
   double absToler;
   double checkVerticalOffset;
+  double conterval,contoler;
   uint64_t verticalAffect,mask;
   vector<double> zcheck;
+  ContourInterval ci;
+  polyspiral ctour;
+  int concheck;
   zCheck.clear();
   header=readPtinHeader(ptinFile);
   if (nBuckets()==0)
@@ -833,6 +838,25 @@ PtinHeader readPtin(std::string inputFile)
       switch (readleshort(ptinFile))
       {
 	case GRP_CONTOUR:
+	  j=readleshort(ptinFile); // Length of label is 16 bytes (two doubles)
+	  if (j!=16)
+	    header.tolRatio=PT_CONTOUR_ERROR;
+	  conterval=readledouble(ptinFile);
+	  contoler=readledouble(ptinFile);
+	  ci.setIntervalRatios(conterval,1,0);
+	  ci.setRelativeTolerance(contoler);
+	  if (readleshort(ptinFile)!=GRPTYPE_POLY)
+	    header.tolRatio=PT_CONTOUR_ERROR;
+	  nContours=readleint(ptinFile);
+	  net.contours[ci].clear();
+	  for (j=0;header.tolRatio>0 && j<nContours;j++)
+	  {
+	    ctour.read(ptinFile);
+	    concheck=readleint(ptinFile);
+	    if (abs(foldangle(concheck-ctour.checksum()))>5)
+	      header.tolRatio=PT_CONTOUR_ERROR;
+	    net.contours[ci].push_back(ctour);
+	  }
 	  break;
 	default:
 	  header.tolRatio=PT_UNKNOWN_GROUP;

@@ -119,6 +119,7 @@ void ContourInterval::setInterval(double unit,int icode,bool fine)
 
 void ContourInterval::setIntervalRatios(double i,int f,int c)
 // For restoring settings when program starts
+// TODO: if c==0, set c to 4 or 5 depending on i
 {
   if (i>0 && f>0 && f<10 && c>0 && c<10)
   {
