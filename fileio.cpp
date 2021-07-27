@@ -907,6 +907,7 @@ PtinHeader readPtin(std::string inputFile)
 	      header.tolRatio=PT_CONTOUR_ERROR;
 	    }
 	    concheck=readleint(ptinFile);
+	    cout<<foldangle(concheck-ctour.checksum())<<" concheck\n";
 	    if (abs(foldangle(concheck-ctour.checksum()))>555)
 	      header.tolRatio=PT_CONTOUR_ERROR;
 	    net.contours[ci].push_back(ctour);
@@ -930,6 +931,7 @@ PtinHeader readPtin(std::string inputFile)
 	      header.tolRatio=PT_CONTOUR_ERROR;
 	    }
 	    concheck=readleint(ptinFile);
+	    cout<<foldangle(concheck-net.boundary.checksum())<<" concheck\n";
 	    if (abs(foldangle(concheck-net.boundary.checksum()))>5)
 	      header.tolRatio=PT_CONTOUR_ERROR;
 	  }
