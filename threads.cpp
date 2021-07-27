@@ -951,7 +951,8 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
-	  cerr<<"Can't write PTIN in wait state\n";
+	  adjustLooseCorners(act.param0*act.param1);
+	  writePtin(act.filename,act.param0,act.param1,act.param2);
 	  unsleep(thread);
 	  break;
 	case ACT_DELETE_FILE:

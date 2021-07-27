@@ -977,6 +977,11 @@ void MainWindow::makeActions()
   convertAction->setText(tr("Convert"));
   fileMenu->addAction(convertAction);
   connect(convertAction,SIGNAL(triggered(bool)),this,SLOT(startConversion()));
+  saveFileAction=new QAction(this);
+  saveFileAction->setIcon(QIcon::fromTheme("document-save"));
+  saveFileAction->setText(tr("Save"));
+  fileMenu->addAction(saveFileAction);
+  connect(saveFileAction,SIGNAL(triggered(bool)),this,SLOT(saveFile()));
   exportMenu=fileMenu->addMenu(tr("Export"));
   clearAction=new QAction(this);
   clearAction->setIcon(QIcon::fromTheme("edit-clear"));

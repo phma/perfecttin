@@ -108,7 +108,8 @@ private:
   QMenu *fileMenu,*viewMenu,*contourMenu,*settingsMenu,*helpMenu,*exportMenu,*colorMenu;
   QLabel *fileMsg,*dotTriangleMsg,*toleranceMsg,*densityMsg;
   QProgressBar *doneBar,*busyBar;
-  QAction *openAction,*loadAction,*loadBoundaryAction,*convertAction,*clearAction;
+  QAction *openAction,*loadAction,*loadBoundaryAction,*convertAction;
+  QAction *saveFileAction,*clearAction;
   QAction *exportAction,*stopAction,*resumeAction,*exitAction;
   QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
   QAction *exportCarlsonTinAction,*exportLandXmlAction;
