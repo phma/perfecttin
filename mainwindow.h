@@ -79,6 +79,7 @@ public slots:
   void startConversion();
   void stopConversion();
   void resumeConversion();
+  void saveFile();
   void setColorScheme(int scheme);
   void clearCloud();
   void configure();

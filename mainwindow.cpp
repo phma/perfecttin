@@ -791,6 +791,19 @@ void MainWindow::resumeConversion()
   }
 }
 
+void MainWindow::saveFile()
+{
+  ThreadAction ta;
+  double toleranceRatio=stageTolerance/tolerance;
+  ta.param1=tolerance;
+  ta.param0=lrint(toleranceRatio);
+  ta.param2=density;
+  ta.opcode=ACT_WRITE_PTIN;
+  ta.filename=saveFileName+".ptin";
+  if (ta.param0==1 && ta.param1>0 && ta.param2>0 && saveFileName.length())
+    enqueueAction(ta);
+}
+
 void MainWindow::setColorScheme(int scheme)
 {
   colorize.setScheme(scheme);
