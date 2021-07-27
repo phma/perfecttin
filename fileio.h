@@ -51,6 +51,7 @@
 #define CHECKSUM_DIV2 536870912
 
 #define GRP_CONTOUR 0
+#define GRP_BOUNDARY 1
 #define GRPTYPE_POLY 0
 
 extern Printer3dSize printer3d;

@@ -541,7 +541,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   writeleint(checkFile,net.points.size());
   writeleint(checkFile,net.convexHull.size());
   writeleint(checkFile,net.triangles.size());
-   writeleint(checkFile,net.contours.size());
+   writeleint(checkFile,net.contours.size()+(net.boundary.size()>0));
   for (i=1;i<=net.points.size();i++)
   {
     net.wingEdge.lock_shared();
@@ -583,6 +583,15 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
       j->second[i].write(checkFile);
       writeleint(checkFile,j->second[i].checksum());
     }
+  }
+  if (net.boundary.size())
+  {
+    writeleshort(checkFile,GRP_BOUNDARY);
+    writeleshort(checkFile,0);
+    writeleshort(checkFile,GRPTYPE_POLY);
+    writeleint(checkFile,1);
+    net.boundary.write(checkFile);
+    writeleint(checkFile,net.boundary.checksum());
   }
   checkFile.flush();
   checkFile.seekp(24,ios::beg);
@@ -894,6 +903,21 @@ PtinHeader readPtin(std::string inputFile)
 	    if (abs(foldangle(concheck-ctour.checksum()))>5)
 	      header.tolRatio=PT_CONTOUR_ERROR;
 	    net.contours[ci].push_back(ctour);
+	  }
+	  break;
+	case GRP_BOUNDARY:
+	  j=readleshort(ptinFile); // Length of label is 0 bytes (no label)
+	  if (j!=0)
+	    header.tolRatio=PT_CONTOUR_ERROR;
+	  if (readleshort(ptinFile)!=GRPTYPE_POLY)
+	    header.tolRatio=PT_CONTOUR_ERROR;
+	  nContours=readleint(ptinFile);
+	  for (j=0;header.tolRatio>0 && j<nContours;j++)
+	  {
+	    net.boundary.read(ptinFile);
+	    concheck=readleint(ptinFile);
+	    if (abs(foldangle(concheck-net.boundary.checksum()))>5)
+	      header.tolRatio=PT_CONTOUR_ERROR;
 	  }
 	  break;
 	default:
