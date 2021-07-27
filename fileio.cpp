@@ -41,6 +41,7 @@ using namespace std;
 
 CoordCheck zCheck;
 Printer3dSize printer3d;
+char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 
 const double verticalOffset=0;
 /* The vertical offset is added to all points' elevations for debugging

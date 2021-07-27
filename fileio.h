@@ -54,6 +54,7 @@
 #define GRPTYPE_POLY 0
 
 extern Printer3dSize printer3d;
+extern char hexdig[16];
 
 struct PtinHeader
 {

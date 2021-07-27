@@ -42,6 +42,7 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "adjelev.h"
+#include "fileio.h"
 #include "octagon.h"
 #include "edgeop.h"
 #include "triop.h"
@@ -60,7 +61,6 @@
 
 using namespace std;
 
-char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 bool slowmanysum=false;
 bool testfail=false;
 const bool drawDots=true;
