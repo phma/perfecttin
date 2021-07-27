@@ -900,7 +900,7 @@ PtinHeader readPtin(std::string inputFile)
 	  {
 	    ctour.read(ptinFile);
 	    concheck=readleint(ptinFile);
-	    if (abs(foldangle(concheck-ctour.checksum()))>5)
+	    if (abs(foldangle(concheck-ctour.checksum()))>555)
 	      header.tolRatio=PT_CONTOUR_ERROR;
 	    net.contours[ci].push_back(ctour);
 	  }
