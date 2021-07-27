@@ -25,6 +25,7 @@
 #include <cmath>
 #include <cstring>
 #include "dxf.h"
+#include "random.h"
 #include "neighbor.h"
 #include "boundrect.h"
 #include "octagon.h"
@@ -316,6 +317,21 @@ void deleteFile(string fileName)
   remove(fileName.c_str());
 }
 
+string randomRenameFile(string fileName)
+/* Renames a file, adding a random suffix. The file will be deleted later.
+ * In Windows, moving a file on top of an existing file doesn't work.
+ * So move the file first, write the new file, then delete the old file.
+ */
+{
+  unsigned int suffixInt=rng.uirandom();
+  int i;
+  string newName=fileName;
+  for (i=0;i<8;i++)
+    newName+=hexdig[(suffixInt>>(4*i))&15];
+  rename(fileName.c_str(),newName.c_str());
+  return newName;
+}
+
 void writeDxf(string outputFile,bool asc,double outUnit,int flags)
 {
   vector<GroupCode> dxfCodes;
@@ -507,8 +523,11 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   map<ContourInterval,std::vector<polyspiral> >::iterator j;
   xyz pnt;
   triangle *tri;
-  ofstream checkFile(outputFile,ios::binary);
+  ofstream checkFile;
+  string delendum;
   vector<double> zcheck;
+  delendum=randomRenameFile(outputFile);
+  checkFile.open(outputFile,ios::binary);
   zCheck.clear();
   writeleshort(checkFile,6);
   writeleshort(checkFile,28);
@@ -569,6 +588,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   checkFile.seekp(24,ios::beg);
   writeledouble(checkFile,tolerance);
   writeledouble(checkFile,density);
+  deleteFile(delendum);
 }
 
 PtinHeader readPtinHeader(istream &inputFile)
