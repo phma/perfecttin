@@ -898,7 +898,14 @@ PtinHeader readPtin(std::string inputFile)
 	  net.contours[ci].clear();
 	  for (j=0;header.tolRatio>0 && j<nContours;j++)
 	  {
-	    ctour.read(ptinFile);
+	    try
+	    {
+	      ctour.read(ptinFile);
+	    }
+	    catch (...)
+	    {
+	      header.tolRatio=PT_CONTOUR_ERROR;
+	    }
 	    concheck=readleint(ptinFile);
 	    if (abs(foldangle(concheck-ctour.checksum()))>555)
 	      header.tolRatio=PT_CONTOUR_ERROR;
@@ -914,7 +921,14 @@ PtinHeader readPtin(std::string inputFile)
 	  nContours=readleint(ptinFile);
 	  for (j=0;header.tolRatio>0 && j<nContours;j++)
 	  {
-	    net.boundary.read(ptinFile);
+	    try
+	    {
+	      net.boundary.read(ptinFile);
+	    }
+	    catch (...)
+	    {
+	      header.tolRatio=PT_CONTOUR_ERROR;
+	    }
 	    concheck=readleint(ptinFile);
 	    if (abs(foldangle(concheck-net.boundary.checksum()))>5)
 	      header.tolRatio=PT_CONTOUR_ERROR;
