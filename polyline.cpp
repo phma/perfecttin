@@ -1162,12 +1162,8 @@ unsigned int polyspiral::checksum()
   }
   for (i=0;i<lsz;i++)
   {
-    ret-=signParity(i)*dir(endpoints[i],endpoints[(i+1)%esz]);
-    ret+=signParity(i)*(deltas[i]+delta2s[i]+2*midbearings[i]);
-    /* The midbearings of a polyspiral copied from a polyline are the same as
-     * the dir from one endpoint to the next, so 2*midbearings[i]-dir(
-     * endpoints[i],endpoints[i+1] is equal to dir(endpoints[i],endpoints[i+1].
-     */
+    ret+=signParity(i)*dir(endpoints[i],endpoints[(i+1)%esz]);
+    ret+=signParity(i)*(deltas[i]+delta2s[i]);
   }
   return ret;
 }
