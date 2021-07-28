@@ -51,6 +51,8 @@ void pointlist::clear()
   convexHull.clear();
   edgePool.clear();
   trianglePool.clear();
+  pieceDraw.clear();
+  trianglePaint.clear();
   swishFactor=0;
   currentContours=nullptr;
   wingEdge.unlock();
