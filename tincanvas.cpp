@@ -795,12 +795,13 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   QPainter painter(this);
   QTime paintTime,subTime;
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
+  QRectF qind(ballPos.getx()-8,ballPos.gety()-8,16,16);
   QRectF sclera(ballPos.getx()-10,ballPos.gety()-5,20,10);
   QRectF iris(ballPos.getx()-5,ballPos.gety()-5,10,10);
   QRectF pupil(ballPos.getx()-2,ballPos.gety()-2,4,4);
   QRectF paper(ballPos.getx()-7.07,ballPos.gety()-10,14.14,20);
   QPolygonF octagon;
-  QPainterPath roughCurve,pruneCurve,smoothCurve;
+  QPainterPath roughCurve,pruneCurve,smoothCurve,trigon;
   double x0,x1,y;
   paintTime.start();
   octagon<<QPointF(ballPos.getx()-10,ballPos.gety()-4.14);
@@ -851,6 +852,10 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   smoothCurve.cubicTo(-6.048,-6.696,-8.856,-1.836,-8.856,2.592);
   smoothCurve.cubicTo(-8.856,3.068,-7.92,5.688,-6.642,6.426);
   smoothCurve.translate(ballPos.getx(),ballPos.gety());
+  trigon.moveTo(9.659,0.259);
+  trigon.lineTo(-7.071,7.071);
+  trigon.lineTo(-0.259,-9.659);
+  trigon.translate(ballPos.getx(),ballPos.gety());
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
   switch (state)
@@ -914,6 +919,15 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.drawEllipse(iris);
       painter.setBrush(Qt::black);
       painter.drawEllipse(pupil);
+      break;
+    case -ACT_QINDEX:
+      painter.setPen(Qt::NoPen);
+      painter.setBrush(Qt::blue);
+      painter.drawPath(trigon);
+      painter.setPen(Qt::black);
+      painter.setBrush(Qt::NoBrush);
+      painter.drawRect(qind);
+      painter.drawPoint(QPointF(ballPos.getx(),ballPos.gety()));
       break;
     case 0:
       painter.setBrush(Qt::lightGray);
