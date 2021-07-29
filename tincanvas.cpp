@@ -906,6 +906,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.drawPolygon(octagon);
       break;
     case -ACT_LOAD:
+    case -ACT_READ_PTIN:
       painter.setPen(Qt::NoPen);
       painter.setBrush(Qt::lightGray);
       painter.drawEllipse(sclera);
