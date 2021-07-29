@@ -694,7 +694,7 @@ PtinHeader readPtin(std::string inputFile)
   double conterval,contoler;
   uint64_t verticalAffect,mask;
   vector<double> zcheck;
-  ContourInterval ci;
+  ContourInterval ci(0,0,false);
   polyspiral ctour;
   int concheck;
   zCheck.clear();
