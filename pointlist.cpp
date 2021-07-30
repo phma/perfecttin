@@ -100,6 +100,15 @@ void pointlist::setCurrentContours(ContourInterval &ci)
     insertPieces((*currentContours)[i],-1);
 }
 
+vector<ContourInterval> pointlist::contourIntervals()
+{
+  vector<ContourInterval> ret;
+  map<ContourInterval,vector<polyspiral> >::iterator i;
+  for (i=contours.begin();i!=contours.end();++i)
+    ret.push_back(i->first);
+  return ret;
+}
+
 void pointlist::nipPiece()
 // Call only when pieceMutex is locked.
 {
