@@ -902,6 +902,9 @@ void MainWindow::handleResult(ThreadAction ta)
       if (message.length())
 	msgBox->warning(this,tr("PerfectTIN"),message);
       break;
+    case ACT_QINDEX:
+      cout<<"Finished qindex\n";
+      break;
   }
   fileMsg->setText(QString::fromStdString(fileNames));
   showingResult=false;

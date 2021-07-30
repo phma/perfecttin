@@ -874,6 +874,7 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_QINDEX:
 	  net.makeqindex();
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	default:
@@ -961,6 +962,7 @@ void TinThread::operator()(int thread)
 	  break;
 	case ACT_QINDEX:
 	  net.makeqindex();
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	default:
