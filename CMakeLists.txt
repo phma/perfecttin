@@ -71,7 +71,7 @@ add_executable(perfecttin perfecttin.cpp test.cpp ${common_files})
 add_executable(dibathy dibathy.cpp ${common_files})
 add_executable(vecinos vecinos.cpp ${common_files})
 endif (${Boost_FOUND})
-add_executable(perfecttin-gui cidialog.cpp configdialog.cpp
+add_executable(perfecttin-gui ciaction.cpp cidialog.cpp configdialog.cpp
 	       csaction.cpp gui.cpp lissajous.cpp
 	       mainwindow.cpp tincanvas.cpp unitbutton.cpp
 	       ${common_files} ${lib_resources} ${qm_files})
