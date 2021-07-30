@@ -953,8 +953,9 @@ PtinHeader readPtin(std::string inputFile)
       else
 	tri->dots.push_back(cloud[i]);
     }
-    if (ci.mediumInterval()>0)
-      net.setCurrentContours(ci);
+    /* There is no sense setting current contours now, because the quad index
+     * has not yet been made.
+     */
   }
   else if (readingStarted)
     net.clear();

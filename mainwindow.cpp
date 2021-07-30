@@ -844,6 +844,8 @@ void MainWindow::handleResult(ThreadAction ta)
  */
 {
   QString message;
+  vector<ContourInterval> ciList;
+  int i;
   showingResult=true;
   tinSizeChanged();
   switch (ta.opcode)
@@ -903,7 +905,14 @@ void MainWindow::handleResult(ThreadAction ta)
 	msgBox->warning(this,tr("PerfectTIN"),message);
       break;
     case ACT_QINDEX:
-      cout<<"Finished qindex\n";
+      ciList=net.contourIntervals();
+      for (i=0;i<ciList.size();i++)
+	if (ciList[i]==canvas->contourInterval)
+	{ // See TinCanvas::selectContourInterval
+	  QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	  net.setCurrentContours(ciList[i]);
+	  QGuiApplication::restoreOverrideCursor();
+	}
       break;
   }
   fileMsg->setText(QString::fromStdString(fileNames));

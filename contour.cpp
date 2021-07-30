@@ -187,6 +187,11 @@ bool operator<(const ContourInterval &l,const ContourInterval &r)
     return l.interval<r.interval;
 }
 
+bool operator==(const ContourInterval &l,const ContourInterval &r)
+{
+  return l.interval==r.interval && l.relativeTolerance==r.relativeTolerance;
+}
+
 void ContourInterval::writeXml(ostream &ofile)
 {
   ofile<<"<ContourInterval interval=\""<<ldecimal(interval);
