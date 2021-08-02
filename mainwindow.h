@@ -28,6 +28,7 @@
 #include <QPixmap>
 #include <string>
 #include <array>
+#include <deque>
 #include "configdialog.h"
 #include "unitbutton.h"
 #include "csaction.h"
@@ -102,7 +103,7 @@ private:
   double tolerance,density,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
-  std::vector<ContourIntervalAction> ciActions;
+  std::deque<ContourIntervalAction> ciActions;
   QTimer *timer;
   QFileDialog *fileDialog;
   QMessageBox *msgBox;

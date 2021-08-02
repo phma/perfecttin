@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(canvas,SIGNAL(splashScreenStarted()),this,SLOT(disableMenuSplash()));
   connect(canvas,SIGNAL(splashScreenFinished()),this,SLOT(enableMenuSplash()));
   connect(canvas,SIGNAL(contourDrawingFinished()),this,SLOT(refreshNumTriangles()));
+  connect(canvas,SIGNAL(contourSetsChanged()),this,SLOT(updateContourIntervalActions()));
   doneBar=new QProgressBar(this);
   busyBar=new QProgressBar(this);
   doneBar->setRange(0,16777216);
@@ -424,6 +425,7 @@ void MainWindow::loadFile()
       lastFileName=fileName;
     }
     fileMsg->setText(QString::fromStdString(fileNames));
+    updateContourIntervalActions();
   }
   delete fileDialog;
   fileDialog=nullptr;
@@ -500,11 +502,17 @@ void MainWindow::endisableMenu()
 void MainWindow::updateContourIntervalActions()
 {
   int i;
+  vector<ContourInterval> cis=net.contourIntervals();
   for (i=0;i<ciActions.size();i++)
     contourMenu->removeAction(&ciActions[i]);
   ciActions.clear();
+  for (i=0;i<cis.size();i++)
+    ciActions.emplace_back(this,cis[i]);
   for (i=0;i<ciActions.size();i++)
+  {
     contourMenu->addAction(&ciActions[i]);
+    // connect signals
+  }
 }
 
 void MainWindow::exportDxfTxt()
@@ -778,6 +786,7 @@ void MainWindow::startConversion()
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
     clearLog();
+    updateContourIntervalActions();
     writtenTolerance=INFINITY;
     fileNames=baseName(saveFileName)+".ptin";
     fileMsg->setText(QString::fromStdString(fileNames));
@@ -862,6 +871,7 @@ void MainWindow::handleResult(ThreadAction ta)
   {
     case ACT_LOAD:
       convertAction->setEnabled(true);
+      updateContourIntervalActions();
       break;
     case ACT_READ_PTIN:
       if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)
@@ -913,6 +923,7 @@ void MainWindow::handleResult(ThreadAction ta)
       }
       if (message.length())
 	msgBox->warning(this,tr("PerfectTIN"),message);
+      updateContourIntervalActions();
       break;
     case ACT_QINDEX:
       ciList=net.contourIntervals();
