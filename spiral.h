@@ -63,57 +63,57 @@ public:
   spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev);
   spiralarc(xyz kra,xy mij,xyz fam,int mbear,double curvature,double clothance,double length);
   spiralarc(xyz pnt,double curvature,double clothance,int bear,double startLength,double endLength);
-  virtual double in(xy pnt);
-  virtual xy pointOfIntersection();
-  virtual double tangentLength(int which);
-  virtual double diffarea();
+  virtual double in(xy pnt) override;
+  virtual xy pointOfIntersection() override;
+  virtual double tangentLength(int which) override;
+  virtual double diffarea() override;
   spiralarc operator-() const;
-  virtual double length() const
+  virtual double length() const override
   {
     return len;
   }
-  virtual double epsilon() const;
-  virtual int bearing(double along) const
+  virtual double epsilon() const override;
+  virtual int bearing(double along) const override
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
-  int startbearing() const
+  int startbearing() const override
   {
     return midbear+ispiralbearing(-len/2,cur,clo);
   }
-  int endbearing() const
+  int endbearing() const override
   {
     return midbear+ispiralbearing(len/2,cur,clo);
   }
-  virtual double curvature(double along) const
+  virtual double curvature(double along) const override
   {
     return cur+clo*(along-len/2);
   }
-  virtual double radius(double along) const
+  virtual double radius(double along) const override
   {
     return 1/curvature(along);
   }
-  virtual int getdelta()
+  virtual int getdelta() override
   {
     return radtobin(cur*len);
   }
-  virtual int getdelta2()
+  virtual int getdelta2() override
   {
     return startbearing()+endbearing()-2*dir(xy(start),xy(end));
   }
-  virtual double clothance()
+  virtual double clothance() override
   {
     return clo;
   }
-  virtual xyz station(double along) const;
-  virtual xy center();
+  virtual xyz station(double along) const override;
+  virtual xy center() override;
   void _setdelta(int d,int s=0);
   void _setcurvature(double startc,double endc);
   void _fixends(double p);
   void split(double along,spiralarc &a,spiralarc &b);
-  virtual void lengthen(int which,double along);
-  void setdelta(int d,int s=0);
-  virtual void setcurvature(double startc,double endc);
+  virtual void lengthen(int which,double along) override;
+  void setdelta(int d,int s=0) override;
+  virtual void setcurvature(double startc,double endc) override;
   bool valid()
   {
     return (std::isfinite(cur) && std::isfinite(clo) && std::isfinite(len));

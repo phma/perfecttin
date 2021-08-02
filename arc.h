@@ -38,45 +38,45 @@ public:
   arc(xyz kra,xyz fam);
   arc(xyz kra,xyz mij,xyz fam);
   arc(xyz kra,xyz fam,int d);
-  virtual void setdelta(int d,int s=0);
-  virtual void setcurvature(double startc,double endc);
-  virtual double radius(double along) const
+  virtual void setdelta(int d,int s=0) override;
+  virtual void setcurvature(double startc,double endc) override;
+  virtual double radius(double along) const override
   {
     return chordlength()/sinhalf(delta)/2;
   }
-  virtual double curvature(double along) const
+  virtual double curvature(double along) const override
   {
     return 2*sinhalf(delta)/chordlength();
   }
-  virtual xy pointOfIntersection();
-  virtual double tangentLength(int which);
-  virtual double diffarea();
-  int startbearing() const
+  virtual xy pointOfIntersection() override;
+  virtual double tangentLength(int which) override;
+  virtual double diffarea() override;
+  int startbearing() const override
   {
     return chordbearing()-delta/2;
   }
-  int endbearing() const
+  int endbearing() const override
   {
     return chordbearing()+delta/2;
   }
-  virtual int getdelta()
+  virtual int getdelta() override
   {
     return delta;
   }
-  virtual int getdelta2()
+  virtual int getdelta2() override
   {
     return 0;
   }
-  virtual double in(xy pnt);
-  virtual double length() const;
-  virtual double epsilon() const;
-  virtual xyz station(double along) const;
-  virtual int bearing(double along) const;
-  virtual xy center();
-  virtual bool isCurly();
-  virtual bool isTooCurly();
+  virtual double in(xy pnt) override;
+  virtual double length() const override;
+  virtual double epsilon() const override;
+  virtual xyz station(double along) const override;
+  virtual int bearing(double along) const override;
+  virtual xy center() override;
+  virtual bool isCurly() override;
+  virtual bool isTooCurly() override;
   void split(double along,arc &a,arc &b);
-  virtual void lengthen(int which,double along);
+  virtual void lengthen(int which,double along) override;
 };
 
 #endif

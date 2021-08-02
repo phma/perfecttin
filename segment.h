@@ -138,6 +138,8 @@ public:
   {
     return 0;
   }
+  virtual bool isCurly();
+  virtual bool isTooCurly();
   double closest(xy topoint,double closesofar=INFINITY,bool offends=false);
   double dirbound(int angle,double boundsofar=INFINITY);
   virtual void split(double along,segment &a,segment &b);
