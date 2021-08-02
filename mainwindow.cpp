@@ -1086,6 +1086,7 @@ void MainWindow::makeActions()
   smoothContoursAction->setText(tr("Draw smooth contours"));
   contourMenu->addAction(smoothContoursAction);
   connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(smoothContours()));
+  contourMenu->addSeparator();
   // Settings menu
   configureAction=new QAction(this);
   configureAction->setIcon(QIcon::fromTheme("configure"));
