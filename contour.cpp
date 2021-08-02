@@ -82,7 +82,6 @@ ContourInterval::ContourInterval(double unit,int icode,bool fine)
 
 void ContourInterval::setInterval(double unit,int icode,bool fine)
 {
-  int i;
   fineRatio=1;
   while (icode>1)
   {
@@ -282,7 +281,7 @@ vector<edge *> contstarts(pointlist &pts,double elev)
   edge *ep;
   int sd,io;
   triangle *tri;
-  int i,j;
+  int i;
   //cout<<"Exterior edges:";
   for (io=0;io<2;io++)
     for (i=0;i<pts.edges.size();i++)
@@ -568,14 +567,14 @@ void prune1contour(pointlist &pl,double tolerance,int i,int thread)
  */
 {
   int n=0;
-  int j,sz,origsz;
+  int j,sz;
   array<double,2> lohiElev;
   polyline change;
   double e=(*pl.currentContours)[i].getElevation();
   PostScript ps;
   BoundRect br;
   DirtyTracker dt;
-  origsz=sz=(*pl.currentContours)[i].size();
+  sz=(*pl.currentContours)[i].size();
   //cout<<"Contour "<<i<<" error before "<<contourError(pl,(*pl.currentContours)[i]);
   //cout<<" bendiness "<<totalBendiness((*pl.currentContours)[i],tolerance)<<endl;
   dt.init(sz);

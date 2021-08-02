@@ -404,7 +404,6 @@ void spiralarc::_fixends(double p)
 
 void spiralarc::split(double along,spiralarc &a,spiralarc &b)
 {
-  double dummy;
   xyz mida,midb;
   int midbeara,midbearb;
   double cura,curb;

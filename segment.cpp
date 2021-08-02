@@ -163,7 +163,6 @@ double segment::tangentLength(int which)
 
 void segment::split(double along,segment &a,segment &b)
 {
-  double dummy;
   xyz splitpoint=station(along);
   a=segment(start,splitpoint);
   b=segment(splitpoint,end);

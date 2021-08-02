@@ -101,7 +101,6 @@ double makeOctagon()
   vector<triangle *> trianglePointers;
   vector<point *> cornerPointers;
   int i,j,n,h,sz,triDots;
-  triangle *tri;
   largeVertical=false;
   net.clear();
   net.triangles[0]; // Create a dummy triangle so that the GUI says "Making octagon"

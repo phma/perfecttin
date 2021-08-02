@@ -690,7 +690,6 @@ PtinHeader readPtin(std::string inputFile)
   bool readingStarted=false;
   double high=-INFINITY,low=INFINITY;
   double absToler;
-  double checkVerticalOffset;
   double conterval,contoler;
   uint64_t verticalAffect,mask;
   vector<double> zcheck;
