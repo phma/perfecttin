@@ -497,6 +497,16 @@ void MainWindow::endisableMenu()
   stopAction->setEnabled(false);
 }
 
+void MainWindow::updateContourIntervalActions()
+{
+  int i;
+  for (i=0;i<ciActions.size();i++)
+    contourMenu->removeAction(&ciActions[i]);
+  ciActions.clear();
+  for (i=0;i<ciActions.size();i++)
+    contourMenu->addAction(&ciActions[i]);
+}
+
 void MainWindow::exportDxfTxt()
 {
   int dialogResult;

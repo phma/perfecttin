@@ -31,6 +31,7 @@
 #include "configdialog.h"
 #include "unitbutton.h"
 #include "csaction.h"
+#include "ciaction.h"
 #include "cidialog.h"
 #include "tincanvas.h"
 
@@ -67,6 +68,7 @@ public slots:
   void disableMenuSplash();
   void enableMenuSplash();
   void endisableMenu();
+  void updateContourIntervalActions();
   void exportDxfTxt();
   void exportDxfBin();
   void exportPlyTxt();
@@ -100,6 +102,7 @@ private:
   double tolerance,density,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;
+  std::vector<ContourIntervalAction> ciActions;
   QTimer *timer;
   QFileDialog *fileDialog;
   QMessageBox *msgBox;
