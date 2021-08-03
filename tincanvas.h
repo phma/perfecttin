@@ -56,6 +56,7 @@ signals:
   void splashScreenFinished();
   void contourDrawingFinished();
   void contourSetsChanged();
+  void contourIntervalChanged(ContourInterval ci);
 public slots:
   void sizeToFit();
   void setSize();
@@ -65,6 +66,7 @@ public slots:
   void tick(); // 50 ms
   void startSplashScreen();
   void selectContourInterval();
+  void setContourInterval(ContourInterval ci);
   void clearContourFlags();
   void roughContours();
   void rough1Contour();

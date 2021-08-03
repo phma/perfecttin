@@ -502,7 +502,17 @@ void TinCanvas::selectContourInterval()
     QGuiApplication::restoreOverrideCursor();
     repaintAllTriangles();
     contourSetsChanged();
+    contourIntervalChanged(contourInterval);
   }
+}
+
+void TinCanvas::setContourInterval(ContourInterval ci)
+{
+  QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  net.setCurrentContours(contourInterval=ci);
+  QGuiApplication::restoreOverrideCursor();
+  repaintAllTriangles();
+  contourIntervalChanged(contourInterval);
 }
 
 void TinCanvas::clearContourFlags()

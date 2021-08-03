@@ -513,9 +513,9 @@ void MainWindow::updateContourIntervalActions()
   {
     contourMenu->addAction(&ciActions[i]);
     ciActions[i].setText((QString::fromStdString(cis[i].valueToleranceString())));
-    //connect(this,SIGNAL(colorSchemeChanged(int)),&ciActions[i],SLOT(setInterval(int)));
+    connect(canvas,SIGNAL(contourIntervalChanged(ContourInterval)),&ciActions[i],SLOT(setInterval(ContourInterval)));
     connect(&ciActions[i],SIGNAL(triggered(bool)),&ciActions[i],SLOT(selfTriggered(bool)));
-    //connect(&ciActions[i],SIGNAL(intervalChanged(ContourInterval)),this,SLOT(setColorScheme(ContourInterval)));
+    connect(&ciActions[i],SIGNAL(intervalChanged(ContourInterval)),canvas,SLOT(setContourInterval(ContourInterval)));
   }
 }
 
