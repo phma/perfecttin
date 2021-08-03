@@ -78,6 +78,7 @@ public:
   void setInterval(double unit,int icode,bool fine);
   void setIntervalRatios(double i,int f,int c);
   std::string valueString(double unit,bool precise=false);
+  std::string valueToleranceString();
   int contourType(double elev);
   friend bool operator<(const ContourInterval &l,const ContourInterval &r);
   friend bool operator==(const ContourInterval &l,const ContourInterval &r);

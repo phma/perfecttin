@@ -36,6 +36,7 @@
 #include <cassert>
 #include <cstring>
 #include <deque>
+#include "units.h"
 #include "pointlist.h"
 #include "contour.h"
 #include "relprime.h"
@@ -148,6 +149,43 @@ string ContourInterval::valueString(double unit,bool precise)
   ret=ldecimal(mediumInterval()/unit,mediumInterval()/unit/M_SQRT_10/(precise?1e6:1));
   if (ret[0]=='.')
     ret="0"+ret;
+  return ret;
+}
+
+string ContourInterval::valueToleranceString()
+{
+  int i,num=0,denom=1;
+  int minLength=255,whichUnit;
+  string numStr,ret;
+  vector<int> cfrac;
+  double tol=relativeTolerance;
+  for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[0]);i++)
+  {
+    numStr=ldecimal(mediumInterval()/conversionFactors[i]);
+    if (numStr.length()<minLength)
+    {
+      ret=numStr;
+      minLength=numStr.length();
+      whichUnit=i;
+    }
+  }
+  if (ret[0]=='.')
+    ret="0"+ret;
+  ret=ret+' '+unitSymbols[whichUnit]+' ';
+  while (true)
+  {
+    cfrac.push_back(floor(tol));
+    tol-=cfrac.back();
+    if (tol<1e-3)
+      break;
+    tol=1/tol;
+  }
+  for (i=cfrac.size()-1;i>=0;i--)
+  {
+    swap(num,denom);
+    num+=denom*cfrac[i];
+  }
+  ret=ret+to_string(num)+'/'+to_string(denom);
   return ret;
 }
 
