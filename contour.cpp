@@ -154,7 +154,7 @@ string ContourInterval::valueString(double unit,bool precise)
 
 string ContourInterval::valueToleranceString()
 {
-  int i,num=0,denom=1;
+  int i,num=1,denom=0;
   int minLength=255,whichUnit;
   string numStr,ret;
   vector<int> cfrac;
