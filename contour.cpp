@@ -144,7 +144,11 @@ string ContourInterval::valueString(double unit,bool precise)
  * Uses 7 digits if precise to distinguish which foot it was set in.
  */
 {
-  return ldecimal(mediumInterval()/unit,mediumInterval()/unit/M_SQRT_10/(precise?1e6:1));
+  string ret;
+  ret=ldecimal(mediumInterval()/unit,mediumInterval()/unit/M_SQRT_10/(precise?1e6:1));
+  if (ret[0]=='.')
+    ret="0"+ret;
+  return ret;
 }
 
 int ContourInterval::contourType(double elev)
