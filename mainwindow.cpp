@@ -512,6 +512,7 @@ void MainWindow::updateContourIntervalActions()
   for (i=0;i<ciActions.size();i++)
   {
     contourMenu->addAction(&ciActions[i]);
+    ciActions[i].setText((QString::fromStdString(cis[i].valueToleranceString())));
     // connect signals
   }
 }
