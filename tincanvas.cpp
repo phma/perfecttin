@@ -558,7 +558,6 @@ void TinCanvas::rough1Contour()
 
 void TinCanvas::roughContoursFinish()
 {
-  PostScript ps;
   BoundRect br;
   int i;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
@@ -578,19 +577,6 @@ void TinCanvas::roughContoursFinish()
   pruneContoursValid=false;
   smoothContoursValid=false;
   repaintAllTriangles();
-  ps.open("contours.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
-  ps.prolog();
-  ps.startpage();
-  br.include(&net);
-  ps.setscale(br);
-  for (i=0;i<(*net.currentContours).size();i++)
-  {
-    ps.comment("Contour "+to_string(i)+" Elevation "+to_string((*net.currentContours)[i].getElevation()));
-    ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
-  }
-  ps.endpage();
-  net.statsPieces();
 }
 
 void TinCanvas::pruneContours()
@@ -654,7 +640,6 @@ void TinCanvas::prune1Contour()
 
 void TinCanvas::pruneContoursFinish()
 {
-  PostScript ps;
   BoundRect br;
   int i;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(pruneContoursFinish()));
@@ -672,20 +657,6 @@ void TinCanvas::pruneContoursFinish()
   net.eraseEmptyContours();
   pruneContoursValid=true;
   repaintAllTriangles();
-  ps.open("contours.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
-  ps.prolog();
-  ps.startpage();
-  br.include(&net);
-  ps.setscale(br);
-  for (i=0;i<(*net.currentContours).size();i++)
-  {
-    ps.comment("Contour "+to_string(i)+" Elevation "+to_string((*net.currentContours)[i].getElevation()));
-    ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
-  }
-  ps.endpage();
-  cout<<"Should be "<<totalContourSegments<<endl;
-  net.statsPieces();
 }
 
 void TinCanvas::smoothContours()
@@ -750,7 +721,6 @@ void TinCanvas::smooth1Contour()
 
 void TinCanvas::smoothContoursFinish()
 {
-  PostScript ps;
   BoundRect br;
   int i;
   switch (goal)
@@ -765,21 +735,6 @@ void TinCanvas::smoothContoursFinish()
   smoothContoursValid=true;
   repaintAllTriangles();
   setThreadCommand(TH_WAIT);
-  ps.open("contours.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
-  ps.prolog();
-  ps.startpage();
-  br.include(&net);
-  ps.setscale(br);
-  for (i=0;i<(*net.currentContours).size();i++)
-  {
-    ps.comment("Contour "+to_string(i)+" Elevation "+to_string((*net.currentContours)[i].getElevation()));
-    ps.spline((*net.currentContours)[i].approx3d(0.1/ps.getscale()));
-    checkContour(net,(*net.currentContours)[i],tolerance);
-  }
-  ps.endpage();
-  cout<<"Should be "<<totalContourSegments<<endl;
-  net.statsPieces();
 }
 
 void TinCanvas::contoursCancel()
