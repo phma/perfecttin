@@ -30,6 +30,7 @@
 #include "neighbor.h"
 #include "fileio.h"
 #include "angle.h"
+#include "units.h"
 #include "octagon.h"
 #include "brevno.h"
 using namespace std;

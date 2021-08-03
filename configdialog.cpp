@@ -3,7 +3,7 @@
 /* configdialog.cpp - configuration dialog            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -25,10 +25,10 @@
 #include "configdialog.h"
 #include "ldecimal.h"
 #include "threads.h"
+#include "units.h"
 
 using namespace std;
 
-const double conversionFactors[4]={1,0.3048,12e2/3937,0.3047996};
 const char unitNames[4][12]=
 {
   QT_TRANSLATE_NOOP("ConfigurationDialog","Meter"),

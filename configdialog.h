@@ -3,7 +3,7 @@
 /* configdialog.h - configuration dialog              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -35,7 +35,6 @@
 #include <QGridLayout>
 #include "stl.h"
 
-extern const double conversionFactors[4];
 extern const char unitNames[4][12];
 
 class GeneralTab: public QWidget

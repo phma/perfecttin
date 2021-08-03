@@ -32,6 +32,7 @@
 #include "triop.h"
 #include "test.h"
 #include "angle.h"
+#include "units.h"
 #include "edgeop.h"
 #include "relprime.h"
 #include "adjelev.h"
@@ -156,15 +157,12 @@ void drawMag(PostScript &ps)
 
 double parseUnit(const string &unit)
 {
-  if (unit=="m")
-    return 1;
-  if (unit=="ft")
-    return 0.3048;
-  if (unit=="usft")
-    return 12e2/3937;
-  if (unit=="inft")
-    return 0.3047996;
-  return 0;
+  int i;
+  double ret=0;
+  for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[0]);i++)
+    if (unit==unitSymbols[i])
+      ret=conversionFactors[i];
+  return ret;
 }
 
 void parseUnits(string units)
