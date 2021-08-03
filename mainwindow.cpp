@@ -930,14 +930,10 @@ void MainWindow::handleResult(ThreadAction ta)
       updateContourIntervalActions();
       break;
     case ACT_QINDEX:
-      ciList=net.contourIntervals();
-      for (i=0;i<ciList.size();i++)
-	if (ciList[i]==canvas->contourInterval)
-	{ // See TinCanvas::selectContourInterval
-	  QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	  net.setCurrentContours(ciList[i]);
-	  QGuiApplication::restoreOverrideCursor();
-	}
+      /* This results in a signal back to the MainWindow to set the checkmark
+       * on the contour interval action with this contour interval.
+       */
+      canvas->setContourInterval(canvas->contourInterval);
       break;
   }
   fileMsg->setText(QString::fromStdString(fileNames));
