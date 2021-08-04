@@ -246,6 +246,25 @@ void ContourInterval::writeXml(ostream &ofile)
   ofile<<"\"/>"<<endl;
 }
 
+bool operator<(const ContourLayer &l,const ContourLayer &r)
+// For a map from ContourLayer to layer numbers
+{
+  if (l.ci==r.ci)
+    return l.tp<r.tp;
+  else
+    return l.ci<r.ci;
+}
+
+bool operator==(const ContourLayer &l,const ContourLayer &r)
+{
+  return l.ci==r.ci && l.tp==r.tp;
+}
+
+bool operator!=(const ContourLayer &l,const ContourLayer &r)
+{
+  return l.ci!=r.ci || l.tp!=r.tp;
+}
+
 void DirtyTracker::init(int n)
 {
   dirt.clear();

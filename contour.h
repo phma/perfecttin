@@ -89,6 +89,26 @@ private:
   int fineRatio,coarseRatio;
 };
 
+struct ContourLayer
+/* These correspond to layers when exporting as DXF. Each ContourInterval
+ * has a set of 4 or 5 or 2 layers. E.g. if they are 1 m 1/2 contours, either
+ * 1 m 1/2 200: 0,5,10,15...
+ * 1 m 1/2 104: 1,6,11,16...
+ * 1 m 1/2 108: 2,7,12,17...
+ * 1 m 1/2 10c: 3,8,13,18...
+ * 1 m 1/2 110: 4,9,14,19...
+ * or
+ * 1 m 1/2 200: 0,5,10,15...
+ * 1 m 1/2 100: 1,2,3,4,6...
+ */
+{
+  ContourInterval ci;
+  int tp;
+  friend bool operator<(const ContourLayer &l,const ContourLayer &r);
+  friend bool operator==(const ContourLayer &l,const ContourLayer &r);
+  friend bool operator!=(const ContourLayer &l,const ContourLayer &r);
+};
+
 class DirtyTracker
 {
 public:
