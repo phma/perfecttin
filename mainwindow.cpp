@@ -867,7 +867,6 @@ void MainWindow::handleResult(ThreadAction ta)
  */
 {
   QString message;
-  vector<ContourInterval> ciList;
   int i;
   showingResult=true;
   tinSizeChanged();

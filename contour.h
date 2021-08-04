@@ -82,6 +82,7 @@ public:
   int contourType(double elev);
   friend bool operator<(const ContourInterval &l,const ContourInterval &r);
   friend bool operator==(const ContourInterval &l,const ContourInterval &r);
+  friend bool operator!=(const ContourInterval &l,const ContourInterval &r);
   void writeXml(std::ostream &ofile);
 private:
   double interval,relativeTolerance;
