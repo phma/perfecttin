@@ -3,7 +3,7 @@
 /* dxf.cpp - Drawing Exchange Format                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019,2020 Pierre Abbat.
+/* Copyright 2019-2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -590,6 +590,22 @@ void linetypeTable(vector<GroupCode> &dxfData)
   insertLinetype(dxfData,"CONTINUOUS",64,"Solid line",65,0,0);
   tabletag.str="ENDTAB";
   dxfData.push_back(tabletag);
+}
+
+void insertLayer(vector<GroupCode> &dxfData,string name,int n1,int color)
+{
+  GroupCode layertag(0),layername(2),n1code(70),colorcode(62);
+  GroupCode ltypecode(6),n3code(73),pencode(40);
+  layertag.str="LAYER";
+  dxfData.push_back(layertag);
+  layername.str=name;
+  dxfData.push_back(layername);
+  n1code.integer=n1;
+  dxfData.push_back(n1code);
+  colorcode.integer=color;
+  dxfData.push_back(colorcode);
+  ltypecode.str="CONTINUOUS";
+  dxfData.push_back(ltypecode);
 }
 
 void tableSection(vector<GroupCode> &dxfData)
