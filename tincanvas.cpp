@@ -515,7 +515,7 @@ void TinCanvas::setContourInterval(ContourInterval ci)
     if (ciList[i]==ci)
     {
       which=i;
-      if (ci!=contourInterval)
+      if (!net.currentContours || ci!=contourInterval)
 	net.setCurrentContours(contourInterval=ci);
     }
   if (which<0)
