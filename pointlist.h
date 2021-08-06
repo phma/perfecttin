@@ -24,6 +24,8 @@
 #ifndef POINTLIST_H
 #define POINTLIST_H
 
+class ContourLayer;
+
 #include <map>
 #include <string>
 #include <vector>
@@ -93,6 +95,7 @@ public:
   void unsetCurrentContours();
   void setCurrentContours(ContourInterval &ci);
   std::vector<ContourInterval> contourIntervals();
+  std::map<ContourLayer,int> contourLayers();
   void insertContourPiece(spiralarc s,int thread);
   void deleteContourPiece(spiralarc s,int thread);
   std::vector<ContourPiece> getContourPieces(int inx);

@@ -335,10 +335,30 @@ string randomRenameFile(string fileName)
 void writeDxf(string outputFile,bool asc,double outUnit,int flags)
 {
   vector<GroupCode> dxfCodes;
+  vector<DxfLayer> dxfLayers;
+  map<ContourLayer,int> contourLayers;
   int i;
+  map<ContourLayer,int>::iterator j;
+  DxfLayer layer;
   BoundRect br;
-  br.include(&net);
   ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
+  br.include(&net);
+  contourLayers=net.contourLayers();
+  layer.name="TIN";
+  layer.number=1;
+  layer.color=0;
+  dxfLayers.push_back(layer);
+  layer.name="Boundary";
+  layer.number=2;
+  layer.color=3;
+  dxfLayers.push_back(layer);
+  for (j=contourLayers.begin();j!=contourLayers.end();++j)
+  {
+    layer.name=j->first.ci.valueToleranceString();
+    layer.number=j->second;
+    layer.color=j->first.tp>>8;
+    dxfLayers.push_back(layer);
+  }
   //dxfHeader(dxfCodes,br);
   tableSection(dxfCodes);
   openEntitySection(dxfCodes);

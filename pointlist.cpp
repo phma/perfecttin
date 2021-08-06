@@ -109,6 +109,30 @@ vector<ContourInterval> pointlist::contourIntervals()
   return ret;
 }
 
+map<ContourLayer,int> pointlist::contourLayers()
+{
+  map<ContourInterval,vector<polyspiral> >::iterator i;
+  int j;
+  map<ContourLayer,int>::iterator k;
+  map<ContourLayer,int> ret;
+  ContourLayer cl;
+  for (i=contours.begin();i!=contours.end();++i)
+  {
+    cl.ci=i->first;
+    for (j=0;j<i->second.size();j++)
+    {
+      cl.tp=cl.ci.contourType(i->second[j].getElevation());
+      ret[cl]=0;
+    }
+  }
+  /* Start at layer 3. Layer 0 is reserved by the DXF format, layer 1 is for
+   * the TIN, and layer 2 is for the boundary.
+   */
+  for (k=ret.begin(),j=3;k!=ret.end();++k,++i)
+    k->second=j;
+  return ret;
+}
+
 void pointlist::nipPiece()
 // Call only when pieceMutex is locked.
 {

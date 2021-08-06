@@ -152,7 +152,7 @@ string ContourInterval::valueString(double unit,bool precise)
   return ret;
 }
 
-string ContourInterval::valueToleranceString()
+string ContourInterval::valueToleranceString() const
 {
   int i,num=1,denom=0;
   int minLength=255,whichUnit;

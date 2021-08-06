@@ -67,6 +67,13 @@ public:
   };
 };
 
+struct DxfLayer
+{
+  std::string name;
+  int number;
+  int color;
+};
+
 GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
 void writeDxfText(std::ostream &file,GroupCode code);
