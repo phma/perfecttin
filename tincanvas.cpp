@@ -828,9 +828,9 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   smoothCurve.cubicTo(-6.048,-6.696,-8.856,-1.836,-8.856,2.592);
   smoothCurve.cubicTo(-8.856,3.068,-7.92,5.688,-6.642,6.426);
   smoothCurve.translate(ballPos.getx(),ballPos.gety());
-  trigon.moveTo(9.659,0.259);
+  trigon.moveTo(9.659,2.588);
   trigon.lineTo(-7.071,7.071);
-  trigon.lineTo(-0.259,-9.659);
+  trigon.lineTo(-2.588,-9.659);
   trigon.translate(ballPos.getx(),ballPos.gety());
   painter.setRenderHint(QPainter::Antialiasing,true);
   painter.drawPixmap(this->rect(),frameBuffer,this->rect());
