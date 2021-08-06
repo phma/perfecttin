@@ -608,7 +608,23 @@ void insertLayer(vector<GroupCode> &dxfData,string name,int n1,int color)
   dxfData.push_back(ltypecode);
 }
 
-void tableSection(vector<GroupCode> &dxfData)
+void layerTable(vector<GroupCode> &dxfData,vector<DxfLayer> &layers)
+{
+  int i;
+  GroupCode tabletag(0),tablename(2),nLayers(70);
+  tabletag.str="TABLE";
+  tablename.str="LAYER";
+  dxfData.push_back(tabletag);
+  dxfData.push_back(tablename);
+  nLayers.integer=layers.size();
+  dxfData.push_back(nLayers);
+  for (i=0;i<layers.size();i++)
+    insertLayer(dxfData,layers[i].name,64,layers[i].color);
+  tabletag.str="ENDTAB";
+  dxfData.push_back(tabletag);
+}
+
+void tableSection(vector<GroupCode> &dxfData,vector<DxfLayer> &layers)
 {
   GroupCode sectag(0),secname(2);
   sectag.str="SECTION";
@@ -616,6 +632,7 @@ void tableSection(vector<GroupCode> &dxfData)
   dxfData.push_back(sectag);
   dxfData.push_back(secname);
   linetypeTable(dxfData);
+  layerTable(dxfData,layers);
   sectag.str="ENDSEC";
   dxfData.push_back(sectag);
 }

@@ -361,7 +361,7 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
     dxfLayers.push_back(layer);
   }
   //dxfHeader(dxfCodes,br);
-  tableSection(dxfCodes);
+  tableSection(dxfCodes,dxfLayers);
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())

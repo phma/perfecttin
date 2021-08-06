@@ -84,7 +84,7 @@ std::vector<GroupCode> readDxfGroups(std::string filename);
 void writeDxfGroups(std::ostream &file,std::vector<GroupCode> &codes,bool mode);
 std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);
 void dxfHeader(std::vector<GroupCode> &dxfData,BoundRect br);
-void tableSection(std::vector<GroupCode> &dxfData);
+void tableSection(std::vector<GroupCode> &dxfData,std::vector<DxfLayer> &layers);
 void openEntitySection(std::vector<GroupCode> &dxfData);
 void closeEntitySection(std::vector<GroupCode> &dxfData);
 void dxfEnd(std::vector<GroupCode> &dxfData);
