@@ -128,7 +128,7 @@ map<ContourLayer,int> pointlist::contourLayers()
   /* Start at layer 3. Layer 0 is reserved by the DXF format, layer 1 is for
    * the TIN, and layer 2 is for the boundary.
    */
-  for (k=ret.begin(),j=3;k!=ret.end();++k,++i)
+  for (k=ret.begin(),j=3;k!=ret.end();++k,++j)
     k->second=j;
   return ret;
 }
