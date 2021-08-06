@@ -664,7 +664,7 @@ void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
 {
   GroupCode entityType(0),layerName(8),colorNumber(62);
   entityType.str="3DFACE";
-  layerName.str="0";
+  layerName.str="TIN";
   colorNumber.integer=0;
   dxfData.push_back(entityType);
   dxfData.push_back(layerName);
