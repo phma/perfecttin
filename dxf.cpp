@@ -668,7 +668,6 @@ void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
   colorNumber.integer=0;
   dxfData.push_back(entityType);
   dxfData.push_back(layerName);
-  dxfData.push_back(colorNumber);
   insertXyz(dxfData,10,*tri.a/outUnit);
   insertXyz(dxfData,11,*tri.b/outUnit);
   insertXyz(dxfData,12,*tri.c/outUnit); // A 3DFACE always has four corners. That it's a
@@ -686,10 +685,9 @@ void insertPolyline(vector<GroupCode> &dxfData,polyline &poly,DxfLayer &lay,doub
   colorNumber.integer=0;
   closedFlag.integer=!poly.isopen();
   nVertices.integer=poly.size()+poly.isopen();
-  elev.real=poly.getElevation();
+  elev.real=poly.getElevation()/outUnit;
   dxfData.push_back(entityType);
   dxfData.push_back(layerName);
-  dxfData.push_back(colorNumber);
   dxfData.push_back(nVertices);
   dxfData.push_back(closedFlag);
   dxfData.push_back(elev);

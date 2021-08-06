@@ -337,9 +337,11 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   vector<GroupCode> dxfCodes;
   vector<DxfLayer> dxfLayers;
   map<ContourLayer,int> contourLayers;
-  int i;
+  int i,n;
   map<ContourLayer,int>::iterator j;
+  map<ContourInterval,vector<polyspiral> >::iterator k;
   DxfLayer layer;
+  ContourLayer cl;
   BoundRect br;
   ofstream dxfFile(outputFile,ofstream::binary|ofstream::trunc);
   br.include(&net);
@@ -370,6 +372,17 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
       else;
     else
       cerr<<"Invalid triangle "<<i<<endl;
+  for (k=net.contours.begin();k!=net.contours.end();++k)
+  {
+    cl.ci=k->first;
+    for (i=0;i<k->second.size();i++)
+    {
+      cl.tp=cl.ci.contourType(k->second[i].getElevation());
+      n=contourLayers[cl]-1;
+      layer=dxfLayers[n];
+      insertPolyline(dxfCodes,k->second[i],layer,outUnit);
+    }
+  }
   closeEntitySection(dxfCodes);
   dxfEnd(dxfCodes);
   writeDxfGroups(dxfFile,dxfCodes,asc);

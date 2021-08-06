@@ -89,3 +89,4 @@ void openEntitySection(std::vector<GroupCode> &dxfData);
 void closeEntitySection(std::vector<GroupCode> &dxfData);
 void dxfEnd(std::vector<GroupCode> &dxfData);
 void insertTriangle(std::vector<GroupCode> &dxfData,triangle &tri,double outUnit);
+void insertPolyline(std::vector<GroupCode> &dxfData,polyline &poly,DxfLayer &lay,double outUnit);
