@@ -211,7 +211,7 @@ string hexEncodeInt(long long num)
     if (nybble)
       nonzero=true;
     if (nonzero || !i)
-      ret+=(nybble>9)?(nybble+'0'):(nybble+'A'-10);
+      ret+=(nybble<=9)?(nybble+'0'):(nybble+'A'-10);
   }
   return ret;
 }

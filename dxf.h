@@ -74,6 +74,7 @@ struct DxfLayer
   int color;
 };
 
+std::string hexEncodeInt(long long num);
 GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
 void writeDxfText(std::ostream &file,GroupCode code);
