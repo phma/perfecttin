@@ -674,3 +674,25 @@ void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
   insertXyz(dxfData,12,*tri.c/outUnit); // A 3DFACE always has four corners. That it's a
   insertXyz(dxfData,13,*tri.c/outUnit); // triangle is indicated by repeating a corner.
 }
+
+void insertPolyline(vector<GroupCode> &dxfData,polyline &poly,DxfLayer &lay,double outUnit)
+// Does not yet handle polyarcs or polyspirals.
+{
+  GroupCode entityType(0),layerName(8),colorNumber(62);
+  GroupCode nVertices(90),closedFlag(70),elev(38);
+  int i;
+  entityType.str="LWPOLYLINE";
+  layerName.str=lay.name;
+  colorNumber.integer=0;
+  closedFlag.integer=!poly.isopen();
+  nVertices.integer=poly.size()+poly.isopen();
+  elev.real=poly.getElevation();
+  dxfData.push_back(entityType);
+  dxfData.push_back(layerName);
+  dxfData.push_back(colorNumber);
+  dxfData.push_back(nVertices);
+  dxfData.push_back(closedFlag);
+  dxfData.push_back(elev);
+  for (i=0;i<nVertices.integer;i++)
+    insertXy(dxfData,10,poly.getEndpoint(i)/outUnit);
+}
