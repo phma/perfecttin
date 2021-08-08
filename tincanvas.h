@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QProgressDialog>
 #include <QTimer>
-#include <QTime>
+#include <QElapsedTimer>
 #include "lissajous.h"
 #include "point.h"
 #include "cidialog.h"
@@ -110,7 +110,7 @@ private:
   int ballAngle,dartAngle;
   int lastntri;
   int splashScreenTime; // in ticks
-  QTime lastPaintTime;
+  QElapsedTimer lastPaintTime;
   int lastPaintDuration;
 };
 #endif

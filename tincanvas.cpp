@@ -770,7 +770,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i;
   QPainter painter(this);
-  QTime paintTime,subTime;
+  QElapsedTimer paintTime,subTime;
   QRectF square(ballPos.getx()-10,ballPos.gety()-10,20,20);
   QRectF qind(ballPos.getx()-8,ballPos.gety()-8,16,16);
   QRectF sclera(ballPos.getx()-10,ballPos.gety()-5,20,10);
