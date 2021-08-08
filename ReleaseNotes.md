@@ -1,3 +1,10 @@
+# Version 1.0.0
+- PerfectTIN now draws contours, saves them, and exports them in DXF.
+- A file can contain a boundary, which will be used to clip the TIN. (It currently allows you to export only those triangles whose centroid is in the boundary.)
+- New programs dibathy and vecinos aid in preparing point clouds from single-beam dual-frequency boat scans.
+- It reads point clouds in XYZ format.
+- A bug in the checksum of the dots in a TIN is fixed.
+
 # Version 0.5.1
 - PLY export is now colored.
 - You can view a TIN colored by gradient or by elevation.
