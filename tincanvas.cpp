@@ -22,6 +22,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <QPainter>
+#include <QPainterPath>
 #include <QGuiApplication>
 #include <cmath>
 #include "tincanvas.h"
