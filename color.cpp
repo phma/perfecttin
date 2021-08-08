@@ -3,7 +3,7 @@
 /* color.cpp - colors for points and triangles        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -139,5 +139,22 @@ Color Colorize::operator()(triangle *tri)
   }
   if (tri->dots.size()==0)
     ret.mix(white,0.5);
+  return ret;
+}
+
+Color Colorize::operator()(ContourInterval &ci,segment &seg)
+{
+  Color ret;
+  int n=ci.contourType(seg.getstart().elev())&0xff;
+  // n ranges from 0 (index contour) to 16
+  switch (scheme)
+  {
+    case CS_GRADIENT:
+      ret=Color(n/1e2,0.9,(16-n)/1e2);
+      break;
+    case CS_ELEVATION:
+      ret=Color(n/1e2,0.4,(16-n)/1e2);
+      break;
+  }
   return ret;
 }

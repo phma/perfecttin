@@ -3,7 +3,7 @@
 /* color.h - colors for points and triangles          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020 Pierre Abbat.
+/* Copyright 2020,2021 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -23,10 +23,12 @@
  */
 #ifndef COLOR_H
 #define COLOR_H
+class ContourInterval;
 #include <cmath>
 #include <algorithm>
 #include "triangle.h"
 #include "point.h"
+#include "contour.h"
 
 #define CS_GRADIENT 0
 #define CS_ELEVATION 1
@@ -77,6 +79,7 @@ public:
   int getScheme();
   Color operator()(point *pnt);
   Color operator()(triangle *tri);
+  Color operator()(ContourInterval &ci,segment &seg);
 private:
   double low;
   double high;
