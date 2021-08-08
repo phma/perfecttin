@@ -903,6 +903,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       painter.setPen(Qt::black);
       painter.setBrush(Qt::NoBrush);
       painter.drawRect(qind);
+      painter.setPen(Qt::white);
       painter.drawPoint(QPointF(ballPos.getx(),ballPos.gety()));
       break;
     case 0:
