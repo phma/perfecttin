@@ -85,6 +85,7 @@ public slots:
   void saveFile();
   void setColorScheme(int scheme);
   void clearCloud();
+  void deleteContours();
   void configure();
   void msgNoCloudArea();
   void msgVerticalOutlier();

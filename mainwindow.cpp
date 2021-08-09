@@ -845,6 +845,23 @@ void MainWindow::clearCloud()
   density=0;
 }
 
+void MainWindow::deleteContours()
+{
+  int result=QMessageBox::Yes;
+  if (net.currentContours && net.currentContours->size())
+  {
+    msgBox->setWindowTitle(tr("PerfectTIN"));
+    msgBox->setIcon(QMessageBox::Question);
+    msgBox->setText(tr("This contour interval has contours."));
+    msgBox->setInformativeText(tr("Do you want to delete them?"));
+    msgBox->setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+    msgBox->setDefaultButton(QMessageBox::No);
+    result=msgBox->exec();
+  }
+  if (result==QMessageBox::Yes)
+    canvas->deleteContours();
+}
+
 void MainWindow::configure()
 {
   configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty,printer3d);
@@ -1110,7 +1127,7 @@ void MainWindow::makeActions()
   //smoothContoursAction->setIcon(QIcon(":/deletecon.png"));
   deleteContoursAction->setText(tr("Delete contours"));
   contourMenu->addAction(deleteContoursAction);
-  connect(deleteContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(deleteContours()));
+  connect(deleteContoursAction,SIGNAL(triggered(bool)),this,SLOT(deleteContours()));
   contourMenu->addSeparator();
   // Settings menu
   configureAction=new QAction(this);
