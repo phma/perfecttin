@@ -768,6 +768,15 @@ void TinCanvas::contoursCancel()
   update();
 }
 
+void TinCanvas::deleteContours()
+{
+  QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  net.deleteCurrentContours();
+  QGuiApplication::restoreOverrideCursor();
+  repaintAllTriangles();
+  contourSetsChanged();
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i;

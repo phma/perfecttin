@@ -78,6 +78,7 @@ public slots:
   void smooth1Contour();
   void smoothContoursFinish();
   void contoursCancel();
+  void deleteContours();
 protected:
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

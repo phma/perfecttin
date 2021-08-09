@@ -1110,7 +1110,7 @@ void MainWindow::makeActions()
   //smoothContoursAction->setIcon(QIcon(":/deletecon.png"));
   deleteContoursAction->setText(tr("Delete contours"));
   contourMenu->addAction(deleteContoursAction);
-  //connect(deleteContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(deleteContours()));
+  connect(deleteContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(deleteContours()));
   contourMenu->addSeparator();
   // Settings menu
   configureAction=new QAction(this);
