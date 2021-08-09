@@ -260,7 +260,6 @@ void TinCanvas::tick()
   else
     timeLimit=20;
   // Draw contour pieces on previously painted triangles.
-  painter.setPen(Qt::darkGreen);
   while (elapsed<cr::milliseconds(timeLimit))
   {
     pieceInx=(uintptr_t)net.pieceDraw.dequeue();
@@ -271,6 +270,9 @@ void TinCanvas::tick()
     {
       b3d=pieces[i].s.approx3d(1/scale);
       path=QPainterPath();
+      color=colorize(contourInterval,pieces[i].s);
+      pen.setColor(QColor::fromRgbF(color.fr(),color.fg(),color.fb()));
+      painter.setPen(pen);
       beziseg=b3d[0];
       path.moveTo(worldToWindow(beziseg[0]));
       path.cubicTo(worldToWindow(beziseg[1]),worldToWindow(beziseg[2]),worldToWindow(beziseg[3]));
