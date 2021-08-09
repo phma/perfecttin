@@ -1106,6 +1106,11 @@ void MainWindow::makeActions()
   smoothContoursAction->setText(tr("Draw smooth contours"));
   contourMenu->addAction(smoothContoursAction);
   connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(smoothContours()));
+  deleteContoursAction=new QAction(this);
+  //smoothContoursAction->setIcon(QIcon(":/deletecon.png"));
+  deleteContoursAction->setText(tr("Delete contours"));
+  contourMenu->addAction(deleteContoursAction);
+  //connect(deleteContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(deleteContours()));
   contourMenu->addSeparator();
   // Settings menu
   configureAction=new QAction(this);

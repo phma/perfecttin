@@ -121,7 +121,7 @@ private:
   QAction *exportStlTxtAction,*exportStlBinAction;
   ColorSchemeAction *colorGradientAction,*colorElevationAction;
   QAction *selectContourIntervalAction,*roughContoursAction;
-  QAction *pruneContoursAction,*smoothContoursAction;
+  QAction *pruneContoursAction,*smoothContoursAction,*deleteContoursAction;
   QAction *configureAction;
   QAction *aboutProgramAction,*aboutQtAction;
   UnitButton *unitButtons[4];
