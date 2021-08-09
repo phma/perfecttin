@@ -150,10 +150,10 @@ Color Colorize::operator()(ContourInterval &ci,segment &seg)
   switch (scheme)
   {
     case CS_GRADIENT:
-      ret=Color(n/1e2,0.9,(16-n)/1e2);
+      ret=Color(n/25.,n?0.9:1,(16-n)/25.);
       break;
     case CS_ELEVATION:
-      ret=Color(n/1e2,0.4,(16-n)/1e2);
+      ret=Color(n/25.,n?0.4:0.3,(16-n)/25.);
       break;
   }
   return ret;
