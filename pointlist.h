@@ -94,6 +94,7 @@ public:
   void clearTin();
   void unsetCurrentContours();
   void setCurrentContours(ContourInterval &ci);
+  void deleteCurrentContours();
   std::vector<ContourInterval> contourIntervals();
   std::map<ContourLayer,int> contourLayers();
   void insertContourPiece(spiralarc s,int thread);

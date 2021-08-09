@@ -100,6 +100,21 @@ void pointlist::setCurrentContours(ContourInterval &ci)
     insertPieces((*currentContours)[i],-1);
 }
 
+void pointlist::deleteCurrentContours()
+{
+  int i;
+  map<ContourInterval,vector<polyspiral> >::iterator j;
+  for (i=0;currentContours && i<currentContours->size();i++)
+    deletePieces((*currentContours)[i],-1);
+  for (j=contours.begin();j!=contours.end();++j)
+    if (&j->second==currentContours)
+    {
+      contours.erase(j);
+      break;
+    }
+  currentContours=nullptr;
+}
+
 vector<ContourInterval> pointlist::contourIntervals()
 {
   vector<ContourInterval> ret;
