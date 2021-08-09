@@ -514,6 +514,19 @@ void sleep(int thread)
   sleepCommon(wakeTime,thread);
 }
 
+void sleepms(int thread)
+/* Sleeps for a millisecond or two. Used while inserting or deleting contour
+ * pieces because opTime is the time to process a whole contour, and it's
+ * sleeping only to try to lock some triangles.
+ */
+{
+  sleepTime[thread]+=1+sleepTime[thread]/1e3;
+  if (sleepTime[thread]>2)
+    sleepTime[thread]/=2;
+  cr::steady_clock::time_point wakeTime=clk.now()+cr::milliseconds(lrint(sleepTime[thread]));
+  sleepCommon(wakeTime,thread);
+}
+
 void sleepDead(int thread)
 // Sleep to try to get out of deadlock.
 {

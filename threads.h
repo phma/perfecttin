@@ -132,6 +132,7 @@ bool actionQueueEmpty();
 bool resultQueueEmpty();
 void sleepRead();
 void sleep(int thread);
+void sleepms(int thread);
 void sleepDead(int thread);
 void unsleep(int thread);
 double maxSleepTime();

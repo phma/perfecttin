@@ -203,7 +203,7 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
   nipPiece();
   pieceMutex.unlock();
   while (!lockTriangles(thread,piece.tris))
-    sleep(thread);
+    sleepms(thread);
   for (i=0;i<piece.tris.size();i++)
     piece.tris[i]->crossingPieces.push_back(inx);
   unlockTriangles(thread);
@@ -239,7 +239,7 @@ void pointlist::deleteContourPiece(spiralarc s,int thread)
   if (!pcList->size())
   { // This may leave some crossingPieces in case of hash collisions.
     while (!lockTriangles(thread,piece.tris))
-      sleep(thread);
+      sleepms(thread);
     for (i=0;i<piece.tris.size();i++)
       for (j=0;j<piece.tris[i]->crossingPieces.size();j++)
 	if (piece.tris[i]->crossingPieces[j]==inx)
