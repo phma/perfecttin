@@ -40,6 +40,7 @@ int lhash(segment s)
 
 void pointlist::clear()
 {
+  cout<<"pointlist::clear\n";
   wingEdge.lock();
   qinx.clear();
   contours.clear();
@@ -82,6 +83,7 @@ void pointlist::clearmarks()
 void pointlist::unsetCurrentContours()
 {
   int i;
+  cout<<"unsetCurrentContours\n";
   for (i=0;currentContours && i<currentContours->size();i++)
     deletePieces((*currentContours)[i],-1);
   currentContours=nullptr;
@@ -93,6 +95,7 @@ void pointlist::setCurrentContours(ContourInterval &ci)
  */
 {
   int i;
+  cout<<"setCurrentContours\n";
   for (i=0;currentContours && i<currentContours->size();i++)
     deletePieces((*currentContours)[i],-1);
   currentContours=&contours[ci];
@@ -103,6 +106,7 @@ void pointlist::setCurrentContours(ContourInterval &ci)
 void pointlist::deleteCurrentContours()
 {
   int i;
+  cout<<"deleteCurrentContours\n";
   map<ContourInterval,vector<polyspiral> >::iterator j;
   for (i=0;currentContours && i<currentContours->size();i++)
     deletePieces((*currentContours)[i],-1);
@@ -300,6 +304,7 @@ void pointlist::eraseEmptyContours()
 {
   vector<polyspiral> nonempty;
   int i;
+  cout<<"eraseEmptyContours\n";
   for (i=0;i<(*currentContours).size();i++)
     if ((*currentContours)[i].size()>2 || (*currentContours)[i].isopen())
       nonempty.push_back((*currentContours)[i]);
@@ -688,4 +693,3 @@ void pointlist::roscat(xy tfrom,int ro,double sca,xy tto)
   for (j=points.begin();j!=points.end();++j)
     j->second._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
 }
-
