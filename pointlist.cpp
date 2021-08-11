@@ -43,6 +43,8 @@ void pointlist::clear()
   cout<<"pointlist::clear\n";
   wingEdge.lock();
   qinx.clear();
+  pieceDraw.clear();
+  trianglePaint.clear();
   contours.clear();
   triangles.clear();
   revtriangles.clear();
@@ -52,8 +54,6 @@ void pointlist::clear()
   convexHull.clear();
   edgePool.clear();
   trianglePool.clear();
-  pieceDraw.clear();
-  trianglePaint.clear();
   swishFactor=0;
   currentContours=nullptr;
   wingEdge.unlock();
