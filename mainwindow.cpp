@@ -209,6 +209,12 @@ void MainWindow::tick()
       convertAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
+    else if (net.contours.size() && numEdges==0)
+    {
+      dotTriangleMsg->setText(tr("Reading contours"));
+      convertAction->setEnabled(false);
+      clearAction->setEnabled(false);
+    }
     else if (numEdges>0 && numEdges<numTriangles*3/2)
     { // When it's finished making edges, numEdges=(numTriangles*3+numConvexHull)/2.
       dotTriangleMsg->setText(tr("Making edges"));
