@@ -131,6 +131,7 @@ void TinCanvas::tick()
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
   int trianglesPainted=0;
+  bool fromTrianglePaint;
   double splashElev;
   uintptr_t pieceInx;
   vector<ContourPiece> pieces;
@@ -284,6 +285,7 @@ void TinCanvas::tick()
   while (tri && elapsed<cr::milliseconds(timeLimit))
   {
     tri=net.trianglePaint.dequeue();
+    fromTrianglePaint=tri!=nullptr;
     if (!tri && trianglesToPaint)
     {
       net.wingEdge.lock_shared();
@@ -297,10 +299,15 @@ void TinCanvas::tick()
     if (tri && tri->a)
     {
       net.wingEdge.lock_shared();
-      gradient=tri->gradient(tri->centroid());
-      A=*tri->a;
-      B=*tri->b;
-      C=*tri->c;
+      if (net.triangles.size())
+      {
+	gradient=tri->gradient(tri->centroid());
+	A=*tri->a;
+	B=*tri->b;
+	C=*tri->c;
+      }
+      else // tri came from trianglePaint and net was just cleared by thread reading ptin file
+	tri=nullptr;
       net.wingEdge.unlock_shared();
       triPtr.clear();
       triPtr.push_back(tri);
