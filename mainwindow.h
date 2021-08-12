@@ -42,6 +42,7 @@
 #define BUSY_SAVE 8 /* saving a PerfectTIN file */
 #define BUSY_EXP 16 /* exporting a TIN */
 #define BUSY_CTR 32 /* drawing, pruning, or smoothing contours */
+#define BUSY_SPL 64 /* showing splash screen */
 
 class MainWindow: public QMainWindow
 {
