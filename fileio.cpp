@@ -736,7 +736,6 @@ PtinHeader readPtin(std::string inputFile)
     resizeBuckets(1);
   if (header.tolRatio>0 && header.tolerance>0)
   {
-    net.unsetCurrentContours();
     net.clear();
     cloud.clear();
     readingStarted=true;
