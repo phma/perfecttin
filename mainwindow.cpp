@@ -118,22 +118,6 @@ MainWindow::~MainWindow()
 {
 }
 
-/* Rules for enabling actions:
- * You cannot load or open a file while a conversion is in progress.
- * You can load a file while loading another file (it will be queued).
- * You can load a file while a conversion is stopped, but then you cannot resume.
- * You can open a file while a conversion is stopped. If it is a final file,
- * you cannot resume; if it is a checkpoint file, you can resume.
- * You cannot clear or export while loading a file or converting.
- * You cannot start a conversion while loading a file or converting.
- * You can start a conversion after loading a file, but not after opening one.
- * You cannot stop a conversion unless one is in progress and has
- * passed the octagon stage.
- * You cannot resume a conversion unless one has been stopped or you have
- * opened a checkpoint file and no file has been loaded and the TIN
- * has not been cleared.
- */
-
 void MainWindow::tick()
 {
   double toleranceRatio;
@@ -496,6 +480,22 @@ void MainWindow::enableMenuSplash()
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
 }
+
+/* Rules for enabling actions:
+ * You cannot load or open a file while a conversion is in progress.
+ * You can load a file while loading another file (it will be queued).
+ * You can load a file while a conversion is stopped, but then you cannot resume.
+ * You can open a file while a conversion is stopped. If it is a final file,
+ * you cannot resume; if it is a checkpoint file, you can resume.
+ * You cannot clear or export while loading a file or converting.
+ * You cannot start a conversion while loading a file or converting.
+ * You can start a conversion after loading a file, but not after opening one.
+ * You cannot stop a conversion unless one is in progress and has
+ * passed the octagon stage.
+ * You cannot resume a conversion unless one has been stopped or you have
+ * opened a checkpoint file and no file has been loaded and the TIN
+ * has not been cleared.
+ */
 
 void MainWindow::endisableMenu()
 {
