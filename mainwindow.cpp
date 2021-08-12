@@ -58,8 +58,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
   connect(this,SIGNAL(verticalOutlier()),this,SLOT(msgVerticalOutlier()));
   connect(this,SIGNAL(gotResult(ThreadAction)),this,SLOT(handleResult(ThreadAction)));
-  connect(canvas,SIGNAL(splashScreenStarted()),this,SLOT(disableMenuSplash()));
-  connect(canvas,SIGNAL(splashScreenFinished()),this,SLOT(enableMenuSplash()));
+  connect(canvas,SIGNAL(setBusy(int)),this,SLOT(setBusy(int)));
+  connect(canvas,SIGNAL(setIdle(int)),this,SLOT(setIdle(int)));
   connect(canvas,SIGNAL(contourDrawingFinished()),this,SLOT(refreshNumTriangles()));
   connect(canvas,SIGNAL(contourSetsChanged()),this,SLOT(updateContourIntervalActions()));
   doneBar=new QProgressBar(this);
@@ -499,8 +499,9 @@ void MainWindow::enableMenuSplash()
 
 void MainWindow::endisableMenu()
 {
-  openAction->setEnabled(true);
-  loadAction->setEnabled(true);
+  openAction->setEnabled(bfl(0,BUSY_SPL));
+  loadAction->setEnabled(bfl(0,BUSY_SPL));
+  loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL));
   convertAction->setEnabled(false);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
@@ -1262,4 +1263,13 @@ bool MainWindow::conversionBusy()
 	 canvas->state==-ACT_WRITE_PTIN ||
 	 canvas->state==-ACT_OCTAGON ||
 	 canvas->state==0;
+}
+
+bool MainWindow::bfl(int set,int clear)
+/* Returns true if all bits in set are set and all bits in clear are clear
+ * in the busy flag, and false otherwise.
+ */
+{
+  assert((set&clear)==0);
+  return ((busy^set)&(set|clear))==0;
 }

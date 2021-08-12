@@ -52,8 +52,8 @@ public:
   int totalContourSegments;
   void repaintSeldom();
 signals:
-  void splashScreenStarted();
-  void splashScreenFinished();
+  void setBusy(int activity);
+  void setIdle(int activity);
   void contourDrawingFinished();
   void contourSetsChanged();
   void contourIntervalChanged(ContourInterval ci);

@@ -59,6 +59,7 @@ public:
     return numberThreads;
   }
   bool conversionBusy();
+  bool bfl(int set,int clear);
 signals:
   void tinSizeChanged();
   void lengthUnitChanged(double unit);

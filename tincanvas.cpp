@@ -26,6 +26,7 @@
 #include <QGuiApplication>
 #include <cmath>
 #include "tincanvas.h"
+#include "mainwindow.h"
 #include "boundrect.h"
 #include "octagon.h"
 #include "relprime.h"
@@ -181,7 +182,7 @@ void TinCanvas::tick()
     if (0==--splashScreenTime)
     {
       net.clear();
-      splashScreenFinished();
+      setIdle(BUSY_SPL);
     }
   }
   // Compute the new position of the ball, and update a swath containing the ball's motion.
@@ -402,7 +403,7 @@ void TinCanvas::startSplashScreen()
     net.maketriangles();
     net.wingEdge.unlock();
     colorize.setLimits(-0.5,0.5);
-    splashScreenStarted();
+    setBusy(BUSY_SPL);
     sizeToFit();
   }
 }
