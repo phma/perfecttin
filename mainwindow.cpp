@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   busyBar->setRange(0,16777216);
   lpfBusyFraction=0;
   density=tolerance=0;
+  busy=0;
   lastTolerance=lastStageTolerance=writtenTolerance=0;
   lastState=TH_WAIT;
   lastNumDots=lastNumTriangles=lastNumEdges=0;
@@ -504,6 +505,18 @@ void MainWindow::endisableMenu()
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
+}
+
+void MainWindow::setBusy(int activity)
+{
+  busy|=activity;
+  endisableMenu();
+}
+
+void MainWindow::setIdle(int activity)
+{
+  busy&=~activity;
+  endisableMenu();
 }
 
 void MainWindow::updateContourIntervalActions()

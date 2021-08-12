@@ -36,6 +36,13 @@
 #include "cidialog.h"
 #include "tincanvas.h"
 
+#define BUSY_LOAD 1 /* loading a point cloud */
+#define BUSY_OPEN 2 /* opening a PerfectTIN file */
+#define BUSY_CVT 4 /* converting a point cloud to a TIN */
+#define BUSY_SAVE 8 /* saving a PerfectTIN file */
+#define BUSY_EXP 16 /* exporting a TIN */
+#define BUSY_CTR 32 /* drawing, pruning, or smoothing contours */
+
 class MainWindow: public QMainWindow
 {
   Q_OBJECT
@@ -69,6 +76,8 @@ public slots:
   void disableMenuSplash();
   void enableMenuSplash();
   void endisableMenu();
+  void setBusy(int activity);
+  void setIdle(int activity);
   void updateContourIntervalActions();
   void exportDxfTxt();
   void exportDxfBin();
@@ -97,6 +106,7 @@ protected:
 private:
   int lastNumDots,lastNumTriangles,lastNumEdges;
   int traceHiLo; // -1, 0, or 1
+  int busy;
   double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
