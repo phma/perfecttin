@@ -319,7 +319,8 @@ void TinCanvas::tick()
 	unlockTriangles(numThreads());
       }
       ++trianglesPainted;
-      color=colorize(tri);
+      if (tri)
+	color=colorize(tri);
       if (splashScreenTime)
 	color.mix(white,1-(double)splashScreenTime/SPLASH_TIME);
       brush.setColor(QColor::fromRgbF(color.fr(),color.fg(),color.fb()));
