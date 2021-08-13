@@ -44,6 +44,8 @@
 #define BUSY_CTR 32 /* drawing, pruning, or smoothing contours */
 #define BUSY_SPL 64 /* showing splash screen */
 #define BUSY_OCT 128 /* making octagon */
+#define BUSY_CLD 256 /* a point cloud is loaded */
+#define BUSY_TIN 512 /* a TIN is present */
 
 class MainWindow: public QMainWindow
 {

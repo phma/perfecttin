@@ -171,6 +171,14 @@ void MainWindow::tick()
   }
   if (numDots!=lastNumDots || numTriangles!=lastNumTriangles || numEdges!=lastNumEdges)
   { // Number of dots or triangles has changed: update status bar
+    if (lastNumDots==0 && numDots>0)
+      setBusy(BUSY_CLD);
+    if (lastNumDots>0 && numDots==0)
+      setIdle(BUSY_CLD);
+    if (lastNumTriangles==0 && numTriangles>0)
+      setBusy(BUSY_TIN);
+    if (lastNumTriangles>0 && numTriangles==0)
+      setIdle(BUSY_TIN);
     if ((lastNumTriangles<4 && numTriangles>4) || lastNumDots>numDots)
       tinSizeChanged();
     if (numTriangles<lastNumTriangles || ((numTriangles^lastNumTriangles)&1))
