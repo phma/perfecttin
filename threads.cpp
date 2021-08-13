@@ -908,7 +908,10 @@ void TinThread::operator()(int thread)
       {
 	case ACT_LOAD:
 	  net.clear();
+	  act.opcode=ACT_LOAD_START;
+	  enqueueResult(act);
 	  act.result=readCloud(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_LOAD;
 	  enqueueResult(act);
 	  unsleep(thread);
 	  break;

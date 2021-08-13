@@ -921,9 +921,13 @@ void MainWindow::handleResult(ThreadAction ta)
   tinSizeChanged();
   switch (ta.opcode)
   {
+    case ACT_LOAD_START:
+      setBusy(BUSY_LOAD);
+      break;
     case ACT_LOAD:
       convertAction->setEnabled(true);
       updateContourIntervalActions();
+      setIdle(BUSY_LOAD);
       break;
     case ACT_WRITE_PTIN:
       setIdle(BUSY_SAVE);
