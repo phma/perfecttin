@@ -549,6 +549,7 @@ void TinCanvas::roughContours()
   conterval=contourInterval.fineInterval();
   tolerance=contourInterval.tolerance();
   net.setCurrentContours(contourInterval);
+  setBusy(BUSY_CTR);
   if (goal==DONE)
   {
     goal=ROUGH_CONTOURS;
@@ -598,6 +599,7 @@ void TinCanvas::roughContoursFinish()
     case ROUGH_CONTOURS:
       goal=DONE;
       timer->stop();
+      setIdle(BUSY_CTR);
       contourDrawingFinished();
       break;
     case PRUNE_CONTOURS:
@@ -615,6 +617,7 @@ void TinCanvas::pruneContours()
 {
   int i,sizeRange,lastSizeRange;
   ContourTask ctr;
+  setBusy(BUSY_CTR);
   if (goal==DONE)
   {
     goal=PRUNE_CONTOURS;
@@ -680,6 +683,7 @@ void TinCanvas::pruneContoursFinish()
     case PRUNE_CONTOURS:
       goal=DONE;
       timer->stop();
+      setIdle(BUSY_CTR);
       contourDrawingFinished();
       break;
     case SMOOTH_CONTOURS:
@@ -695,6 +699,7 @@ void TinCanvas::smoothContours()
 {
   int i,sizeRange,lastSizeRange;
   ContourTask ctr;
+  setBusy(BUSY_CTR);
   if (goal==DONE)
   {
     goal=SMOOTH_CONTOURS;
@@ -760,6 +765,7 @@ void TinCanvas::smoothContoursFinish()
     case SMOOTH_CONTOURS:
       goal=DONE;
       timer->stop();
+      setIdle(BUSY_CTR);
       contourDrawingFinished();
       break;
   }
@@ -773,6 +779,7 @@ void TinCanvas::contoursCancel()
 {
   goal=DONE;
   timer->stop();
+  setIdle(BUSY_CTR);
   disconnect(timer,SIGNAL(timeout()),0,0);
   update();
 }
