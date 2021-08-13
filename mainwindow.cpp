@@ -138,12 +138,9 @@ void MainWindow::tick()
     { // finished loading file
       clearAction->setEnabled(true);
       exportMenu->setEnabled(true);
-      if (lastState==-ACT_LOAD)
-	convertAction->setEnabled(true);
     }
     if (canvas->state==-ACT_LOAD || canvas->state==-ACT_READ_PTIN)
     { // started loading file
-      convertAction->setEnabled(false);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
       exportMenu->setEnabled(false);
@@ -199,19 +196,16 @@ void MainWindow::tick()
       dotTriangleMsg->setText(tr("Making octagon"));
       openAction->setEnabled(false);
       loadAction->setEnabled(false);
-      convertAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
     else if (net.contours.size() && numEdges==0)
     {
       dotTriangleMsg->setText(tr("Reading contours"));
-      convertAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
     else if (numEdges>0 && numEdges<numTriangles*3/2)
     { // When it's finished making edges, numEdges=(numTriangles*3+numConvexHull)/2.
       dotTriangleMsg->setText(tr("Making edges"));
-      convertAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
     else if (numTriangles)
@@ -285,7 +279,6 @@ void MainWindow::tick()
 	  setThreadCommand(TH_WAIT);
 	  openAction->setEnabled(true);
 	  loadAction->setEnabled(true);
-	  convertAction->setEnabled(false);
 	  exportMenu->setEnabled(true);
 	  clearAction->setEnabled(true);
 	  stopAction->setEnabled(false);
@@ -481,7 +474,6 @@ void MainWindow::disableMenuSplash()
 {
   openAction->setEnabled(false);
   loadAction->setEnabled(false);
-  convertAction->setEnabled(false);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
@@ -491,7 +483,6 @@ void MainWindow::enableMenuSplash()
 {
   openAction->setEnabled(true);
   loadAction->setEnabled(true);
-  convertAction->setEnabled(false);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
@@ -519,7 +510,7 @@ void MainWindow::endisableMenu()
   openAction->setEnabled(bfl(0,BUSY_SPL));
   loadAction->setEnabled(bfl(0,BUSY_SPL));
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL));
-  convertAction->setEnabled(false);
+  convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
@@ -934,7 +925,6 @@ void MainWindow::handleResult(ThreadAction ta)
       setBusy(BUSY_LOAD);
       break;
     case ACT_LOAD:
-      convertAction->setEnabled(true);
       updateContourIntervalActions();
       setIdle(BUSY_LOAD);
       break;
@@ -969,7 +959,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
 	loadAction->setEnabled(true);
-	convertAction->setEnabled(false);
 	exportMenu->setEnabled(true);
 	clearAction->setEnabled(true);
 	stopAction->setEnabled(false);

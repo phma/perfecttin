@@ -46,6 +46,7 @@
 #define BUSY_OCT 128 /* making octagon */
 #define BUSY_CLD 256 /* a point cloud is loaded */
 #define BUSY_TIN 512 /* a TIN is present */
+#define BUSY_DO (BUSY_LOAD|BUSY_OPEN|BUSY_CVT|BUSY_SAVE|BUSY_EXP|BUSY_CTR)
 
 class MainWindow: public QMainWindow
 {
