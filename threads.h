@@ -49,7 +49,7 @@
 #define ACT_LOAD 1
 #define ACT_OCTAGON 2
 #define ACT_WRITE_DXF 3
-#define ACT_WRITE_TIN 4
+#define ACT_WRITE_TIN 4 /* used as a result for any kind of exporting */
 #define ACT_WRITE_PTIN 5
 #define ACT_READ_PTIN 6
 #define ACT_WRITE_CARLSON_TIN 7
@@ -60,6 +60,7 @@
 #define ACT_WRITE_STL 12
 #define ACT_LOADBDY 13
 #define ACT_LOAD_START 257
+#define ACT_WRITE_TIN_START 260 /* start exporting */
 
 #define RES_LOAD_PLY 1
 #define RES_LOAD_LAS 2

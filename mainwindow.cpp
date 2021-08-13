@@ -929,6 +929,12 @@ void MainWindow::handleResult(ThreadAction ta)
       updateContourIntervalActions();
       setIdle(BUSY_LOAD);
       break;
+    case ACT_WRITE_TIN_START:
+      setBusy(BUSY_EXP);
+      break;
+    case ACT_WRITE_TIN:
+      setIdle(BUSY_EXP);
+      break;
     case ACT_WRITE_PTIN:
       setIdle(BUSY_SAVE);
       break;

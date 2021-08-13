@@ -853,27 +853,51 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeDxf(act.filename,act.param0,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_TIN:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeTinText(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_CARLSON_TIN:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeCarlsonTin(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_LANDXML:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeLandXml(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PLY:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writePly(act.filename,act.param0,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_STL:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeStl(act.filename,act.param0,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
@@ -945,27 +969,51 @@ void TinThread::operator()(int thread)
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_DXF:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeDxf(act.filename,act.param0,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_TIN:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeTinText(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_CARLSON_TIN:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeCarlsonTin(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_LANDXML:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeLandXml(act.filename,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PLY:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writePly(act.filename,act.param0,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_STL:
+	  act.opcode=ACT_WRITE_TIN_START;
+	  enqueueResult(act);
 	  writeStl(act.filename,act.param0,act.param1,act.flags);
+	  act.opcode=ACT_WRITE_TIN;
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_WRITE_PTIN:
