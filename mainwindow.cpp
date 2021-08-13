@@ -940,7 +940,6 @@ void MainWindow::handleResult(ThreadAction ta)
       setIdle(BUSY_SAVE);
       break;
     case ACT_READ_PTIN:
-      setIdle(BUSY_OPEN);
       if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)
       {
 	//cout<<"Finished reading ptin\n";
@@ -989,7 +988,10 @@ void MainWindow::handleResult(ThreadAction ta)
 	openAction->setEnabled(true);
       }
       if (message.length())
+      {
+	setIdle(BUSY_OPEN);
 	msgBox->warning(this,tr("PerfectTIN"),message);
+      }
       updateContourIntervalActions();
       break;
     case ACT_QINDEX:
@@ -997,6 +999,7 @@ void MainWindow::handleResult(ThreadAction ta)
        * on the contour interval action with this contour interval.
        */
       canvas->setContourInterval(canvas->contourInterval);
+      setIdle(BUSY_OPEN);
       break;
   }
   fileMsg->setText(QString::fromStdString(fileNames));
