@@ -246,9 +246,15 @@ void MainWindow::tick()
 	ta.param2=density;
 	ta.opcode=ACT_WRITE_PTIN;
 	if (ta.param0==1)
+	{
 	  ta.filename=saveFileName+".ptin";
+	  setIdle(BUSY_OCT|BUSY_CVT);
+	}
 	else
+	{
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
+	  setIdle(BUSY_OCT);
+	}
 	enqueueAction(ta);
 	writtenTolerance=stageTolerance;
       }
@@ -811,6 +817,7 @@ void MainWindow::startConversion()
     ta.opcode=ACT_OCTAGON;
     enqueueAction(ta);
     clearLog();
+    setBusy(BUSY_OCT|BUSY_CVT);
     updateContourIntervalActions();
     writtenTolerance=INFINITY;
     fileNames=baseName(saveFileName)+".ptin";
