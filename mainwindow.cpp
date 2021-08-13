@@ -379,6 +379,7 @@ void MainWindow::openFile()
     ta.opcode=ACT_READ_PTIN;
     ta.filename=fileName;
     enqueueAction(ta);
+    setBusy(BUSY_OPEN);
     canvas->clearContourFlags();
   }
   delete fileDialog;
@@ -939,6 +940,7 @@ void MainWindow::handleResult(ThreadAction ta)
       setIdle(BUSY_SAVE);
       break;
     case ACT_READ_PTIN:
+      setIdle(BUSY_OPEN);
       if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)
       {
 	//cout<<"Finished reading ptin\n";
