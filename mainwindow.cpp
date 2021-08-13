@@ -255,6 +255,7 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  setIdle(BUSY_OCT);
 	}
+	setBusy(BUSY_SAVE);
 	enqueueAction(ta);
 	writtenTolerance=stageTolerance;
       }
@@ -852,7 +853,10 @@ void MainWindow::saveFile()
   ta.opcode=ACT_WRITE_PTIN;
   ta.filename=saveFileName+".ptin";
   if (ta.param0==1 && ta.param1>0 && ta.param2>0 && saveFileName.length())
+  {
     enqueueAction(ta);
+    setBusy(BUSY_SAVE);
+  }
 }
 
 void MainWindow::setColorScheme(int scheme)
@@ -920,6 +924,9 @@ void MainWindow::handleResult(ThreadAction ta)
     case ACT_LOAD:
       convertAction->setEnabled(true);
       updateContourIntervalActions();
+      break;
+    case ACT_WRITE_PTIN:
+      setIdle(BUSY_SAVE);
       break;
     case ACT_READ_PTIN:
       if (ta.ptinResult.tolRatio>0 && ta.ptinResult.tolerance>0)

@@ -879,6 +879,7 @@ void TinThread::operator()(int thread)
 	case ACT_WRITE_PTIN:
 	  adjustLooseCorners(act.param0*act.param1);
 	  writePtin(act.filename,act.param0,act.param1,act.param2);
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_DELETE_FILE:
@@ -967,6 +968,7 @@ void TinThread::operator()(int thread)
 	case ACT_WRITE_PTIN:
 	  adjustLooseCorners(act.param0*act.param1);
 	  writePtin(act.filename,act.param0,act.param1,act.param2);
+	  enqueueResult(act);
 	  unsleep(thread);
 	  break;
 	case ACT_DELETE_FILE:
