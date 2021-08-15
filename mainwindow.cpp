@@ -137,13 +137,11 @@ void MainWindow::tick()
     if ((lastState==-ACT_LOAD || lastState==-ACT_READ_PTIN || lastState==-ACT_QINDEX) && canvas->state==TH_WAIT)
     { // finished loading file
       clearAction->setEnabled(true);
-      exportMenu->setEnabled(true);
     }
     if (canvas->state==-ACT_LOAD || canvas->state==-ACT_READ_PTIN)
     { // started loading file
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
-      exportMenu->setEnabled(false);
       conversionStopped=false;
     }
     if (canvas->state==TH_WAIT && conversionStopped)
@@ -151,14 +149,12 @@ void MainWindow::tick()
       stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
       clearAction->setEnabled(true);
-      exportMenu->setEnabled(true);
     }
     if (canvas->state==TH_RUN)
     {
       stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
-      exportMenu->setEnabled(false);
     }
     lastState=canvas->state;
   }
@@ -271,7 +267,6 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
-	  exportMenu->setEnabled(true);
 	  clearAction->setEnabled(true);
 	  stopAction->setEnabled(false);
 	}
@@ -463,14 +458,12 @@ void MainWindow::disableMenuSplash()
  * the TIN that the splash screen shows.
  */
 {
-  exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
 }
 
 void MainWindow::enableMenuSplash()
 {
-  exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
 }
@@ -503,7 +496,7 @@ void MainWindow::endisableMenu()
   loadAction->setEnabled(bfl(0,(BUSY_DO-BUSY_LOAD)|BUSY_SPL));
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL|BUSY_OPEN|BUSY_LOAD|BUSY_EXP|BUSY_SAVE));
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
-  exportMenu->setEnabled(false);
+  exportMenu->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
 }
@@ -949,7 +942,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	exportMenu->setEnabled(true);
 	clearAction->setEnabled(true);
 	stopAction->setEnabled(false);
       }
