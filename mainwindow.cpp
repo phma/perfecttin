@@ -144,12 +144,10 @@ void MainWindow::tick()
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
-      stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
     }
     if (canvas->state==TH_RUN)
     {
-      stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
     }
     lastState=canvas->state;
@@ -260,7 +258,6 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
-	  stopAction->setEnabled(false);
 	}
 	currentAction=0;
 	canvas->update();
@@ -319,7 +316,6 @@ void MainWindow::tick()
       minArea=sqr(stageTolerance/tolerance)/densify/density;
       net.swishFactor=traceHiLo*stageTolerance;
       setThreadCommand(TH_RUN);
-      stopAction->setEnabled(true);
     }
   }
   if (largeVertical)
@@ -450,12 +446,10 @@ void MainWindow::disableMenuSplash()
  * the TIN that the splash screen shows.
  */
 {
-  stopAction->setEnabled(false);
 }
 
 void MainWindow::enableMenuSplash()
 {
-  stopAction->setEnabled(false);
 }
 
 /* Rules for enabling actions:
@@ -488,7 +482,7 @@ void MainWindow::endisableMenu()
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   exportMenu->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   clearAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
-  stopAction->setEnabled(false);
+  stopAction->setEnabled(bfl(BUSY_CVT,0));
 }
 
 void MainWindow::setBusy(int activity)
@@ -932,7 +926,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	stopAction->setEnabled(false);
       }
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
 	message=tr("File incomplete %1").arg(QString::fromStdString(ta.filename));
@@ -1056,7 +1049,6 @@ void MainWindow::makeActions()
   stopAction=new QAction(this);
   stopAction->setIcon(QIcon::fromTheme("process-stop"));
   stopAction->setText(tr("Stop"));
-  stopAction->setEnabled(false);
   fileMenu->addAction(stopAction);
   connect(stopAction,SIGNAL(triggered(bool)),this,SLOT(stopConversion()));
   resumeAction=new QAction(this);
