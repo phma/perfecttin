@@ -182,7 +182,7 @@ void TinCanvas::tick()
     if (0==--splashScreenTime)
     {
       net.clear();
-      setIdle(BUSY_SPL);
+      setIdle(BUSY_SPL|BUSY_TIN);
     }
   }
   // Compute the new position of the ball, and update a swath containing the ball's motion.
