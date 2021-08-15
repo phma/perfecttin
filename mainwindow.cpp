@@ -148,7 +148,6 @@ void MainWindow::tick()
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
-      loadAction->setEnabled(true);
       stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
       clearAction->setEnabled(true);
@@ -156,7 +155,6 @@ void MainWindow::tick()
     }
     if (canvas->state==TH_RUN)
     {
-      loadAction->setEnabled(false);
       stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
       clearAction->setEnabled(false);
@@ -192,7 +190,6 @@ void MainWindow::tick()
      */
     {
       dotTriangleMsg->setText(tr("Making octagon"));
-      loadAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
     else if (net.contours.size() && numEdges==0)
@@ -274,7 +271,6 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
-	  loadAction->setEnabled(true);
 	  exportMenu->setEnabled(true);
 	  clearAction->setEnabled(true);
 	  stopAction->setEnabled(false);
@@ -370,7 +366,6 @@ void MainWindow::openFile()
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
-    loadAction->setEnabled(false);
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
     ta.opcode=ACT_READ_PTIN;
@@ -468,7 +463,6 @@ void MainWindow::disableMenuSplash()
  * the TIN that the splash screen shows.
  */
 {
-  loadAction->setEnabled(false);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
@@ -476,7 +470,6 @@ void MainWindow::disableMenuSplash()
 
 void MainWindow::enableMenuSplash()
 {
-  loadAction->setEnabled(true);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
   stopAction->setEnabled(false);
@@ -504,7 +497,7 @@ void MainWindow::endisableMenu()
 {
   cout<<"busy="<<busy<<endl;
   openAction->setEnabled(bfl(0,(BUSY_DO-BUSY_OPEN)|BUSY_SPL));
-  loadAction->setEnabled(bfl(0,BUSY_SPL));
+  loadAction->setEnabled(bfl(0,(BUSY_DO-BUSY_LOAD)|BUSY_SPL));
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL));
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   exportMenu->setEnabled(false);
@@ -868,7 +861,7 @@ void MainWindow::clearCloud()
   canvas->clearContourFlags();
   fileNames=lastFileName="";
   fileMsg->setText("");
-  loadAction->setEnabled(true);
+  setIdle(BUSY_CLD);
   density=0;
 }
 
@@ -953,7 +946,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	loadAction->setEnabled(true);
 	exportMenu->setEnabled(true);
 	clearAction->setEnabled(true);
 	stopAction->setEnabled(false);
@@ -976,7 +968,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	  default:
 	    message=tr("File corrupt %1").arg(QString::fromStdString(ta.filename));
 	}
-	loadAction->setEnabled(true);
       }
       if (message.length())
       {
