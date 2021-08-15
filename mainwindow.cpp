@@ -480,6 +480,7 @@ void MainWindow::endisableMenu()
   loadAction->setEnabled(bfl(0,(BUSY_DO-BUSY_LOAD)|BUSY_SPL));
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL|BUSY_OPEN|BUSY_LOAD|BUSY_EXP|BUSY_SAVE));
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
+  saveFileAction->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   exportMenu->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   clearAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   stopAction->setEnabled(bfl(BUSY_CVT,0));
