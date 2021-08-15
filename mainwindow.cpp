@@ -483,6 +483,9 @@ void MainWindow::enableMenuSplash()
  * You can load a file while a conversion is stopped, but then you cannot resume.
  * You can open a file while a conversion is stopped. If it is a final file,
  * you cannot resume; if it is a checkpoint file, you can resume.
+ * You cannot load a boundary while loading or opening a file, saving a file,
+ * or exporting a TIN. You can load a boundary while converting a point cloud
+ * or drawing contours.
  * You cannot clear or export while loading a file or converting.
  * You cannot start a conversion while loading a file or converting.
  * You can start a conversion after loading a file, but not after opening one.
@@ -498,7 +501,7 @@ void MainWindow::endisableMenu()
   cout<<"busy="<<busy<<endl;
   openAction->setEnabled(bfl(0,(BUSY_DO-BUSY_OPEN)|BUSY_SPL));
   loadAction->setEnabled(bfl(0,(BUSY_DO-BUSY_LOAD)|BUSY_SPL));
-  loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL));
+  loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL|BUSY_OPEN|BUSY_LOAD|BUSY_EXP|BUSY_SAVE));
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
