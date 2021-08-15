@@ -136,25 +136,21 @@ void MainWindow::tick()
     //cout<<"Last state "<<lastState<<" Current state "<<canvas->state<<endl;
     if ((lastState==-ACT_LOAD || lastState==-ACT_READ_PTIN || lastState==-ACT_QINDEX) && canvas->state==TH_WAIT)
     { // finished loading file
-      clearAction->setEnabled(true);
     }
     if (canvas->state==-ACT_LOAD || canvas->state==-ACT_READ_PTIN)
     { // started loading file
       resumeAction->setEnabled(false);
-      clearAction->setEnabled(false);
       conversionStopped=false;
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
       stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
-      clearAction->setEnabled(true);
     }
     if (canvas->state==TH_RUN)
     {
       stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
-      clearAction->setEnabled(false);
     }
     lastState=canvas->state;
   }
@@ -186,17 +182,14 @@ void MainWindow::tick()
      */
     {
       dotTriangleMsg->setText(tr("Making octagon"));
-      clearAction->setEnabled(false);
     }
     else if (net.contours.size() && numEdges==0)
     {
       dotTriangleMsg->setText(tr("Reading contours"));
-      clearAction->setEnabled(false);
     }
     else if (numEdges>0 && numEdges<numTriangles*3/2)
     { // When it's finished making edges, numEdges=(numTriangles*3+numConvexHull)/2.
       dotTriangleMsg->setText(tr("Making edges"));
-      clearAction->setEnabled(false);
     }
     else if (numTriangles)
       dotTriangleMsg->setText(tr("%n triangles","",numTriangles));
@@ -267,7 +260,6 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
-	  clearAction->setEnabled(true);
 	  stopAction->setEnabled(false);
 	}
 	currentAction=0;
@@ -458,13 +450,11 @@ void MainWindow::disableMenuSplash()
  * the TIN that the splash screen shows.
  */
 {
-  clearAction->setEnabled(false);
   stopAction->setEnabled(false);
 }
 
 void MainWindow::enableMenuSplash()
 {
-  clearAction->setEnabled(false);
   stopAction->setEnabled(false);
 }
 
@@ -497,7 +487,7 @@ void MainWindow::endisableMenu()
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL|BUSY_OPEN|BUSY_LOAD|BUSY_EXP|BUSY_SAVE));
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   exportMenu->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
-  clearAction->setEnabled(false);
+  clearAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   stopAction->setEnabled(false);
 }
 
@@ -942,7 +932,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
 	enqueueAction(ta);
-	clearAction->setEnabled(true);
 	stopAction->setEnabled(false);
       }
       else if (ta.ptinResult.tolRatio>0 && std::isnan(ta.ptinResult.tolerance))
