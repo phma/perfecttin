@@ -148,7 +148,6 @@ void MainWindow::tick()
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
-      openAction->setEnabled(true);
       loadAction->setEnabled(true);
       stopAction->setEnabled(false);
       resumeAction->setEnabled(true);
@@ -157,7 +156,6 @@ void MainWindow::tick()
     }
     if (canvas->state==TH_RUN)
     {
-      openAction->setEnabled(false);
       loadAction->setEnabled(false);
       stopAction->setEnabled(true);
       resumeAction->setEnabled(false);
@@ -194,7 +192,6 @@ void MainWindow::tick()
      */
     {
       dotTriangleMsg->setText(tr("Making octagon"));
-      openAction->setEnabled(false);
       loadAction->setEnabled(false);
       clearAction->setEnabled(false);
     }
@@ -277,7 +274,6 @@ void MainWindow::tick()
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  enqueueAction(ta);
 	  setThreadCommand(TH_WAIT);
-	  openAction->setEnabled(true);
 	  loadAction->setEnabled(true);
 	  exportMenu->setEnabled(true);
 	  clearAction->setEnabled(true);
@@ -472,7 +468,6 @@ void MainWindow::disableMenuSplash()
  * the TIN that the splash screen shows.
  */
 {
-  openAction->setEnabled(false);
   loadAction->setEnabled(false);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
@@ -481,7 +476,6 @@ void MainWindow::disableMenuSplash()
 
 void MainWindow::enableMenuSplash()
 {
-  openAction->setEnabled(true);
   loadAction->setEnabled(true);
   exportMenu->setEnabled(false);
   clearAction->setEnabled(false);
@@ -490,6 +484,8 @@ void MainWindow::enableMenuSplash()
 
 /* Rules for enabling actions:
  * You cannot load or open a file while a conversion is in progress.
+ * You can open a file while opening another file (it's pointless, as the
+ * first TIN will be cleared on opening the second file).
  * You can load a file while loading another file (it will be queued).
  * You can load a file while a conversion is stopped, but then you cannot resume.
  * You can open a file while a conversion is stopped. If it is a final file,
@@ -507,7 +503,7 @@ void MainWindow::enableMenuSplash()
 void MainWindow::endisableMenu()
 {
   cout<<"busy="<<busy<<endl;
-  openAction->setEnabled(bfl(0,BUSY_SPL));
+  openAction->setEnabled(bfl(0,(BUSY_DO-BUSY_OPEN)|BUSY_SPL));
   loadAction->setEnabled(bfl(0,BUSY_SPL));
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL));
   convertAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
@@ -873,7 +869,6 @@ void MainWindow::clearCloud()
   fileNames=lastFileName="";
   fileMsg->setText("");
   loadAction->setEnabled(true);
-  openAction->setEnabled(true);
   density=0;
 }
 
@@ -982,7 +977,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	    message=tr("File corrupt %1").arg(QString::fromStdString(ta.filename));
 	}
 	loadAction->setEnabled(true);
-	openAction->setEnabled(true);
       }
       if (message.length())
       {
