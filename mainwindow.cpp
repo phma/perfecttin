@@ -139,16 +139,13 @@ void MainWindow::tick()
     }
     if (canvas->state==-ACT_LOAD || canvas->state==-ACT_READ_PTIN)
     { // started loading file
-      resumeAction->setEnabled(false);
       conversionStopped=false;
     }
     if (canvas->state==TH_WAIT && conversionStopped)
     {
-      resumeAction->setEnabled(true);
     }
     if (canvas->state==TH_RUN)
     {
-      resumeAction->setEnabled(false);
     }
     lastState=canvas->state;
   }
@@ -485,6 +482,7 @@ void MainWindow::endisableMenu()
   exportMenu->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   clearAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   stopAction->setEnabled(bfl(BUSY_CVT,0));
+  resumeAction->setEnabled(bfl(BUSY_UNFIN,BUSY_DO));
 }
 
 void MainWindow::setBusy(int activity)
@@ -803,6 +801,7 @@ void MainWindow::stopConversion()
 {
   setThreadCommand(TH_WAIT);
   conversionStopped=true;
+  setIdle(BUSY_CVT);
 }
 
 void MainWindow::resumeConversion()
@@ -811,6 +810,7 @@ void MainWindow::resumeConversion()
   {
     setThreadCommand(TH_RUN);
     conversionStopped=false;
+    setBusy(BUSY_CVT);
   }
 }
 
@@ -920,7 +920,6 @@ void MainWindow::handleResult(ThreadAction ta)
 	{
 	  conversionStopped=true;
 	  resizeBuckets(1);
-	  resumeAction->setEnabled(true);
 	  setBusy(BUSY_UNFIN);
 	  if (extension(saveFileName)=="."+to_string(ta.ptinResult.tolRatio))
 	    saveFileName=noExt(saveFileName);
