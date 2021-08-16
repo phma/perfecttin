@@ -549,6 +549,7 @@ void TinCanvas::roughContours()
   conterval=contourInterval.fineInterval();
   tolerance=contourInterval.tolerance();
   net.setCurrentContours(contourInterval);
+  contourSetsChanged(); // setCurrentContours could make an empty contour set
   setBusy(BUSY_CTR);
   if (goal==DONE)
   {
