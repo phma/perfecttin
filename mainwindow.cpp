@@ -231,12 +231,13 @@ void MainWindow::tick()
 	if (ta.param0==1)
 	{
 	  ta.filename=saveFileName+".ptin";
-	  setIdle(BUSY_OCT|BUSY_CVT);
+	  setIdle(BUSY_OCT|BUSY_CVT|BUSY_UNFIN);
 	}
 	else
 	{
 	  ta.filename=saveFileName+"."+to_string(ta.param0)+".ptin";
 	  setIdle(BUSY_OCT);
+	  setBusy(BUSY_UNFIN);
 	}
 	setBusy(BUSY_SAVE);
 	enqueueAction(ta);
@@ -920,9 +921,12 @@ void MainWindow::handleResult(ThreadAction ta)
 	  conversionStopped=true;
 	  resizeBuckets(1);
 	  resumeAction->setEnabled(true);
+	  setBusy(BUSY_UNFIN);
 	  if (extension(saveFileName)=="."+to_string(ta.ptinResult.tolRatio))
 	    saveFileName=noExt(saveFileName);
 	}
+	else
+	  setIdle(BUSY_UNFIN);
 	fileNames=baseName(saveFileName)+".ptin";
 	net.conversionTime=ta.ptinResult.conversionTime;
 	ta.opcode=ACT_QINDEX;
