@@ -473,6 +473,7 @@ void MainWindow::enableMenuSplash()
 
 void MainWindow::endisableMenu()
 {
+  int i;
   cout<<"busy="<<busy<<endl;
   openAction->setEnabled(bfl(0,(BUSY_DO-BUSY_OPEN)|BUSY_SPL));
   loadAction->setEnabled(bfl(0,(BUSY_DO-BUSY_LOAD)|BUSY_SPL));
@@ -483,6 +484,9 @@ void MainWindow::endisableMenu()
   clearAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
   stopAction->setEnabled(bfl(BUSY_CVT,0));
   resumeAction->setEnabled(bfl(BUSY_UNFIN,BUSY_DO));
+  selectContourIntervalAction->setEnabled(bfl(0,BUSY_CTR));
+  for (i=0;i<ciActions.size();i++)
+    ciActions[i].setEnabled(bfl(0,BUSY_CTR));
 }
 
 void MainWindow::setBusy(int activity)
