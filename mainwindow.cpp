@@ -474,7 +474,6 @@ void MainWindow::enableMenuSplash()
 void MainWindow::endisableMenu()
 {
   int i;
-  cout<<"busy="<<busy<<endl;
   openAction->setEnabled(bfl(0,(BUSY_DO-BUSY_OPEN)|BUSY_SPL));
   loadAction->setEnabled(bfl(0,(BUSY_DO-BUSY_LOAD)|BUSY_SPL));
   loadBoundaryAction->setEnabled(bfl(0,BUSY_SPL|BUSY_OPEN|BUSY_LOAD|BUSY_EXP|BUSY_SAVE));
