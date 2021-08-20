@@ -165,11 +165,7 @@ void edge::flip(pointlist *topopoints)
   b=nextb->otherend(b);
   nexta=temp1;
   nextb=temp2;
-  /* Now adjust the triangles, if there are any. When showing the TIN on screen
-   * and letting the user flip edges, the triangles are needed for hit-testing.
-   * The control points are unaffected, so elevations are garbage, unless you
-   * flip the same edge four times and the edge was side a of both triangles
-   * before flipping.
+  /* Now adjust the triangles, if there are any.
    */
   for (i=0;i<size && a->line->next(a)!=this;i++)
     a->line=a->line->next(a);
