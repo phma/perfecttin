@@ -298,7 +298,7 @@ void DirtyTracker::markClean(int n)
 
 void DirtyTracker::erase(int n)
 {
-  if (n>=0 && n<dirt.size())
+  if (n>=0 && n+1<dirt.size())
   {
     memmove(&dirt[n],&dirt[n+1],dirt.size()-n-1);
     dirt.pop_back();
