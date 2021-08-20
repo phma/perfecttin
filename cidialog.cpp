@@ -36,6 +36,8 @@ const char tolStr[4][5]=
 
 ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
 {
+  intervalLabel=new QLabel(tr("Contour interval"),this);
+  toleranceLabel=new QLabel(tr("Relative tolerance"),this);
   currentInterval=new QLabel(tr("None"),this);
   intervalBox=new QComboBox(this);
   toleranceBox=new QComboBox(this);
@@ -43,11 +45,13 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
-  gridLayout->addWidget(currentInterval,0,0);
-  gridLayout->addWidget(intervalBox,0,1);
-  gridLayout->addWidget(toleranceBox,1,1);
-  gridLayout->addWidget(okButton,2,0);
-  gridLayout->addWidget(cancelButton,2,1);
+  gridLayout->addWidget(intervalLabel,0,0);
+  gridLayout->addWidget(currentInterval,0,1);
+  gridLayout->addWidget(intervalBox,0,2);
+  gridLayout->addWidget(toleranceLabel,1,0);
+  gridLayout->addWidget(toleranceBox,1,2);
+  gridLayout->addWidget(okButton,2,1);
+  gridLayout->addWidget(cancelButton,2,2);
   contourInterval=nullptr;
   okButton->setEnabled(false);
   okButton->setDefault(true);

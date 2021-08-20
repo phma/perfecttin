@@ -49,7 +49,7 @@ public slots:
 private:
   ContourInterval *contourInterval,selectedInterval;
   double relTol;
-  QLabel *currentInterval;
+  QLabel *currentInterval,*intervalLabel,*toleranceLabel;
   QComboBox *intervalBox,*toleranceBox;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
