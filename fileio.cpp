@@ -372,6 +372,11 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
       else;
     else
       cerr<<"Invalid triangle "<<i<<endl;
+  if (net.boundary.size())
+  {
+    layer=dxfLayers[1];
+    insertPolyline(dxfCodes,net.boundary,layer,outUnit);
+  }
   for (k=net.contours.begin();k!=net.contours.end();++k)
   {
     cl.ci=k->first;
