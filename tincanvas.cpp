@@ -131,7 +131,7 @@ void TinCanvas::tick()
   int i,sz,timeLimit;
   int thisOpcount=opcount;
   int tstatus=getThreadStatus();
-  int trianglesPainted=0;
+  int trianglesPainted=0,piecesDrawn=0,piecesToDraw=0;
   bool fromTrianglePaint;
   double splashElev;
   uintptr_t pieceInx;
@@ -279,6 +279,7 @@ void TinCanvas::tick()
       path.moveTo(worldToWindow(beziseg[0]));
       path.cubicTo(worldToWindow(beziseg[1]),worldToWindow(beziseg[2]),worldToWindow(beziseg[3]));
       painter.drawPath(path);
+      piecesDrawn++;
     }
   }
   // Paint some triangles in the TIN in colors depending on their gradient or elevation.
@@ -329,7 +330,10 @@ void TinCanvas::tick()
       polygon<<worldToWindow(A)<<worldToWindow(B)<<worldToWindow(C);
       painter.drawConvexPolygon(polygon);
       for (i=0;i<crossingPieces.size();i++)
+      {
 	net.pieceDraw.enqueue((void *)(crossingPieces[i]+4294967296),0);
+	piecesToDraw++;
+      }
     }
     elapsed=clk.now()-timeStart;
   }
@@ -351,7 +355,7 @@ void TinCanvas::tick()
   }
   if (lastntri && !net.triangles.size())
     frameBuffer.fill();
-  if (trianglesPainted && !trianglesToPaint)
+  if ((trianglesPainted || piecesDrawn) && !trianglesToPaint && !piecesToDraw)
     update();
   //if (elapsed>cr::milliseconds(50))
     //cout<<"tick got stuck\n";
