@@ -484,8 +484,8 @@ void MainWindow::endisableMenu()
   stopAction->setEnabled(bfl(BUSY_CVT,0));
   resumeAction->setEnabled(bfl(BUSY_UNFIN,BUSY_DO));
   selectContourIntervalAction->setEnabled(bfl(0,BUSY_CTR));
-  roughContoursAction->setEnabled(bfl(0,BUSY_DO|BUSY_SPL));
-  smoothContoursAction->setEnabled(bfl(0,BUSY_DO|BUSY_SPL));
+  roughContoursAction->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
+  smoothContoursAction->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   deleteContoursAction->setEnabled(bfl(0,BUSY_DO|BUSY_SPL));
   for (i=0;i<ciActions.size();i++)
     ciActions[i].setEnabled(bfl(0,BUSY_CTR));
