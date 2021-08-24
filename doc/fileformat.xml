@@ -127,7 +127,7 @@
     <entry>uint32</entry><entry>00000006</entry><entry>6</entry><entry>Number of triangles</entry>
   </row>
   <row>
-    <entry>uint32</entry><entry>00000000</entry><entry>0</entry><entry>Number of groups of contours</entry>
+    <entry>uint32</entry><entry>00000001</entry><entry>0</entry><entry>Number of groups of contours</entry>
   </row>
 </tgroup>
 </table>
@@ -383,6 +383,82 @@
 </tgroup>
 </table>
 <para>The z-coordinates are absolute, not relative to the centroid, and are held in memory as doubles. (In this file, which was generated with a small number of dots for fuzzing, all z-coordinates of points, and therefore of centroids, are 0.) The number of checksums is the base-2 logarithm of the number of dots, rounded up, plus 1, unless this would make the last two checksums equal (which can happen at sea level), in which case the last is omitted.</para>
+</section>
+
+<section id="contours">
+<title>Contours</title>
+<para>After the checksums are the contours, which are polylines (planned to be polyspirals in the future) in horizontal planes. There may also be a boundary, and the format allows for expansion to curves not in horizontal planes, which could represent curb and gutter.</para>
+<table pgwide="1">
+  <title>Contour</title>
+  <tgroup align="left" cols="4" colsep="1" rowsep="1">
+  <thead>
+    <row>
+      <entry>Type</entry><entry>Hex</entry><entry>Decimal</entry><entry>Meaning</entry>
+    </row>
+  </thead>
+  <row>
+    <entry>uint16</entry><entry>0000</entry><entry>0</entry><entry>Group of contour lines</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>0010</entry><entry>16</entry><entry>Number of bytes in label</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3ff0000000000000</entry><entry>1</entry><entry>Contour interval</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3fe0000000000000</entry><entry>1/2</entry><entry>Relative tolerance</entry>
+  </row>
+  <row>
+    <entry>uint16</entry><entry>0000</entry><entry>0</entry><entry>2D polyspirals with elevation</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000001</entry><entry>1</entry><entry>Number of contours in group</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry><entry>Elevation</entry>
+  </row>
+  <row>
+    <entry>uint8</entry><entry>00</entry><entry>false</entry><entry>True if curvy</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000006</entry><entry>6</entry><entry>Number of endpoints</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>4004800000000000</entry><entry>2.5625</entry><entry>Coordinates x,y of endpoint</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>0000000000000000</entry><entry>0</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>3ff4800000000000</entry><entry>1.28125</entry><entry>Coordinates x,y of endpoint</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>4001c00000000000</entry><entry>2.21875</entry>
+  </row>
+  <row>
+    <entry>...</entry><entry>...</entry><entry>...</entry><entry>...</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000006</entry><entry>6</entry><entry>Number of lengths</entry>
+  </row>
+  <row>
+    <entry>double</entry><entry>4004800000000000</entry><entry>2.5625</entry><entry>Length</entry>
+  </row>
+  <row>
+    <entry>...</entry><entry>...</entry><entry>...</entry><entry>...</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000000</entry><entry>0</entry><entry>Number of deltas</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>00000000</entry><entry>0</entry><entry>Number of delta2s</entry>
+  </row>
+  <row>
+    <entry>uint32</entry><entry>2aac7554</entry><entry>120.0196836°</entry><entry>Checksum computed by adding and subtracting angles</entry>
+  </row>
+
+</tgroup>
+</table>
 </section>
 
 </article>
