@@ -111,7 +111,7 @@ public slots:
 protected:
   void closeEvent(QCloseEvent *event) override;
 private:
-  int lastNumDots,lastNumTriangles,lastNumEdges;
+  int lastNumDots,lastNumTriangles,lastNumEdges,lastNumContours;
   int traceHiLo; // -1, 0, or 1
   int busy;
   double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;

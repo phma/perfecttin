@@ -124,6 +124,7 @@ void MainWindow::tick()
   int numDots=cloud.size();
   int tstatus=getThreadStatus();
   int numTriangles=net.triangles.size();
+  int numContours=net.contours.size();
   int numEdges=net.edges.size();
   ThreadAction ta;
   if (!showingResult && !resultQueueEmpty())
@@ -149,7 +150,8 @@ void MainWindow::tick()
     }
     lastState=canvas->state;
   }
-  if (numDots!=lastNumDots || numTriangles!=lastNumTriangles || numEdges!=lastNumEdges)
+  if (numDots!=lastNumDots || numTriangles!=lastNumTriangles ||
+      numEdges!=lastNumEdges || numContours!=lastNumContours)
   { // Number of dots or triangles has changed: update status bar
     if (lastNumDots==0 && numDots>0)
       setBusy(BUSY_CLD);
@@ -178,7 +180,7 @@ void MainWindow::tick()
     {
       dotTriangleMsg->setText(tr("Making octagon"));
     }
-    else if (net.contours.size() && numEdges==0)
+    else if (numContours && numEdges==0)
     {
       dotTriangleMsg->setText(tr("Reading contours"));
     }
