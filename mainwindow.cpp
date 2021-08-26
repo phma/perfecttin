@@ -135,18 +135,9 @@ void MainWindow::tick()
   if (lastState!=canvas->state)
   {
     //cout<<"Last state "<<lastState<<" Current state "<<canvas->state<<endl;
-    if ((lastState==-ACT_LOAD || lastState==-ACT_READ_PTIN || lastState==-ACT_QINDEX) && canvas->state==TH_WAIT)
-    { // finished loading file
-    }
     if (canvas->state==-ACT_LOAD || canvas->state==-ACT_READ_PTIN)
     { // started loading file
       conversionStopped=false;
-    }
-    if (canvas->state==TH_WAIT && conversionStopped)
-    {
-    }
-    if (canvas->state==TH_RUN)
-    {
     }
     lastState=canvas->state;
   }
