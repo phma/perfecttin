@@ -349,8 +349,9 @@ int pointlist::isSmoothed(segment &seg)
 }
 
 int pointlist::isNextPieceSmoothed()
+// Returns -1 if the map entry is empty, otherwise as isSmoothed.
 {
-  int i,sm,ret=0,startInx;
+  int i,sm,ret=-1,startInx;
   pieceMutex.lock();
   startInx=pieceInx;
   while (!contourPieces.count(pieceInx))
