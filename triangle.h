@@ -110,6 +110,7 @@ public:
   xy gradient(xy pnt);
   triangleHit hitTest(xy pnt);
   bool in(xy pnt);
+  bool onEdge(xy pnt,double toler);
   int quadrant(xy pnt);
   bool inCircle(xy pnt,double radius);
   bool iscorner(point *v);

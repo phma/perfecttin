@@ -316,6 +316,17 @@ bool triangle::in(xy pnt)
   return area3(pnt,*b,*c)>=0 && area3(*a,pnt,*c)>=0 && area3(*a,*b,pnt)>=0;
 }
 
+bool triangle::onEdge(xy pnt,double toler)
+/* Returns true if pnt is on at least one edge. peri should be set.
+ * Used to tell whether a contour has been pruned and smoothed.
+ */
+{
+  toler*=peri;
+  return fabs(area3(pnt,*b,*c))<toler ||
+	 fabs(area3(*a,pnt,*c))<toler ||
+	 fabs(area3(*a,*b,pnt))<toler;
+}
+
 int triangle::quadrant(xy pnt)
 /* 0: pnt is in the middle
  * 1: pnt is near A
