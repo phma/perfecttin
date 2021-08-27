@@ -515,6 +515,7 @@ void TinCanvas::selectContourInterval()
      * time, after which all triangles have to be repainted.
      */
     net.setCurrentContours(contourInterval);
+    setContourFlags();
     QGuiApplication::restoreOverrideCursor();
     repaintAllTriangles();
     contourSetsChanged();
@@ -536,6 +537,7 @@ void TinCanvas::setContourInterval(ContourInterval ci)
     }
   if (which<0)
     net.unsetCurrentContours();
+  setContourFlags();
   QGuiApplication::restoreOverrideCursor();
   repaintAllTriangles();
   contourIntervalChanged(contourInterval);
@@ -543,6 +545,16 @@ void TinCanvas::setContourInterval(ContourInterval ci)
 
 void TinCanvas::clearContourFlags()
 {
+  roughContoursValid=pruneContoursValid=smoothContoursValid=false;
+}
+
+void TinCanvas::setContourFlags()
+{
+  int contourState,i,n;
+  n=lrint(sqrt(net.contourPieces.size()));
+  for (i=0;i<n;i++)
+    cout<<net.isNextPieceSmoothed()<<' ';
+  cout<<endl;
   roughContoursValid=pruneContoursValid=smoothContoursValid=false;
 }
 

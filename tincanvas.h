@@ -68,6 +68,7 @@ public slots:
   void selectContourInterval();
   void setContourInterval(ContourInterval ci);
   void clearContourFlags();
+  void setContourFlags();
   void roughContours();
   void rough1Contour();
   void roughContoursFinish();
