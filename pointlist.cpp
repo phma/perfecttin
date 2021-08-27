@@ -23,6 +23,7 @@
  */
 
 #include <cmath>
+#include <cfloat>
 #include "angle.h"
 #include "pointlist.h"
 #include "ldecimal.h"
@@ -307,6 +308,44 @@ void pointlist::eraseEmptyContours()
       deletePieces((*currentContours)[i],-1);
   nonempty.shrink_to_fit();
   swap((*currentContours),nonempty);
+}
+
+int pointlist::isSmoothed(segment &seg)
+/* Returns 0 for a piece of a rough contour, 1 for a piece of a pruned
+ * contour, and 2 for a piece of a smoothed contour. It may return wrong
+ * answers, so try several pieces.
+ *
+ * A rough contour piece is always a segment with its midpoint in a triangle
+ * and both ends on edges of the same triangle. The midpoint and both ends are
+ * at the same elevation.
+ *
+ * A pruned contour piece is a segment whose ends are on edges at the same
+ * elevation, but usually they aren't in the same triangle, and usually the
+ * midpoint is not at the same elevation as the endpoints.
+ *
+ * A smoothed contour piece is a spiralarc whose ends and midpoint usually
+ * are at three different elevations. Its ends are usually not on edges.
+ */
+{
+  triangle *tribeg=findt(seg.getstart(),true);
+  triangle *trimid=findt(seg.midpoint(),true);
+  triangle *triend=findt(seg.getend(),true);
+  double begElev=tribeg->elevation(seg.getstart());
+  double midElev=trimid->elevation(seg.midpoint());
+  double endElev=triend->elevation(seg.getend());
+  xy midgrad=trimid->gradient(seg.midpoint());
+  double hToler=seg.epsilon();
+  double vToler=hToler*midgrad.length()+fabs(midElev)*DBL_EPSILON;
+  int ret=0;
+  if (!trimid->onEdge(seg.getend(),hToler) || !trimid->onEdge(seg.getstart(),hToler))
+    ret=1;
+  if (fabs(begElev-midElev)>vToler || fabs(midElev-endElev)>vToler)
+    ret=1;
+  if (!triend->onEdge(seg.getend(),hToler) || !tribeg->onEdge(seg.getstart(),hToler))
+    ret=2;
+  if (fabs(endElev-begElev>vToler))
+    ret=2;
+  return ret;
 }
 
 bool pointlist::checkTinConsistency()
