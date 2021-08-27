@@ -106,6 +106,7 @@ public:
   int statsPieces();
   void eraseEmptyContours();
   int isSmoothed(segment &seg);
+  int isNextPieceSmoothed();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
 private:

@@ -348,6 +348,24 @@ int pointlist::isSmoothed(segment &seg)
   return ret;
 }
 
+int pointlist::isNextPieceSmoothed()
+{
+  int i,sm,ret=0,startInx;
+  pieceMutex.lock();
+  startInx=pieceInx;
+  while (!contourPieces.count(pieceInx))
+    if (++pieceInx==startInx)
+      break;
+  for (i=0;i<contourPieces[pieceInx].size();i++)
+  {
+    sm=isSmoothed(contourPieces[pieceInx][i].s);
+    if (sm>ret)
+      ret=sm;
+  }
+  pieceMutex.unlock();
+  return ret;
+}
+
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;
