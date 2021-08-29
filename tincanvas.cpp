@@ -551,10 +551,17 @@ void TinCanvas::clearContourFlags()
 void TinCanvas::setContourFlags()
 {
   int contourState,i,n;
+  int histo[3];
   n=lrint(sqrt(net.contourPieces.size()));
+  for (i=0;i<3;i++)
+    histo[i]=0;
   for (i=0;i<n;i++)
-    cout<<net.isNextPieceSmoothed()<<' ';
-  cout<<endl;
+  {
+    contourState=net.isNextPieceSmoothed();
+    if (contourState>=0)
+      histo[contourState]++;
+  }
+  cout<<histo[0]<<' '<<histo[1]<<' '<<histo[2]<<endl;
   roughContoursValid=pruneContoursValid=smoothContoursValid=false;
 }
 
