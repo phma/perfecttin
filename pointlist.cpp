@@ -354,9 +354,12 @@ int pointlist::isNextPieceSmoothed()
   int i,sm,ret=-1,startInx;
   pieceMutex.lock();
   startInx=pieceInx;
-  while (!contourPieces.count(pieceInx))
-    if (++pieceInx==startInx)
+  do
+  {
+    pieceInx+=0x69969669;
+    if (pieceInx==startInx)
       break;
+  } while (!contourPieces.count(pieceInx));
   for (i=0;i<contourPieces[pieceInx].size();i++)
   {
     sm=isSmoothed(contourPieces[pieceInx][i].s);
