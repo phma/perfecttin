@@ -105,7 +105,7 @@ public:
   void deletePieces(polyspiral ctour,int thread);
   int statsPieces();
   void eraseEmptyContours();
-  int isSmoothed(segment &seg);
+  int isSmoothed(const segment &seg);
   int isNextPieceSmoothed();
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);

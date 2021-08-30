@@ -941,7 +941,7 @@ int makeContourIndex()
 {
   int i,sum;
   contourIndex.clear();
-  for (i=sum=0;i<net.currentContours->size();i++)
+  for (i=sum=0;net.currentContours && i<net.currentContours->size();i++)
   {
     sum+=(*net.currentContours)[i].size();
     contourIndex.push_back(sum);

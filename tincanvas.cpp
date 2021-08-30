@@ -550,14 +550,16 @@ void TinCanvas::clearContourFlags()
 
 void TinCanvas::setContourFlags()
 {
-  int contourState,i,n;
+  int contourState,i,j,n;
   int histo[3];
-  n=lrint(sqrt(net.contourPieces.size()));
+  totalContourSegments=makeContourIndex();
+  n=lrint(sqrt(totalContourSegments));
   for (i=0;i<3;i++)
     histo[i]=0;
-  for (i=0;i<n;i++)
+  for (i=j=0;i<n;i++)
   {
-    contourState=net.isNextPieceSmoothed();
+    contourState=net.isSmoothed(nthPiece(j));
+    j=(j+relprime(n))%n;
     if (contourState>=0)
       histo[contourState]++;
   }

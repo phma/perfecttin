@@ -310,7 +310,7 @@ void pointlist::eraseEmptyContours()
   swap((*currentContours),nonempty);
 }
 
-int pointlist::isSmoothed(segment &seg)
+int pointlist::isSmoothed(const segment &seg)
 /* Returns 0 for a piece of a rough contour, 1 for a piece of a pruned
  * contour, and 2 for a piece of a smoothed contour. It may return wrong
  * answers, so try several pieces.

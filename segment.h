@@ -45,11 +45,11 @@ public:
   segment();
   segment(xyz kra,xyz fam);
   segment(xyz kra,double c1,double c2,xyz fam);
-  xyz getstart()
+  xyz getstart() const
   {
     return start;
   }
-  xyz getend()
+  xyz getend() const
   {
     return end;
   }
