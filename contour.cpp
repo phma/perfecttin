@@ -41,6 +41,7 @@
 #include "contour.h"
 #include "relprime.h"
 #include "manysum.h"
+#include "octagon.h"
 #include "ldecimal.h"
 using namespace std;
 
@@ -56,6 +57,7 @@ float splittab[65]=
 shared_mutex markMutex;
 deque<set<edge *> > marks;
 int newHisto[6]={0,0,0,0,0,0};
+vector<int> contourIndex;
 
 ContourInterval::ContourInterval()
 {
@@ -932,4 +934,16 @@ void smoothcontours(pointlist &pl,double tolerance)
   int i;
   for (i=0;i<(*pl.currentContours).size();i++)
     smooth1contour(pl,tolerance,i,0);
+}
+
+void makeContourIndex()
+// This is used for getting any contour piece by index number.
+{
+  int i,sum;
+  contourIndex.clear();
+  for (i=sum=0;i<net.currentContours->size();i++)
+  {
+    sum+=(*net.currentContours)[i].size();
+    contourIndex.push_back(sum);
+  }
 }
