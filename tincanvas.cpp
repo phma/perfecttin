@@ -54,7 +54,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   goal=DONE;
   triangleNum=splashScreenTime=dartAngle=ballAngle=0;
   state=TH_WAIT;
-  totalContourSegments=0;
+  totalContourPieces=0;
   memset(contourColor,0,sizeof(contourColor));
   memset(contourLineType,0,sizeof(contourLineType));
   memset(contourThickness,0,sizeof(contourThickness));
@@ -552,8 +552,8 @@ void TinCanvas::setContourFlags()
 {
   int contourState,i,j,n;
   int histo[3];
-  totalContourSegments=makeContourIndex();
-  n=lrint(sqrt(totalContourSegments));
+  totalContourPieces=makeContourIndex();
+  n=lrint(sqrt(totalContourPieces));
   for (i=0;i<3;i++)
     histo[i]=0;
   for (i=j=0;i<n;i++)
@@ -589,7 +589,7 @@ void TinCanvas::roughContours()
   progInx=elevLo;
   disconnect(timer,SIGNAL(timeout()),0,0);
   setThreadCommand(TH_ROUGH);
-  totalContourSegments=elevHi-elevLo+1;
+  totalContourPieces=elevHi-elevLo+1;
   for (i=elevLo;i<=elevHi;i++)
     {
       ctr.num=i;
@@ -603,7 +603,7 @@ void TinCanvas::roughContours()
 
 void TinCanvas::rough1Contour()
 {
-  if (contourSegmentsDone<totalContourSegments)
+  if (contourSegmentsDone<totalContourPieces)
   {
     ++progInx;
   }
@@ -650,7 +650,7 @@ void TinCanvas::pruneContours()
     timer->start(0);
   }
   progInx=0;
-  contourSegmentsDone=totalContourSegments=0;
+  contourSegmentsDone=totalContourPieces=0;
   ctr.tolerance=tolerance;
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (roughContoursValid && conterval==contourInterval.fineInterval())
@@ -660,7 +660,7 @@ void TinCanvas::pruneContours()
     {
       if ((*net.currentContours)[i].size()>sizeRange)
 	sizeRange=(*net.currentContours)[i].size();
-      totalContourSegments+=(*net.currentContours)[i].size();
+      totalContourPieces+=(*net.currentContours)[i].size();
     }
     sizeRange++;
     lastSizeRange=sizeRange;
@@ -687,7 +687,7 @@ void TinCanvas::pruneContours()
 
 void TinCanvas::prune1Contour()
 {
-  if (contourSegmentsDone<totalContourSegments)
+  if (contourSegmentsDone<totalContourPieces)
   {
     ++progInx;
   }
@@ -732,7 +732,7 @@ void TinCanvas::smoothContours()
     timer->start(50);
   }
   progInx=0;
-  contourSegmentsDone=totalContourSegments=0;
+  contourSegmentsDone=totalContourPieces=0;
   ctr.tolerance=tolerance;
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
@@ -742,7 +742,7 @@ void TinCanvas::smoothContours()
     {
       if ((*net.currentContours)[i].size()>sizeRange)
 	sizeRange=(*net.currentContours)[i].size();
-      totalContourSegments+=(*net.currentContours)[i].size();
+      totalContourPieces+=(*net.currentContours)[i].size();
     }
     sizeRange++;
     lastSizeRange=sizeRange;
@@ -769,7 +769,7 @@ void TinCanvas::smoothContours()
 
 void TinCanvas::smooth1Contour()
 {
-  if (contourSegmentsDone<totalContourSegments)
+  if (contourSegmentsDone<totalContourPieces)
   {
     //smooth1contour(net,tolerance,progInx);
     ++progInx;

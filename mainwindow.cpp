@@ -259,7 +259,7 @@ void MainWindow::tick()
       (tstatus&0x3ffbfeff)==1048577*TH_PRUNE ||
       (tstatus&0x3ffbfeff)==1048577*TH_SMOOTH)
   {
-    doneBar->setValue(lrint((double)contourSegmentsDone/canvas->totalContourSegments*16777216));
+    doneBar->setValue(lrint((double)contourSegmentsDone/canvas->totalContourPieces*16777216));
     switch ((tstatus&0x3ffbfeff)/1048577)
     {
       case TH_ROUGH:

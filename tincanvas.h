@@ -49,7 +49,7 @@ public:
   xy windowToWorld(QPointF pnt);
   ContourInterval contourInterval;
   int state;
-  int totalContourSegments;
+  int totalContourPieces;
   void repaintSeldom();
 signals:
   void setBusy(int activity);
