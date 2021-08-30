@@ -936,7 +936,7 @@ void smoothcontours(pointlist &pl,double tolerance)
     smooth1contour(pl,tolerance,i,0);
 }
 
-void makeContourIndex()
+int makeContourIndex()
 // This is used for getting any contour piece by index number.
 {
   int i,sum;
@@ -946,4 +946,19 @@ void makeContourIndex()
     sum+=(*net.currentContours)[i].size();
     contourIndex.push_back(sum);
   }
+  return sum;
+}
+
+spiralarc nthPiece(int n)
+{
+  int beg=0,mid,end=contourIndex.size();
+  while (end>beg+1)
+  {
+    mid=(beg+end)/2;
+    if (contourIndex[mid]>n)
+      end=mid;
+    else
+      beg=mid;
+  }
+  return (*net.currentContours)[beg].getspiralarc(n-beg);
 }

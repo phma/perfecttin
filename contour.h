@@ -134,5 +134,6 @@ void prune1contour(pointlist &pl,double tolerance,int i,int thread);
 void prunecontours(pointlist &pl,double tolerance);
 void smooth1contour(pointlist &pl,double tolerance,int i,int thread);
 void smoothcontours(pointlist &pl,double tolerance);
-void makeContourIndex();
+int makeContourIndex();
+spiralarc nthPiece(int n);
 #endif
