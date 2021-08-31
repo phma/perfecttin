@@ -564,7 +564,9 @@ void TinCanvas::setContourFlags()
       histo[contourState]++;
   }
   cout<<histo[0]<<' '<<histo[1]<<' '<<histo[2]<<endl;
-  roughContoursValid=pruneContoursValid=smoothContoursValid=false;
+  roughContoursValid=(histo[0]|histo[1]|histo[2])>0;
+  pruneContoursValid=(histo[1]|histo[2])>0;
+  smoothContoursValid=histo[2]>0;
 }
 
 void TinCanvas::roughContours()
