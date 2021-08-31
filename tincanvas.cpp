@@ -629,6 +629,7 @@ void TinCanvas::roughContoursFinish()
       timer->stop();
       setIdle(BUSY_CTR);
       contourDrawingFinished();
+      setThreadCommand(TH_WAIT);
       break;
     case PRUNE_CONTOURS:
     case SMOOTH_CONTOURS:
@@ -713,6 +714,7 @@ void TinCanvas::pruneContoursFinish()
       timer->stop();
       setIdle(BUSY_CTR);
       contourDrawingFinished();
+      setThreadCommand(TH_WAIT);
       break;
     case SMOOTH_CONTOURS:
       connect(timer,SIGNAL(timeout()),this,SLOT(smoothContours()));
