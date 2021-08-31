@@ -821,6 +821,7 @@ void TinCanvas::deleteContours()
   QGuiApplication::restoreOverrideCursor();
   repaintAllTriangles();
   contourSetsChanged();
+  clearContourFlags();
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
