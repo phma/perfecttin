@@ -7,7 +7,7 @@
 </personname>
 <personblurb>NC PLS</personblurb>
 </author>
-<pubdate>2020</pubdate>
+<pubdate>2021</pubdate>
 </info>
 
 <trademark class="copyright">
@@ -64,7 +64,7 @@
     <para>Set the unit with the toolbar button.</para>
   </listitem>
   <listitem>
-    <para>Load the point cloud file with <menuchoice><guimenu>File</guimenu><guimenuitem>Load</guimenuitem></menuchoice>.</para>
+    <para>Load the point cloud file with <menuchoice><guimenu>File</guimenu><guimenuitem>Load cloud</guimenuitem></menuchoice>.</para>
   </listitem>
   <listitem>
     <para>If the point cloud is in more than one file, load the other files.</para>
@@ -98,10 +98,33 @@
   </orderedlist>
 </section>
 
+<section id="contours">
+  <title>Drawing contours</title>
+  <para>To draw contours, do this:</para>
+  <orderedlist>
+    <listitem>
+      <para>Set the unit with the toolbar button.</para>
+    </listitem>
+    <listitem>
+      <para>Select the contour interval with <menuchoice><guimenu>Contour</guimenu><guimenuitem>Select contour interval</guimenuitem></menuchoice>. The tolerance is relative to the contour interval, e.g. if the contour interval is 2 m and the tolerance is 1/5, it is 400 mm</para>
+    </listitem>
+    <listitem>
+      <para>Draw contours with <menuchoice><guimenu>Contour</guimenu><guimenuitem>Draw smooth contours</guimenuitem></menuchoice>.</para>
+    </listitem>
+    <listitem>
+      <para>If you want another set of contours, select another contour interval and repeat the procedure.</para>
+    </listitem>
+    <listitem>
+      <para>Save the file with contours with <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
+    </listitem>
+  </orderedlist>
+</section>
+
 <section id="export">
   <title>Exporting a TIN</title>
   <para>PerfectTIN files are not readable by other programs. They are also big; they contain the point cloud as well as the TIN, so that PerfectTIN can resume converting a point cloud if it's interrupted. So you'll want to export the TIN in another format.</para>
   <para>Do <menuchoice><guimenu>File</guimenu><guisubmenu>Export</guisubmenu><guimenuitem><emphasis>format</emphasis></guimenuitem></menuchoice>, and enter the filename you want to export it as.</para>
   <para>PerfectTIN can export in DXF, PLY, STL, TIN text (AquaVeo), Carlson TIN, and LandXML formats. The DXF format is the least efficient because each point of the TIN is written eight times on average: it belongs to six triangles, each of which is written as a 3DFACE element, in which one corner is written twice. STL is slightly more efficient; each point is written six times on average. The other formats consist of a list of points followed by a list of triangles, with each triangle being three point numbers. They take less space than DXF.</para>
   <para>When exporting in PLY format, the points are colored according to their gradient or elevation, the same as in the window.</para>
+  <para>When exporting a TIN with contours in DXF format, the contours are in layers named <code>Contour <parameter>interval</parameter> <parameter>tolerance</parameter> <parameter>hex</parameter></code>, e.g. <code>Contour 1 m 1/2 200</code>, where <parameter>hex</parameter> is 200 for an index contour and 104-110 for intermediate contours.</para>
 </section>
