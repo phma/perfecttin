@@ -263,6 +263,7 @@ void ConfigurationDialog::accept()
 		  tolerances[general->toleranceBox->currentIndex()],
 		  general->threadInput->text().toInt(),
 		  general->exportEmptyCheck->checkState()>0,
+		  general->onlyContourCheck->checkState()>0,
 		  pri);
   QDialog::accept();
 }

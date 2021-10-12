@@ -79,7 +79,8 @@ class ConfigurationDialog: public QDialog
 public:
   ConfigurationDialog(QWidget *parent=nullptr);
 signals:
-  void settingsChanged(double lu,double tol,int thr,bool ee,Printer3dSize pri);
+  void settingsChanged(double lu,double tol,int thr,
+		       bool ee,bool cc,Printer3dSize pri);
 public slots:
   void set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer);
   void updateToleranceConversion();

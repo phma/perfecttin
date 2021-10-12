@@ -75,7 +75,7 @@ signals:
 public slots:
   void tick();
   void refreshNumTriangles();
-  void setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri);
+  void setSettings(double lu,double tol,int thr,bool ee,bool oc,Printer3dSize pri);
   void setUnit(double lu);
   void openFile();
   void loadFile();
@@ -117,7 +117,8 @@ private:
   double lastTolerance,lastStageTolerance,writtenTolerance,lastDensity,rmsadj;
   int numberThreads;
   int lastState; // state is in TinCanvas
-  bool conversionStopped,showingResult,exportEmpty,onlyInBoundary,lastLargeVertical;
+  bool conversionStopped,showingResult,exportEmpty;
+  bool onlyContours,onlyInBoundary,lastLargeVertical;
   double tolerance,density,lengthUnit;
   double lpfBusyFraction;
   std::string fileNames,saveFileName,lastFileName;

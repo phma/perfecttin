@@ -51,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent)
   canvas=new TinCanvas(this);
   configDialog=new ConfigurationDialog(this);
   msgBox=new QMessageBox(this);
-  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool,Printer3dSize)),
-	  this,SLOT(setSettings(double,double,int,bool,Printer3dSize)));
+  connect(configDialog,SIGNAL(settingsChanged(double,double,int,bool,bool,Printer3dSize)),
+	  this,SLOT(setSettings(double,double,int,bool,bool,Printer3dSize)));
   connect(this,SIGNAL(tinSizeChanged()),canvas,SLOT(setSize()));
   connect(this,SIGNAL(lengthUnitChanged(double)),canvas,SLOT(setLengthUnit(double)));
   connect(this,SIGNAL(noCloudArea()),this,SLOT(msgNoCloudArea()));
@@ -1188,6 +1188,7 @@ void MainWindow::readSettings()
   tolerance=settings.value("tolerance",0.1).toDouble();
   lengthUnit=settings.value("lengthUnit",1).toDouble();
   exportEmpty=settings.value("exportEmpty",false).toBool();
+  onlyContours=settings.value("onlyContours",false).toBool();
   onlyInBoundary=true; //TODO add to config
   colorize.setScheme(settings.value("colorScheme",CS_GRADIENT).toInt());
   printer3d.shape=settings.value("3dprinter/shape",1).toUInt();
@@ -1213,6 +1214,7 @@ void MainWindow::writeSettings()
   settings.setValue("tolerance",tolerance);
   settings.setValue("lengthUnit",lengthUnit);
   settings.setValue("exportEmpty",exportEmpty);
+  settings.setValue("onlyContours",onlyContours);
   settings.setValue("colorScheme",colorize.getScheme());
   settings.setValue("3dprinter/shape",printer3d.shape);
   settings.setValue("3dprinter/length",printer3d.x);
@@ -1227,12 +1229,14 @@ void MainWindow::writeSettings()
 					      canvas->contourInterval.mediumInterval()));
 }
 
-void MainWindow::setSettings(double lu,double tol,int thr,bool ee,Printer3dSize pri)
+void MainWindow::setSettings(double lu,double tol,int thr,
+			     bool ee,bool oc,Printer3dSize pri)
 {
   lengthUnit=lu;
   tolerance=tol;
   numberThreads=thr;
   exportEmpty=ee;
+  onlyContours=oc;
   printer3d=pri;
   writeSettings();
   lengthUnitChanged(lengthUnit);
