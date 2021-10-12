@@ -83,7 +83,7 @@ public:
   double distanceToHull(xy pnt);
   bool validConvexHull();
   std::vector<int> valencyHistogram();
-  bool shouldWrite(int n,int flags);
+  bool shouldWrite(int n,int flags,bool contours);
   void updateqindex();
   double elevation(xy location);
   xy gradient(xy location);

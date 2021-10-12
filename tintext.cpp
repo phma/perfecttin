@@ -41,10 +41,10 @@ void writeTinText(string outputFile,double outUnit,int flags)
     tinFile<<ldecimal(net.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
   }
   for (i=0;i<net.triangles.size();i++)
-    nTrianglesToWrite+=(net.shouldWrite(i,flags));
+    nTrianglesToWrite+=(net.shouldWrite(i,flags,false));
   tinFile<<"TRI "<<nTrianglesToWrite<<endl;
   for (i=0;i<net.triangles.size();i++)
-    if (net.shouldWrite(i,flags))
+    if (net.shouldWrite(i,flags,false))
     {
       tinFile<<net.revpoints[net.triangles[i].a]<<' ';
       tinFile<<net.revpoints[net.triangles[i].b]<<' ';

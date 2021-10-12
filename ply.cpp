@@ -117,7 +117,7 @@ void writePly(string filename,bool asc,double outUnit,int flags)
   plyUnit=outUnit;
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())
-      if (net.shouldWrite(i,flags))
+      if (net.shouldWrite(i,flags,false))
 	trianglesToWrite.push_back(&net.triangles[i]);
       else;
     else

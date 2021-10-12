@@ -81,7 +81,7 @@ void writeLandXml(string outputFile,double outUnit,int flags)
   }
   xmlFile<<"</Pnts><Faces>\n";
   for (i=0;i<net.triangles.size();i++)
-    if (net.shouldWrite(i,flags))
+    if (net.shouldWrite(i,flags,false))
     {
       xmlFile<<"<F>";
       xmlFile<<net.revpoints[net.triangles[i].a]<<' ';

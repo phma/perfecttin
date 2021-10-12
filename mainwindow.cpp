@@ -534,7 +534,7 @@ void MainWindow::exportDxfTxt()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=true;
-    ta.flags=exportEmpty+2*onlyInBoundary;
+    ta.flags=exportEmpty+2*onlyInBoundary+4*onlyContours;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);
@@ -562,7 +562,7 @@ void MainWindow::exportDxfBin()
     fileName=files[0].toStdString();
     ta.param1=lengthUnit;
     ta.param0=false;
-    ta.flags=exportEmpty+2*onlyInBoundary;
+    ta.flags=exportEmpty+2*onlyInBoundary+4*onlyContours;
     ta.filename=fileName;
     ta.opcode=ACT_WRITE_DXF;
     enqueueAction(ta);

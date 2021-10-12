@@ -71,7 +71,7 @@ void writeCarlsonTin(string outputFile,double outUnit,int flags)
   }
   for (i=0;i<net.triangles.size();i++)
   {
-    if (net.shouldWrite(i,flags))
+    if (net.shouldWrite(i,flags,false))
     {
       writeleshort(tinFile,CA_TRIANGLE);
       writeleint(tinFile,net.revpoints[net.triangles[i].a]);

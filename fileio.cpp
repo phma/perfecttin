@@ -333,6 +333,10 @@ string randomRenameFile(string fileName)
 }
 
 void writeDxf(string outputFile,bool asc,double outUnit,int flags)
+/* Writes TIN and contours in DXF.
+ * flags bit 0=write empty triangles; bit 1=write only triangles in boundary;
+ * bit 2=don't write any triangles if there are contours.
+ */
 {
   vector<GroupCode> dxfCodes;
   vector<DxfLayer> dxfLayers;
@@ -367,7 +371,7 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   openEntitySection(dxfCodes);
   for (i=0;i<net.triangles.size();i++)
     if (net.triangles[i].ptValid())
-      if (net.shouldWrite(i,flags))
+      if (net.shouldWrite(i,flags,contourLayers.size()))
 	insertTriangle(dxfCodes,net.triangles[i],outUnit);
       else;
     else
