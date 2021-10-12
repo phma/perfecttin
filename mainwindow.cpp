@@ -865,7 +865,8 @@ void MainWindow::deleteContours()
 
 void MainWindow::configure()
 {
-  configDialog->set(lengthUnit,tolerance,numberThreads,exportEmpty,printer3d);
+  configDialog->set(lengthUnit,tolerance,numberThreads,
+		    exportEmpty,onlyContours,printer3d);
   configDialog->open();
 }
 

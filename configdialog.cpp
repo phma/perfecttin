@@ -198,7 +198,8 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent):QDialog(parent)
   connect(printTab,SIGNAL(contentChanged()),this,SLOT(checkValid()));
 }
 
-void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,bool exportEmpty,Printer3dSize printer)
+void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,
+			      bool exportEmpty,bool onlyContours,Printer3dSize printer)
 {
   int i;
   general->lengthUnitBox->clear();
@@ -223,6 +224,7 @@ void ConfigurationDialog::set(double lengthUnit,double tolerance,int threads,boo
       general->toleranceBox->setCurrentIndex(i);
   general->threadInput->setText(QString::number(threads));
   general->exportEmptyCheck->setCheckState(exportEmpty?Qt::Checked:Qt::Unchecked);
+  general->onlyContourCheck->setCheckState(onlyContours?Qt::Checked:Qt::Unchecked);
   for (i=0;i<sizeof(shapeNames)/sizeof(shapeNames[1]);i++)
     if (printer.shape==i)
       printTab->shapeBox->setCurrentIndex(i);
