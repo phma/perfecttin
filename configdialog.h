@@ -48,7 +48,7 @@ public:
   QComboBox *lengthUnitBox,*toleranceBox;
   QGridLayout *gridLayout;
   QLineEdit *threadInput;
-  QCheckBox *exportEmptyCheck;
+  QCheckBox *exportEmptyCheck,*onlyContourCheck;
 };
 
 class Printer3dTab: public QWidget

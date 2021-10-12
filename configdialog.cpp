@@ -58,6 +58,7 @@ GeneralTab::GeneralTab(QWidget *parent):QWidget(parent)
   toleranceBox=new QComboBox(this);
   threadInput=new QLineEdit(this);
   exportEmptyCheck=new QCheckBox(tr("Export empty"),this);
+  onlyContourCheck=new QCheckBox(tr("Only contours"),this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
   gridLayout->addWidget(lengthUnitLabel,1,0);
@@ -69,6 +70,7 @@ GeneralTab::GeneralTab(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(threadInput,3,1);
   gridLayout->addWidget(threadDefault,3,2);
   gridLayout->addWidget(exportEmptyCheck,4,1);
+  gridLayout->addWidget(onlyContourCheck,5,1);
 }
 
 Printer3dTab::Printer3dTab(QWidget *parent):QWidget(parent)
