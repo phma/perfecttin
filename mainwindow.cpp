@@ -162,6 +162,7 @@ void MainWindow::tick()
     lastNumDots=numDots;
     lastNumTriangles=numTriangles;
     lastNumEdges=numEdges;
+    lastNumContours=numContours;
     if (numDots && numTriangles && numTriangles<8)
     /* Reading a .ptin file can make numDots small (like 3) as it puts dots that
      * were pushed over an edge by roundoff error into cloud, while numTriangles
