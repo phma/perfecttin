@@ -1,6 +1,6 @@
 project(perfecttin)
 cmake_minimum_required(VERSION 3.8.0)
-# Copyright 2019-2021 Pierre Abbat.
+# Copyright 2019-2022 Pierre Abbat.
 # This file is part of PerfectTIN.
 #
 # PerfectTIN is free software: you can redistribute it and/or modify
@@ -122,7 +122,7 @@ check_include_files(windows.h HAVE_WINDOWS_H)
 # There is no need to install a binary built for fuzzing.
 if (NOT DEFINED NO_INSTALL)
 if (${Boost_FOUND})
-install(TARGETS perfecttin dibathy vecinos DESTINATION bin)
+install(TARGETS perfecttin DESTINATION bin)
 endif (${Boost_FOUND})
 install(TARGETS perfecttin-gui DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/perfecttin)
