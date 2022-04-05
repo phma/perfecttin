@@ -3,7 +3,7 @@
 /* mainwindow.cpp - main window                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2022 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -1033,7 +1033,7 @@ void MainWindow::makeActions()
   loadBoundaryAction=new QAction(this);
   loadBoundaryAction->setIcon(QIcon::fromTheme("document-open"));
   loadBoundaryAction->setText(tr("Load boundary"));
-  fileMenu->addAction(loadBoundaryAction);
+  //fileMenu->addAction(loadBoundaryAction);
   connect(loadBoundaryAction,SIGNAL(triggered(bool)),this,SLOT(loadBoundary()));
   convertAction=new QAction(this);
   convertAction->setIcon(QIcon::fromTheme("document-save-as"));
