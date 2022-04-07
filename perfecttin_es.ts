@@ -31,7 +31,7 @@
     <message>
         <location filename="configdialog.cpp" line="187"/>
         <source>Cancel</source>
-        <translation>Anular</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="configdialog.cpp" line="192"/>
@@ -100,7 +100,7 @@
         <location filename="cidialog.cpp" line="41"/>
         <location filename="cidialog.cpp" line="112"/>
         <source>None</source>
-        <translation>Ningún</translation>
+        <translation>Ninguno</translation>
     </message>
     <message>
         <location filename="cidialog.cpp" line="44"/>
@@ -110,7 +110,7 @@
     <message>
         <location filename="cidialog.cpp" line="45"/>
         <source>Cancel</source>
-        <translation>Anular</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -172,7 +172,7 @@
     <message>
         <location filename="mainwindow.cpp" line="272"/>
         <source>Smoothing contours</source>
-        <translation>Alisando contornos</translation>
+        <translation>Suavizando contornos</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="335"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="mainwindow.cpp" line="949"/>
         <source>File corrupt %1</source>
-        <translation>Fichero %1 es corrupto</translation>
+        <translation>Fichero %1 está dañado</translation>
     </message>
     <message>
         <source>
@@ -368,7 +368,7 @@ Licencia GPL 3 o siguiente%4</translation>
     <message>
         <location filename="mainwindow.cpp" line="879"/>
         <source>Vertical outlier</source>
-        <translation>Hay una elevación aberrante en la nube de puntos. La TIN puede ser corrupta al abrir.</translation>
+        <translation>Hay una elevación anormal en la nube de puntos. La TIN puede estar dañada al abrir.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="975"/>
@@ -471,7 +471,7 @@ Licencia LGPL 3 o siguiente%4</translation>
     <message>
         <location filename="mainwindow.cpp" line="1049"/>
         <source>Clear</source>
-        <translation>Vaciar</translation>
+        <translation>Limpiar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1054"/>
@@ -536,7 +536,7 @@ Licencia LGPL 3 o siguiente%4</translation>
     <message>
         <location filename="mainwindow.cpp" line="1108"/>
         <source>Color by</source>
-        <translation>Colorar por</translation>
+        <translation>Colorear por</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1111"/>
@@ -561,7 +561,7 @@ Licencia LGPL 3 o siguiente%4</translation>
     <message>
         <location filename="mainwindow.cpp" line="1134"/>
         <source>Draw smooth contours</source>
-        <translation>Dibujar contornos lisos</translation>
+        <translation>Dibujar contornos suaves</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1139"/>
