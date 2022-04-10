@@ -2,9 +2,9 @@
 - Pierre Abbat <phma@bezitopo.org>
 
 # Localization
-##English
+## English
 - Pierre Abbat <phma@bezitopo.org>
 
-##Spanish
+## Spanish
 - Pierre Abbat <phma@bezitopo.org>
 - Gabriel De Luca <pablogabrieldeluca@gmail.com>
