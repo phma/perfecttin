@@ -352,18 +352,18 @@ void writeDxf(string outputFile,bool asc,double outUnit,int flags)
   contourLayers=net.contourLayers();
   layer.name="TIN";
   layer.number=1;
-  layer.color=0;
+  layer.color=1;
   dxfLayers.push_back(layer);
   layer.name="Boundary";
   layer.number=2;
-  layer.color=3;
+  layer.color=4;
   dxfLayers.push_back(layer);
   for (j=contourLayers.begin();j!=contourLayers.end();++j)
   {
     layer.name="Contour "+j->first.ci.valueToleranceString()+
 	       ' '+hexEncodeInt(j->first.tp);
     layer.number=j->second;
-    layer.color=j->first.tp>>8;
+    layer.color=(j->first.tp>>8)*2+1;
     dxfLayers.push_back(layer);
   }
   //dxfHeader(dxfCodes,br);
