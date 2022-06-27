@@ -3,7 +3,7 @@
 /* pointlist.h - list of points                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2022 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -76,6 +76,7 @@ public:
   std::map<int,std::vector<ContourPiece> > contourPieces;
   std::mutex pieceMutex;
   int pieceInx;
+  bool dirty;
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1,int thread=-1);
   void insertHullPoint(point *newpnt,point *prec);

@@ -3,7 +3,7 @@
 /* pointlist.cpp - list of points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2022 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -55,6 +55,7 @@ void pointlist::clear()
   edgePool.clear();
   trianglePool.clear();
   swishFactor=0;
+  dirty=false;
   currentContours=nullptr;
   wingEdge.unlock();
 }
@@ -110,6 +111,7 @@ void pointlist::deleteCurrentContours()
   for (j=contours.begin();j!=contours.end();++j)
     if (&j->second==currentContours)
     {
+      dirty=true;
       contours.erase(j);
       break;
     }

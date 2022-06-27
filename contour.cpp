@@ -3,7 +3,7 @@
 /* contour.cpp - generates contours                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2020,2021 Pierre Abbat.
+/* Copyright 2020-2022 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -533,6 +533,7 @@ void rough1contour(pointlist &pl,double elev,int thread)
       pl.wingEdge.unlock();
       pl.insertPieces(ctour,thread);
     }
+  pl.dirty=true;
 }
 
 void roughcontours(pointlist &pl,double conterval)
@@ -675,6 +676,7 @@ void prune1contour(pointlist &pl,double tolerance,int i,int thread)
   checkContour(pl,(*pl.currentContours)[i],tolerance);
   //cout<<"        "<<i<<" error after "<<contourError(pl,(*pl.currentContours)[i]);
   //cout<<" bendiness "<<totalBendiness((*pl.currentContours)[i],tolerance)<<endl;
+  pl.dirty=true;
 }
 
 void prunecontours(pointlist &pl,double tolerance)
@@ -927,6 +929,7 @@ void smooth1contour(pointlist &pl,double tolerance,int i,int thread)
   (*pl.currentContours)[i].setlengths();
   (*pl.currentContours)[i].shrink_to_fit();
   checkContour(pl,(*pl.currentContours)[i],tolerance);
+  pl.dirty=true;
 }
 
 void smoothcontours(pointlist &pl,double tolerance)
