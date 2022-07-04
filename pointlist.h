@@ -93,6 +93,7 @@ public:
   int size();
   void clearmarks();
   void clearTin();
+  void setDirty(bool d);
   void unsetCurrentContours();
   void setCurrentContours(ContourInterval &ci);
   void deleteCurrentContours();

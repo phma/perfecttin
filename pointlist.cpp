@@ -55,7 +55,7 @@ void pointlist::clear()
   edgePool.clear();
   trianglePool.clear();
   swishFactor=0;
-  dirty=false;
+  setDirty(false);
   currentContours=nullptr;
   wingEdge.unlock();
 }
@@ -67,6 +67,12 @@ void pointlist::clearTin()
   revtriangles.clear();
   edges.clear();
   wingEdge.unlock();
+}
+
+void pointlist::setDirty(bool d)
+{
+  dirty=d;
+  cout<<"Pointlist is "<<(d?"dirty":"clean")<<endl;
 }
 
 int pointlist::size()
@@ -111,7 +117,7 @@ void pointlist::deleteCurrentContours()
   for (j=contours.begin();j!=contours.end();++j)
     if (&j->second==currentContours)
     {
-      dirty=true;
+      setDirty(true);
       contours.erase(j);
       break;
     }
