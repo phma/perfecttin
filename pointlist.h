@@ -76,7 +76,6 @@ public:
   std::map<int,std::vector<ContourPiece> > contourPieces;
   std::mutex pieceMutex;
   int pieceInx;
-  bool dirty;
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1,int thread=-1);
   void insertHullPoint(point *newpnt,point *prec);
@@ -94,6 +93,10 @@ public:
   void clearmarks();
   void clearTin();
   void setDirty(bool d);
+  bool isDirty()
+  {
+    return dirty;
+  }
   void unsetCurrentContours();
   void setCurrentContours(ContourInterval &ci);
   void deleteCurrentContours();
@@ -112,6 +115,7 @@ public:
   bool checkTinConsistency();
   triangle *findt(xy pnt,bool clip=false);
 private:
+  bool dirty;
   void nipPiece();
   // the following methods are in tin.cpp
   void dumpedges();
