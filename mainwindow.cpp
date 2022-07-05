@@ -997,6 +997,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
   /* It is highly unlikely that both a conversion is in progress and the
    * pointlist is dirty, since conversion writes the file at each stage,
    * clearing the dirty flag, and one can't make contours while converting.
+   * If you hit the exit button, save the file, and hit exit again, the window
+   * will close, but the program will not exit until it's saved the file.
    */
   if (conversionBusy())
   {
