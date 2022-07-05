@@ -1025,15 +1025,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
       saveFile();
       while (net.isDirty())
-      {
-	tick();
-	sleepRead();
-	sleepRead();
-	canvas->tick();
-	sleepRead();
-	sleepRead();
-	sleepRead();
-      }
+	QCoreApplication::processEvents();
     }
   }
   if (acceptConv && acceptSave)
