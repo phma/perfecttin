@@ -992,7 +992,12 @@ void MainWindow::aboutQt()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
   int result;
+  bool acceptConv=true,acceptSave=true;
   writeSettings();
+  /* It is highly unlikely that both a conversion is in progress and the
+   * pointlist is dirty, since conversion writes the file at each stage,
+   * clearing the dirty flag, and one can't make contours while converting.
+   */
   if (conversionBusy())
   {
     msgBox->setWindowTitle(tr("PerfectTIN"));
@@ -1002,13 +1007,39 @@ void MainWindow::closeEvent(QCloseEvent *event)
     msgBox->setStandardButtons(QMessageBox::Yes|QMessageBox::No);
     msgBox->setDefaultButton(QMessageBox::No);
     result=msgBox->exec();
-    if (result==QMessageBox::Yes)
-      event->accept();
-    else
-      event->ignore();
+    if (result==QMessageBox::No)
+      acceptConv=false;
   }
-  else
+  if (net.isDirty())
+  {
+    msgBox->setWindowTitle(tr("PerfectTIN"));
+    msgBox->setIcon(QMessageBox::Warning);
+    msgBox->setText(tr("You have modified the document."));
+    msgBox->setInformativeText(tr("Do you want to save your changes?"));
+    msgBox->setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
+    msgBox->setDefaultButton(QMessageBox::Save);
+    result=msgBox->exec();
+    if (result==QMessageBox::Cancel)
+      acceptConv=false;
+    if (result==QMessageBox::Save)
+    {
+      saveFile();
+      while (net.isDirty())
+      {
+	tick();
+	sleepRead();
+	sleepRead();
+	canvas->tick();
+	sleepRead();
+	sleepRead();
+	sleepRead();
+      }
+    }
+  }
+  if (acceptConv && acceptSave)
     event->accept();
+  else
+    event->ignore();
 }
 
 void MainWindow::makeActions()
