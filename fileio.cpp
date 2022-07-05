@@ -557,7 +557,7 @@ const int ptinHeaderFormat=0x0000002c;
  */
 
 void writePtin(string outputFile,int tolRatio,double tolerance,double density)
-/* inputFile contains the tolerance ratio, unless it's 1.
+/* outputFile contains the tolerance ratio, unless it's 1.
  * tolerance is the final, not stage, tolerance. This can cause weirdness
  * if one changes the tolerance during a conversion.
  */
@@ -640,6 +640,7 @@ void writePtin(string outputFile,int tolRatio,double tolerance,double density)
   checkFile.seekp(24,ios::beg);
   writeledouble(checkFile,tolerance);
   writeledouble(checkFile,density);
+  net.setDirty(false);
   deleteFile(delendum);
 }
 
