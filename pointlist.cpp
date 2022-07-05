@@ -72,7 +72,7 @@ void pointlist::clearTin()
 void pointlist::setDirty(bool d)
 {
   dirty=d;
-  cout<<"Pointlist is "<<(d?"dirty":"clean")<<endl;
+  //cout<<"Pointlist is "<<(d?"dirty":"clean")<<endl;
 }
 
 int pointlist::size()
