@@ -521,6 +521,16 @@ void insertXy(vector<GroupCode> &dxfData,int xtag,xy pnt)
   dxfData.push_back(yCode);
 }
 
+void insertBulge(vector<GroupCode> &dxfData,int delta)
+/* Bulge is the displacement of the midpoint of the arc from the chord,
+ * divided by half the chord length.
+ */
+{
+  GroupCode bulgeCode(42);
+  bulgeCode.real=tanquarter(delta);
+  dxfData.push_back(bulgeCode);
+}
+
 void insertXyz(vector<GroupCode> &dxfData,int xtag,xyz pnt)
 // xtag is the tag of the x-coordinate
 {
