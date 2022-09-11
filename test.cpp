@@ -3,7 +3,7 @@
 /* test.cpp - test patterns and functions             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2022 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -139,7 +139,7 @@ void aster(int n)
    and later by me, not knowing of Vogel. */
 {
   int i;
-  double angle=(sqrt(5)-1)*M_PI;
+  double angle=(sqrt(5.)-1)*M_PI;
   xy pnt;
   for (i=0;i<n;i++)
   {
@@ -152,7 +152,7 @@ void _ellipse(int n,double skewness)
 /* Skewness is not eccentricity. When skewness=0.01, eccentricity=0.14072. */
 {
   int i;
-  double angle=(sqrt(5)-1)*M_PI;
+  double angle=(sqrt(5.)-1)*M_PI;
   xy pnt;
   for (i=0;i<n;i++)
   {
@@ -201,7 +201,7 @@ void straightrow(int n)
   for (i=0;i<n;i++)
   {
     angle=(2.0*i/(n-1)-1)*M_PI/6;
-    pnt=xy(0,sqrt(n)*tan(angle));
+    pnt=xy(0,sqrt((double)n)*tan(angle));
     cloud.push_back(xyz(pnt,testsurface(pnt)));
   }
 }
@@ -211,9 +211,9 @@ void lozenge(int n)
 {
   xy pnt;
   straightrow(n);
-  pnt=xy(-sqrt(n),0);
+  pnt=xy(-sqrt((double)n),0);
   cloud.push_back(xyz(pnt,testsurface(pnt)));
-  pnt=xy(sqrt(n),0);
+  pnt=xy(sqrt((double)n),0);
   cloud.push_back(xyz(pnt,testsurface(pnt)));
 }
 
