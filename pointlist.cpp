@@ -197,7 +197,7 @@ void pointlist::insertContourPiece(spiralarc s,int thread)
     if (tri)
       piece.tris.push_back(tri);
     i++;
-    if (i>4 && piece.tris.back()==piece.tris[piece.tris.size()-3])
+    if (i>4 && piece.tris.back()==piece.tris[piece.tris.size()/2])
       tri=nullptr;
   }
   pieceMutex.lock();
