@@ -658,8 +658,7 @@ void TinCanvas::pruneContours()
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (roughContoursValid && conterval==contourInterval.fineInterval())
   {
-    setThreadCommand(TH_PRUNE);
-    for (i=sizeRange=0;i<(*net.currentContours).size();i++)
+    for (i=sizeRange=0;i<net.currentContours->size();i++)
     {
       if ((*net.currentContours)[i].size()>sizeRange)
 	sizeRange=(*net.currentContours)[i].size();
@@ -741,8 +740,7 @@ void TinCanvas::smoothContours()
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (pruneContoursValid && conterval==contourInterval.fineInterval())
   {
-    setThreadCommand(TH_SMOOTH);
-    for (i=sizeRange=0;i<(*net.currentContours).size();i++)
+    for (i=sizeRange=0;i<net.currentContours->size();i++)
     {
       if ((*net.currentContours)[i].size()>sizeRange)
 	sizeRange=(*net.currentContours)[i].size();
