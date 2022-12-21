@@ -28,7 +28,7 @@
 #include "polyline.h"
 #include "ps.h"
 #define CCHALONG 0.30754991027012474516361707317
-// This is sqrt(4/27) of the way from 0.5 to 0. See clampcubic.
+// This is sqrt(4/27) of the way from 0.5 to 0. See clampcubic in Bezitopo.
 #define M_SQRT_10 3.16227766016837933199889354
 
 class pointlist;
