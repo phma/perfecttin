@@ -3,7 +3,7 @@
 /* testptin.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2021,2023 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -469,6 +469,70 @@ void testmatrix()
   tassert(rs4.determinant()==0);
   rs4[3][3]=1;
   tassert(fabs(rs4.determinant()*9-100)<1e-12);
+}
+
+void testquaternion()
+{
+  Quaternion q0(0,0,0,0),q1(1,0,0,0),qr2(0,1,0,0),qr3(0.5,0.5,0.5,0.5);
+  Quaternion qr5(M_1PHI/2+0.5,0.5,M_1PHI/2,0),qsum(1.5,0.5,0.5,0.5);
+  Quaternion qprod(-0.5,0,-M_1PHI/2,M_1PHI/2+0.5);
+  Quaternion qrste(-1/14.,5/14.,7/14.,11/14.);
+  xyz vec0(0,0.6,0.8),vec2,vec3,vec5;
+  xyz vec0m(0,0.0006,0.0008),vec016k(0,9600,12800);
+  xyz vec2r(0,-0.6,-0.8),vec3r(0.8,0,0.6),vec5r(0.3*M_1PHI+0.4,0.3-0.4/M_1PHI,0.3/M_1PHI+0.4*M_1PHI);
+  xyz vecste(0,0,-192);
+  /* qr2, qr3, and qr5 generate the group of order 120 which is the group
+   * of rotations of an icosahedron (or dodecahedron) times 2.
+   * The matrix of qr5 is
+   * 1-1/2φ² 1/2φ     1/2              0.809017  0.309017  0.500000
+   * 1/2φ    1/2      -1/2φ-1/2        0.309017  0.500000 -0.809017
+   * -1/2    1/2φ+1/2 1/2-1/2φ²       -0.500000  0.809017  0.309017
+   */
+  Quaternion op0,op1,res;
+  int i,j;
+  res=q1+qr3;
+  tassert(res==qsum);
+  tassert(res!=q0);
+  res=qr2*qr3*qr5; // 1/3 rotation about (0,1/φ,-φ)
+  for (j=0;j<4;j++)
+    cout<<setprecision(6)<<res.getcomp(j)<<' ';
+  cout<<endl;
+  tassert((qprod-res).norm()<1e-12);
+  res=q1;
+  for (i=0;i<10;i++)
+  {
+    res=res*qr5;
+    for (j=0;j<4;j++)
+      cout<<setprecision(6)<<res.getcomp(j)<<' ';
+    cout<<endl;
+  }
+  vec2=qr2.rotate(vec0);
+  vec3=qr3.rotate(vec0);
+  vec5=qr5.rotate(vec0);
+  cout<<vec2.getx()<<' '<<vec2.gety()<<' '<<vec2.getz()<<endl;
+  cout<<vec3.getx()<<' '<<vec3.gety()<<' '<<vec3.getz()<<endl;
+  cout<<vec5.getx()<<' '<<vec5.gety()<<' '<<vec5.getz()<<endl;
+  tassert((vec2-vec2r).length()<1e-15);
+  tassert((vec3-vec3r).length()<1e-15);
+  tassert((vec5-vec5r).length()<1e-15);
+  vec2=qrste.rotate(vecste);
+  cout<<vec2.getx()<<' '<<vec2.gety()<<' '<<vec2.getz()<<endl;
+  op0=versor(vec0,radtobin(0.0003));
+  op1=versor(vec0,radtobin(0.0007));
+  res=versor(vec0,radtobin(0.001));
+  tassert((op0*op1-res).norm()<1e-9);
+  op0=versor(vec0,0.0003);
+  op1=versor(vec0,0.0007);
+  res=versor(vec0,0.001);
+  tassert((op0*op1-res).norm()<1e-9);
+  op0=versor(vec0m);
+  tassert((op0-res).norm()<1e-9);
+  op0=versor(vec016k);
+  tassert((op0*res+1).norm()<1e-9);
+  op0=versor(xyz(4,0,0));
+  tassert(op0==qr2);
+  op0=versor(xyz(4/3.,4/3.,4/3.));
+  tassert((op0-qr3).norm()<1e-9);
 }
 
 void testrelprime()
@@ -1879,6 +1943,8 @@ int main(int argc, char *argv[])
     testarea3();
   if (shoulddo("matrix"))
     testmatrix();
+  if (shoulddo("quaternion"))
+    testquaternion();
   if (shoulddo("relprime"))
     testrelprime();
   if (shoulddo("manysum"))

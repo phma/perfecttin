@@ -3,7 +3,7 @@
 /* relprime.h - relatively prime numbers              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2023 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
  */
 #ifndef RELPRIME_H
 #define RELPRIME_H
+#define M_1PHI 0.6180339887498948482046
 extern const double quadirr[];
 unsigned gcd(unsigned a,unsigned b);
 unsigned relprime(unsigned n,int thread=0);
