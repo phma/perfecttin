@@ -3,7 +3,7 @@
 /* fileio.cpp - file I/O                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2021,2023 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -733,7 +733,7 @@ PtinHeader readPtin(std::string inputFile)
   xyz pnt,ctr;
   bool readingStarted=false;
   double high=-INFINITY,low=INFINITY;
-  double absToler;
+  double absToler,rmsOffset;
   double conterval,contoler;
   uint64_t verticalAffect,mask;
   vector<double> zcheck;
@@ -874,6 +874,9 @@ PtinHeader readPtin(std::string inputFile)
         sleepRead(); // Let GUI update between big triangles
     }
   //cout<<"edgeCheck="<<edgeCheck<<endl;
+  rmsOffset=sqrt(pairwisesum(sqrOffsets)/sqrOffsets.size());
+  if (!isfinite(rmsOffset))
+    rmsOffset=0;
   if (header.tolRatio>0 && header.tolerance>0 && edgeCheck)
     header.tolRatio=PT_EDGE_MISMATCH;
   if (header.tolRatio>0 && header.tolerance>0)
@@ -902,7 +905,7 @@ PtinHeader readPtin(std::string inputFile)
       zcheck.push_back(0);
     while (zcheck.size()<64)
       zcheck.push_back(zcheck.back());
-    absToler=header.tolRatio*header.tolerance*sqrt(zCheck.getCount())/CHECKSUM_DIV1;
+    absToler=header.tolRatio*rmsOffset*sqrt(zCheck.getCount())/CHECKSUM_DIV1;
     //cout<<"absToler="<<absToler<<endl;
     for (i=0;i<n;i++)
     {
