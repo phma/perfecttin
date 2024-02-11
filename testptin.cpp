@@ -743,6 +743,7 @@ void testclosest()
   }
   close=seg5.closest(pnt5,INFINITY);
   cout<<"station "<<ldecimal(close)<<endl;
+  cloud.clear();
   ps.trailer();
   ps.close();
 }
