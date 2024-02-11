@@ -3,7 +3,7 @@
 /* testptin.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021,2023 Pierre Abbat.
+/* Copyright 2019-2021,2023,2024 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -1417,6 +1417,7 @@ void testadjblock()
     task.pnt[i]=&net.points[i+1];
   task.dots=&tri->dots[0];
   task.numDots=4096;
+  task.swishFactor=0;
   task.result=&result;
   result.ready=false;
   computeAdjustBlock(task);
