@@ -1,6 +1,6 @@
-project(perfecttin)
 cmake_minimum_required(VERSION 3.8.0)
-# Copyright 2019-2022 Pierre Abbat.
+project(perfecttin)
+# Copyright 2019-2022,2025 Pierre Abbat.
 # This file is part of PerfectTIN.
 #
 # PerfectTIN is free software: you can redistribute it and/or modify

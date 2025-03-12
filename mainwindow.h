@@ -3,7 +3,7 @@
 /* mainwindow.h - main window                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2021,2025 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -65,6 +65,7 @@ public:
   }
   bool conversionBusy();
   bool bfl(int set,int clear);
+  bool any(int set);
 signals:
   void tinSizeChanged();
   void lengthUnitChanged(double unit);

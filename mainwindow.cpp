@@ -3,7 +3,7 @@
 /* mainwindow.cpp - main window                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2022 Pierre Abbat.
+/* Copyright 2019-2022,2025 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -475,7 +475,7 @@ void MainWindow::endisableMenu()
   saveFileAction->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   exportMenu->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
   clearAction->setEnabled(bfl(BUSY_CLD,BUSY_DO));
-  stopAction->setEnabled(bfl(BUSY_CVT,0));
+  stopAction->setEnabled(any(BUSY_CVT|BUSY_CTR));
   resumeAction->setEnabled(bfl(BUSY_UNFIN,BUSY_DO));
   selectContourIntervalAction->setEnabled(bfl(0,BUSY_CTR));
   roughContoursAction->setEnabled(bfl(BUSY_TIN,BUSY_DO|BUSY_SPL));
@@ -1294,4 +1294,11 @@ bool MainWindow::bfl(int set,int clear)
 {
   assert((set&clear)==0);
   return ((busy^set)&(set|clear))==0;
+}
+
+bool MainWindow::any(int set)
+/* Returns true if any bits in set are set in the busy flag, and false otherwise.
+ */
+{
+  return (busy&set)!=0;
 }
