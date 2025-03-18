@@ -3,7 +3,7 @@
 /* tincanvas.cpp - canvas for drawing TIN             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019-2021 Pierre Abbat.
+/* Copyright 2019-2021,2025 Pierre Abbat.
  * This file is part of PerfectTIN.
  *
  * PerfectTIN is free software: you can redistribute it and/or modify
@@ -664,12 +664,13 @@ void TinCanvas::pruneContours()
 	sizeRange=(*net.currentContours)[i].size();
       totalContourPieces+=(*net.currentContours)[i].size();
     }
-    sizeRange++;
+    sizeRange+=2;
     lastSizeRange=sizeRange;
     while (sizeRange)
     {
       for (i=0;i<(*net.currentContours).size();i++)
-	if ((*net.currentContours)[i].size()>=sizeRange && (*net.currentContours)[i].size()<lastSizeRange)
+	if ((*net.currentContours)[i].size()+1>=sizeRange &&
+            (*net.currentContours)[i].size()+1<lastSizeRange)
 	{
 	  ctr.num=i;
 	  ctr.size=(*net.currentContours)[i].size();
@@ -677,7 +678,7 @@ void TinCanvas::pruneContours()
 	}
       lastSizeRange=sizeRange;
       sizeRange=relprime(sizeRange);
-      if (sizeRange==1)
+      if (sizeRange==1) // relprime(1)==1
 	sizeRange=0;
     }
     waitForThreads(TH_PRUNE);
@@ -746,12 +747,13 @@ void TinCanvas::smoothContours()
 	sizeRange=(*net.currentContours)[i].size();
       totalContourPieces+=(*net.currentContours)[i].size();
     }
-    sizeRange++;
+    sizeRange+=2;
     lastSizeRange=sizeRange;
     while (sizeRange)
     {
       for (i=0;i<(*net.currentContours).size();i++)
-	if ((*net.currentContours)[i].size()>=sizeRange && (*net.currentContours)[i].size()<lastSizeRange)
+	if ((*net.currentContours)[i].size()+1>=sizeRange &&
+            (*net.currentContours)[i].size()+1<lastSizeRange)
 	{
 	  ctr.num=i;
 	  ctr.size=(*net.currentContours)[i].size();
@@ -759,7 +761,7 @@ void TinCanvas::smoothContours()
 	}
       lastSizeRange=sizeRange;
       sizeRange=relprime(sizeRange);
-      if (sizeRange==1)
+      if (sizeRange==1) // relprime(1)==1
 	sizeRange=0;
     }
     waitForThreads(TH_SMOOTH);
