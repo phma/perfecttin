@@ -1062,7 +1062,7 @@ void MainWindow::makeActions()
   connect(loadBoundaryAction,SIGNAL(triggered(bool)),this,SLOT(loadBoundary()));
   convertAction=new QAction(this);
   convertAction->setIcon(QIcon::fromTheme("document-save-as"));
-  convertAction->setText(tr("Convert"));
+  convertAction->setText(tr("Process"));
   fileMenu->addAction(convertAction);
   connect(convertAction,SIGNAL(triggered(bool)),this,SLOT(startConversion()));
   saveFileAction=new QAction(this);

@@ -418,8 +418,8 @@ Licencia LGPL 3 o siguiente%4</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1065"/>
-        <source>Convert</source>
-        <translation>Convertir</translation>
+        <source>Process</source>
+        <translation>Procesar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1070"/>
